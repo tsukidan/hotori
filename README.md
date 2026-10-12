@@ -1,6 +1,12 @@
+![Hotori banner](assets/banner.png)
+
 # Hotori
 
 A Windows app for installing and customizing the Hotori Discord theme, built with Rust + Tauri 2. The HTML/CSS/JavaScript interface is embedded in the executable; no frontend bundler or Node runtime is needed to build or run the app.
+
+[Download Hotori](https://github.com/tsukidan/hotori/releases/latest) · [Get Vencord](https://vencord.dev/download/)
+
+Download `hotori.exe` from Releases, open it, and choose Install. Enable Hotori in Vencord’s Themes settings, then use Customize to make it yours. Vencord is required. Update theme installs the latest published theme while preserving your saved customization settings.
 
 Build the optimized app with `cargo build --release --locked`. Open `target/release/hotori.exe`. For development, use `cargo run`. Building requires Rust/MSVC and Microsoft C++ Build Tools; running requires Microsoft Edge WebView2 Runtime. The executable opens Hotori directly.
 
