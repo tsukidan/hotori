@@ -1,0 +1,2696 @@
+/**
+ * @name Hotori
+ * @author tsuki
+ * @authorId 109679787630399488
+ * @authorLink https://plusinsta.xyz
+ * @version 0.7.1
+ * @description A Discord theme inspired by Liquid Glass.
+ */
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | USER SETTINGS - EDIT THIS BOX ONLY                                                         |
+ * | Choose your appearance below. Keep variable names and semicolons intact.                   |
+ * | Profiles: var(--blur-acrylic), var(--blur-liquid), or var(--blur-none).                    |
+ * | Server layout: var(--vertical) or var(--horizontal).                                       |
+ * | Your existing values are preserved. Theme implementation follows this box.                 |
+ * |                                                                                            |
+ * ============================================================================================= */
+:root,
+.theme-dark {
+    /* =====================================================================================
+     * |                                                                                    |
+     * | 1. GLASS STYLE                                                                     |
+     * |                                                                                    |
+     * ===================================================================================== */
+    /* Choose ONE: var(--blur-acrylic) = frosted; var(--blur-liquid) = refractive;
+       var(--blur-none) = no glass background, border, shadow, or blur. */
+    --blur-profile: var(--blur-acrylic);
+
+    /* =====================================================================================
+     * |                                                                                    |
+     * | 2. LIGHT OR DARK GLASS                                                             |
+     * |                                                                                    |
+     * ===================================================================================== */
+    /* Choose ONE: var(--glass-light) or var(--glass-dark). Independent of Discord appearance. */
+    --glass-background: var(--glass-dark);
+
+    /* =====================================================================================
+     * |                                                                                    |
+     * | 3. BACKGROUND IMAGES                                                               |
+     * |                                                                                    |
+     * ===================================================================================== */
+    /* Use none for no wallpaper, or url('https://...') for your own image. */
+    --main-bg: none;
+    --settings-bg: none;
+
+    /* =====================================================================================
+     * |                                                                                    |
+     * | 4. BACKGROUND DARKENING                                                            |
+     * |                                                                                    |
+     * ===================================================================================== */
+    /* The last rgba number is opacity: 0 = clear, 1 = solid. Higher = darker. */
+    --bg-overlay-top: rgba(0, 0, 0, 0.2);
+    --bg-overlay-bottom: rgba(0, 0, 0, 0.5);
+    --settings-bg-overlay-top: rgba(0, 0, 0, 0.5);
+    --settings-bg-overlay-bottom: rgba(0, 0, 0, 0.8);
+
+    /* =====================================================================================
+     * |                                                                                    |
+     * | 5. BLUR AND LIQUID COLOR INTENSITY                                                 |
+     * |                                                                                    |
+     * ===================================================================================== */
+    /* Keep px on blur values. Smaller = clearer; larger = frostier. Keep % on saturation. */
+    --blur-val: 24px; /* Acrylic only. */
+    --liquid-blur-val: 2.5px; /* Liquid only. */
+    --liquid-saturation: 220%; /* Liquid only; 100% is normal saturation. */
+
+    /* =====================================================================================
+     * |                                                                                    |
+     * | 6. GLASS TINT PRESETS (OPTIONAL)                                                   |
+     * |                                                                                    |
+     * ===================================================================================== */
+    /* The first three rgba numbers are RGB (0-255); the last is opacity (0-1). */
+    --glass-light: rgba(255, 255, 255, 0.10);
+    --glass-dark: rgba(12, 16, 24, 0.24);
+
+    /* =====================================================================================
+     * |                                                                                    |
+     * | 7. ACCENT COLOR                                                                    |
+     * |                                                                                    |
+     * ===================================================================================== */
+    /* Main accent for Discord brand colors, buttons, links, and navigation icons. */
+    --main-color: #5865f2;
+
+    /* =====================================================================================
+     * |                                                                                    |
+     * | 8. TEXT AND ICON COLORS (ADVANCED, OPTIONAL)                                       |
+     * |                                                                                    |
+     * ===================================================================================== */
+    /* Keep !important. These are base colors; some component rules use their own colors. */
+    --text-normal: #ffffff !important;
+    --text-muted: #ffffff !important;
+    --interactive-normal: #ffffff !important;
+    --interactive-hover: #ffffff !important;
+    --interactive-active: #ffffff !important;
+    --channels-default: #ffffff !important;
+    --header-primary: #ffffff !important;
+    --header-secondary: #ffffff !important;
+    --icon-primary: #ffffff !important;
+    /* Shared color for secondary labels, neutral button text, and icons. */
+    --secondary-ui-color: #ffffff;
+
+    /* =====================================================================================
+     * |                                                                                    |
+     * | 9. MESSAGE BAR SPACING                                                             |
+     * |                                                                                    |
+     * ===================================================================================== */
+    /* Extra gap only while someone is typing; no reserved space when idle.
+       The typing edge uses your selected Acrylic/Liquid blur settings. */
+    --chat-input-gap: 0px;
+
+    /* =====================================================================================
+     * |                                                                                    |
+     * | 10. CHAT MESSAGE AVATARS                                                           |
+     * |                                                                                    |
+     * ===================================================================================== */
+    /* Keep px. Discord's normal size is 40px; 80px is twice as large.
+       Applies to full-size message avatars in channels and DMs.
+       Compact chat, reply thumbnails, and sidebar/profile avatars are separate. */
+    --message-avatar-size: 60px;
+    /* Avatar corners: 0px = square, 8px = rounded, 50% = circle.
+       Shared by message, sidebar, profile, and call avatar images. */
+    --avatar-radius: 30%;
+
+    /* =====================================================================================
+     * |                                                                                    |
+     * | 11. MESSAGES THAT MENTION YOU                                                      |
+     * |                                                                                    |
+     * ===================================================================================== */
+    /* Yellow glass tint. Last rgba number controls opacity (0-1). */
+    --mention-glass-tint: rgba(255, 205, 64, 0.14);
+    --mention-glass-hover: rgba(255, 205, 64, 0.22);
+    --mention-glass-accent: #ffd45c;
+
+    /* =====================================================================================
+     * |                                                                                    |
+     * | 12. SERVER LIST                                                                    |
+     * |                                                                                    |
+     * ===================================================================================== */
+    /* Choose var(--vertical) or var(--horizontal).
+       Horizontal places servers across the app above channels and chat. */
+    --server-list-layout: var(--vertical);
+    --server-list-top-padding: 12px; /* Space above Discord/DM in vertical mode. */
+    --server-list-horizontal-height: 80px; /* Room for icons and scrolling. */
+
+}
+/* =============================================================================================
+ * |                                                                                            |
+ * | END OF USER SETTINGS                                                                       |
+ * | Everything below implements the theme. No routine user edits are needed.                   |
+ * |                                                                                            |
+ * ============================================================================================= */
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | THEME SECTION INDEX                                                                        |
+ * | 01  INTERNAL TOKENS & GLASS CALCULATIONS                                                   |
+ * | 02  ACCENT PALETTE & LEGACY COLORS                                                         |
+ * | 03  SECONDARY TEXT & ICON TOKENS                                                           |
+ * | 04  BASE APPLICATION & BACKGROUND                                                          |
+ * | 05  GLOBAL TEXT & ICON OVERRIDES                                                           |
+ * | 06  LIQUID GLASS STRUCTURAL PANELS                                                         |
+ * | 07  BOOST GOAL TRACK                                                                       |
+ * | 08  SMALL GLASS SURFACES & PANEL DETAILS                                                   |
+ * | 09  BACKGROUND STRIPPING & CLEANUP                                                         |
+ * | 10  DECORATIVE BORDERS & DIVIDERS                                                          |
+ * | 11  MEMBER ROWS & CHAT DATE DIVIDERS                                                       |
+ * | 12  MISCELLANEOUS CHAT ELEMENTS & EMBEDS                                                   |
+ * | 13  MESSAGE ACTIONS & MENTIONS                                                             |
+ * | 14  STARTUP / LOADING SCREEN TRANSPARENCY                                                  |
+ * | 15  CHAT INPUT FONT COLOR FIX                                                              |
+ * | 16  LIQUID GLASS CONTEXT MENU & AUTOCOMPLETE                                               |
+ * | 17  HEADER, TITLES & TEXT TYPOGRAPHY                                                       |
+ * | 18  VOICE CONNECTION BANNERS & LINK LEGIBILITY                                             |
+ * | 19  CHANNEL TITLES & TOOLBAR                                                               |
+ * | 20  NESTED GLASS & EMBED CONTENT                                                           |
+ * | 21  DIALOGS & PINNED MESSAGE POPOUTS                                                       |
+ * | 22  CHANNEL TITLE ICON ALIGNMENT                                                           |
+ * | 23  ALIGNMENT & SPACING ADJUSTMENTS                                                        |
+ * | 24  AVATAR SHAPE & MESSAGE SIZING                                                          |
+ * | 25  VOICE STATUS TEXT                                                                      |
+ * | 26  TYPING INDICATOR & MESSAGE INPUT SPACING                                               |
+ * | 27  SCROLLBARS                                                                             |
+ * | 28  CALL LAYOUT & SPEAKING INDICATORS                                                      |
+ * | 29  VOICE PANEL BUTTONS                                                                    |
+ * | 30  COMPACT GLASS & NESTED BACKDROP OPTIMIZATION                                           |
+ * | 31  LIQUID GLASS PROFILE                                                                   |
+ * | 32  NO-GLASS PROFILE                                                                       |
+ * | 33  SERVER LIST LAYOUT                                                                     |
+ * | 34  SETTINGS PAGE                                                                          |
+ * |                                                                                            |
+ * ============================================================================================= */
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | 01 | INTERNAL TOKENS & GLASS CALCULATIONS                                                  |
+ * |                                                                                            |
+ * ============================================================================================= */
+/* Profile IDs, embedded lens maps, and calculated surfaces. */
+:root,
+.theme-dark {
+    --blur-acrylic: 0;
+    --blur-liquid: 1;
+    --blur-none: 2;
+    --vertical: 0;
+    --horizontal: 1;
+    /* Keep interpolation within the original Acrylic/Liquid range. */
+    --glass-profile-strength: clamp(0, var(--blur-profile), 1);
+    --glass-backdrop-enabled: clamp(0, calc(2 - var(--blur-profile)), 1);
+    /* =====================================================================================
+     * |                                                                                    |
+     * | EMBEDDED LENS MAPS - GENERATED DATA                                                |
+     * |                                                                                    |
+     * ===================================================================================== */
+    --liquid-refraction: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cfilter%20id%3D%22hotori-liquid%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%20color-interpolation-filters%3D%22sRGB%22%3E%3CfeImage%20href%3D%22data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAUAAAACgCAYAAAB9o7WcAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAA0aSURBVHhe7dxvaJf1wsdxsUkpWZYorCwGjhpMcIUWpq2B%2FXFT8G9oUxG2pbWtZP2mjfztnPc5%2BxlL92tY20rbBqIuJf%2BCbloJa2lSSk1wsGLCKGugWJahhqvPYd2777vazqmbc9q8%2BX4evJ5cDy4%2Bj95Pru%2F1HQLo%2F6L2KqrqRhU%2FothPCDOzQRL9CRX%2FiAq7Ud7Vvr36PUN%2B%2B6A%2F%2By%2BiXZfQtsuo7gdUfRXFu1GsG3HFzGxwRLtRpBsVXEW5P6DFl9H8S2jWxb4d68%2B%2FDOD759C751HjBbTnImr4DtV%2Fj2ouofhlFOtnkJnZQIleQZHLKP8SyvkeZX%2BH5l5EWRfQw%2BfRg%2Bf6du0PBfDEGfRBF2o%2Bh5rOor1fo4azqP48qvkGxS%2Bgtd8iuszMBseab1HkAsr%2FBuWcR9ln0ZyvUeZZlHEOPdCFJp3p27d%2FGcC20%2BiTTnSsE7WcQU2fo31foYZOVP8FqvkSxbtQrJ9BZmYDJdqFIl0o%2F0uU8wXK7kSzv0KZn6P0M2hKJ7qnE6We7tu5fgN4ug21t6PWT9Hx06ilAzW2o70daGsbqmtH1Z%2BheAeKdSBOmpkNjmgHinSggs9Qbjta0obmdKCsdpTegSafRmmfopR2NL7tdwJ45gTq%2FAR92opaW9HxU6j5JHq7De1uRdtPodoTqPpjFG9FsX4GmZkNlOhJFGlFBR%2BjvBNo0Sk0rxU92oYyTqLJp1BaK7q7FSV9gsad%2BCcBPPc%2B6voAdR5Dp4%2BjU8fRhx%2Biw0fRwY%2FQziOo4Rja1IxebUEVR1DsKOKQmdngiB5FxUfQMy1oeTPKPoYWHEEzPkLTj6L7P0QTjqPxx1HSMZT4ARrzfj8BPP8uOteMzrSgjhZ0shkdPYzeew8dOIx2NKEt76DX96NXGtH6gyjWzyAzs4ESPYRWHUTPNqKn9qOl76CFTWjmYfTQe2jqYTSxGSW3oHEtaEwzGv3ubwJ4cT%2B60IjONqHPm1B7I2p7G310EB0%2BgPbtQzsPoM17UM0OtOEttG4Xiu1GbDMzGxzR3Wj1LrTyLZS%2FAy3bgxYcQLP3oekH0H0HUerbKKUR3dmExjahUY1o5P5fBPDSLnRxD%2Fp6L%2FpqH%2BrYi1p3oyM7UdMOdGAn2r4d1W1FG99ElZvRui2orJ9BZmYDpXQbWr0FFW1GK95EuVvRou1o5k6UuQNN24nSdqPkvei2fejWvWjkHjRi1y8CeHkb%2Bq4BnW1AnQ2obSs6tR0da0DvbEF7NqOtdWjTJvRaHXp5I3rpDVRWi6g2MxscpbXo%2BTfQcxvR03Vo%2BSa0pA7N3Ywe2YKmNKAJ21HqVpTUgMY2oJsa0PCegPYE8Got%2BqEOfV%2BPztejL%2BpRex06UYuaN6H9r6MdNejNjajuNVRVhSo2oPIqVNbPIDOzgVJajUqqUPEGVFiFcl9DT2xEC2vQrNdRxiY0qRal1KE76tHoenRjPbq%2BDg2rRUO6q9DVanSpBn1Tg76sQZ9Vo4%2BrUcurqPEV9NYGtLkSbXwZbahAlZWoPI7KKhHrzcwGR2klKomjokq0sgKteBktq0SPb0BZr6D0V9G91eiuanR7DbqlBo2oQcOqUUIVGvJjBeqOo8txdCGOuuKoI45a4%2BhIBTq4Hu1ah7asQ2%2B8hKrKUbwclZejWD%2BDzMwGSnQ9KilHkXJUWI6efAktXYfmr0Mz1qNpFSgtjpLjKDGORsXR8DhKiKPrKtCQn2KoO4auxNC3a1FXDHXE0MkYOhpDh2JodwxtK0O1Zai6DFWWofUx9OKLiLVmZoPjhRfRqhgqKkMFZSivDC0uQ%2FNi6LEYmhpDE2MoOYYSY%2BjmteiGGEqIoaGxngCCrvTq6nWy16Fe23pV91rfa23PWZp%2BRpmZDYQ1oFW9Cnot7vVYr4m9Envd0Gtoz0eQfzeAP0fw72ZmA6snftdEAP%2FuCJrZAPpLb%2FyumQD%2BHMG%2FmZn9uXrid00G8G%2BOoJn9if7aG79rNoA%2FR9DM7D%2BsJ34OoJkFyQE0s2A5gGYWLAfQzILlAJpZsBxAMwuWA2hmwXIAzSxYDqCZBcsBNLNgOYBmFiwH0MyC5QCaWbAcQDMLlgNoZsFyAM0sWA6gmQXLATSzYDmAZhYsB9DMguUAmlmwHEAzC5YDaGbBcgDNLFgOoJkFywE0s2A5gGYWLAfQzILlAJpZsBxAMwuWA2hmwXIAzSxYDqCZBcsBNLNgOYBmFiwH0MyC5QCaWbAcQDMLlgNoZsFyAM0sWA6gmQXLATSzYDmAZhYsB9DMguUAmlmwHEAzC5YDaGbBcgDNLFgOoJkFywE0s2A5gGYWLAfQzILlAJpZsBxAMwuWA2hmwXIAzSxYDqCZBcsBNLNgOYBmFiwH0MyC5QCaWbAcQDMLlgNoZsFyAM0sWA6gmQXLATSzYDmAZhYsB9DMguUAmlmwHEAzC5YDaGbBcgDNLFgOoJkFywE0s2A5gGYWLAfQzILlAJpZsBxAMwuWA2hmwXIAzSxYDqCZBcsBNLNgOYBmFiwH0MyC5QCaWbAcQDMLlgNoZsFyAM0sWA6gmQXLATSzYDmAZhYsB9DMguUAmlmwHEAzC5YDaGbBcgDNLFgOoJkFywE0s2A5gGYWLAfQzILlAJpZsBxAMwuWA2hmwXIAzSxYDqCZBcsBNLNgOYBmFiwH0MyC5QCaWbAcQDMLlgNoZsFyAM0sWA6gmQXLATSzYDmAZhYsB9DMguUAmlmw%2Fl8EkL%2Bamf05rukA%2Fnasmdl%2F2jUZQP5iZjYwrqkA%2Fnacmdmf7ZoIIGvMzAbHvx%2FAKOqOoitR9O0a1BVFHVF0MoqORtGhKNodRdtKUW0pqi5FlaVofRS9%2BELfQWZmA%2BWFF9CqKCoqRQWlKK8ULS5F86LosSiaGkUToyg5ihKj6OY16IYoSoiioVE05Mdi1B1BlyPoQgR1RVBHBLVG0JFidHAV2rUabVmN3ngeVZWgeAkqL0GxVQgzs0ESXYVKSlCkBBWWoCefR0tXo%2Fmr0YxVaFoxSoug5AhKjKBRETQ8ghIi6LpiNKS7EF0tQJfy0Tf56Mt89FkB%2BrgAtTyDGp9Fb61Em4vQxufQhmJUWYTKI6isqO8gM7OBUlqESiKoqAitLEYrnkPLitDjK1HWsyj9GXRvAbqrAN2ej27JRyPy0bAClFCIhlzNQz%2Fkou9z0Pkc9EUOas9FJ%2FJQ83K0%2Fym0Ix%2B9uQLVPY2qClHFSlReiMoKEGZmg6S0AJUUouKVqLAQ5T6NnliBFuajWU%2BhjOVoUh5KyUV35KDROejGHHR9LhqWh4b0nLC%2BvBh9l43OZqPObNS2BJ1ahI5lo3eWoj3L0NZctGk5ei0XvbwCvfQkKsvrO8jMbKCU5qHnn0TPrUBP56Lly9GSXDR3GXpkKZqSjSYsQqlLUFI2GpuNbspGwxf%2F198lPwfw0nx0cS76eg76ajbqmINa56EjC1DTQnRgAdq%2BCNUtQRufQJXL0LqlqKznJWZmg6R0MVq9FBUtQyueQLlL0KJFaOYClLkQTVuA0uah5Dnottno1jlo5Fw0Yv4vAnhxFrqQhc5mos8zUXsWansUfTQDHZ6J9s1GO2eizXNRzUK04XG0bj6Kzes7yMxsoETnodXz0crHUf5CtGwuWjATzZ6Nps9E981AqY%2BilCx0ZyYam4lGZaGRs34RwB7nH0bnMtCZdNSRjk5moKPT0XsPoQPT0Y5MtOUR9Pos9EoWWj8DxR5DmJkNkuhjaNUM9GwWemoWWvoIWpiJZk5HDz2Epk5HEzNQcjoal47GZKDRD%2F%2FvBQv%2FE8BzD6KuB1DnFHR6Mjo1GX14Pzo8FR28D%2B2chhqmoE0Z6NV0VDENxab2HWRmNlCiU1HxNPRMOlqegbKnoAXT0Iz70PSp6P770YTJaPxklDQFJT6AxjzYTwB7nJmEOu9Bn6ah1jR0fAJqnojeTkW709D2Cah2Eqq%2BF8XTUGwiwsxskEQnokgaKrgX5U1CiyageWno0VSUMRFNnoDS0tDdaSjpHjRu0q%2Bv2PpVAHucTkXtKaj1bnR8PGpJRo0paG8y2pqK6lJQ9V0onoxiyX0HmZkNlGgyiiSjgrtQbgpakormJKOsFJSejCaPR2l3o5QUND71163rN4A92sajT5LQsSTUMg413Yn23YYaklD9HajmdhRPRLFEhJnZIIkmokgiyr8d5dyBspPQ7NtQ5p0ofRyakoTuSUKp4%2Ft27p8GsMeJceiDRNQ8BjWNRXtvRQ1jUf1oVHMLio9Ca2%2FuO8jMbKCsuRlFRqH8W1DOaJQ9Fs25FWWORRlj0AOJaNK4vn373QD2eH8Menc0ahyF9oxEDTeh%2BhtRzQgUH45iNyDMzAZJ9AYUGY7yR6CcG1H2TWjuSJQ1Cj08Gj04pm%2FX%2FnAA%2F9v%2BkWjXCLRtOKq7HlUPQ%2FEEFEvoO8jMbKBEE1AkARUMQ7nXo8XD0fwRaNbIvh3rzx8K4C%2FVDkNVCajiOhQbijAzGyTRoaj4OlSYgPKG9e3V7%2FkHNgxVPh4wyeUAAAAASUVORK5CYII%3D%22%20x%3D%220%22%20y%3D%220%22%20width%3D%22100%25%22%20height%3D%22100%25%22%20preserveAspectRatio%3D%22none%22%20result%3D%22edgeMap%22%2F%3E%3CfeDisplacementMap%20in%3D%22SourceGraphic%22%20in2%3D%22edgeMap%22%20scale%3D%2214%22%20xChannelSelector%3D%22R%22%20yChannelSelector%3D%22G%22%2F%3E%3C%2Ffilter%3E%3C%2Fsvg%3E#hotori-liquid");
+    --liquid-refraction-compact: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cfilter%20id%3D%22hotori-liquid%22%20x%3D%22-10%25%22%20y%3D%22-10%25%22%20width%3D%22120%25%22%20height%3D%22120%25%22%20color-interpolation-filters%3D%22sRGB%22%3E%3CfeImage%20href%3D%22data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAKAAAAAwCAYAAACWqXFuAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAnHSURBVHhe7dxtaNvl4ofxMXWiIvWBIuJQqYrKhE2dqJQincOCjqGtm6gT61ZXNa1zNK4PS5MradaHmTJnG7WzmxWn4marjClU5oqUouLUDRwqalGZiBQfiqg4H64%2F%2BRtxx%2FYcPZwXfZH7xYdA3uT74oLwC%2FedWYD%2Fjf6fsfcXzPyK6d%2BQoKDFfsPor1j3C9b8PLWXvzPrr29MZ%2Fd3OPgDbv8et%2F6I2Z%2Bw%2BzCmDyOTQSGLHcaGwxj5CVf9iCu%2Bx6ofcMl3Uzuazn8McHQC90zgi1%2Fj0CRun8D%2BrzD7DWa%2BxfQ0g4LCEpvE6LcY%2BQZrvsIVE1g5idd9jYsnsGxialf%2FKMB9h3Dscxz5EncfwsEv8ImPcMs49nyCmU8x%2FRlyIChksc8w%2BinWf4Krx%2FH2j7DqC1xyCMu%2FxNLPceGhqX39xwAPfoxvj%2BPoh7h3HF84iDs%2BwK1v4qNv4eZ3cON%2BTE8zKCgssQO4bj%2BueQfvegtXvYnLP8DrD%2BKicSz7EC8Zx3kfT%2B1s2gA%2FPojvvYf73sXX3sfh%2FbhzDJ96Hftext49uOkV7NqLbSPIUFDIWkewcS%2BufQXr9mDty3jr67hsDCv245Xv48J38cL38JyDfxPgoX04%2Fja%2Buw%2FHxvDVN3DXCA6N4sBL%2BNgwPrgTM4PYMYSpaQYFhSU%2BhM1DGB3E%2B3bincNY%2FRJWjuLSEbzqDSwdw4v2YcnbOHffvwlwYhQ%2FH8MPR%2FH91%2FCNV3F4GHc8j0%2Fvwr5n8OFnMbMNux7H9gFMDSDZoJDFB7BlABsfx%2Bg2vOdZrH0Gb9mFy5%2FHimG8%2FFW84DU8bxTPGMPi0ekC3INfjuD4Xtw%2FjCO78Pkd%2BNxzuO1J7NmCm%2Fuxqwc7ejGdxeQ0g4LCkshiLIvNvdjYg2v6sX4LrnwSb3wOb9iB5btwwTCW7MXTRrB4z18C%2FG43fv0iHtqNB1%2FAsZ04OoS7nsYnt%2BEjj2C2DzMPYXsGN2SwrRuT3UhnUMgS3djajesz2JLB6EMY6cO7H8HbtuHSp7FsCEt34rwXcO5uPOVFPHH3EQH%2BMIiTQ%2FjFIH6wA19%2FCl8awGf6cEsP9mVx0ybs3IgdD2BbB6Y6MTnNoKCwJDox3omtHdj8ADZtxLWbsDaLq3vw5j68dgCveArP34GnD2LREB4%2FeESA32%2FHie340RP45lZ8uQ%2BHH8NnH8b%2BzfhQBjd2Yns7bmjHVBqTaSQnFRS0NCbSGE%2Fj%2BnZsacd1nXhvBms2400PY8VjeE0fXrYVz30Ci7fjCdvzAf7cjz9uxa%2F6cXwLvvUo7unFnQ%2Fitgz2dGGmHR%2FowPYN2NaGydTvpowJClIir7UNWzbg%2FR0Ybcf6LlyZwWUP4uJevPRRLNmCp%2FbjcVvxmH6c9Usv%2FpTFb7L4SQ%2B%2Bsxlf2YSDGXy8C3s7MLMBO9owncJUElO5AJNIECQxkcR4CuNJjKWwuQ2jG7CuA%2B%2FowqoMXr0JL96MZ%2FfgyVk8NotH9%2BKsXzN4uBu%2FzeCnGdy%2FEfd24VAHDrRjNo3dbdiZwnQuvmQ%2BvtxTzDRjggJEPsJcgElsSmFDG0bSWN2OlR24qAsXbMSzMnhSBud041EZnPVbGg%2BncTKNn6XxQBpH2nAohQMpzCaxO4mdSUyDKTCZ98ejdFDYEnlxMAY2JbEhiZEkVqewMoXlbTg%2FjWemsSiNc9I4O50LEJzMO5A3lJfN68zLxRcCDP7qyABzmvIieZV58%2FOK8mbnHkJCgMH%2FKgQYzKgQYDCjQoDBjAoBBjMqBBjMqBBgMKNCgMGMCgEGMyoEGMyoEGAwo0KAwYwKAQYzKgQYzKgQYDCj%2FrcAY3g4hpMx%2FCyGB2I40opDcRyIYzaB3QnsTIQDqcH0jgzw%2Fw%2BkJrAhgZEEVsexMo7lrTg%2FhmfGsCiGc2I4O5Y7kh%2FFww34bRQ%2FjeL%2Bdbi3EYeacaAFszHsbsXOOKYTmEpgMpH%2F8NxrEOQCTGA8gbEENsWxoRUjMaxuwcpmXNSIC9bhWVE8KYpzGvCoaO5SUh3%2BFMFvIvhJPb6zBl9Zi4NRfLwRe5sxsx47WjEd%2Fz3AVDwfYRAk8vHF8wHGsbkVo%2BuxrhnvaMSqKF69Fi9eg2fX48kRPDaCR9flrmXW4I%2Br8KsaHF%2BNb92Fe%2Bpw5324LYo9jZhpwQeasX09trViMhdgHAmCOCbyWluxZT3e34zRFqxvxJVRXHYfLq7DS%2B%2FCktV4ag0etwqPqfnjYvoKnFiBH92Ob67Cl2tx%2BE589h7sX4MPRXFjE7a34IYWTMUwGUNyphkUFJAYJmIYj%2BH6FmxpwXVNeG8Ua9bgTfdgxZ14TS1etgrPvR2LV%2BAJK37%2F6v79rzmqcLISv6jCD5bj67fiS9X4TC1uqce%2BCG5ai53rsON%2BbGvGVBMmm5CgoCWaMN6Erc3YfD82rcO1a7E2gqvr8eZavLYar7gVz1%2BOp1dhUSUeX3VEgN8twa%2Bvw0NL8OD1OLYMRytx1y345Ep85G7M1mLmXmyP4oYotjVgsmHqoKCwJBqwtQHXR7ElitF7MVKLd9%2BNt63EpbdgWSWWLsN51%2BPcJXjKdXjikiMCzJlYjF%2BW4%2Fgi3F%2BBI0vx%2BeX43I247TbsWY2ba7CrHjvqMB3BZAQJCloigrEINtdhYz2uqcH61bjyNrzxRrxhOZYvxQUVWLIITyvH4sV%2F%2FoTzZ4Bl%2BHkpfliG71%2BJb1yFwxW44wZ8ein23YwP34SZldh1B7ZXY6p66qCgsMSrsaUaG%2B%2FA6Eq85yasvRlvWYrLb8CKCrz8KrzgSjyvDM8oxeKyaQLMObQQxy%2FBdxfiWCm%2BejnuKsehMhy4Fh%2BrwAeXYaYKOyoxVYkEBS1eic2VGK3C%2B5bhnRVYfS1WluHScrzqciwtxYsWYsklOHfhn71NCTDn43n43oW47yJ87QIcXoA7S%2FGpK7DvGuxdjJuuxq5F2FY%2BdVBQWFrLsXERrr0a6xZj7TV46xW4rBQrFuCVF%2BDCi%2FDCC%2FGcef%2Fa2rQB5hw8B98uwdHzcG8JvjAPd5yPWy%2FDRy%2FFzRfjxgWYno8EBS02H9ctwDUX412X4qrLcPn5eP08XFSCZefhJSU475ypnf3bAHP2zcWxM3DkNNw9FwdPxyfOxS0l2HM2Zs7C9JlTBwWFJXYmRs%2FC%2BrNxdQnefi5WnY5L5mL5aVh6Bi6cO7Wvvw0wZ7QY9xTji6fgUBFuL8b%2BUzF7MmZOwnQREhS0WBFGT8LIyVhzKq4oxsoivO4UXFyMZcVTu%2FrHAf5h94k4eDxuPwG3HofZY7F7DqbnTB0UFJbYHGyYg5FjcdVxuOIErDoel5w4taPp%2FKMAj9R%2FDPYejZmjMD0bCQpabDZGj8K6o7HmmKm9%2FJ3%2FA5C15ldV2efrAAAAAElFTkSuQmCC%22%20x%3D%220%22%20y%3D%220%22%20width%3D%22100%25%22%20height%3D%22100%25%22%20preserveAspectRatio%3D%22none%22%20result%3D%22edgeMap%22%2F%3E%3CfeDisplacementMap%20in%3D%22SourceGraphic%22%20in2%3D%22edgeMap%22%20scale%3D%228%22%20xChannelSelector%3D%22R%22%20yChannelSelector%3D%22G%22%2F%3E%3C%2Ffilter%3E%3C%2Fsvg%3E#hotori-liquid");
+    /* =====================================================================================
+     * |                                                                                    |
+     * | CALCULATED GLASS SURFACES                                                          |
+     * |                                                                                    |
+     * ===================================================================================== */
+    --glass-surface: var(--glass-background);
+    --glass-background-subtle: color-mix(in srgb, var(--glass-background) 50%, transparent);
+    --glass-blur: calc((var(--blur-val) + (var(--liquid-blur-val) - var(--blur-val)) * var(--glass-profile-strength)) * var(--glass-backdrop-enabled));
+    --glass-saturation: calc(100% + (50% + (var(--liquid-saturation) - 150%) * var(--glass-profile-strength)) * var(--glass-backdrop-enabled));
+    --glass-brightness: calc(1 + 0.04 * var(--glass-profile-strength) * var(--glass-backdrop-enabled));
+    --glass-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation)) brightness(var(--glass-brightness));
+    --glass-unread-filter: blur(var(--glass-blur)) saturate(calc(100% + (80% + (var(--liquid-saturation) - 180%) * var(--glass-profile-strength)) * var(--glass-backdrop-enabled))) brightness(var(--glass-brightness));
+    --glass-border: rgba(255, 255, 255, calc(0.10 + 0.08 * var(--glass-profile-strength)));
+    --glass-sheen: linear-gradient(135deg,
+                              rgba(255, 255, 255, calc(0.12 * var(--glass-profile-strength))) 0%,
+                              transparent 40%, transparent 70%,
+                              rgba(255, 255, 255, calc(0.04 * var(--glass-profile-strength))) 100%);
+    --glass-edge-shadow: inset 1px 1px 0 rgba(255, 255, 255, calc(0.35 * var(--glass-profile-strength))),
+                           inset -1px -1px 0 rgba(255, 255, 255, calc(0.18 * var(--glass-profile-strength)));
+    --glass-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.4),
+                           0 8px 32px rgba(0, 0, 0, 0.15);
+    --glass-shadow-small: inset 0 1px 1px rgba(255, 255, 255, 0.4),
+                           0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | 02 | ACCENT PALETTE & LEGACY COLORS                                                        |
+ * |                                                                                            |
+ * ============================================================================================= */
+/* Discord accent palette: all shades derive from the user's --main-color.
+   Keep light/dark and alpha variants for hover states and subtle surfaces.
+   Palette names and legacy mappings follow discord-current-full.css. */
+:root,
+.theme-dark,
+.theme-light {
+    --blurple-1: color-mix(in srgb, var(--main-color) 13.89%, white) !important;
+    --blurple-2: color-mix(in srgb, var(--main-color) 15.56%, white) !important;
+    --blurple-3: color-mix(in srgb, var(--main-color) 17.78%, white) !important;
+    --blurple-4: color-mix(in srgb, var(--main-color) 20.00%, white) !important;
+    --blurple-5: color-mix(in srgb, var(--main-color) 21.67%, white) !important;
+    --blurple-6: color-mix(in srgb, var(--main-color) 23.89%, white) !important;
+    --blurple-7: color-mix(in srgb, var(--main-color) 25.56%, white) !important;
+    --blurple-8: color-mix(in srgb, var(--main-color) 27.78%, white) !important;
+    --blurple-9: color-mix(in srgb, var(--main-color) 29.44%, white) !important;
+    --blurple-10: color-mix(in srgb, var(--main-color) 31.11%, white) !important;
+    --blurple-11: color-mix(in srgb, var(--main-color) 33.33%, white) !important;
+    --blurple-12: color-mix(in srgb, var(--main-color) 35.00%, white) !important;
+    --blurple-13: color-mix(in srgb, var(--main-color) 37.22%, white) !important;
+    --blurple-14: color-mix(in srgb, var(--main-color) 38.89%, white) !important;
+    --blurple-15: color-mix(in srgb, var(--main-color) 40.56%, white) !important;
+    --blurple-16: color-mix(in srgb, var(--main-color) 42.22%, white) !important;
+    --blurple-17: color-mix(in srgb, var(--main-color) 43.89%, white) !important;
+    --blurple-18: color-mix(in srgb, var(--main-color) 46.11%, white) !important;
+    --blurple-19: color-mix(in srgb, var(--main-color) 47.78%, white) !important;
+    --blurple-20: color-mix(in srgb, var(--main-color) 49.44%, white) !important;
+    --blurple-21: color-mix(in srgb, var(--main-color) 51.11%, white) !important;
+    --blurple-22: color-mix(in srgb, var(--main-color) 52.78%, white) !important;
+    --blurple-23: color-mix(in srgb, var(--main-color) 54.45%, white) !important;
+    --blurple-24: color-mix(in srgb, var(--main-color) 56.11%, white) !important;
+    --blurple-25: color-mix(in srgb, var(--main-color) 57.78%, white) !important;
+    --blurple-26: color-mix(in srgb, var(--main-color) 59.44%, white) !important;
+    --blurple-27: color-mix(in srgb, var(--main-color) 61.67%, white) !important;
+    --blurple-28: color-mix(in srgb, var(--main-color) 62.78%, white) !important;
+    --blurple-29: color-mix(in srgb, var(--main-color) 65.00%, white) !important;
+    --blurple-30: color-mix(in srgb, var(--main-color) 66.67%, white) !important;
+    --blurple-31: color-mix(in srgb, var(--main-color) 68.89%, white) !important;
+    --blurple-32: color-mix(in srgb, var(--main-color) 71.11%, white) !important;
+    --blurple-33: color-mix(in srgb, var(--main-color) 72.22%, white) !important;
+    --blurple-34: color-mix(in srgb, var(--main-color) 74.45%, white) !important;
+    --blurple-35: color-mix(in srgb, var(--main-color) 75.56%, white) !important;
+    --blurple-36: color-mix(in srgb, var(--main-color) 77.78%, white) !important;
+    --blurple-37: color-mix(in srgb, var(--main-color) 79.44%, white) !important;
+    --blurple-38: color-mix(in srgb, var(--main-color) 81.11%, white) !important;
+    --blurple-39: color-mix(in srgb, var(--main-color) 82.78%, white) !important;
+    --blurple-40: color-mix(in srgb, var(--main-color) 84.44%, white) !important;
+    --blurple-41: color-mix(in srgb, var(--main-color) 86.67%, white) !important;
+    --blurple-42: color-mix(in srgb, var(--main-color) 87.78%, white) !important;
+    --blurple-43: color-mix(in srgb, var(--main-color) 89.45%, white) !important;
+    --blurple-44: color-mix(in srgb, var(--main-color) 91.11%, white) !important;
+    --blurple-45: color-mix(in srgb, var(--main-color) 92.78%, white) !important;
+    --blurple-46: color-mix(in srgb, var(--main-color) 93.89%, white) !important;
+    --blurple-47: color-mix(in srgb, var(--main-color) 95.55%, white) !important;
+    --blurple-48: color-mix(in srgb, var(--main-color) 96.67%, white) !important;
+    --blurple-49: color-mix(in srgb, var(--main-color) 98.89%, white) !important;
+    --blurple-50: var(--main-color) !important;
+    --blurple-51: color-mix(in srgb, var(--main-color) 97.58%, black) !important;
+    --blurple-52: color-mix(in srgb, var(--main-color) 95.15%, black) !important;
+    --blurple-53: color-mix(in srgb, var(--main-color) 92.73%, black) !important;
+    --blurple-54: color-mix(in srgb, var(--main-color) 90.61%, black) !important;
+    --blurple-55: color-mix(in srgb, var(--main-color) 88.18%, black) !important;
+    --blurple-56: color-mix(in srgb, var(--main-color) 86.06%, black) !important;
+    --blurple-57: color-mix(in srgb, var(--main-color) 83.94%, black) !important;
+    --blurple-58: color-mix(in srgb, var(--main-color) 81.51%, black) !important;
+    --blurple-59: color-mix(in srgb, var(--main-color) 79.39%, black) !important;
+    --blurple-60: color-mix(in srgb, var(--main-color) 77.27%, black) !important;
+    --blurple-61: color-mix(in srgb, var(--main-color) 75.15%, black) !important;
+    --blurple-62: color-mix(in srgb, var(--main-color) 73.03%, black) !important;
+    --blurple-63: color-mix(in srgb, var(--main-color) 71.21%, black) !important;
+    --blurple-64: color-mix(in srgb, var(--main-color) 69.09%, black) !important;
+    --blurple-65: color-mix(in srgb, var(--main-color) 66.97%, black) !important;
+    --blurple-66: color-mix(in srgb, var(--main-color) 65.15%, black) !important;
+    --blurple-67: color-mix(in srgb, var(--main-color) 63.03%, black) !important;
+    --blurple-68: color-mix(in srgb, var(--main-color) 61.21%, black) !important;
+    --blurple-69: color-mix(in srgb, var(--main-color) 59.09%, black) !important;
+    --blurple-70: color-mix(in srgb, var(--main-color) 57.27%, black) !important;
+    --blurple-71: color-mix(in srgb, var(--main-color) 55.15%, black) !important;
+    --blurple-72: color-mix(in srgb, var(--main-color) 53.33%, black) !important;
+    --blurple-73: color-mix(in srgb, var(--main-color) 51.82%, black) !important;
+    --blurple-74: color-mix(in srgb, var(--main-color) 50.00%, black) !important;
+    --blurple-75: color-mix(in srgb, var(--main-color) 48.18%, black) !important;
+    --blurple-76: color-mix(in srgb, var(--main-color) 46.06%, black) !important;
+    --blurple-77: color-mix(in srgb, var(--main-color) 44.24%, black) !important;
+    --blurple-78: color-mix(in srgb, var(--main-color) 42.42%, black) !important;
+    --blurple-79: color-mix(in srgb, var(--main-color) 40.61%, black) !important;
+    --blurple-80: color-mix(in srgb, var(--main-color) 39.09%, black) !important;
+    --blurple-81: color-mix(in srgb, var(--main-color) 37.27%, black) !important;
+    --blurple-82: color-mix(in srgb, var(--main-color) 35.45%, black) !important;
+    --blurple-83: color-mix(in srgb, var(--main-color) 33.64%, black) !important;
+    --blurple-84: color-mix(in srgb, var(--main-color) 32.42%, black) !important;
+    --blurple-85: color-mix(in srgb, var(--main-color) 30.61%, black) !important;
+    --blurple-86: color-mix(in srgb, var(--main-color) 29.09%, black) !important;
+    --blurple-87: color-mix(in srgb, var(--main-color) 27.27%, black) !important;
+    --blurple-88: color-mix(in srgb, var(--main-color) 25.76%, black) !important;
+    --blurple-89: color-mix(in srgb, var(--main-color) 24.24%, black) !important;
+    --blurple-90: color-mix(in srgb, var(--main-color) 22.42%, black) !important;
+    --blurple-91: color-mix(in srgb, var(--main-color) 21.21%, black) !important;
+    --blurple-92: color-mix(in srgb, var(--main-color) 19.39%, black) !important;
+    --blurple-93: color-mix(in srgb, var(--main-color) 17.88%, black) !important;
+    --blurple-94: color-mix(in srgb, var(--main-color) 16.36%, black) !important;
+    --blurple-95: color-mix(in srgb, var(--main-color) 14.24%, black) !important;
+    --blurple-96: color-mix(in srgb, var(--main-color) 12.42%, black) !important;
+    --blurple-97: color-mix(in srgb, var(--main-color) 10.30%, black) !important;
+    --blurple-98: color-mix(in srgb, var(--main-color) 7.58%, black) !important;
+    --blurple-99: color-mix(in srgb, var(--main-color) 3.94%, black) !important;
+    --blurple-100: color-mix(in srgb, var(--main-color) 0.00%, black) !important;
+
+    /* Legacy brand aliases, including translucent mentions and selections. */
+    --brand-100: var(--blurple-1) !important;
+    --brand-130: var(--blurple-1) !important;
+    --brand-160: var(--blurple-1) !important;
+    --brand-200: var(--blurple-4) !important;
+    --brand-230: var(--blurple-7) !important;
+    --brand-260: var(--blurple-10) !important;
+    --brand-300: var(--blurple-15) !important;
+    --brand-330: var(--blurple-21) !important;
+    --brand-345: var(--blurple-26) !important;
+    --brand-360: var(--blurple-29) !important;
+    --brand-400: var(--blurple-38) !important;
+    --brand-430: var(--blurple-41) !important;
+    --brand-460: var(--blurple-45) !important;
+    --brand-500: var(--blurple-50) !important;
+    --brand-530: var(--blurple-54) !important;
+    --brand-560: var(--blurple-59) !important;
+    --brand-600: var(--blurple-65) !important;
+    --brand-630: var(--blurple-70) !important;
+    --brand-660: var(--blurple-74) !important;
+    --brand-700: var(--blurple-81) !important;
+    --brand-730: var(--blurple-82) !important;
+    --brand-760: var(--blurple-84) !important;
+    --brand-800: var(--blurple-86) !important;
+    --brand-830: var(--blurple-91) !important;
+    --brand-860: var(--blurple-96) !important;
+    --brand-900: var(--blurple-99) !important;
+    --brand-05a: color-mix(in srgb, var(--main-color) 5%, transparent) !important;
+    --brand-10a: color-mix(in srgb, var(--main-color) 10%, transparent) !important;
+    --brand-15a: color-mix(in srgb, var(--main-color) 15%, transparent) !important;
+    --brand-20a: color-mix(in srgb, var(--main-color) 20%, transparent) !important;
+    --brand-25a: color-mix(in srgb, var(--main-color) 25%, transparent) !important;
+    --brand-30a: color-mix(in srgb, var(--main-color) 30%, transparent) !important;
+    --brand-35a: color-mix(in srgb, var(--main-color) 35%, transparent) !important;
+    --brand-40a: color-mix(in srgb, var(--main-color) 40%, transparent) !important;
+    --brand-45a: color-mix(in srgb, var(--main-color) 45%, transparent) !important;
+    --brand-50a: color-mix(in srgb, var(--main-color) 50%, transparent) !important;
+    --brand-55a: color-mix(in srgb, var(--main-color) 55%, transparent) !important;
+    --brand-60a: color-mix(in srgb, var(--main-color) 60%, transparent) !important;
+    --brand-65a: color-mix(in srgb, var(--main-color) 65%, transparent) !important;
+    --brand-70a: color-mix(in srgb, var(--main-color) 70%, transparent) !important;
+    --brand-75a: color-mix(in srgb, var(--main-color) 75%, transparent) !important;
+    --brand-80a: color-mix(in srgb, var(--main-color) 80%, transparent) !important;
+    --brand-85a: color-mix(in srgb, var(--main-color) 85%, transparent) !important;
+    --brand-90a: color-mix(in srgb, var(--main-color) 90%, transparent) !important;
+    --brand-95a: color-mix(in srgb, var(--main-color) 95%, transparent) !important;
+    --brand-experiment-15a: var(--brand-15a) !important;
+}
+
+/* Legacy components that bypass the complete color tokens. */
+.brandShine_d723f6 {
+    color: hsl(from var(--brand-500) h s l / .1) !important;
+}
+.newUpsellBackground__65c15 {
+    background: hsl(from var(--brand-500) h s l / .08) !important;
+}
+.buttonShine_b807c8 {
+    color: hsl(from var(--brand-500) h s l / .1) !important;
+}
+.addCard__28d4e {
+    background-color: hsl(from var(--brand-500) h s l / .25) !important;
+    border: 2px dashed hsl(from var(--brand-500) h s l / .5) !important;
+}
+.addIconWrapper__28d4e {
+    background-color: hsl(from var(--brand-500) h s l / .35) !important;
+}
+.clickBackground__29c87 {
+    background-color: hsl(from var(--brand-500) h s l / .9) !important;
+}
+.tivNavItemIconContainerSelected__4ccc5 {
+    background-color: hsl(from var(--brand-500) h s l / .9) !important;
+}
+.brandShineLight__7eea4 {
+    color: hsl(from var(--brand-500) h s l / .1) !important;
+}
+
+/* Literal blurple used by the shop selection border and card glow. */
+.shopCardSelected_bab2bc {
+    border-color: var(--main-color) !important;
+}
+.cardFlairGlow_abfd90 {
+    background: conic-gradient(from 180deg at 50% 50%, var(--main-color) 0deg, var(--blurple-29) 60deg, var(--blurple-15) 120deg, var(--main-color) 180deg, var(--blurple-29) 240deg, var(--blurple-40) 300deg, var(--main-color) 1turn) !important;
+}
+
+@keyframes hotori-owned-card-glow {
+    0%, 100% { box-shadow: 0 0 0 0 transparent; }
+    25%, 75% { box-shadow: 0 0 25px 0 var(--main-color); }
+}
+
+.full-motion .card__892b9.highlighted__892b9 {
+    animation-name: hotori-owned-card-glow !important;
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | 03 | SECONDARY TEXT & ICON TOKENS                                                          |
+ * |                                                                                            |
+ * ============================================================================================= */
+/* Neutral labels/buttons use the user setting; semantic status colors stay separate. */
+:root,
+.theme-dark,
+.theme-light {
+    --text-default: var(--secondary-ui-color) !important;
+    --text-strong: var(--secondary-ui-color) !important;
+    --text-subtle: var(--secondary-ui-color) !important;
+    --icon-default: var(--secondary-ui-color) !important;
+    --icon-strong: var(--secondary-ui-color) !important;
+    --icon-muted: var(--secondary-ui-color) !important;
+    --icon-subtle: var(--secondary-ui-color) !important;
+    --interactive-muted: var(--secondary-ui-color) !important;
+    --interactive-icon-default: var(--secondary-ui-color) !important;
+    --interactive-icon-hover: var(--secondary-ui-color) !important;
+    --interactive-icon-active: var(--secondary-ui-color) !important;
+    --interactive-text-default: var(--secondary-ui-color) !important;
+    --interactive-text-hover: var(--secondary-ui-color) !important;
+    --interactive-text-active: var(--secondary-ui-color) !important;
+    --control-secondary-icon-default: var(--secondary-ui-color) !important;
+    --control-secondary-text-default: var(--secondary-ui-color) !important;
+    --control-secondary-text-hover: var(--secondary-ui-color) !important;
+    --control-secondary-text-active: var(--secondary-ui-color) !important;
+    --control-icon-only-icon-default: var(--secondary-ui-color) !important;
+    --control-icon-only-icon-hover: var(--secondary-ui-color) !important;
+    --control-icon-only-icon-active: var(--secondary-ui-color) !important;
+    --input-placeholder-text-default: var(--secondary-ui-color) !important;
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | 04 | BASE APPLICATION & BACKGROUND                                                         |
+ * |                                                                                            |
+ * ============================================================================================= */
+.app_a3002d,
+.app__160d8 {
+    background: transparent !important;
+}
+
+.bg__960e4 {
+    background-image: linear-gradient(to bottom, var(--bg-overlay-top), var(--bg-overlay-bottom)), var(--main-bg) !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-attachment: fixed !important;
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | 05 | GLOBAL TEXT & ICON OVERRIDES                                                          |
+ * |                                                                                            |
+ * ============================================================================================= */
+.name__5d473,
+.modeUnreadImportant__2ea32 .name__2ea32,
+.clickable__81391 {
+    color: #ffffff !important;
+}
+
+.name__2ea32 {
+    color: var(--secondary-ui-color) !important;
+}
+
+svg {
+    fill: currentColor !important;
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | 06 | LIQUID GLASS STRUCTURAL PANELS                                                        |
+ * |                                                                                            |
+ * ============================================================================================= */
+.wrapper_ef3116,
+.sidebarList__5e434,
+.panels__5e434,
+.member_c8ffbb,
+.sm_a22cb0.hasText_a22cb0 .buttonChildrenWrapper_a22cb0,
+.full-motion .searchBar_c322aa,
+.overlay_b32ca4,
+.channelTextArea__74017,
+.jumpToPresentBar__0f481,
+.divider__908e2::before,
+.unreadPill__908e2,
+.container__06b03,
+.footerButton__272c7,
+.container__62dd3,
+.newMessagesBar__0f481,
+.root_bfe55a,
+.buttonSection__1405b,
+.reaction__23977,
+.tabBody__133bf,
+.nowPlayingColumn__133bf,
+.refresh-active-now .header__00943,
+.refresh-active-now .itemCard__7e549,
+.upload_aa605f,
+.modeSelected__2ea32,
+.title_edbb22,
+.trailing_c38106,
+.backForwardButtons__63abb,
+.content__908e2,
+.card__39ec2,
+.wrapper__926d7,
+.stackedBars__74017,
+.sidebarRegion__23e6b,
+.container__72c38,
+.modal_e44912,
+.searchResultsWrap_a98f3b,
+.searchResult__80bf8,
+.container__16eb0,
+.sidebarContainer__89463,
+.container__1dc40,
+.container_e928f4,
+
+.table_e7d73e,
+.tier_a36dee,
+.wrapper__83b1d,
+.tierHeaderUnlocked_a36dee,
+.tierBody_a36dee,
+.soundTable__93d4a,
+.mainTableContainer__09a38,
+.checkmark_ce03f4,
+.roleRow__5f97b,
+.container_d8f25b,
+.icon_d8f25b,
+.card_b846e5,
+.joinOptions__959cb,
+.compactContainer_eaaeee,
+.card_dc2e44,
+.iconWrapper__4a3a5,
+.clickableContainer_d96a9c,
+.backgroundModifierContainer_d96a9c,
+.auditLog__43dab,
+.scrollerContainer__4b8d8,
+.editCard_a25a68,
+.addAnotherRuleCardContainer__0c1e8,
+[class*="embedTitleLink_"],
+.role_af3987,
+.innerContainer_c2a763,
+.container_dca174,
+.contentHeader_e9e3ed,
+.actionButtons_cc1819,
+.closeButton__6088c,
+.authedAppV2__92059,
+.actionMenuButton__8dc78,
+.container__122e4,
+.file__0ccae,
+.shop__6db1d,
+.markup__75297 code,
+.outer_c0bea0:not(.custom-user-profile-theme) {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    box-shadow: var(--glass-shadow), var(--glass-edge-shadow) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 16px !important;
+    margin: 4px !important;
+}
+
+/* Keep multiline code text clear of the rounded glass edges. Border-box
+   includes the inset in constrained widths; native pre-wrap handles resizing. */
+.markup__75297 pre code {
+    padding: 12px 16px !important;
+    box-sizing: border-box;
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | 07 | BOOST GOAL TRACK                                                                      |
+ * |                                                                                            |
+ * ============================================================================================= */
+/* Boost goal: glass belongs to the whole track, behind the native purple fill
+   and labels. Avoid panel margins that offset the absolutely positioned fill. */
+.contentContainer__0d0f9 {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: var(--radius-round, 999px);
+    isolation: isolate;
+}
+
+.progressContainer__0d0f9 {
+    background: transparent !important;
+    border-radius: inherit;
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | 08 | SMALL GLASS SURFACES & PANEL DETAILS                                                  |
+ * |                                                                                            |
+ * ============================================================================================= */
+.item_caf372,
+.overlay__3b260 {
+        background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    box-shadow: var(--glass-shadow), var(--glass-edge-shadow) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 16px !important;
+}
+.sm_a22cb0 .buttonChildrenWrapper_a22cb0,
+.buttonInner_aec7ab,
+.winButton_c38106, .icon__0c4c4,
+.actionMenuButton__8dc78 svg path {
+    color: #FFFFFF !important;
+    fill: #FFFFFF !important;
+}
+[class*="embedTitleLink_"] {
+    padding: 5px !important;
+    margin-left: -5px !important;
+}
+.icon__4a3a5 {
+    color: #FFF !important;
+}
+
+.card_b846e5:before {
+    background: rgba(255, 255, 255, 0.2) !important;
+}
+
+.soundTable__93d4a {
+    padding: 10px !important;
+}
+
+.refresh-active-now .header__00943 {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+    background: rgba(0, 0, 0, 0.2) !important;
+}
+
+.banner__68edb,
+.banner__7f9c0 {
+    border-radius: 16px !important;
+}
+
+.custom-user-profile-theme .footerButton__272c7:before {
+    background: transparent !important;
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | 09 | BACKGROUND STRIPPING & CLEANUP                                                        |
+ * |                                                                                            |
+ * ============================================================================================= */
+.sidebar__5e434,
+.container__89463,
+.contentContainer__89463,
+.container__2637a,
+.members_c8ffbb,
+.member__5d473,
+.member_c8ffbb,
+.scroller__99e7c,
+.container_c8ffbb,
+.chat_f75fb0,
+.secondary_a22cb0,
+.sm_a22cb0.hasText_a22cb0,
+.chatContent_f75fb0,
+.themedBackground__74017,
+.privateChannels_e6b769,
+.wrapper_cb9592.minimum_cb9592,
+.messagesPopoutWrap__432f4,
+.channelHeader__9f71b,
+.container__133bf,
+.chatTypingGradientAtBottom__36d07,
+.callContainer_cb9592,
+.channelChatWrapper_cb9592,
+.wrapper_cb9592,
+.activityPanel__5e434,
+.theme-dark .themed__9293f,
+.standardSidebarView__23e6b,
+.sidebarRegionScroller__23e6b,
+.layer__960e4,
+.contentRegion__23e6b,
+.contentRegionScroller__23e6b,
+.content_e9e3ed,
+.contentHeader_e9e3ed,
+.chatGradient__36d07,
+.high-contrast-mode .page__5e434,
+.theme-midnight .page__5e434,
+.messages__36d07,
+.quote__122e4,
+.aside_f58343,
+ .shopScroll__08415,
+ .shop__08415,
+.page__1feb0, .shopScroll__1feb0,
+.filterBar__11877{
+    background: transparent !important;
+    border: none !important;
+}
+
+.custom-user-profile-theme .inner_c0bea0 {
+    border: none !important;
+    border-radius: 16px !important;
+    margin: 4px !important;
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | 10 | DECORATIVE BORDERS & DIVIDERS                                                         |
+ * |                                                                                            |
+ * ============================================================================================= */
+.theme-dark .children__9293f:after {
+    content: "" !important;
+    position: relative !important;
+    display: block !important;
+    width: 6px !important;
+    height: 24px !important;
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.4),
+                             0 2px 8px rgba(0, 0, 0, 0.15), var(--glass-edge-shadow) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 12px !important;
+    margin: 0 12px !important;
+}
+
+.containerWithMargin__0d0f9::after,
+.sectionDivider__629e4,
+.separator_aa8da2,
+.divider_dbba93,
+.divider__44f7f,
+.divider__864b0 {
+    content: "" !important;
+    display: block !important;
+    width: calc(100% - 16px) !important;
+    height: 3px !important;
+    margin: 12px auto 0 !important;
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.5),
+                             0 2px 8px rgba(0, 0, 0, 0.15), var(--glass-edge-shadow) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 12px !important;
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | 11 | MEMBER ROWS & CHAT DATE DIVIDERS                                                      |
+ * |                                                                                            |
+ * ============================================================================================= */
+/* Offline row opacity creates a backdrop boundary that breaks the glass.
+   Dim only the inner member content, leaving the blur surface opaque. */
+.member__5d473.offline__5d473 {
+    opacity: 1 !important;
+}
+
+.member__5d473.offline__5d473 .memberInner__5d473 {
+    opacity: 0.3;
+}
+
+.member__5d473.offline__5d473:hover .memberInner__5d473,
+.member__5d473.offline__5d473:focus-within .memberInner__5d473 {
+    opacity: 1;
+}
+
+.sectionDivider_e6b769 {
+    display: none !important;
+}
+
+.searchBar_e6b769 {
+    border: none;
+}
+
+.divider__908e2 {
+    height: 10px !important;
+    /* Keep this wrapper from restricting the date label's backdrop. */
+    opacity: 1 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    margin: 4px !important;
+}
+
+/* The line and date label each blur the backdrop, without nesting filters. */
+.divider__908e2::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    margin: 0 !important;
+    pointer-events: none;
+}
+
+.separator_aa8da2,
+.divider_dbba93 {
+    height: 5px !important;
+}
+
+.unreadPillCap__908e2 {
+    display: none !important;
+}
+
+/* Centered Liquid Glass Unread Pill */
+.unreadPill__908e2 {
+    position: relative !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: fit-content !important;
+    margin: 16px auto !important;
+    padding: 6px 20px !important;
+    height: auto !important;
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-unread-filter) !important;
+    -webkit-backdrop-filter: var(--glass-unread-filter) !important;
+    z-index: 100 !important;
+    isolation: isolate !important;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.5),
+                             0 4px 16px rgba(0, 0, 0, 0.2), var(--glass-edge-shadow) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 50px !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | 12 | MISCELLANEOUS CHAT ELEMENTS & EMBEDS                                                  |
+ * |                                                                                            |
+ * ============================================================================================= */
+.full-motion .searchBar_c322aa,
+.container__16eb0 {
+    color: #FFF !important;
+}
+
+/* Liquid Glass for Embeds (Link previews, bot messages, etc.) */
+.embed__623de,
+.embedFull__623de,
+.blockquoteContainer__75297 {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    box-shadow: var(--glass-shadow), var(--glass-edge-shadow) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 16px !important;
+    margin-top: 4px !important;
+    margin-bottom: 4px !important;
+}
+
+/* Image-only attachments stay unframed. Full link/bot embeds keep their glass,
+   including embeds that also contain an image. */
+.imageContainer__0f481,
+.embed__623de:not(.embedFull__623de):has(.imageContainer__0f481) {
+    background: transparent !important;
+    background-image: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+.blockquoteDivider__75297 {
+    display: none !important;
+}
+
+.markup__75297 blockquote {
+    color: #FFF !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1),
+                 0 2px 2px rgba(0, 0, 0, 0.4) !important;
+    font-weight: 600 !important;
+}
+
+.grid__623de {
+    background: transparent !important;
+}
+
+.embed__623de > :first-child {
+    border-top-left-radius: 16px !important;
+    border-bottom-left-radius: 16px !important;
+}
+
+[class*="embedTitle_"],
+[class*="embedTitleLink_"] {
+    color: #ffffff !important;
+    font-weight: 800 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2),
+                 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+}
+
+[class*="linkButtonIcon_"] svg,
+[class*="linkButtonIcon_"] path {
+    color: var(--main-color) !important;
+    fill: currentColor !important;
+}
+
+[class*="linkButtonIcon_"] {
+    color: var(--main-color) !important;
+}
+
+.messageContent_c19a55 {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1),
+                 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+    font-weight: 600 !important;
+}
+
+.cozy_fc8177,
+.wrapper_fc8177,
+.message__5126c {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+.message__5126c:hover,
+.cozy_fc8177:hover,
+.wrapper_fc8177:hover {
+    background: transparent !important;
+    background-image: none !important;
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | 13 | MESSAGE ACTIONS & MENTIONS                                                            |
+ * |                                                                                            |
+ * ============================================================================================= */
+/* Message hover actions: one glass surface for reactions, reply, and more. */
+.buttonsInner__5126c {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 12px !important;
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
+}
+
+/* Inner toolbar wrappers must not paint Discord's opaque panel over the glass. */
+.buttonsInner__5126c > :is([class*="wrapper_"], [role="toolbar"]) {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: inherit !important;
+}
+
+.buttonsInner__5126c :is([class*="button_"], [role="button"]):hover {
+    background-color: var(--glass-background-subtle) !important;
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | INLINE MENTION PILLS                                                                        |
+ * |                                                                                            |
+ * ============================================================================================= */
+/* Yellow glass with white, shadowed mention text in messages and the composer. */
+.mention,
+[data-slate-editor="true"] .wrapper_f61d60 {
+    display: inline-block;
+    box-sizing: border-box;
+    max-width: 100%;
+    padding: 0 4px;
+    border: 1px solid var(--glass-border);
+    border-radius: 6px;
+    background: var(--mention-glass-tint) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
+    color: #ffffff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.65) !important;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+}
+
+.mention.interactive:hover,
+.mention.interactive:focus-visible,
+[data-slate-editor="true"] .wrapper_f61d60:hover {
+    background-color: var(--mention-glass-hover) !important;
+}
+
+/* A highlighted message already supplies the backdrop blur for its mentions. */
+.message__5126c.mentioned__5126c .mention {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* Mentioned message rows: yellow glass, with Discord's mention marker intact. */
+.message__5126c.mentioned__5126c {
+    background: var(--mention-glass-tint) !important;
+    /* Paint the accent in the background so it clips to the glass corners. */
+    background-image: linear-gradient(to right, var(--mention-glass-accent) 0 3px, transparent 3px), var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 235, 160, 0.3), var(--glass-edge-shadow) !important;
+    border-radius: 12px !important;
+}
+
+.message__5126c.mentioned__5126c:hover,
+.message__5126c.mentioned__5126c.selected__5126c {
+    background-color: var(--mention-glass-hover) !important;
+    background-image: linear-gradient(to right, var(--mention-glass-accent) 0 3px, transparent 3px), var(--glass-sheen) !important;
+}
+
+.message__5126c.mentioned__5126c::before {
+    content: none !important;
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | 14 | STARTUP / LOADING SCREEN TRANSPARENCY                                                 |
+ * |                                                                                            |
+ * ============================================================================================= */
+.container_a2f514,
+[class*="ready_"] {
+    background: transparent !important;
+}
+
+.scrollerSpacer__36d07,
+[class*="wrapper_"] > [class*="spinner_"],
+[class*="chatContent_"] > div:first-child:not([class*="message_"]):not([class*="scrollerSpacer_"]) {
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.scrollerContent__36d07,
+.wrapper_d852db {
+    background: transparent !important;
+}
+
+.editor__1b31f {
+    caret-color: #ffffff !important;
+    color: #ffffff !important;
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | 15 | CHAT INPUT FONT COLOR FIX                                                             |
+ * |                                                                                            |
+ * ============================================================================================= */
+[class*="placeholder_"] {
+    color: var(--secondary-ui-color) !important;
+}
+
+[class*="channelTextArea_"] svg {
+    color: #ffffff !important;
+    fill: #ffffff !important;
+}
+
+.icon__9293f {
+    color: #ffffff !important;
+}
+
+/* Leading server channel icons (#, voice, forum, etc.). */
+.icon__2ea32 {
+    color: var(--main-color) !important;
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | 16 | LIQUID GLASS CONTEXT MENU & AUTOCOMPLETE                                              |
+ * |                                                                                            |
+ * ============================================================================================= */
+.menu_c1e9c4,
+.submenu_c1e9c4 {
+    background: var(--glass-background-subtle) !important;
+    background-image: var(--glass-sheen) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), var(--glass-edge-shadow) !important;
+    contain: none !important;
+    overflow: visible !important;
+    position: relative !important;
+}
+
+.menu_c1e9c4::before,
+.submenu_c1e9c4::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 16px;
+    background: var(--glass-background-subtle);
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Autocomplete uses the live backdrop and selected glass profile. */
+[class*="autocomplete_"] {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), var(--glass-edge-shadow) !important;
+}
+
+/* If Discord nests autocomplete wrappers, only the outer one needs glass. */
+[class*="autocomplete_"] [class*="autocomplete_"] {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+/* Attached autocomplete sits outside the input but inside its DOM subtree.
+   Move the input's filter to a sibling background layer while it is open,
+   so the input no longer blocks the popup's access to the page backdrop. */
+.channelTextArea__74017:has([class*="autocomplete_"]) {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    z-index: 0;
+}
+
+.channelTextArea__74017:has([class*="autocomplete_"])::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: var(--glass-surface);
+    background-image: var(--glass-sheen);
+    backdrop-filter: var(--glass-filter);
+    -webkit-backdrop-filter: var(--glass-filter);
+    pointer-events: none;
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | 17 | HEADER, TITLES & TEXT TYPOGRAPHY                                                      |
+ * |                                                                                            |
+ * ============================================================================================= */
+/* Header Text Liquid Glass Fix */
+.cozy_c19a55 .header_c19a55 {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    box-shadow: var(--glass-shadow), var(--glass-edge-shadow) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 16px !important;
+    margin: 4px 4px 4px -10px !important;
+    display: inline-block !important;
+    padding: 4px 12px !important;
+    width: fit-content !important;
+}
+
+.cozy_c19a55 .headerText_c19a55 {
+    color: #ffffff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+    font-weight: 600 !important;
+}
+
+.cozy_c19a55 .timestamp_c19a55 {
+    color: var(--secondary-ui-color) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | 18 | VOICE CONNECTION BANNERS & LINK LEGIBILITY                                            |
+ * |                                                                                            |
+ * ============================================================================================= */
+/* Voice reconnect banner: shared Acrylic/Liquid surface for both states.
+   Keep Discord's 32px layout and attached top corners. */
+.root_e373d2.connecting_e373d2,
+.root_e373d2.connected_e373d2 {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
+    border: 1px solid var(--glass-border) !important;
+    color: var(--text-normal) !important;
+}
+
+/* Retain a visible success cue without an opaque green banner. */
+.root_e373d2.connected_e373d2 .icon_e373d2 {
+    color: var(--text-feedback-positive) !important;
+}
+
+/* Liquid Glass Disconnect Panel (Red Tint) */
+.colorable_f1ceac.disconnect_f1ceac {
+    background: rgba(255, 0, 0, 0.6) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.3),
+                             0 8px 32px rgba(255, 0, 0, 0.2), var(--glass-edge-shadow) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 16px !important;
+    margin: 4px !important;
+}
+
+/* Legibility Stroke for Links */
+.markup__75297 a {
+    text-shadow: 
+         1px  1px 0 #000000,
+        -1px  1px 0 #000000,
+         1px -1px 0 #000000,
+        -1px -1px 0 #000000,
+         1px  0px 0 #000000,
+        -1px  0px 0 #000000,
+         0px  1px 0 #000000,
+         0px -1px 0 #000000;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+    color: var(--main-color) !important;
+}
+
+/* Glass for message-body text links and the explicitly selected embed author
+   links. Other embed text, media links, and mention pills stay separate. */
+.messageContent_c19a55 a[href]:not(.mention):not(:has(img, video, svg)):not(:where(.embed__623de *, .embedFull__623de *)),
+a.embedAuthorNameLink__623de.embedLink__623de.embedAuthorName__623de {
+    display: inline-block;
+    box-sizing: border-box;
+    max-width: 100%;
+    vertical-align: bottom;
+    overflow-wrap: anywhere;
+    /* Clip the backdrop to the same rounded box as the visible glass. Inline
+       fragments can otherwise blur their combined rectangular bounds. */
+    overflow: hidden;
+    color: var(--main-color) !important;
+    -webkit-text-stroke: 0 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.65),
+                 0 2px 5px rgba(0, 0, 0, 0.3) !important;
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    border: 1px solid var(--glass-border) !important;
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
+    padding: 1px 5px;
+    border-radius: 6px;
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | 19 | CHANNEL TITLES & TOOLBAR                                                              |
+ * |                                                                                            |
+ * ============================================================================================= */
+/* Channel titles sit inside a glass pill; the lettering stays solid. */
+.title__9293f,
+.titleName_aae012 {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    -webkit-background-clip: border-box;
+    background-clip: border-box;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 999px !important;
+    padding: 4px 12px !important;
+    box-sizing: border-box;
+    width: fit-content;
+    max-width: 100%;
+    color: var(--text-normal) !important;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.2) !important;
+    font-weight: 900 !important;
+    font-size: 2em !important;
+}
+
+.titleName_aae012 {
+    font-size: 4rem !important;
+}
+
+/* One shared glass pill for the channel toolbar. */
+.subtitleContainer_f75fb0 .toolbar__9293f {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 999px !important;
+    box-sizing: border-box;
+    min-height: 32px;
+    padding: 4px 8px;
+    align-items: center;
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | 20 | NESTED GLASS & EMBED CONTENT                                                          |
+ * |                                                                                            |
+ * ============================================================================================= */
+/* Reusable nested glass: tint, sheen, and edges without another blur pass.
+   Add .hotori-glass-child beneath an already blurred toolbar/popout, or mark
+   another already blurred ancestor .hotori-glass-parent (marker only).
+   CSS cannot attach classes to Discord's DOM: add parent-scoped selectors
+   to this list to reuse the same treatment on native Discord components. */
+:is(.hotori-glass-parent, .subtitleContainer_f75fb0 .toolbar__9293f, .messagesPopoutWrap__432f4, .embed__623de, .embedFull__623de) .hotori-glass-child,
+.subtitleContainer_f75fb0 .toolbar__9293f .searchBar_c322aa,
+.messagesPopoutWrap__432f4 .messageGroupWrapper__432f4,
+:is(.embed__623de, .embedFull__623de) :is(.embedDescription__623de, .embedFieldValue__623de, .embedFooterText__623de, .embedTitleLink__623de) {
+    background: var(--glass-background-subtle) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: var(--glass-child-radius, 12px) !important;
+    box-sizing: border-box;
+}
+
+.subtitleContainer_f75fb0 .toolbar__9293f .searchBar_c322aa {
+    --glass-child-radius: 999px;
+}
+
+/* Author links sit on existing embed glass too: match the description's
+   lighter nested tint and reuse the embed's blur instead of filtering twice. */
+:is(.embed__623de, .embedFull__623de) a.embedAuthorNameLink__623de.embedLink__623de.embedAuthorName__623de {
+    background: var(--glass-background-subtle) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* Embed descriptions, field subtext, footers, and linked titles share the
+   embed's existing blur. Let long text wrap inside its own glass surface. */
+:is(.embed__623de, .embedFull__623de) :is(.embedDescription__623de, .embedFieldValue__623de, .embedFooterText__623de, .embedTitleLink__623de) {
+    padding: 6px 10px !important;
+    margin-inline: 0 !important;
+    width: fit-content;
+    max-width: 100%;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+:is(.embed__623de, .embedFull__623de) :is(.embedFooterText__623de, .embedTitleLink__623de) {
+    display: inline-block;
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | 21 | DIALOGS & PINNED MESSAGE POPOUTS                                                      |
+ * |                                                                                            |
+ * ============================================================================================= */
+/* Shared dialog/popout shell, including Add Friends to DM.
+   Target the surface across size/padding variants; retain native layout. */
+.container__8a031 {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    border-color: var(--glass-border) !important;
+    box-shadow: var(--glass-shadow), var(--glass-edge-shadow) !important;
+}
+
+/* Keep scrolling-edge fades translucent over the shared glass surface. */
+.container__8a031 > .bodyScrollingSpacerBottom__8a031:last-child::before {
+    background: linear-gradient(to top, var(--glass-surface), transparent) !important;
+}
+
+.container__8a031 .bodyControls__8a031::after {
+    background: linear-gradient(to bottom, var(--glass-surface), transparent) !important;
+}
+
+/* Pinned messages: one filtered backdrop for the entire popout. */
+.messagesPopoutWrap__432f4 {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 16px !important;
+    box-shadow: var(--glass-shadow), var(--glass-edge-shadow) !important;
+}
+
+.messagesPopoutWrap__432f4 .header__432f4,
+.messagesPopoutWrap__432f4 .footer__432f4 {
+    background: var(--glass-background-subtle) !important;
+    background-image: var(--glass-sheen) !important;
+    box-shadow: var(--glass-edge-shadow) !important;
+    border-color: var(--glass-border) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* Cards and nested message headers/embeds reuse the outer blur, including
+   pseudo-elements, so scrolling pins never adds a filter per item. */
+.messagesPopoutWrap__432f4 .messageGroupWrapper__432f4,
+.messagesPopoutWrap__432f4 .messageGroupWrapper__432f4 *,
+.messagesPopoutWrap__432f4 .messageGroupWrapper__432f4::before,
+.messagesPopoutWrap__432f4 .messageGroupWrapper__432f4::after,
+.messagesPopoutWrap__432f4 .messageGroupWrapper__432f4 *::before,
+.messagesPopoutWrap__432f4 .messageGroupWrapper__432f4 *::after {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | 22 | CHANNEL TITLE ICON ALIGNMENT                                                          |
+ * |                                                                                            |
+ * ============================================================================================= */
+/* Extend one continuous title surface behind the preceding channel icon. */
+.children__9293f:has(> .channelIcon__9293f) {
+    isolation: isolate;
+    padding-inline-start: 8px;
+    overflow: visible;
+}
+
+.children__9293f:has(> .channelIcon__9293f) .titleWrapper__9293f {
+    position: relative;
+}
+
+.children__9293f:has(> .channelIcon__9293f) .title__9293f {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+    border-color: transparent !important;
+}
+
+.children__9293f:has(> .channelIcon__9293f) .titleWrapper__9293f::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    inset-inline-start: calc(-1 * (var(--chat-input-icon-size, 24px) + var(--custom-message-margin-horizontal, 16px) / 2 + 8px));
+    z-index: -1;
+    pointer-events: none;
+    background: var(--glass-surface);
+    background-image: var(--glass-sheen);
+    backdrop-filter: var(--glass-filter);
+    -webkit-backdrop-filter: var(--glass-filter);
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow);
+    border: 1px solid var(--glass-border);
+    border-radius: 999px;
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | 23 | ALIGNMENT & SPACING ADJUSTMENTS                                                       |
+ * |                                                                                            |
+ * ============================================================================================= */
+.subtitleContainer_f75fb0 {
+    margin-right: 1rem !important;
+}
+
+/* Fit the title pill naturally, with a clear gap before the scroll viewport. */
+.subtitleContainer_f75fb0 .container__9293f {
+    height: auto !important;
+    min-height: var(--custom-channel-header-height);
+    padding-bottom: 12px !important;
+}
+
+.wrapper_cb9592.minimum_cb9592 {
+    margin-right: 0.5rem !important;
+}
+
+.title_edbb22 {
+    padding: 5px !important;
+}
+
+.trailing_c38106 {
+    padding-left: 10px !important;
+}
+
+.searchHeader_ae7890 {
+    border: none;
+}
+
+.brand_aa8da2.item_aa8da2,
+.themed_aa8da2.item_aa8da2,
+.icon_c1e9c4 {
+    color: #FFF !important;
+}
+
+.reactionCount__23977 {
+    color: #ffffff;
+    font-weight: 800 !important;
+}
+
+.fixedContent__409aa:after {
+    display: none;
+}
+.sidebar__5e434:after {
+    display: none;
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | 24 | AVATAR SHAPE & MESSAGE SIZING                                                         |
+ * |                                                                                            |
+ * ============================================================================================= */
+/* Avatar shape. Keep decoration art and rectangular stream tiles separate. */
+.avatar_c19a55,
+.avatar__07f91,
+.avatar_adebba,
+.wrapper__44b0c,
+.avatar__44b0c,
+.avatarBorder__44b0c,
+img[class*="avatar_"],
+[class*="avatarSpeaking_"],
+.avatarSpeakingOutline_adebba {
+    border-radius: var(--avatar-radius) !important;
+}
+
+/* Discord's SVG avatar mask otherwise forces a circle. Shape only the avatar
+   image region; status badges and decoration layers retain their own shapes. */
+.wrapper__44b0c .mask__44b0c foreignObject {
+    mask: none !important;
+    border-radius: var(--avatar-radius) !important;
+    overflow: hidden;
+}
+
+/* Status backing only; no added blur or SVG masking changes. */
+.status__44b0c,
+.mask_a423bd {
+    background: rgba(0, 0, 0, 0.25) !important;
+    border-radius: 50% !important;
+}
+
+.status__44b0c .mask_a423bd {
+    background: transparent !important;
+}
+
+/* Resize cozy-message avatars together with their text gutter/decorations. */
+.cozy_c19a55.wrapper_c19a55 {
+    --chat-avatar-size: var(--message-avatar-size);
+    --custom-message-avatar-size: var(--message-avatar-size);
+    --custom-message-avatar-decoration-size: calc(var(--message-avatar-size) * var(--decoration-to-avatar-ratio, 1.2));
+    --custom-message-margin-left-content-cozy: calc(var(--message-avatar-size) + 2 * var(--custom-message-margin-horizontal));
+}
+
+.cozy_c19a55 .avatar_c19a55 {
+    width: var(--message-avatar-size) !important;
+    height: var(--message-avatar-size) !important;
+}
+
+.cozy_c19a55 .avatarDecoration_c19a55 {
+    width: var(--custom-message-avatar-decoration-size) !important;
+    height: var(--custom-message-avatar-decoration-size) !important;
+}
+
+/* Only avatar-bearing messages need extra height; grouped follow-ups stay compact. */
+.cozy_c19a55 .contents_c19a55:has(> .avatar_c19a55) {
+    min-height: calc(var(--message-avatar-size) + 8px);
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | 25 | VOICE STATUS TEXT                                                                     |
+ * |                                                                                            |
+ * ============================================================================================= */
+/* Voice Connected legibility: keep the shared tint and existing status colors. */
+.container_e131a9 {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85), 0 2px 5px rgba(0, 0, 0, 0.45) !important;
+}
+
+.container_e131a9 svg,
+.container_e131a9 .krispLogo_e131a9 {
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8));
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | 26 | TYPING INDICATOR & MESSAGE INPUT SPACING                                              |
+ * |                                                                                            |
+ * ============================================================================================= */
+/* Clear the typing strip in channels and DMs. Keep the text and dots intact. */
+.typing_f75fb0,
+.base_b88801,
+.typing_b88801,
+.typingIndicator_fb64c9,
+.chatGradientBase__36d07,
+.chatGradient__36d07,
+.chatTypingGradientAtBottom__36d07,
+.chatTypingGradientNotAtBottom__36d07,
+.formWithLoadedChatInput_f75fb0::before {
+    background: transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* Add the typing lane to Discord's existing -16px form offset. */
+.chatContent_f75fb0:has(.typing_b88801 .text_b88801 strong) .form_f75fb0 {
+    margin-top: calc(8px + var(--chat-input-gap)) !important;
+}
+
+/* Share the form's gutters and the input's existing 4px glass margins. */
+.form_f75fb0 {
+    --hotori-input-gutter: var(--space-xs);
+}
+
+.refresh-fast-follow-avatars .form_f75fb0 {
+    --hotori-input-gutter: min(var(--space-xs), var(--space-8));
+}
+
+.form_f75fb0 .channelTextArea__74017 {
+    box-sizing: border-box;
+    width: calc(100% - 8px);
+}
+
+/* The message-list edge must never draw the typing indicator's glass. */
+.chatGradientBase__36d07::before {
+    content: none;
+}
+
+/* Blur the actual typing row's backdrop; its text and dots stay sharp.
+   Matching a populated row also avoids creating a glass strip while idle. */
+.base_b88801.typing_b88801:has(.text_b88801 strong) {
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    border-radius: 8px 8px 0 0;
+}
+
+.inTextChannel_b88801.base_b88801.typing_b88801:has(.text_b88801 strong) {
+    /* The input has a 4px top margin from the shared glass rule. */
+    top: calc(-20px - var(--chat-input-gap));
+    inset-inline: calc(var(--hotori-input-gutter, var(--space-xs)) + 4px);
+    box-sizing: border-box;
+    width: auto;
+}
+
+/* Join the input's top edge to the typing strip only while it is populated. */
+.form_f75fb0:has(.typing_b88801 .text_b88801 strong) .channelTextArea__74017 {
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | 27 | SCROLLBARS                                                                            |
+ * |                                                                                            |
+ * ============================================================================================= */
+/* Glass scrollbars. Native scrollbar parts use tint and reflections rather
+   than SVG backdrop refraction. Preserve Discord's sizes and auto-hide rules. */
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+    background: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: color-mix(in srgb, var(--glass-background) 80%, rgba(255, 255, 255, 0.35)) !important;
+    background-image: linear-gradient(100deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.04) 45%, rgba(255, 255, 255, 0.14)) !important;
+    background-clip: padding-box !important;
+    border-radius: 999px !important;
+}
+
+::-webkit-scrollbar-thumb:horizontal {
+    background-image: linear-gradient(170deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.04) 45%, rgba(255, 255, 255, 0.14)) !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: color-mix(in srgb, var(--glass-background) 65%, rgba(255, 255, 255, 0.5)) !important;
+}
+
+::-webkit-scrollbar-thumb:active {
+    background-color: color-mix(in srgb, var(--glass-background) 55%, rgba(255, 255, 255, 0.65)) !important;
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | 28 | CALL LAYOUT & SPEAKING INDICATORS                                                     |
+ * |                                                                                            |
+ * ============================================================================================= */
+/* Keep the call's glass surface inside its available space. The shared 4px
+   margins must be deducted from the original 100% dimensions. */
+.callContainer_cb9592 .root_bfe55a {
+    box-sizing: border-box !important;
+    width: calc(100% - 8px) !important;
+    height: calc(100% - 8px) !important;
+    min-width: 0;
+    min-height: 0;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+}
+
+/* Clip scrolling video content without changing its scroll behavior. */
+.callContainer_cb9592 .scroller_affa7e.videoGrid_a21736 {
+    border-radius: 16px !important;
+    background-clip: padding-box;
+}
+
+/* Account row: preserve Discord's profile/nameplate background. Blur the
+   backdrop behind the row and paint reflections separately from its artwork.
+   Keep all four corners rounded, including while the voice panel is open. */
+.panels__5e434 .container__37e49 {
+    border-radius: 16px !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
+}
+
+.panels__5e434 .container__37e49::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    border: 1px solid var(--glass-border);
+    border-radius: inherit;
+    background-image: var(--glass-sheen);
+}
+
+.panels__5e434 .container__37e49 :is(.accountPopoutButtonWrapper__37e49, .buttons__37e49) {
+    position: relative;
+    z-index: 1;
+}
+
+/* Account mute/deafen controls: white icons over transparent nested glass.
+   The slash still indicates mute/deafen; remove the red plate and red glyphs. */
+:is(.buttons__37e49, .container__37e49) [class*="splitButton_"] {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 8px;
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
+    color: #ffffff !important;
+    /* State variants may paint using either primary or critical tokens. */
+    --control-primary-background-default: transparent;
+    --control-primary-background-hover: var(--glass-background-subtle);
+    --control-primary-background-active: var(--glass-background-subtle);
+    --control-critical-primary-background-default: transparent;
+    --control-critical-primary-background-hover: var(--glass-background-subtle);
+    --control-critical-primary-background-active: var(--glass-background-subtle);
+}
+
+/* These split-button halves have their own fills, separate from Mana buttons.
+   Let the shared glass plate show through in muted, open, and hover states. */
+:is(.buttons__37e49, .container__37e49) [class*="splitButton_"] :is(button, [role="button"], [class*="splitButtonMain_"], [class*="splitButtonCaretHalf_"], [class*="soloMain_"]) {
+    background: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    color: #ffffff !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+:is(.buttons__37e49, .container__37e49) [class*="splitButton_"] :is(button, [role="button"], [class*="splitButtonMain_"], [class*="splitButtonCaretHalf_"], [class*="soloMain_"]):is(:hover, :active, [aria-expanded="true"]) {
+    background: var(--glass-background-subtle) !important;
+}
+
+.buttons__37e49 :is(.button_a22cb0, .colorable_f1ceac):not(.disconnect_f1ceac) {
+    color: #ffffff !important;
+    background: var(--glass-background-subtle) !important;
+    background-image: var(--glass-sheen) !important;
+    border: 1px solid var(--glass-border) !important;
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+.buttons__37e49 :is(.button_a22cb0, .colorable_f1ceac):not(.disconnect_f1ceac):hover {
+    background-color: var(--glass-surface) !important;
+}
+
+.buttons__37e49 :is(.buttonChildrenWrapper_a22cb0, .buttonChildren_a22cb0) {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+.buttons__37e49 :is(svg, .redIcon__37e49, .centerIcon_f1ceac, .controlIcon_f1ceac, .icon_a22cb0) {
+    color: #ffffff !important;
+}
+
+.buttons__37e49 svg path:not([fill="none"]) {
+    fill: currentColor !important;
+}
+
+/* Speaking avatar rings follow the main accent, with a soft matching halo. */
+:root,
+.theme-dark,
+.theme-light {
+    --status-speaking: var(--main-color) !important;
+}
+
+/* Calls paint their active ring inline rather than adding avatarSpeaking.
+   Match the inset ring only, so idle tiles retain their normal border. */
+.border__2f4f7[style*="box-shadow"][style*="inset"]:not(.voiceChannelEffect__2f4f7, [style*="transparent"], [style*="0px 0px 0px 0px"], [style*="0, 0, 0, 0)"]),
+[class*="avatar_"][style*="box-shadow"][style*="inset"],
+[class*="avatarBorder_"][style*="box-shadow"][style*="inset"],
+[class*="avatarSpeaking_"] {
+    box-shadow: inset 0 0 0 2px var(--main-color),
+                0 0 6px color-mix(in srgb, var(--main-color) 65%, transparent),
+                0 0 14px color-mix(in srgb, var(--main-color) 35%, transparent) !important;
+}
+
+.povMediaActive__41e19 {
+    border-color: var(--main-color) !important;
+    box-shadow: 0 0 6px color-mix(in srgb, var(--main-color) 65%, transparent),
+                0 0 14px color-mix(in srgb, var(--main-color) 35%, transparent) !important;
+}
+
+.speaking_adebba .avatarSpeakingOutline_adebba {
+    outline-color: var(--main-color) !important;
+    box-shadow: 0 0 6px color-mix(in srgb, var(--main-color) 65%, transparent),
+                0 0 14px color-mix(in srgb, var(--main-color) 35%, transparent) !important;
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | 29 | VOICE PANEL BUTTONS                                                                   |
+ * |                                                                                            |
+ * ============================================================================================= */
+/* Voice-panel actions: scope glass to this component, not every filled button. */
+.button_e131a9.buttonColor_e131a9,
+.button_e131a9 .buttonColor_e131a9 {
+    --hotori-button-tint: var(--glass-background-subtle);
+    background: var(--hotori-button-tint) !important;
+    background-image: var(--glass-sheen) !important;
+    /* Transparent glass over the panel; no extra blur or refraction pass. */
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 12px !important;
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
+    transition: background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.button_e131a9.buttonColor_e131a9.buttonActive_e131a9,
+.button_e131a9 .buttonColor_e131a9.buttonActive_e131a9 {
+    --hotori-button-tint: color-mix(in srgb, var(--glass-background-subtle) 75%, rgba(45, 190, 115, 0.35));
+}
+
+.button_e131a9.buttonColor_e131a9.greyButtonActive_e131a9,
+.button_e131a9 .buttonColor_e131a9.greyButtonActive_e131a9 {
+    --hotori-button-tint: color-mix(in srgb, var(--glass-background-subtle) 75%, rgba(255, 255, 255, 0.18));
+}
+
+:is(.button_e131a9.buttonColor_e131a9, .button_e131a9 .buttonColor_e131a9):not(:disabled, .disabled_e131a9, .fauxDisabled_e131a9, [aria-disabled="true"]):hover {
+    background-color: color-mix(in srgb, var(--hotori-button-tint) 80%, rgba(255, 255, 255, 0.16)) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+:is(.button_e131a9.buttonColor_e131a9, .button_e131a9 .buttonColor_e131a9):not(:disabled, .disabled_e131a9, .fauxDisabled_e131a9, [aria-disabled="true"]):active {
+    background-color: color-mix(in srgb, var(--hotori-button-tint) 80%, rgba(255, 255, 255, 0.24)) !important;
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.2), var(--glass-edge-shadow) !important;
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | 30 | COMPACT GLASS & NESTED BACKDROP OPTIMIZATION                                          |
+ * |                                                                                            |
+ * ============================================================================================= */
+/* Compact surfaces keep their glass highlight with a smaller outer shadow. */
+.member_c8ffbb,
+.sm_a22cb0.hasText_a22cb0 .buttonChildrenWrapper_a22cb0,
+.reaction__23977,
+.modeSelected__2ea32,
+.footerButton__272c7,
+.role_af3987,
+.checkmark_ce03f4,
+.icon_d8f25b,
+.closeButton__6088c,
+.actionMenuButton__8dc78,
+[class*="embedTitleLink_"],
+.cozy_c19a55 .header_c19a55 {
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
+}
+
+/* Reuse an ancestor's frosted backdrop only when that ancestor is present.
+   Standalone instances retain their selected profile blur; tint and borders stay. */
+.sidebarList__5e434 .modeSelected__2ea32,
+.searchResultsWrap_a98f3b .searchResult__80bf8,
+.channelTextArea__74017 .stackedBars__74017,
+.tier_a36dee .tierHeaderUnlocked_a36dee,
+.tier_a36dee .tierBody_a36dee,
+.container_d8f25b .icon_d8f25b,
+.outer_c0bea0:not(.custom-user-profile-theme) .innerContainer_c2a763,
+.outer_c0bea0:not(.custom-user-profile-theme) .footerButton__272c7,
+.innerContainer_c2a763 .role_af3987,
+.embed__623de [class*="embedTitleLink_"],
+.embedFull__623de [class*="embedTitleLink_"],
+.embed__623de .markup__75297 code,
+.embedFull__623de .markup__75297 code {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | 31 | LIQUID GLASS PROFILE                                                                  |
+ * |                                                                                            |
+ * ============================================================================================= */
+/* Select the SVG filter only for Liquid. Style queries use the inherited
+   numeric profile ID. Elements without container-style support retain blur.
+   Custom properties alone do not add a filter to otherwise unstyled elements;
+   the existing backdrop-filter: none optimizations still take precedence. */
+@container style(--blur-profile: 1) {
+    :where(*) {
+        /* Clear centers, with restrained light concentrated near the rim. */
+        --glass-surface: color-mix(in srgb, var(--glass-background) 65%, transparent);
+        --glass-background-subtle: color-mix(in srgb, var(--glass-background) 30%, transparent);
+        --glass-sheen: linear-gradient(165deg, rgba(255, 255, 255, 0.07), transparent 14%, transparent 88%, rgba(255, 255, 255, 0.025));
+        --glass-border: rgba(255, 255, 255, 0.13);
+        --glass-edge-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.22), inset -1px -1px 0 rgba(255, 255, 255, 0.09);
+        --glass-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.18), 0 6px 20px rgba(0, 0, 0, 0.14);
+        --glass-shadow-small: inset 0 1px 1px rgba(255, 255, 255, 0.16), 0 2px 6px rgba(0, 0, 0, 0.12);
+        --glass-filter: var(--liquid-refraction) blur(var(--glass-blur)) saturate(var(--glass-saturation)) brightness(var(--glass-brightness));
+        --glass-unread-filter: var(--glass-filter);
+    }
+
+    /* Smaller rounded lens and gentler displacement for short surfaces. */
+    .member_c8ffbb,
+    .sm_a22cb0.hasText_a22cb0 .buttonChildrenWrapper_a22cb0,
+    .reaction__23977,
+    .modeSelected__2ea32,
+    .footerButton__272c7,
+    .role_af3987,
+    .closeButton__6088c,
+    .actionMenuButton__8dc78,
+    .content__908e2,
+    .unreadPill__908e2,
+    .root_e373d2,
+    .title__9293f,
+    .titleName_aae012,
+    .titleWrapper__9293f::before,
+    .subtitleContainer_f75fb0 .toolbar__9293f,
+    .cozy_c19a55 .header_c19a55 {
+        --liquid-refraction: var(--liquid-refraction-compact);
+    }
+
+    /* Avoid building up several cloudy layers inside an existing glass panel. */
+    .sidebarList__5e434 .modeSelected__2ea32,
+    .searchResultsWrap_a98f3b .searchResult__80bf8,
+    .channelTextArea__74017 .stackedBars__74017,
+    .tier_a36dee .tierHeaderUnlocked_a36dee,
+    .tier_a36dee .tierBody_a36dee,
+    .outer_c0bea0:not(.custom-user-profile-theme) .innerContainer_c2a763,
+    .outer_c0bea0:not(.custom-user-profile-theme) .footerButton__272c7,
+    .innerContainer_c2a763 .role_af3987,
+    .embed__623de .markup__75297 code,
+    .embedFull__623de .markup__75297 code {
+        background-color: var(--glass-background-subtle) !important;
+        background-image: none !important;
+    }
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | 32 | NO-GLASS PROFILE                                                                      |
+ * |                                                                                            |
+ * ============================================================================================= */
+/* None removes the glass decoration entirely. Keep transparent zero shadows
+   rather than 'none' so existing comma-separated shadow lists remain valid. */
+@container style(--blur-profile: 2) {
+    :where(*) {
+        --glass-background: transparent;
+        --glass-surface: transparent;
+        --glass-background-subtle: transparent;
+        --glass-sheen: none;
+        --glass-border: transparent;
+        --glass-edge-shadow: 0 0 0 transparent;
+        --glass-shadow: 0 0 0 transparent;
+        --glass-shadow-small: 0 0 0 transparent;
+        --glass-filter: none;
+        --glass-unread-filter: none;
+    }
+
+    /* These surfaces also have fixed shadows outside the shared variables. */
+    .theme-dark .children__9293f::after,
+    .containerWithMargin__0d0f9::after,
+    .sectionDivider__629e4,
+    .separator_aa8da2,
+    .divider_dbba93,
+    .divider__44f7f,
+    .divider__864b0,
+    .unreadPill__908e2,
+    .message__5126c.mentioned__5126c,
+    .menu_c1e9c4,
+    .submenu_c1e9c4,
+    [class*="autocomplete_"],
+    .colorable_f1ceac.disconnect_f1ceac,
+    .title__9293f,
+    .titleName_aae012,
+    .button_e131a9.buttonColor_e131a9,
+    .button_e131a9 .buttonColor_e131a9 {
+        box-shadow: none !important;
+    }
+
+    .colorable_f1ceac.disconnect_f1ceac,
+    .button_e131a9.buttonColor_e131a9:not(.buttonActive_e131a9),
+    .button_e131a9 .buttonColor_e131a9:not(.buttonActive_e131a9) {
+        background: transparent !important;
+        border-color: transparent !important;
+    }
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | 33 | SERVER LIST LAYOUT                                                                    |
+ * |                                                                                            |
+ * ============================================================================================= */
+
+.wrapper_ef3116 .scroller_ef3116 {
+    padding-top: var(--server-list-top-padding) !important;
+}
+
+@container style(--server-list-layout: 1) {
+    /* Preserve the existing app grid lines used by the sidebar and chat. */
+    .base__5e434 {
+        grid-template-areas: "titleBar titleBar"
+                             "guildsList guildsList"
+                             "notice notice"
+                             "channelsList page" !important;
+        grid-template-columns: [start] calc(var(--custom-guild-sidebar-width) - var(--custom-guild-list-width)) [guildsEnd channelsEnd] minmax(0, 1fr) [end] !important;
+        grid-template-rows: [top] var(--custom-app-top-bar-height) [titleBarEnd] var(--server-list-horizontal-height) [guildsRowEnd] min-content [noticeEnd] minmax(0, 1fr) [end] !important;
+    }
+
+    .base__5e434[data-fullscreen="true"] {
+        grid-template-rows: [top titleBarEnd] var(--server-list-horizontal-height) [guildsRowEnd] min-content [noticeEnd] minmax(0, 1fr) [end] !important;
+    }
+
+    .sidebar__5e434 {
+        grid-column: start / end !important;
+        width: auto !important;
+        min-width: 0 !important;
+    }
+
+    .wrapper_ef3116:not(.hidden_ef3116) {
+        grid-column: start / end !important;
+        grid-row: titleBarEnd / guildsRowEnd !important;
+        width: auto !important;
+        height: calc(var(--server-list-horizontal-height) - 8px) !important;
+        min-width: 0;
+        box-sizing: border-box;
+        margin: 4px !important;
+        flex-direction: row;
+        mask: none !important;
+        -webkit-mask: none !important;
+    }
+
+    .tree_ef3116 {
+        flex-direction: row !important;
+        align-items: center;
+        min-width: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .wrapper_ef3116 .scroller_ef3116 {
+        display: flex !important;
+        /* The scroller can itself be a vertical Stack, not just contain one. */
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        justify-content: flex-start !important;
+        gap: var(--space-xs, 8px) !important;
+        flex: 1 1 auto;
+        align-items: center !important;
+        min-width: 0;
+        height: 100%;
+        box-sizing: border-box;
+        padding: 8px 12px !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        scrollbar-gutter: auto !important;
+    }
+
+    /* Only layout containers become rows; keep each icon's own centering. */
+    .scroller_ef3116 > div:not(.listItem__650eb):not([hidden]),
+    .scroller_ef3116 [data-list-id="guildsnav"],
+    .scroller_ef3116 .stack_dbd263[data-direction="vertical"],
+    .folderGuildsList__48112 {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        flex: 0 0 auto;
+        width: auto !important;
+        height: auto;
+        gap: var(--space-xs, 8px) !important;
+    }
+
+    .scroller_ef3116 .listItem__650eb {
+        /* Folder tiles are larger than avatars; reserve room for either. */
+        flex: 0 0 var(--guildbar-folder-size);
+        width: var(--guildbar-folder-size) !important;
+        margin-block: 0 !important;
+    }
+
+    /* The divider must not reserve an entire server-sized slot after DM. */
+    .scroller_ef3116 .listItem__650eb:has(.guildSeparator__252b6) {
+        flex: 0 0 1px;
+        width: 1px !important;
+        min-width: 0;
+        margin: 0 !important;
+    }
+
+    /* Rotate the native pill above its icon, preserving unread/hover animations. */
+    .scroller_ef3116 .listItem__650eb .wrapper__58105 {
+        position: absolute !important;
+        top: -4px !important;
+        bottom: auto !important;
+        inset-inline-start: 50% !important;
+        inset-inline-end: auto !important;
+        width: 8px !important;
+        height: var(--guildbar-avatar-size) !important;
+        margin: 0 !important;
+        transform: translate(-50%, -50%) rotate(90deg) !important;
+        transform-origin: center;
+        pointer-events: none;
+    }
+
+    /* Discord's hidden measurement/spacer elements must not consume a slot. */
+    .scroller_ef3116 > [hidden] {
+        display: none !important;
+    }
+
+    .folderGroup__48112 {
+        display: flex;
+        flex-direction: row !important;
+        align-items: center;
+        gap: var(--space-xs, 8px);
+        flex: 0 0 auto;
+        width: auto;
+    }
+
+    .isExpanded__48112 .folderGuildsList__48112 {
+        height: auto !important;
+        overflow: visible;
+    }
+
+    .folderGuildsList__48112 > :first-child {
+        margin-top: 0 !important;
+    }
+
+    .folderGroupBackground__48112 {
+        inset: 0 !important;
+        width: auto !important;
+    }
+
+    .guildSeparator__252b6 {
+        width: 1px;
+        height: 32px;
+    }
+
+    .panels__5e434 {
+        width: calc(var(--custom-guild-sidebar-width) - var(--custom-guild-list-width) - 8px) !important;
+    }
+
+    .sidebarResizeHandle__5e434 {
+        inset-inline-start: calc(var(--custom-guild-sidebar-width) - var(--custom-guild-list-width) - 4px);
+        inset-inline-end: auto;
+        top: var(--server-list-horizontal-height);
+    }
+
+    .unreadMentionsIndicatorTop_ef3116,
+    .unreadMentionsIndicatorBottom_ef3116 {
+        top: 0;
+        bottom: auto;
+        width: var(--custom-guild-list-width);
+        padding: 4px !important;
+    }
+
+    .unreadMentionsIndicatorTop_ef3116 {
+        inset-inline: 0 auto;
+    }
+
+    .unreadMentionsIndicatorBottom_ef3116 {
+        inset-inline: auto 0;
+    }
+
+    .bottomRailNotifCenterButton_ef3116 {
+        flex: 0 0 auto;
+        padding: 8px;
+    }
+
+    .bottomRailNotifCenterButton_ef3116::before {
+        display: none;
+    }
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | 34 | SETTINGS PAGE                                                                         |
+ * |                                                                                            |
+ * ============================================================================================= */
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | SETTINGS 1 - PAGE BACKDROP                                                                 |
+ * |                                                                                            |
+ * ============================================================================================= */
+/* Page backdrop */
+.sidebar__409aa {
+    background: transparent !important;
+}
+
+.container_abd9a8 {
+    background-image: linear-gradient(to bottom, var(--settings-bg-overlay-top), var(--settings-bg-overlay-bottom)), var(--settings-bg) !important;
+    background-size: cover !important;
+    background-position: center top !important;
+    background-attachment: fixed !important;
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | SETTINGS 2 - TOGGLE ACCENTS                                                                |
+ * |                                                                                            |
+ * ============================================================================================= */
+/* Main-color toggle states */
+/* Toggle accents, including switches that receive inline colors from Discord. */
+:root,
+.theme-dark,
+.theme-light {
+    --switch-background-selected-default: var(--main-color) !important;
+    --switch-background-selected-hover: color-mix(in srgb, var(--main-color) 85%, black) !important;
+    --switch-background-active: color-mix(in srgb, var(--main-color) 75%, black) !important;
+    --switch-thumb-icon-active: var(--main-color) !important;
+}
+
+/* Account mute/deafen controls also expose checked switch semantics.
+   Keep their glass treatment instead of painting them as solid toggles. */
+:is([class*="container_"][class*="checked_"]:has(input[type="checkbox"]),
+    [role="switch"][aria-checked="true"]):not(:where(.container__37e49, .container__37e49 *, .buttons__37e49, .buttons__37e49 *, .container__841c8, .container__841c8 *, :has(.mentionButton__841c8))) {
+    background-color: var(--main-color) !important;
+}
+
+/* The checked glyph can also be painted with an inline SVG fill. */
+[class*="container_"][class*="checked_"]:has(input[type="checkbox"]):not(:where(.container__37e49, .container__37e49 *, .buttons__37e49, .buttons__37e49 *)) svg path {
+    fill: var(--main-color) !important;
+}
+
+/* Discord's custom switch indicator receives its track color inline. */
+.container_a28278:is([aria-checked="true"], [data-checked="true"], [data-state="checked"]) .switchIndicator_a28278,
+.container_a28278:has(input:checked) .switchIndicator_a28278,
+.switchIndicator_a28278:is([aria-checked="true"], [data-checked="true"], [data-state="checked"]),
+.switchIndicator_a28278[style*="88, 101, 242"],
+.switchIndicator_a28278[style*="5865f2" i],
+.switchIndicator_a28278[style*="blurple"],
+.switchIndicator_a28278[style*="switch-background-selected"] {
+    background-color: var(--main-color) !important;
+}
+
+.switchIndicator_a28278 svg path:is([fill="#5865f2" i], [fill="rgb(88, 101, 242)"], [fill*="blurple"], [fill*="switch-thumb-icon-active"]) {
+    fill: var(--main-color) !important;
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | SETTINGS 3 - GROUPED SETTINGS PANELS                                                       |
+ * |                                                                                            |
+ * ============================================================================================= */
+/* Grouped settings panels: one backdrop per group, with consistent gutters.
+   Style the parent class directly: setting anchors do not always use IDs. */
+:is(.standardSidebarView__23e6b, .container_abd9a8, .settingsPage__9cd63)
+:is([id="voice_input_profile_setting"], .container__75920,
+    .group__0624f, .groupContainer_ef8d95, .panelGroup_ef5082,
+    .defaultKeybindGroup_f82450, .keybindGroup_f061f6) {
+    box-sizing: border-box;
+    min-width: 0;
+    padding: 20px !important;
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 16px !important;
+    box-shadow: var(--glass-shadow), var(--glass-edge-shadow) !important;
+}
+
+:is(.standardSidebarView__23e6b, .container_abd9a8, .settingsPage__9cd63)
+:is([id="voice_input_profile_setting"], .container__75920) {
+    margin-inline: 0 !important;
+    /* Discord's anchor wrapper has negative margins on both axes. */
+    margin-block: 10px !important;
+}
+
+/* Nested settings sit directly on the outer group's glass surface. */
+:is(.standardSidebarView__23e6b, .container_abd9a8, .settingsPage__9cd63)
+:is(.container__75920, [id="voice_input_profile_setting"], .group__0624f, .groupContainer_ef8d95)
+.container__75920 {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    padding: 8px 0 !important;
+    margin-block: 0 !important;
+    border-radius: 12px !important;
+}
+
+/* Some setting anchors wrap a single group container. Avoid a double frame
+   and double padding there; the outer group supplies both. */
+:is(.standardSidebarView__23e6b, .container_abd9a8, .settingsPage__9cd63)
+:is(.container__75920, [id="voice_input_profile_setting"]) > .container__75920:only-child {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Compact row spacing inside the more generously padded parent panel. */
+:is(.standardSidebarView__23e6b, .container_abd9a8, .settingsPage__9cd63) .group__64e61 {
+    gap: 2px !important;
+    padding-block: 4px !important;
+}
+
+/* Header/body wrappers share their group's backdrop rather than hiding it. */
+:is(.standardSidebarView__23e6b, .container_abd9a8, .settingsPage__9cd63)
+:is(.groupCollapsedContainer_ef8d95, .groupHeader_ef8d95) {
+    background: transparent !important;
+}
+
+/* A group nested inside a setting panel uses the outer panel's backdrop. */
+:is(.standardSidebarView__23e6b, .container_abd9a8, .settingsPage__9cd63)
+.container__75920 :is(.group__0624f, .groupContainer_ef8d95, .panelGroup_ef5082) {
+    padding: 0 !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | SETTINGS 4 - CHILD CONTROLS                                                                |
+ * |                                                                                            |
+ * ============================================================================================= */
+/* Child rows have no separate glass card; the parent supplies the surface.
+   Keep layout, spacing, and semantic colors on their contents. */
+:is(.standardSidebarView__23e6b, .container_abd9a8, .settingsPage__9cd63)
+:is(.radioGroupOption__64e61, .soundButtonSettingContainer__84bad,
+    .notificationItem_ef8d95, .settingsRowSubsection_f11d9e) {
+    box-sizing: border-box;
+    min-width: 0;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid transparent !important;
+    border-radius: 12px !important;
+    box-shadow: none !important;
+    margin-inline: 0 !important;
+    margin-block: 0 !important;
+    padding-block: 8px !important;
+}
+
+/* Settings headings stay distinct from descriptions and control values. */
+:is(.standardSidebarView__23e6b, .container_abd9a8, .settingsPage__9cd63)
+:is(h1, h2, h3, h4, h5, h6, [role="heading"], .groupTitle__0624f,
+    .groupTitle_ef8d95, .formItemTitle_ef8d95) {
+    font-weight: 900 !important;
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | SETTINGS 5 - RADIO ALIGNMENT                                                               |
+ * |                                                                                            |
+ * ============================================================================================= */
+/* Radio alignment: reserve the indicator gutter and center it in the row.
+   Leading icons retain a separate gutter; descriptions can wrap normally. */
+.radioGroupOption__64e61 {
+    position: relative;
+    padding: 12px 16px !important;
+    padding-inline-start: calc(16px + var(--custom-radio-text-start)) !important;
+    margin-inline: 0 !important;
+}
+
+.radioGroupOption__64e61.withLeadingIcon__64e61 {
+    padding-inline-start: calc(16px + var(--custom-radio-text-start) + var(--custom-radio-icon-offset)) !important;
+}
+
+.radioGroupOption__64e61 > .radioIndicator__64e61 {
+    inset-inline-start: 16px !important;
+    inset-block-start: calc(50% - var(--custom-radio-size) / 2) !important;
+    flex-shrink: 0;
+}
+
+.radioGroupOption__64e61 > .radioItemIcon__64e61 {
+    inset-inline-start: calc(16px + var(--custom-radio-text-start)) !important;
+    inset-block-start: calc(50% - var(--custom-radio-icon-size) / 2) !important;
+}
+
+/* Restore the radio's own SVG paints after the global svg color override. */
+.radioIndicator__64e61 {
+    fill: none !important;
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | SETTINGS 6 - OFF SWITCHES                                                                  |
+ * |                                                                                            |
+ * ============================================================================================= */
+/* OFF switches: glass track only. Preserve 48x24 size, pill radius, thumb,
+   transitions, disabled opacity, and the enabled main-color states above.
+   Using a background image leaves inline ON colors visible beneath the sheen. */
+:is(.standardSidebarView__23e6b, .container_abd9a8, .settingsPage__9cd63) {
+    --switch-background-default: var(--glass-background-subtle) !important;
+    --switch-background-hover: var(--glass-background-subtle) !important;
+}
+
+:is(.standardSidebarView__23e6b, .container_abd9a8, .settingsPage__9cd63) .switchIndicator_a28278 {
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border-color: var(--glass-border) !important;
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
+    --switch-background-default: var(--glass-background-subtle) !important;
+    --switch-background-hover: var(--glass-background-subtle) !important;
+}
+
+:is(.standardSidebarView__23e6b, .container_abd9a8, .settingsPage__9cd63)
+.container_a28278:is([aria-checked="false"], [data-checked="false"], [data-state="unchecked"]) .switchIndicator_a28278,
+:is(.standardSidebarView__23e6b, .container_abd9a8, .settingsPage__9cd63)
+.container_a28278:has(input[type="checkbox"]:not(:checked)) .switchIndicator_a28278,
+:is(.standardSidebarView__23e6b, .container_abd9a8, .settingsPage__9cd63)
+.switchIndicator_a28278:is([aria-checked="false"], [data-checked="false"], [data-state="unchecked"]) {
+    background-color: var(--glass-background-subtle) !important;
+}
+
+/* =============================================================================================
+ * |                                                                                            |
+ * | SHOP PRODUCT CARDS                                                                        |
+ * |                                                                                            |
+ * ============================================================================================= */
+.productCardContainer_fcbddd {
+    background: rgba(0, 0, 0, 0.25) !important;
+    background-image: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 16px !important;
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important;
+}
+
+/* Discord paints a separate footer gradient over the card's flat background. */
+.productCardContainer_fcbddd :is(.footerGradient_fcbddd, .staticBundleFooterGradient_fcbddd),
+.productCardContainer_fcbddd .staticBundleFooterGradient_fcbddd::after {
+    background: transparent !important;
+    background-image: none !important;
+}
+
+.productCardContainer_fcbddd :is(.productName_fcbddd, .footerInfoContainer_fcbddd) {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important;
+}
+
+/* Modal/image-viewer backdrop: edge-to-edge blur with a subtle black tint. */
+.scrim__40128,
+.backdrop_bc663c {
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(var(--glass-blur)) !important;
+    -webkit-backdrop-filter: blur(var(--glass-blur)) !important;
+    /* Keep the full-window blur constant during Discord's native fade/zoom.
+       Interpolating its radius forces costly filtering on every frame. */
+    transition: opacity 200ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .scrim__40128,
+    .backdrop_bc663c {
+        transition: none !important;
+    }
+}
+
+.reduce-motion :is(.scrim__40128, .backdrop_bc663c) {
+    transition: none !important;
+}
+
+/* Opened content floats above the blurred backdrop with a deep glass shadow.
+   Use static box shadows, leaving Discord's native zoom/fade transforms intact. */
+.layer_bc663c [role="dialog"]:not(.user-profile-modal, .user-profile-modal-v2):not(:has(.imageWrapper, [class*="imageWrapper_"], .user-profile-modal, .user-profile-modal-v2)),
+.layer_bc663c .imageWrapper,
+.layer_bc663c [class*="imageWrapper_"] {
+    border-radius: 16px !important;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18),
+                0 8px 20px rgba(0, 0, 0, 0.45),
+                0 24px 64px rgba(0, 0, 0, 0.65),
+                0 48px 100px rgba(0, 0, 0, 0.35) !important;
+}
+
+/* Full profiles animate inside their dialog wrapper. Keep that stationary
+   wrapper unframed; the profile card retains its own moving glass edges. */
+.layer_bc663c [role="dialog"]:has(.user-profile-modal, .user-profile-modal-v2):not(.outer_c0bea0) {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* A small, soft shadow keeps all popout text readable over profile artwork.
+   Apply to descendants too so text components with their own shadow rules match. */
+.user-profile-popout,
+.user-profile-popout * {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55) !important;
+}
+
+/* Discord's light profile palette gives status bubbles a pale background.
+   Override the popout-wide shadow only within those light status bubbles. */
+.user-profile-popout.theme-light .container_ab8609,
+.user-profile-popout.theme-light .container_ab8609 *,
+.user-profile-popout .theme-light .container_ab8609,
+.user-profile-popout .theme-light .container_ab8609 * {
+    color: #111111 !important;
+    text-shadow: none !important;
+}
+
+/* GIF picker: one glass backdrop, with transparent inner surfaces so the
+   native opaque body/header cannot hide it. Keep the grid and GIFs intact. */
+.contentWrapper__08434:has(.container_fed6d3) {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 16px !important;
+    box-shadow: var(--glass-shadow), var(--glass-edge-shadow) !important;
+}
+
+.contentWrapper__08434 .container_fed6d3,
+.contentWrapper__08434 .header_fed6d3 {
+    background: transparent !important;
+}
+
+.contentWrapper__08434 .container_fed6d3 {
+    border-radius: 0 0 16px 16px;
+}
+
+/* Composer media button: use the selected light/dark glass tint and sheen,
+   without adding another blur layer inside the already frosted composer. */
+.channelTextArea__74017 :is(.attachButtonInner__0923f, .attachButton__36c1b) {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border-radius: 8px;
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
+}
+
+.channelTextArea__74017 :is(.attachButtonInner__0923f, .attachButton__36c1b):hover {
+    background-color: color-mix(in srgb, var(--glass-surface) 85%, rgba(255, 255, 255, 0.15)) !important;
+}
+
+/* Tighten only the gaps; preserve the buttons' native click targets. */
+.channelTextArea__74017 .buttons__74017 {
+    gap: 2px !important;
+}
+
+/* Media-viewer-style depth, scaled down to chat avatar dimensions.
+   Box shadows follow the configured avatar rounding without altering artwork. */
+.message__5126c .avatar_c19a55 {
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18),
+                0 4px 10px rgba(0, 0, 0, 0.38),
+                0 10px 24px rgba(0, 0, 0, 0.42) !important;
+}
+
+/* Posted image attachments: the imageContent node lives inside clipped
+   single-image grids and visual-media containers. Filter the outer container
+   AFTER its contents are clipped, preserving rounded corners and spoilers. */
+.visualMediaItemContainer_f4758a:has(.imageContent__0f481.itemContentContainer_f4758a.mosaicItemContent__6c706) {
+    filter: drop-shadow(0 4px 5px rgba(0, 0, 0, 0.38))
+            drop-shadow(0 10px 12px rgba(0, 0, 0, 0.42)) !important;
+}
+
+/* Fallback for attachment layouts without the outer visual-media container. */
+.imageContent__0f481.itemContentContainer_f4758a.mosaicItemContent__6c706:not(.visualMediaItemContainer_f4758a *) {
+    filter: drop-shadow(0 4px 5px rgba(0, 0, 0, 0.38))
+            drop-shadow(0 10px 12px rgba(0, 0, 0, 0.42)) !important;
+}
+
+/* Reply @ notification toggle: accent-tinted glass with legible white text.
+   Discord retains its native toggle label/icon and notification behavior. */
+.channelTextArea__74017 .stackedBars__74017:has(.replyBar__841c8) {
+    background: var(--glass-background-subtle) !important;
+    background-image: var(--glass-sheen) !important;
+}
+
+.channelTextArea__74017 .clipContainer__841c8,
+.channelTextArea__74017 .container__841c8,
+.replyBar__841c8 {
+    background: transparent !important;
+}
+
+.replyBar__841c8 .actions__841c8,
+.replyBar__841c8 .mentionButton__841c8 :is([class*="container_"][class*="checked_"], [role="switch"], [class*="switchIndicator_"]) {
+    background: transparent !important;
+}
+
+.replyBar__841c8 .mentionButton__841c8 {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 8px;
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
+    margin: 3px 4px;
+    padding: 4px 8px;
+    transition: background-color 180ms ease;
+}
+
+.replyBar__841c8 .mentionButton__841c8,
+.replyBar__841c8 .mentionButton__841c8 * {
+    color: #ffffff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.65),
+                 0 2px 5px rgba(0, 0, 0, 0.3) !important;
+}
+
+.replyBar__841c8 .mentionButton__841c8:is(:hover, :focus-visible) {
+    background-color: var(--glass-background-subtle) !important;
+}
+
+/* Follow the notification control's actual checked state, including builds
+   that put its accessible switch/checkbox state on a surrounding element. */
+.replyBar__841c8 .mentionButton__841c8:is([aria-checked="true"], [aria-pressed="true"], :has(input:checked), :has([aria-checked="true"])),
+.replyBar__841c8 [role="switch"][aria-checked="true"] .mentionButton__841c8 {
+    background-color: color-mix(in srgb, var(--main-color) 24%, var(--glass-surface)) !important;
+}
+
+.replyBar__841c8 .mentionButton__841c8:is([aria-checked="true"], [aria-pressed="true"], :has(input:checked), :has([aria-checked="true"])):is(:hover, :focus-visible),
+.replyBar__841c8 [role="switch"][aria-checked="true"] .mentionButton__841c8:is(:hover, :focus-visible) {
+    background-color: color-mix(in srgb, var(--main-color) 34%, var(--glass-surface)) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .replyBar__841c8 .mentionButton__841c8 { transition: none; }
+}
+
+/* Put the glass on the whole card's parent, spanning both grid columns. */
+.root__1042d {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 12px;
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
+    box-sizing: border-box;
+}
+
+.root__1042d .body__1042d {
+    background: transparent !important;
+}
+
+/* END OF HOTORI DEV THEME */

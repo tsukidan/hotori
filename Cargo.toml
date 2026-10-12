@@ -1,0 +1,27 @@
+[package]
+name = "hotori"
+version = "1.0.0"
+edition = "2024"
+build = "build.rs"
+
+[[bin]]
+name = "hotori"
+path = "src/main.rs"
+
+[features]
+default = ["custom-protocol"]
+custom-protocol = ["tauri/custom-protocol"]
+
+[dependencies]
+base64 = "0.23.1"
+reqwest = { version = "0.13.5", default-features = false, features = ["blocking", "rustls"] }
+tauri = { version = "2", features = [] }
+serde = { version = "1", features = ["derive"] }
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[profile.release]
+strip = true
+lto = "thin"
+codegen-units = 1

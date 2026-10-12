@@ -1,0 +1,6 @@
+{
+  "name": "hotori-ui-tests",
+  "private": true,
+  "scripts": { "test:native": "node tests/native-smoke.cjs" },
+  "devDependencies": { "playwright": "1.62.1" }
+}

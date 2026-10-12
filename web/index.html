@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Hotori</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="wallpaper" aria-hidden="true"></div>
+  <header class="titlebar" aria-label="Hotori window">
+    <div class="titlebar-drag" data-tauri-drag-region>
+      <span>Hotori</span>
+    </div>
+    <div class="window-controls" aria-label="Window controls">
+      <button id="window-minimize" class="window-button" type="button" aria-label="Minimize" title="Minimize"><span data-icon="minimize"></span></button>
+      <button id="window-maximize" class="window-button" type="button" aria-label="Maximize" title="Maximize"><span data-icon="maximize"></span></button>
+      <button id="window-close" class="window-button window-close" type="button" aria-label="Close" title="Close"><span data-icon="close"></span></button>
+    </div>
+  </header>
+  <main id="app" data-page="installer">
+    <section id="installer-page" class="page installer-page" aria-labelledby="installer-title">
+      <div class="home-content">
+        <h1 id="installer-title"><img class="logo" src="assets/logo.png" alt="Hotori"></h1>
+        <p class="tagline">If only the snow could fall slower...</p>
+        <div class="glass installer-card">
+          <h2>Hotori — a theme inspired by Liquid Glass.</h2>
+          <p class="description">A Discord theme inspired by Liquid Glass. Make it yours with acrylic or liquid glass, custom backgrounds, colors and blur. Adjust avatar size and shape, message spacing, mention highlights, and your server list layout.</p>
+          <div class="action-groups">
+            <section class="action-group" aria-labelledby="installation-heading">
+              <h3 id="installation-heading"><span data-icon="download"></span>Installation</h3>
+              <p>Add or remove your theme.</p>
+              <div class="actions">
+                <button id="install" class="button primary" disabled><span data-icon="download"></span><span class="button-label">Install</span></button>
+                <button id="uninstall" class="button" disabled><span data-icon="trash"></span>Uninstall</button>
+                <button id="update-theme" class="button" disabled title="Download the latest theme while preserving your customization settings."><span data-icon="reset"></span><span class="button-label">Update theme</span></button>
+              </div>
+            </section>
+            <section class="action-group" aria-labelledby="customization-heading">
+              <h3 id="customization-heading"><span data-icon="sliders"></span>Customization</h3>
+              <p>Fine-tune your theme and its files.</p>
+              <div class="actions">
+                <button id="customize" class="button" disabled><span data-icon="sliders"></span>Customize</button>
+                <button id="folder" class="button" disabled><span data-icon="folder"></span>Open Themes Folder</button>
+              </div>
+            </section>
+          </div>
+          <p id="home-status" class="status" role="status" aria-live="polite">Checking your theme…</p>
+        </div>
+        <p class="vencord-notice">!! Vencord is required for this theme !!</p>
+      </div>
+    </section>
+    <section id="settings-page" class="page settings-page" aria-labelledby="settings-title" inert>
+      <div class="glass settings-card">
+        <header class="settings-header">
+          <h2 id="settings-title" tabindex="-1">Make Hotori yours</h2>
+          <p>Glass, color, and atmosphere. Fine-tune every detail of your Discord.</p>
+        </header>
+        <form id="settings-form" class="settings-scroll" aria-label="Theme options">
+          <div id="settings-list"></div>
+        </form>
+        <footer class="settings-footer">
+          <p id="settings-status" class="status" role="status" aria-live="polite">Save changes in each category.</p>
+          <div class="settings-actions">
+          <button id="reset-defaults" class="button" type="button" title="Restore and save all customization options to the theme defaults."><span data-icon="reset"></span>Reset to defaults</button>
+          <button id="back" class="button" type="button"><span data-icon="back"></span>Back</button>
+          </div>
+        </footer>
+      </div>
+    </section>
+  </main>
+  <dialog id="vencord-dialog" class="glass vencord-dialog" aria-labelledby="vencord-dialog-title" aria-describedby="vencord-dialog-message">
+    <h2 id="vencord-dialog-title">Vencord required</h2>
+    <p id="vencord-dialog-message">You need Vencord to use this theme. Please install it and try again.</p>
+    <form method="dialog"><button class="button primary" autofocus>OK</button></form>
+  </dialog>
+  <span class="version" aria-label="Version 1.0">v1.0</span>
+</body>
+</html>
