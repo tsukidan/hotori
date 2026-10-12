@@ -248,3 +248,9 @@ details[open] > summary > .icon { transform: rotate(180deg); }
 .settings-actions #reset-defaults { min-width: 180px; }
 
 #update-theme { grid-column: 1 / -1; }
+
+.app-update-row { display: flex; justify-content: center; margin-top: 18px; }
+.app-update-row .button { min-width: 200px; }
+.app-update-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
+#app-update-progress { display: block; width: 100%; margin-top: 18px; height: 8px; accent-color: #cf8589; }
+#app-update-progress[hidden] { display: none; }

@@ -61,7 +61,7 @@ fn download() -> Result<String, String> {
         .redirect(reqwest::redirect::Policy::none())
         .connect_timeout(Duration::from_secs(10))
         .timeout(Duration::from_secs(30))
-        .user_agent("Hotori/1.0")
+        .user_agent(concat!("Hotori/", env!("CARGO_PKG_VERSION")))
         .build()
         .map_err(|e| e.to_string())?;
     let response = client
@@ -367,7 +367,10 @@ mod tests {
             std::env::temp_dir().join(format!("hotori-default-cache-test-{}", std::process::id()));
         fs::create_dir_all(folder.join("hotori-assets")).unwrap();
         let published = BUNDLED_THEME
-            .replace("@version 0.7.1", "@version 0.8.0")
+            .replace(
+                &format!("@version {}", metadata(BUNDLED_THEME, "@version").unwrap()),
+                "@version 999.0.0",
+            )
             .replace("--blur-val: 24px;", "--blur-val: 30px;");
         let path = folder.join("hotori-assets/theme-defaults.css");
         replace(&path, None, &published).unwrap();
@@ -462,14 +465,17 @@ mod tests {
                 "--server-list-top-padding: 21px;",
             );
         let published = BUNDLED_THEME
-            .replace("@version 0.7.1", "@version 0.8.0")
+            .replace(
+                &format!("@version {}", metadata(BUNDLED_THEME, "@version").unwrap()),
+                "@version 999.0.0",
+            )
             .replace(
                 "--blur-val: 24px;",
                 "--blur-val: 30px;\n    --new-option: 13px;",
             )
             + "\n.new-implementation { color: blue; }\n";
         let (merged, version) = merge(&original, &published).unwrap();
-        assert_eq!(version, "0.8.0");
+        assert_eq!(version, "999.0.0");
         for old in variables(&original).unwrap() {
             assert_eq!(
                 variables(&merged)
@@ -485,7 +491,7 @@ mod tests {
         }
         assert!(merged.contains("--new-option: 13px;"));
         assert!(merged.ends_with(".new-implementation { color: blue; }\n"));
-        assert!(merged.contains("@version 0.8.0"));
+        assert!(merged.contains("@version 999.0.0"));
         assert_eq!(merge(&merged, &published).unwrap().0, merged);
     }
 
@@ -507,7 +513,10 @@ mod tests {
             assert!(apply(&path, BUNDLED_THEME, &invalid).is_err());
             assert_eq!(fs::read_to_string(&path).unwrap(), BUNDLED_THEME);
         }
-        let published = BUNDLED_THEME.replace("@version 0.7.1", "@version 0.8.0");
+        let published = BUNDLED_THEME.replace(
+            &format!("@version {}", metadata(BUNDLED_THEME, "@version").unwrap()),
+            "@version 999.0.0",
+        );
         fs::write(&path, format!("{BUNDLED_THEME}\n/* external change */")).unwrap();
         assert!(apply(&path, BUNDLED_THEME, &published).is_err());
         assert!(
@@ -518,7 +527,7 @@ mod tests {
         fs::write(&path, BUNDLED_THEME).unwrap();
         assert!(apply(&path, BUNDLED_THEME, &published).unwrap().changed);
         let updated = fs::read_to_string(&path).unwrap();
-        assert!(updated.contains("@version 0.8.0"));
+        assert!(updated.contains("@version 999.0.0"));
         assert!(!apply(&path, &updated, &published).unwrap().changed);
         fs::remove_file(path).unwrap();
     }

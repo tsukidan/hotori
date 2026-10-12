@@ -47,9 +47,10 @@
               </div>
             </section>
           </div>
+          <div class="app-update-row"><button id="update-app" class="button" disabled><span data-icon="download"></span><span class="button-label">Update Hotori</span></button></div>
           <p id="home-status" class="status" role="status" aria-live="polite">Checking your theme…</p>
         </div>
-        <p class="vencord-notice">!! Vencord is required for this theme !!</p>
+        <p class="vencord-notice" hidden>!! Vencord is required for this theme !!</p>
       </div>
     </section>
     <section id="settings-page" class="page settings-page" aria-labelledby="settings-title" inert>
@@ -76,6 +77,16 @@
     <p id="vencord-dialog-message">You need Vencord to use this theme. Please install it and try again.</p>
     <form method="dialog"><button class="button primary" autofocus>OK</button></form>
   </dialog>
-  <span class="version" aria-label="Version 1.0">v1.0</span>
+  <dialog id="app-update-dialog" class="glass vencord-dialog" aria-labelledby="app-update-title" aria-describedby="app-update-description">
+    <h2 id="app-update-title">Update Hotori</h2>
+    <p id="app-update-description"></p>
+    <p id="app-update-status" class="status" role="status" aria-live="polite">Your theme settings and wallpapers will be preserved.</p>
+    <progress id="app-update-progress" max="100" value="0" hidden aria-label="App update download progress"></progress>
+    <div class="app-update-actions">
+      <button id="app-update-cancel" class="button" type="button">Not now</button>
+      <button id="app-update-install" class="button primary" type="button">Download &amp; restart</button>
+    </div>
+  </dialog>
+  <span class="version" aria-label="Version 1.1.0">v1.1.0</span>
 </body>
 </html>

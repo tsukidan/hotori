@@ -3,6 +3,8 @@ const $ = (id) => document.getElementById(id);
 const invoke = window.__TAURI__?.core?.invoke;
 let busy = false;
 let updatingTheme = false;
+let checkingApp = false;
+let installingApp = false;
 let status = { ready: false, installed: false };
 let fields = [];
 let navigationTimer;
@@ -22,6 +24,10 @@ function updateButtons() {
   $("uninstall").disabled = busy || !status.installed;
   $("customize").disabled = busy || !status.installed;
   $("folder").disabled = busy || !invoke;
+  $("update-app").disabled = busy || !invoke;
+  $("update-app").querySelector(".button-label").textContent = checkingApp ? "Checking…" : "Update Hotori";
+  $("app-update-cancel").disabled = installingApp;
+  $("app-update-install").disabled = installingApp;
   $("back").disabled = busy;
   $("reset-defaults").disabled = busy || !invoke;
   updateCategoryButtons();
@@ -31,6 +37,7 @@ async function refresh() {
   if (!invoke || busy) return;
   try {
     status = await invoke("get_status");
+    document.querySelector(".vencord-notice").hidden = status.ready;
     updateButtons();
   } catch (error) { message("home-status", String(error), true); }
 }
@@ -377,6 +384,47 @@ async function operation(command, success) {
   } catch (error) { message("home-status", String(error), true); }
   finally { busy = false; await refresh(); updateButtons(); }
 }
+
+$("update-app").addEventListener("click", async () => {
+  if (busy || !invoke) return;
+  busy = true; checkingApp = true; updateButtons();
+  message("home-status", "Checking for a Hotori app update…");
+  try {
+    const result = await invoke("check_app_update");
+    if (result.available) {
+      $("app-update-description").textContent = `Hotori ${result.version} is available. You’re using ${result.currentVersion}. Hotori will close and reopen to finish the update.`;
+      message("app-update-status", "Your theme settings and wallpapers will be preserved.");
+      $("app-update-progress").hidden = true;
+      $("app-update-progress").value = 0;
+      $("app-update-dialog").showModal();
+      message("home-status", `Hotori ${result.version} is available.`);
+    } else message("home-status", `You’re up to date. Hotori ${result.currentVersion} is installed.`);
+  } catch (error) { message("home-status", String(error), true); }
+  finally { busy = false; checkingApp = false; updateButtons(); }
+});
+$("app-update-cancel").addEventListener("click", () => { if (!installingApp) $("app-update-dialog").close(); });
+$("app-update-dialog").addEventListener("cancel", event => { if (installingApp) event.preventDefault(); });
+$("app-update-install").addEventListener("click", async () => {
+  if (busy || !invoke) return;
+  busy = true; installingApp = true; updateButtons();
+  $("app-update-progress").hidden = false;
+  message("app-update-status", "Downloading the update…");
+  let unlisten;
+  try {
+    if (window.__TAURI__?.event) unlisten = await window.__TAURI__.event.listen("app-update-progress", ({ payload }) => {
+      $("app-update-progress").value = payload.percent;
+      message("app-update-status", payload.phase === "verifying" ? "Verifying the update and preparing to restart…" : `Downloading Hotori… ${payload.percent}%`);
+    });
+    await invoke("install_app_update");
+    message("app-update-status", "Restarting Hotori…");
+  } catch (error) {
+    message("app-update-status", String(error), true);
+    $("app-update-progress").hidden = true;
+  } finally {
+    if (unlisten) unlisten();
+    busy = false; installingApp = false; updateButtons();
+  }
+});
 
 $("install").addEventListener("click", () => operation("install_theme", "Installed. Enable Hotori in Vencord’s Themes settings."));
 $("update-theme").addEventListener("click", async () => {

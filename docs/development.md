@@ -29,3 +29,32 @@ The app's Update theme button fetches this file from the repository's default br
 The installed theme is `%APPDATA%/Vencord/themes/hotori.theme.css`. The published source is cached in `themes/hotori-assets/theme-defaults.css` for Reset to defaults and slider bounds. Bundled defaults are the offline fallback. Local wallpapers are copied into `themes/hotori-assets` and referenced through Vencord's local theme protocol.
 
 Theme updates and EXE releases are independent. Attach `hotori.exe` to app releases; keep build outputs out of Git. Push only when explicitly requested.
+
+## App versioning
+
+Small fixes increment the patch version by 0.0.1 (for example, 1.0.0 → 1.0.1). Larger features use a minor bump; major changes may warrant a major bump. Keep Cargo.toml, the Hotori entry in Cargo.lock, tauri.conf.json, and the visible version label in web/index.html aligned. Theme versions are independent of app versions.
+
+Build and verify the local EXE first. Wait for the user's verification and explicit publishing instruction before pushing or changing GitHub releases.
+
+## Signed portable app updates
+
+Hotori 1.1.0 adds **Update Hotori**, separate from **Update theme**. It checks the latest stable GitHub release, offers Download & restart, verifies an Ed25519-signed manifest and the EXE's SHA-256/size, then stages the app beside the running EXE. A copy of the current app acts as the temporary helper. It waits for the original process to exit, keeps a backup while replacing the EXE, and restores the old version if the new app fails its startup acknowledgement. Paths containing spaces are supported. Theme files and wallpapers are not involved in app replacement. The EXE's folder must be writable.
+
+Prepare an app release locally on the signing Windows account:
+
+```powershell
+cargo build --release --locked
+python scripts/sign-release.py sign
+```
+
+The Python signing tool requires `cryptography`. Its default EXE is `target/release/hotori.exe`; it verifies the Windows product version against `tauri.conf.json` before signing. After user approval, attach these three files to the matching stable `vX.Y.Z` GitHub release:
+
+- `hotori.exe`
+- `hotori-update.json`
+- `hotori-update.json.sig`
+
+The app embeds only `assets/update-public-key.hex`. The private key is Windows-DPAPI protected at `%LOCALAPPDATA%/Hotori/signing/update-key.dpapi`, outside this repository. Keep this key and its Windows account available for future releases. Do not regenerate the public key for an existing app: old copies trust the original key. A lost signing key requires users to download a new trusted app manually. These update signatures verify app downloads; they are separate from Windows Authenticode signing.
+
+The current public 1.0.0 release predates app updates. Users must manually download their first updater-capable EXE; later signed releases can be installed from inside that app. No update is downloaded automatically on startup. No push or GitHub release is performed by the signing script.
+
+`node tests/app-update-smoke.cjs` performs a real replacement/restart using disposable EXE copies and the locally signed release artifacts. It builds an older-version helper harness under `target/qa`, checks paths with spaces, verifies the real new app starts, and confirms user theme/wallpaper files survive. `HOTORI_TEST_APP_UPDATE=1` additionally enables a live GitHub app-update check in the native smoke test.

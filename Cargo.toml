@@ -1,6 +1,6 @@
 [package]
 name = "hotori"
-version = "1.0.0"
+version = "1.1.0"
 edition = "2024"
 build = "build.rs"
 
@@ -17,6 +17,13 @@ base64 = "0.23.1"
 reqwest = { version = "0.13.5", default-features = false, features = ["blocking", "rustls"] }
 tauri = { version = "2", features = [] }
 serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+semver = "1"
+sha2 = "0.10"
+ed25519-dalek = "2.2"
+
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.61", features = ["Win32_Foundation", "Win32_Storage_FileSystem", "Win32_System_Threading", "Win32_UI_WindowsAndMessaging"] }
 
 [build-dependencies]
 tauri-build = { version = "2", features = [] }

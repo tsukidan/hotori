@@ -1,4 +1,5 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+mod app_updates;
 mod customization;
 mod installer;
 mod settings;
@@ -122,6 +123,46 @@ async fn update_theme(state: tauri::State<'_, AppState>) -> Result<updates::Upda
 }
 
 #[tauri::command]
+async fn check_app_update(
+    state: tauri::State<'_, app_updates::State>,
+) -> Result<app_updates::Check, String> {
+    let session = state.0.clone();
+    tauri::async_runtime::spawn_blocking(move || {
+        let mut pending = session.lock().map_err(|e| e.to_string())?;
+        *pending = None;
+        let (result, candidate) = app_updates::check()?;
+        *pending = candidate;
+        Ok(result)
+    })
+    .await
+    .map_err(|e| e.to_string())?
+}
+
+#[tauri::command]
+async fn install_app_update(
+    app: tauri::AppHandle,
+    state: tauri::State<'_, app_updates::State>,
+) -> Result<(), String> {
+    use tauri::Emitter;
+    let session = state.0.clone();
+    let events = app.clone();
+    tauri::async_runtime::spawn_blocking(move || {
+        let mut pending = session.lock().map_err(|e| e.to_string())?;
+        let candidate = pending.as_ref().ok_or("Check for an app update first.")?;
+        let stage = app_updates::prepare(candidate, |progress| {
+            let _ = events.emit("app-update-progress", progress);
+        })?;
+        app_updates::launch_helper(&stage)?;
+        *pending = None;
+        Ok::<_, String>(())
+    })
+    .await
+    .map_err(|e| e.to_string())??;
+    app.exit(0);
+    Ok(())
+}
+
+#[tauri::command]
 fn open_theme_folder(state: tauri::State<AppState>) -> Result<bool, String> {
     let folder = state.folder()?;
     let exists = folder.is_dir();
@@ -160,7 +201,15 @@ async fn wallpaper_preview(
 }
 
 fn main() {
+    if app_updates::helper_entry() {
+        return;
+    }
     tauri::Builder::default()
+        .manage(app_updates::State::default())
+        .setup(|_| {
+            app_updates::complete_startup().map_err(std::io::Error::other)?;
+            Ok(())
+        })
         .manage(AppState {
             folder: std::env::var_os("APPDATA")
                 .map(|p| PathBuf::from(p).join("Vencord").join("themes")),
@@ -174,6 +223,8 @@ fn main() {
             save_settings,
             reset_settings,
             update_theme,
+            check_app_update,
+            install_app_update,
             open_theme_folder,
             import_wallpaper,
             wallpaper_preview

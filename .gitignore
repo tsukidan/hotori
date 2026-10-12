@@ -3,3 +3,6 @@
 /preview-settings.png
 /gen/schemas/
 /node_modules/
+
+# Private signing material must never enter Git.
+*.dpapi
