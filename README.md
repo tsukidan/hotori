@@ -1,38 +1,41 @@
-![Hotori banner](assets/banner.png)
+<div align="center">
 
-# Hotori
+<img src="assets/banner.png" alt="Hotori" width="100%">
 
-A Windows app for installing and customizing the Hotori Discord theme, built with Rust + Tauri 2. The HTML/CSS/JavaScript interface is embedded in the executable; no frontend bundler or Node runtime is needed to build or run the app.
+<p><em>If only the snow could fall slower...</em></p>
 
-[Download Hotori](https://github.com/tsukidan/hotori/releases/latest) · [Get Vencord](https://vencord.dev/download/)
+<p>A Discord theme inspired by Liquid Glass.<br>Soft acrylic, liquid glass, and a look you can make your own.</p>
 
-Download `hotori.exe` from Releases, open it, and choose Install. Enable Hotori in Vencord’s Themes settings, then use Customize to make it yours. Vencord is required. Update theme installs the latest published theme while preserving your saved customization settings.
+<p>
+  <a href="https://github.com/tsukidan/hotori/releases"><img src="https://img.shields.io/badge/Windows_releases-8F4148?style=for-the-badge&amp;logo=github&amp;logoColor=FFF3EF" alt="Windows releases"></a>
+  <a href="https://vencord.dev/download/"><img src="https://img.shields.io/badge/Get_Vencord-533039?style=for-the-badge&amp;logo=discord&amp;logoColor=FFF3EF" alt="Get Vencord"></a>
+  <a href="https://github.com/tsukidan/hotori/blob/main/assets/hotori.theme.css"><img src="https://img.shields.io/badge/Theme_CSS-39242B?style=for-the-badge&amp;logo=css&amp;logoColor=E8B4AA" alt="Theme CSS"></a>
+</p>
 
-Build the optimized app with `cargo build --release --locked`. Open `target/release/hotori.exe`. For development, use `cargo run`. Building requires Rust/MSVC and Microsoft C++ Build Tools; running requires Microsoft Edge WebView2 Runtime. The executable opens Hotori directly.
+<img src="assets/readme-divider.svg" alt="" width="560">
 
-Hotori 1.0 uses the new supplied logo and original background artwork, with separate Installation and Customization action groups. One stationary background uses CSS cover sizing on both pages, with the artwork offset toward the right to keep the face clear of the central panel. Both pages are centered, adapt to resizing down to 560 by 560, and use CSS backdrop blur instead of fixed image crops. Customize slides in from the right within the same window; The bottom Back button or Escape slides it out to the right and discards unsaved edits. Each category has its own Save button that enables for changes and saves only that category, without leaving the editor or resetting scroll. Other categories retain their unsaved drafts. Reduced-motion preferences are respected. Only page transforms animate; blur is not animated, and settings rows do not each run a separate blur effect.
+<h2>The theme</h2>
 
-The default window is 1600 by 900. A transparent frontend title bar shares the wallpaper, with minimize, maximize/restore, and close buttons grouped inside one frosted acrylic pill matching the theme’s acrylic profile (24px blur, 150% saturation). The title bar shows the Hotori name without a logo. Home content fades and drops into place once at launch; completed animations release their opacity/transform state so the window controls can blur the wallpaper; buttons spring into a held, slightly enlarged hover state. The Vencord notice uses muted red text with a white outline. Reduced-motion preferences disable these animations. Drag its left area to move the window, or double-click it to maximize/restore. Native edge resizing remains enabled. Scrolling uses the WebView's native scrolling. The obsolete Slint UI sources are preserved under `legacy/slint` for reference and are not compiled or loaded.
+<p>Choose acrylic or liquid glass, then adjust the blur, colors, and tints.<br>Add your own wallpapers, change avatar size and roundness,<br>and choose a vertical or horizontal server list.</p>
 
-Installation writes the theme embedded from `assets/hotori.theme.css` to `%APPDATA%\Vencord\themes\hotori.theme.css`. Only the EXE is needed; users do not need a development theme file. The themes folder must already exist. Existing installed themes are never overwritten. The bundled theme matches the current development implementation, with the name Hotori, no main/settings wallpaper links, and a default #5865f2 accent. Uninstall removes only hotori.theme.css; development and older test themes remain untouched. If the themes folder is missing, Open Themes Folder opens https://vencord.dev/download/ and shows a Vencord-required popup. Detection uses the themes folder rather than Discord’s patch state. No operation creates backups. Enable **Hotori** in Vencord’s Themes settings.
+<h2>The app</h2>
 
-Customize edits variables before `END OF USER SETTINGS`, excluding typing indicator spacing, server list top padding, and horizontal height. It retains named dropdowns and explanations, color picking, opacity sliders, background links, and numeric controls with separate units. Large bold section headings and reusable SVG icons identify each category; collapsible submenus contain advanced controls and separate text/icon color grids. All categories and submenus start expanded, with Server List first. Blur and intensity sliders stay within 90–110% of the latest cached published defaults (or the bundled defaults before updating) (falling back to 24px acrylic, 2.5px liquid, and 220% saturation if defaults are unavailable). Their bounds do not drift when customizations are saved. Acrylic and liquid blur are displayed as percentages of the source defaults rather than pixels; CSS still receives pixels. Avatar roundness displays 0–100%, mapping the upper end to a full circle (50% in the CSS); avatar size ranges from 0 to 70px and displays a linear percentage scale where 40px is 100% and 70px is 120%. All sliders display and advance in whole numbers; conversions may still produce fractional CSS pixels. Avatar sizes are still saved as pixels. Existing out-of-range values are preserved until the slider is moved. CSS wrappers, existing `!important` flags, comments, metadata, excluded values, and theme implementation are preserved. Saving validates changes and detects external edits; saves keep the editor open, update the session for repeated saves, and show success or errors in place. Installation status refreshes on focus and every two seconds while the app is visible.
+<p>Hotori is a Windows installer and customizer in one app.<br>Install or remove the theme, preview wallpapers, and save each category separately.</p>
 
-`web/index.html` can also be opened in a browser for a nonfunctional visual preview. File operations are disabled outside Tauri. The old Slint `--preview` and `--preview-settings` flags have been retired.
+<p><strong>Update theme</strong> brings in the latest theme while keeping your saved settings.<br><strong>Reset to defaults</strong> gives you a fresh start whenever you want.</p>
 
-Validation:
+<img src="assets/readme-divider.svg" alt="" width="560">
 
-- `cargo test --release --locked` runs the backend and settings bridge tests.
-- `npm install` installs the optional Playwright test dependency. `npm run test:native` launches the actual release app with a temporary APPDATA folder and a local WebView2 debugging endpoint. It checks install/uninstall, settings preservation, save, Back, external edits, scrolling, centered responsive layouts, and the fixed cover background at several native window sizes. It never changes the user's Vencord themes. Screenshots and disposable profiles are kept under `target/qa` for inspection. No browser download is required because it connects to WebView2.
+<h2>Get started</h2>
 
-The release executable embeds the local UI and artwork, including the app icon with transparent corners at a 10% radius. It does not load remote scripts or grant generic filesystem/shell access to the frontend; Rust commands restrict file operations to the Vencord theme files described above.
+<p><strong>1.</strong> Install <a href="https://vencord.dev/download/">Vencord</a> for Discord.</p>
+<p><strong>2.</strong> Download <code>hotori.exe</code> from <a href="https://github.com/tsukidan/hotori/releases">Releases</a> and click <strong>Install</strong>.</p>
+<p><strong>3.</strong> Enable Hotori in <strong>Vencord → Themes</strong>, then open <strong>Customize</strong>.</p>
 
-Both wallpaper options support a local PNG/JPEG/GIF/WebP (up to 10 MB) or a direct HTTP/HTTPS image link, previews, and Clear background. Local selections are copied into `themes/hotori-assets` with content-based filenames and referenced through Vencord’s local `vencord:///themes/` protocol; they are never uploaded. Previews read only managed wallpaper files. Copies survive deletion of the original and are retained when cancelling drafts or uninstalling, to avoid breaking references in other themes. Link mode explains that Discord and previews contact the supplied website. Save changes applies the selection. Existing development files remain untouched.
+<p><sub>Windows · Vencord required · Only the EXE is needed</sub></p>
 
-Reset to defaults at the bottom of Customize immediately restores and saves all editable options from the latest cached published theme (or the bundled theme before updating), including its wallpaper defaults. It keeps Customize open and preserves the installed theme implementation and excluded options.
+<img src="assets/readme-divider.svg" alt="" width="560">
 
-Theme updates: the home page’s Update theme button downloads `assets/hotori.theme.css` from the default branch of the public `tsukidan/hotori` GitHub repository, using GitHub’s raw-contents API. It updates only the installed theme, not the EXE. Publishing theme commits needs no new app release. Keep the release theme named Hotori with `@version` metadata, exactly one `END OF USER SETTINGS` marker, and one custom-property declaration per line in the user-settings section. Bump the theme version when publishing updates. The source must be publicly accessible; no GitHub login or token is shipped with the app.
+<p><sub>Made by <a href="https://github.com/tsukidan">tsuki</a> · <a href="docs/development.md">Development notes</a></sub></p>
 
-Updates merge every existing variable that still appears in the new user-settings section, including hidden/manual settings, `!important`, local wallpaper URIs, and image links. Newly added variables use published defaults; removed variables disappear with the old implementation. New comments, metadata, and implementation come from the published file. Downloads have a 30-second timeout and 2 MB limit. Invalid/truncated files, missing sources, and GitHub errors leave the installed theme untouched. Changes made during download cause the update to abort. The merged file is flushed to a temporary file beside the installed theme and atomically replaces it. No automatic update runs on startup.
-
-The uncustomized published source is cached in `themes/hotori-assets/theme-defaults.css` so Customize slider bounds and Reset to defaults follow the updated theme, including after restarting Hotori. The bundled source is the offline fallback. Continue updating the tracked `assets/hotori.theme.css` in the repository; do not publish a customized installed copy. EXE releases remain independent.
+</div>
