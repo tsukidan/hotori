@@ -144,12 +144,10 @@ function sampleFrames(page, duration = 800) {
     await preview.waitForFunction(() => document.querySelector('#home-status').dataset.error === 'true');
     assert((await preview.locator('#home-status').textContent()).includes('published theme is unavailable'));
     assert.equal(await preview.locator('#app').getAttribute('data-page'), 'installer');
-    await preview.locator('#update-app').click();
-    await preview.waitForFunction(() => document.querySelector('#home-status').textContent.includes('up to date'));
-    await preview.evaluate(() => window.previewAppUpdate = 'error');
-    await preview.locator('#update-app').click();
-    await preview.waitForFunction(() => document.querySelector('#home-status').dataset.error === 'true');
-    await preview.evaluate(() => window.previewAppUpdate = 'available');
+    assert.equal(await preview.locator('#app-update-bubble').isVisible(), false);
+    await preview.evaluate(async () => { window.previewAppUpdate = 'error'; await checkForAppUpdate().catch(() => {}); });
+    assert.equal(await preview.locator('#app-update-bubble').isVisible(), false);
+    await preview.evaluate(async () => { window.previewAppUpdate = 'available'; await checkForAppUpdate(); });
     await preview.locator('#update-app').click();
     await preview.locator('#app-update-dialog').waitFor({ state: 'visible' });
     assert((await preview.locator('#app-update-description').textContent()).includes('2.0.0'));
@@ -224,9 +222,8 @@ function sampleFrames(page, duration = 800) {
     });
     await page.waitForTimeout(950); // One-time launch animation must finish before geometry checks.
     if (process.env.HOTORI_TEST_APP_UPDATE === '1') {
-      await page.locator('#update-app').click();
-      await page.waitForFunction(() => !document.querySelector('#update-app').disabled, null, { timeout: 40000 });
-      assert((await page.locator('#home-status').textContent()).includes('up to date'));
+      await page.waitForFunction(() => !checkingApp, null, { timeout: 40000 });
+      assert.equal(await page.locator('#app-update-bubble').isVisible(), false);
       console.log('PASS: native app checks the public GitHub release and rejects downgrades.');
     }
 
@@ -236,9 +233,10 @@ function sampleFrames(page, duration = 800) {
     assert.equal(await page.locator('.version').getAttribute('aria-label'), `Version ${appVersion}`);
     assert.equal(await page.locator('.version').evaluate(el => getComputedStyle(el).opacity), '0.6');
     assert.equal(await page.locator('.tagline').evaluate(el => getComputedStyle(el).fontStyle), 'italic');
-    assert.equal(await page.locator('.installer-card .vencord-notice').count(), 0);
+    assert.equal(await page.locator('.installer-card .vencord-notice').count(), 1);
     assert.equal(await page.locator('.vencord-notice').isVisible(), false);
-    assert.equal(await page.locator('.action-group').count(), 2);
+    assert.equal(await page.locator('.dock-group').count(), 3);
+    assert.equal(await page.locator('.dock-button').count(), 6);
     assert(await page.locator('#installation-heading').isVisible());
     assert(await page.locator('#customization-heading').isVisible());
     assert.equal(await page.evaluate(() => window.__TAURI__.window.getCurrentWindow().isDecorated()), false);
@@ -256,13 +254,13 @@ function sampleFrames(page, duration = 800) {
     const { nodeId: hoverNode } = await hoverSession.send('DOM.querySelector', { nodeId: hoverRoot.nodeId, selector: '#install' });
     await hoverSession.send('CSS.forcePseudoState', { nodeId: hoverNode, forcedPseudoClasses: ['hover'] });
     await page.waitForTimeout(400);
-    const hoverTransform = await page.locator('#install').evaluate(el => getComputedStyle(el).transform);
+    const hoverTransform = await page.locator('#install .dock-symbol').evaluate(el => getComputedStyle(el).transform);
     await page.waitForTimeout(400);
-    assert.equal(await page.locator('#install').evaluate(el => getComputedStyle(el).transform), hoverTransform, 'Hover scale stays enlarged until the pointer leaves');
+    assert.equal(await page.locator('#install .dock-symbol').evaluate(el => getComputedStyle(el).transform), hoverTransform, 'Hover scale stays enlarged until the pointer leaves');
     assert.notEqual(hoverTransform, 'none');
     await page.emulateMedia({ reducedMotion: 'reduce' });
     assert.equal(await page.locator('.installer-card').evaluate(el => getComputedStyle(el).animationName), 'none');
-    assert.equal(await page.locator('#install').evaluate(el => getComputedStyle(el).transform), 'none');
+    assert.equal(await page.locator('#install .dock-symbol').evaluate(el => getComputedStyle(el).transform), 'none');
     await hoverSession.send('CSS.forcePseudoState', { nodeId: hoverNode, forcedPseudoClasses: [] });
     await hoverSession.detach();
     await page.emulateMedia({ reducedMotion: 'no-preference' });

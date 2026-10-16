@@ -254,3 +254,139 @@ details[open] > summary > .icon { transform: rotate(180deg); }
 .app-update-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
 #app-update-progress { display: block; width: 100%; margin-top: 18px; height: 8px; accent-color: #cf8589; }
 #app-update-progress[hidden] { display: none; }
+
+/* The home composition leaves space for the dock's expanded glass window. */
+.installer-page { overflow-x: hidden; overflow-y: auto; padding: 48px clamp(28px, 4.5vw, 80px) 60px; }
+.home-content {
+  width: 100%; max-width: 1520px; padding-right: 260px;
+  display: grid; grid-template-columns: 1fr; align-items: start;
+  gap: 32px; text-align: left;
+}
+.home-brand { min-width: 0; }
+/* The PNG has 219px of transparent left padding. Crop its canvas in the
+   heading so the visible artwork shares the text's left edge at every size. */
+.home-brand h1 { position: relative; width: min(100%, 360px); aspect-ratio: 814 / 300; overflow: hidden; }
+.home-brand .logo {
+  position: absolute; top: 0; left: -26.904177%; width: 154.054054%;
+  max-width: none; max-height: none; margin: 0;
+}
+.home-brand .tagline { margin: 20px 0 0; font-size: clamp(13px, 1.2vw, 17px); }
+.installer-card { padding: 0; max-width: 600px; text-align: left; }
+.installer-card h2 { font-size: clamp(25px, 2vw, 30px); line-height: 1.25; font-weight: 500; text-wrap: balance; }
+.installer-card .description { margin: 18px 0 0; max-width: 550px; font-size: 14px; line-height: 1.85; }
+.installer-card .status { margin-top: 30px; }
+#home-status {
+  display: grid; grid-template-columns: 22px minmax(0, 1fr); align-items: start;
+  gap: 6px 12px; font-size: 14px; line-height: 1.5;
+  width: fit-content; max-width: 100%; padding: 12px 16px; border-radius: 16px;
+  border: 1px solid #ffffff1a;
+  background: linear-gradient(135deg, #ffffff0a, #0c101814);
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+  box-shadow: inset 0 1px 1px #ffffff33, 0 2px 8px #00000026;
+}
+#home-status > .icon { width: 22px; height: 22px; color: #fff3ef; stroke-width: 1.8; }
+#home-status[data-error="true"] > .icon { color: inherit; }
+.status-copy, .status-detail { display: contents; }
+.status-heading { grid-column: 2; color: #fff3ef; font-weight: 600; }
+.status-detail-text { grid-column: 2; min-width: 0; font-size: 13px; }
+.status-detail .icon { grid-column: 1; width: 22px; height: 22px; }
+.installer-card .vencord-notice { font-size: 14px; text-align: left; }
+.home-brand, .installer-card {
+  animation: hotori-arrive 700ms cubic-bezier(.2,.75,.25,1) backwards;
+}
+
+/* A fixed right edge lets the glass window unfold into the room on its left. */
+.command-dock {
+  position: absolute; z-index: 3; right: clamp(20px, 2.5vw, 44px); top: 50%;
+  transform: translateY(-50%); width: 76px;
+  display: flex; flex-direction: column; gap: 12px;
+  color: #fff;
+  transition: width 480ms cubic-bezier(.22,1.15,.36,1);
+}
+.command-dock:is(:hover, :focus-within) { width: 244px; }
+.dock-main, .dock-update-bubble { position: relative; isolation: isolate; padding: 16px 10px; }
+.dock-update-bubble { padding-top: 24px; }
+.dock-update-bubble[hidden] { display: none; }
+.dock-update-bubble .dock-heading { top: 8px; right: 20px; }
+.dock-surface {
+  position: absolute; inset: 0; z-index: -1; border-radius: 30px;
+  border: 1px solid #ffffff1a;
+  background: linear-gradient(135deg, #ffffff0a, #0c101814);
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+  box-shadow: inset 0 1px 1px #ffffff33, 0 2px 8px #00000026;
+  pointer-events: none;
+}
+.dock-group { position: relative; padding-top: 20px; }
+.dock-group + .dock-group { margin-top: 10px; border-top: 1px solid #ffffff1f; }
+.dock-heading {
+  position: absolute; top: 4px; right: 10px; margin: 0;
+  font-size: 9px; line-height: 14px; font-weight: 600;
+  letter-spacing: 1.4px; text-transform: uppercase; white-space: nowrap;
+  color: #ffffff99; opacity: 0; transform: translateX(8px);
+  transition: opacity 150ms ease, transform 300ms ease;
+}
+.command-dock:is(:hover, :focus-within) .dock-heading { opacity: 1; transform: none; transition-delay: 100ms; }
+.dock-item { position: relative; height: 60px; }
+.dock-button {
+  position: relative; display: block; width: 100%; height: 100%; padding: 0;
+  border: 0; border-radius: 15px; background: transparent; color: #fff;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.dock-button::before {
+  content: ""; position: absolute; inset: 4px 0; border-radius: 14px;
+  background: linear-gradient(135deg, #ffffff08, #ffffff14); opacity: 0;
+  transition: opacity 180ms ease;
+}
+.dock-button:hover:not(:disabled)::before, .dock-button:focus-visible::before { opacity: 1; }
+.dock-symbol {
+  position: absolute; right: 4px; top: 6px; width: 48px; height: 48px;
+  display: grid; place-items: center; transform-origin: center;
+  filter: drop-shadow(0 3px 5px #0004);
+  transform: translate(var(--dock-shift, 0px), var(--dock-spread, 0px)) scale(var(--dock-scale, 1));
+  transition: transform 380ms cubic-bezier(.22,1.55,.36,1);
+}
+.dock-symbol .icon { width: 28px; height: 28px; stroke-width: 1.8; }
+.command-dock:is(:hover, :focus-within) .dock-symbol {
+  transform: translate(calc(-5px + var(--dock-shift, 0px)), var(--dock-spread, 0px)) scale(var(--dock-scale, 1));
+}
+.dock-button .button-label {
+  position: absolute; top: 50%; right: 76px; transform: translate(10px, -50%);
+  white-space: nowrap; font-size: 13px; font-weight: 550; opacity: 0;
+  transition: opacity 140ms ease, transform 300ms var(--ease);
+}
+.command-dock:is(:hover, :focus-within) .button-label { opacity: 1; transform: translate(0, -50%); transition-delay: 90ms; }
+.dock-button:disabled { cursor: default; }
+.dock-button:disabled .dock-symbol, .dock-button:disabled .button-label { color: #ffffff60; }
+.dock-button:active:not(:disabled) .dock-symbol { scale: .91; }
+
+@media (max-width: 1100px) {
+  .home-content { padding-right: 100px; }
+  .installer-card h2 { font-size: 27px; }
+}
+@media (max-width: 800px) {
+  .home-content { gap: 28px; padding-right: 100px; }
+  .home-brand h1 { width: min(100%, 300px); }
+  .home-brand .tagline { margin-top: 14px; }
+  .installer-card { max-width: 420px; }
+  .installer-card h2 { font-size: 25px; }
+  .installer-card .description { margin-top: 14px; font-size: 13px; line-height: 1.7; }
+  .installer-card .status { margin-top: 18px; }
+}
+@media (max-height: 680px) {
+  .dock-main { padding-block: 12px; }
+  .dock-update-bubble { padding-bottom: 12px; }
+  .dock-item { height: 48px; }
+  .dock-symbol { top: 0; }
+  .dock-group { padding-top: 18px; }
+  .dock-group + .dock-group { margin-top: 6px; }
+  .home-content { gap: 24px; }
+  .home-brand h1 { width: min(100%, 280px); }
+  .installer-card .description { line-height: 1.6; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-brand, .installer-card { animation: none; }
+  .command-dock, .dock-heading, .dock-symbol, .dock-button .button-label, .dock-button::before { transition: none; }
+  .command-dock .dock-symbol, .command-dock:is(:hover, :focus-within) .dock-symbol { transform: none; }
+}

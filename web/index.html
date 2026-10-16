@@ -23,35 +23,38 @@
   <main id="app" data-page="installer">
     <section id="installer-page" class="page installer-page" aria-labelledby="installer-title">
       <div class="home-content">
-        <h1 id="installer-title"><img class="logo" src="assets/logo.png" alt="Hotori"></h1>
-        <p class="tagline">If only the snow could fall slower...</p>
-        <div class="glass installer-card">
+        <div class="home-brand">
+          <h1 id="installer-title"><img class="logo" src="assets/logo.png" alt="Hotori"></h1>
+          <p class="tagline">If only the snow could fall slower...</p>
+        </div>
+        <div class="installer-card">
           <h2>Hotori — a theme inspired by Liquid Glass.</h2>
           <p class="description">A Discord theme inspired by Liquid Glass. Make it yours with acrylic or liquid glass, custom backgrounds, colors and blur. Adjust avatar size and shape, message spacing, mention highlights, and your server list layout.</p>
-          <div class="action-groups">
-            <section class="action-group" aria-labelledby="installation-heading">
-              <h3 id="installation-heading"><span data-icon="download"></span>Installation</h3>
-              <p>Add or remove your theme.</p>
-              <div class="actions">
-                <button id="install" class="button primary" disabled><span data-icon="download"></span><span class="button-label">Install</span></button>
-                <button id="uninstall" class="button" disabled><span data-icon="trash"></span>Uninstall</button>
-                <button id="update-theme" class="button" disabled title="Download the latest theme while preserving your customization settings."><span data-icon="reset"></span><span class="button-label">Update theme</span></button>
-              </div>
-            </section>
-            <section class="action-group" aria-labelledby="customization-heading">
-              <h3 id="customization-heading"><span data-icon="sliders"></span>Customization</h3>
-              <p>Fine-tune your theme and its files.</p>
-              <div class="actions">
-                <button id="customize" class="button" disabled><span data-icon="sliders"></span>Customize</button>
-                <button id="folder" class="button" disabled><span data-icon="folder"></span>Open Themes Folder</button>
-              </div>
-            </section>
-          </div>
-          <div class="app-update-row"><button id="update-app" class="button" disabled><span data-icon="download"></span><span class="button-label">Update Hotori</span></button></div>
           <p id="home-status" class="status" role="status" aria-live="polite">Checking your theme…</p>
+          <p class="vencord-notice" hidden>!! Vencord is required for this theme !!</p>
         </div>
-        <p class="vencord-notice" hidden>!! Vencord is required for this theme !!</p>
       </div>
+      <nav id="command-dock" class="command-dock" aria-label="Hotori commands">
+        <div class="dock-main">
+        <div class="dock-surface" aria-hidden="true"></div>
+        <section class="dock-group" aria-labelledby="installation-heading">
+          <h3 id="installation-heading" class="dock-heading">Installation</h3>
+          <div class="dock-item"><button id="install" class="dock-button" disabled><span class="dock-symbol"><span data-icon="download"></span></span><span class="button-label">Install</span></button></div>
+          <div class="dock-item"><button id="update-theme" class="dock-button" disabled title="Download the latest theme while preserving your customization settings."><span class="dock-symbol"><span data-icon="reset"></span></span><span class="button-label">Update theme</span></button></div>
+          <div class="dock-item"><button id="uninstall" class="dock-button" disabled><span class="dock-symbol"><span data-icon="trash"></span></span><span class="button-label">Uninstall</span></button></div>
+        </section>
+        <section class="dock-group" aria-labelledby="customization-heading">
+          <h3 id="customization-heading" class="dock-heading">Customization</h3>
+          <div class="dock-item"><button id="customize" class="dock-button" disabled><span class="dock-symbol"><span data-icon="sliders"></span></span><span class="button-label">Customize</span></button></div>
+          <div class="dock-item"><button id="folder" class="dock-button" disabled><span class="dock-symbol"><span data-icon="folder"></span></span><span class="button-label">Themes folder</span></button></div>
+        </section>
+        </div>
+        <section id="app-update-bubble" class="dock-group dock-update-bubble" aria-labelledby="application-heading" hidden>
+          <div class="dock-surface" aria-hidden="true"></div>
+          <h3 id="application-heading" class="dock-heading">Application</h3>
+          <div class="dock-item"><button id="update-app" class="dock-button" disabled><span class="dock-symbol"><span data-icon="app-update"></span></span><span class="button-label">Update Hotori</span></button></div>
+        </section>
+      </nav>
     </section>
     <section id="settings-page" class="page settings-page" aria-labelledby="settings-title" inert>
       <div class="glass settings-card">
@@ -87,6 +90,6 @@
       <button id="app-update-install" class="button primary" type="button">Download &amp; restart</button>
     </div>
   </dialog>
-  <span class="version" aria-label="Version 1.1.0">v1.1.0</span>
+  <span class="version" aria-label="Version 1.2.1">v1.2.1</span>
 </body>
 </html>

@@ -11,8 +11,19 @@ let navigationTimer;
 let savedValues = new Map();
 let categoryGroups = new Map();
 
-function message(id, text, error = false) {
-  $(id).textContent = text;
+function message(id, text, error = false, symbol = "info", detailSymbol = "") {
+  if (id === "home-status") {
+    const [heading, ...details] = text.split(/(?<=[.!?])\s+(?=[A-Z])/);
+    const copy = element("span", "status-copy");
+    copy.append(element("strong", "status-heading", heading));
+    if (details.length) {
+      const detail = element("span", "status-detail");
+      if (detailSymbol) detail.append(icon(detailSymbol));
+      detail.append(element("span", "status-detail-text", details.join(" ")));
+      copy.append(document.createTextNode("\n"), detail);
+    }
+    $(id).replaceChildren(icon(error ? "alert" : symbol), copy);
+  } else $(id).textContent = text;
   $(id).dataset.error = String(error);
 }
 
@@ -24,7 +35,7 @@ function updateButtons() {
   $("uninstall").disabled = busy || !status.installed;
   $("customize").disabled = busy || !status.installed;
   $("folder").disabled = busy || !invoke;
-  $("update-app").disabled = busy || !invoke;
+  $("update-app").disabled = busy || checkingApp || !invoke;
   $("update-app").querySelector(".button-label").textContent = checkingApp ? "Checking…" : "Update Hotori";
   $("app-update-cancel").disabled = installingApp;
   $("app-update-install").disabled = installingApp;
@@ -64,11 +75,15 @@ function element(tag, className, text) {
 }
 
 const iconPaths = {
+  info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10h.01"/>',
+  check: '<circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/>',
+  alert: '<path d="m12 3 10 18H2L12 3Z"/><path d="M12 9v5m0 3h.01"/>',
   minimize: '<path d="M5 12h14"/>',
   maximize: '<rect x="5" y="5" width="14" height="14" rx="1.5"/>',
   restore: '<path d="M9 5V3h12v12h-2"/><rect x="3" y="9" width="12" height="12" rx="1.5"/>',
   close: '<path d="m6 6 12 12M18 6 6 18"/>',
   download: '<path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/>',
+  "app-update": '<rect x="3" y="3" width="18" height="18" rx="5"/><path d="M12 17V7m-4 4 4-4 4 4"/>',
   trash: '<path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7m4-7v7"/>',
   sliders: '<path d="M4 7h5m4 0h7M4 17h9m4 0h3M9 4v6m4-6v6m0 4v6m4-6v6"/>',
   folder: '<path d="M3 7V4h6l3 3h9v13H3z"/>',
@@ -98,6 +113,56 @@ function icon(name) {
   // Markup is exclusively from the local icon catalog, never theme input.
   svg.innerHTML = iconPaths[name] || iconPaths.sliders;
   return svg;
+}
+
+function initializeDock() {
+  const dock = $("command-dock");
+  const items = [...dock.querySelectorAll(".dock-item")];
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let pointerY = null;
+  let frame = 0;
+  const reset = () => {
+    items.forEach(item => {
+      item.style.removeProperty("--dock-scale");
+      item.style.removeProperty("--dock-shift");
+      item.style.removeProperty("--dock-spread");
+    });
+  };
+  const paint = () => {
+    frame = 0;
+    if (reduceMotion.matches || pointerY === null) { reset(); return; }
+    // Measure stationary rows so magnification never feeds back into pointer distance.
+    const centers = items.map(item => {
+      const rect = item.getBoundingClientRect();
+      return rect.top + rect.height / 2;
+    });
+    items.forEach((item, index) => {
+      const distance = centers[index] - pointerY;
+      const influence = Math.max(0, 1 - Math.abs(distance) / 115);
+      const weight = influence * influence;
+      item.style.setProperty("--dock-scale", (1 + weight * .42).toFixed(3));
+      item.style.setProperty("--dock-shift", `${(-weight * 10).toFixed(2)}px`);
+      item.style.setProperty("--dock-spread", `${(Math.sign(distance) * influence * 8).toFixed(2)}px`);
+    });
+  };
+  const schedule = () => { if (!frame) frame = requestAnimationFrame(paint); };
+  dock.addEventListener("pointermove", event => {
+    if (event.pointerType === "touch") return;
+    pointerY = event.clientY;
+    schedule();
+  });
+  dock.addEventListener("pointerleave", () => { pointerY = null; schedule(); });
+  dock.addEventListener("focusin", event => {
+    const item = event.target.closest(".dock-item");
+    if (!item) return;
+    const rect = item.getBoundingClientRect();
+    pointerY = rect.top + rect.height / 2;
+    schedule();
+  });
+  dock.addEventListener("focusout", event => {
+    if (!dock.contains(event.relatedTarget)) { pointerY = null; schedule(); }
+  });
+  reduceMotion.addEventListener("change", schedule);
 }
 function fieldIcon(field) {
   if (field.name.includes("avatar")) return field.name.includes("radius") ? "circle" : "user";
@@ -380,27 +445,39 @@ async function operation(command, success) {
   busy = true; updateButtons();
   try {
     await invoke(command);
-    message("home-status", success);
+    message("home-status", success, false, command === "install_theme" ? "check" : "trash");
   } catch (error) { message("home-status", String(error), true); }
   finally { busy = false; await refresh(); updateButtons(); }
 }
 
-$("update-app").addEventListener("click", async () => {
-  if (busy || !invoke) return;
-  busy = true; checkingApp = true; updateButtons();
-  message("home-status", "Checking for a Hotori app update…");
+async function checkForAppUpdate() {
+  checkingApp = true; updateButtons();
   try {
     const result = await invoke("check_app_update");
+    $("app-update-bubble").hidden = !result.available;
+    return result;
+  } catch (error) {
+    $("app-update-bubble").hidden = true;
+    throw error;
+  } finally { checkingApp = false; updateButtons(); }
+}
+
+$("update-app").addEventListener("click", async () => {
+  if (busy || !invoke) return;
+  busy = true; updateButtons();
+  message("home-status", "Checking for a Hotori app update…", false, "app-update");
+  try {
+    const result = await checkForAppUpdate();
     if (result.available) {
       $("app-update-description").textContent = `Hotori ${result.version} is available. You’re using ${result.currentVersion}. Hotori will close and reopen to finish the update.`;
       message("app-update-status", "Your theme settings and wallpapers will be preserved.");
       $("app-update-progress").hidden = true;
       $("app-update-progress").value = 0;
       $("app-update-dialog").showModal();
-      message("home-status", `Hotori ${result.version} is available.`);
+      message("home-status", `Hotori ${result.version} is available.`, false, "app-update");
     } else message("home-status", `You’re up to date. Hotori ${result.currentVersion} is installed.`);
   } catch (error) { message("home-status", String(error), true); }
-  finally { busy = false; checkingApp = false; updateButtons(); }
+  finally { busy = false; updateButtons(); }
 });
 $("app-update-cancel").addEventListener("click", () => { if (!installingApp) $("app-update-dialog").close(); });
 $("app-update-dialog").addEventListener("cancel", event => { if (installingApp) event.preventDefault(); });
@@ -430,10 +507,10 @@ $("install").addEventListener("click", () => operation("install_theme", "Install
 $("update-theme").addEventListener("click", async () => {
   if (busy || !invoke) return;
   busy = true; updatingTheme = true; updateButtons();
-  message("home-status", "Downloading the latest Hotori theme… Your saved settings will be preserved.");
+  message("home-status", "Downloading the latest Hotori theme… Your saved settings will be preserved.", false, "download");
   try {
     const result = await invoke("update_theme");
-    message("home-status", result.changed ? `Theme updated to v${result.version}. Your customization settings were preserved.` : `Theme v${result.version} is already up to date. Your settings are unchanged.`);
+    message("home-status", result.changed ? `Theme updated to v${result.version}. Your customization settings were preserved.` : `Theme v${result.version} is already up to date. Your settings are unchanged.`, false, "check");
   } catch (error) { message("home-status", `Could not update theme: ${error}`, true); }
   finally { busy = false; updatingTheme = false; await refresh(); updateButtons(); }
 });
@@ -443,7 +520,7 @@ $("folder").addEventListener("click", async () => {
   busy = true; updateButtons();
   try {
     const openedFolder = await invoke("open_theme_folder");
-    if (openedFolder) message("home-status", "Opened your Vencord themes folder.");
+    if (openedFolder) message("home-status", "Opened your Vencord themes folder.", false, "folder");
     else {
       $("vencord-dialog").showModal();
       message("home-status", "Opened the Vencord download page.");
@@ -518,10 +595,13 @@ async function initialize() {
     updateButtons(); return;
   }
   await refresh();
-  message("home-status", status.installed ? "Hotori is installed. Make it yours in Customize." : status.ready ? "Ready to install Hotori." : "Install Vencord first. Open Themes Folder will take you to its download page.");
+  message("home-status", status.installed ? "Hotori is installed. Make it yours in Customize." : status.ready ? "Ready to install Hotori." : "Install Vencord first. Open Themes Folder will take you to its download page.", false, status.installed ? "check" : status.ready ? "download" : "alert", status.installed ? "sliders" : "");
+  // A failed startup check keeps the optional bubble hidden and leaves theme status intact.
+  checkForAppUpdate().catch(() => {});
   setInterval(() => { if (!document.hidden) refresh(); }, 2000);
   window.addEventListener("focus", refresh);
 }
 document.querySelectorAll("[data-icon]").forEach(node => node.replaceWith(icon(node.dataset.icon)));
+initializeDock();
 initializeTitlebar();
 initialize();

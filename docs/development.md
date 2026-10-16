@@ -36,6 +36,8 @@ Small fixes increment the patch version by 0.0.1 (for example, 1.0.0 → 1.0.1).
 
 Build and verify the local EXE first. Wait for the user's verification and explicit publishing instruction before pushing or changing GitHub releases.
 
+Current local app version: **1.2.1**. Patch 1.2.1 aligns status icons and text in shared left columns. The 1.2.0 minor release added the vertical glass dock, shared expansion for the conditional app-update bubble, automatic startup update checks, and the revised home layout and status messages. Subsequent small fixes increment the patch version from this baseline.
+
 ## Signed portable app updates
 
 Hotori 1.1.0 adds **Update Hotori**, separate from **Update theme**. It checks the latest stable GitHub release, offers Download & restart, verifies an Ed25519-signed manifest and the EXE's SHA-256/size, then stages the app beside the running EXE. A copy of the current app acts as the temporary helper. It waits for the original process to exit, keeps a backup while replacing the EXE, and restores the old version if the new app fails its startup acknowledgement. Paths containing spaces are supported. Theme files and wallpapers are not involved in app replacement. The EXE's folder must be writable.
@@ -55,6 +57,6 @@ The Python signing tool requires `cryptography`. Its default EXE is `target/rele
 
 The app embeds only `assets/update-public-key.hex`. The private key is Windows-DPAPI protected at `%LOCALAPPDATA%/Hotori/signing/update-key.dpapi`, outside this repository. Keep this key and its Windows account available for future releases. Do not regenerate the public key for an existing app: old copies trust the original key. A lost signing key requires users to download a new trusted app manually. These update signatures verify app downloads; they are separate from Windows Authenticode signing.
 
-The current public 1.0.0 release predates app updates. Users must manually download their first updater-capable EXE; later signed releases can be installed from inside that app. No update is downloaded automatically on startup. No push or GitHub release is performed by the signing script.
+The 1.0.0 release predates app updates. Users on that version must manually download their first updater-capable EXE; signed releases from 1.1.0 onward can be installed from inside the app. No update is downloaded automatically on startup. No push or GitHub release is performed by the signing script.
 
 `node tests/app-update-smoke.cjs` performs a real replacement/restart using disposable EXE copies and the locally signed release artifacts. It builds an older-version helper harness under `target/qa`, checks paths with spaces, verifies the real new app starts, and confirms user theme/wallpaper files survive. `HOTORI_TEST_APP_UPDATE=1` additionally enables a live GitHub app-update check in the native smoke test.
