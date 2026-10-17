@@ -43,9 +43,8 @@ function message(id, text, error = false, symbol = "info", detailSymbol = "") {
 function updateButtons() {
   $("install").disabled = busy || !status.ready || status.installed;
   $("install").querySelector(".button-label").textContent = busy ? "Working…" : status.installed ? "Installed" : "Install";
-  $("update-theme").disabled = busy || !status.installed;
   $("theme-update-notice").disabled = busy || !status.installed;
-  $("update-theme").querySelector(".button-label").textContent = busy && updatingTheme ? "Updating…" : "Update theme";
+  if (themeUpdate?.available) $("theme-update-label").textContent = updatingTheme ? "Updating…" : `v${themeUpdate.version} available`;
   $("uninstall").disabled = busy || !status.installed;
   $("customize").disabled = busy || !status.installed;
   $("folder").disabled = busy || !invoke;
@@ -600,7 +599,7 @@ $("app-update-install").addEventListener("click", async () => {
 });
 
 $("install").addEventListener("click", () => operation("install_theme", "Installed. Enable Hotori in Vencord’s Themes settings."));
-$("update-theme").addEventListener("click", async () => {
+$("theme-update-notice").addEventListener("click", async () => {
   if (busy || !invoke) return;
   busy = true; updatingTheme = true; updateButtons();
   message("home-status", "Downloading the latest Hotori theme… Your saved settings will be preserved.", false, "download");
@@ -612,7 +611,6 @@ $("update-theme").addEventListener("click", async () => {
   } catch (error) { message("home-status", `Could not update theme: ${error}`, true); }
   finally { busy = false; updatingTheme = false; await refresh(); updateButtons(); }
 });
-$("theme-update-notice").addEventListener("click", () => $("update-theme").click());
 $("uninstall").addEventListener("click", () => operation("uninstall_theme", "Theme uninstalled."));
 $("folder").addEventListener("click", async () => {
   if (busy || !invoke) return;

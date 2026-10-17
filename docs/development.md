@@ -24,7 +24,7 @@ These tests exercise the release EXE without changing your installed Vencord the
 
 Update `assets/hotori.theme.css` in this repository. Keep the name `Hotori`, bump `@version`, retain exactly one `END OF USER SETTINGS` marker, and keep each user-setting declaration on its own line.
 
-The app's Update theme button fetches this file from the repository's default branch. Existing values in the user-settings section are preserved when their variables still exist in the new theme. New variables use published defaults; removed variables disappear with the old implementation. Metadata and implementation come from the published file. Downloads are limited to 2 MB with a 30-second timeout; invalid downloads and detected concurrent edits abort the update.
+The app's theme update notice fetches this file from the repository's default branch when clicked. Existing values in the user-settings section are preserved when their variables still exist in the new theme. New variables use published defaults; removed variables disappear with the old implementation. Metadata and implementation come from the published file. Downloads are limited to 2 MB with a 30-second timeout; invalid downloads and detected concurrent edits abort the update.
 
 The installed theme is `%APPDATA%/Vencord/themes/hotori.theme.css`. The published source is cached in `themes/hotori-assets/theme-defaults.css` for Reset to defaults and slider bounds. Bundled defaults are the offline fallback. Local wallpapers are copied into `themes/hotori-assets` and referenced through Vencord's local theme protocol.
 
@@ -36,7 +36,7 @@ Small fixes increment the patch version by 0.0.1 (for example, 1.0.0 → 1.0.1).
 
 Build and verify the local EXE first. Wait for the user's verification and explicit publishing instruction before pushing or changing GitHub releases.
 
-Current local app version: **1.3.2**. This patch checks GitHub's theme version on startup when a theme is installed and at most every five minutes while the app is visible. The installed-theme bubble shows a separated update action only when GitHub has a newer semantic version; the check never changes local theme files. Patch 1.3.1 refined persistent saving, slider ranges, colors, and wallpaper previews after the 1.3.0 settings redesign. Subsequent small fixes increment the patch version from this baseline.
+Current local app version: **1.3.3**. This patch removes the redundant manual theme-update action from the dock. Theme updates are started directly from the installed-version bubble when a newer version is available. The 1.3.2 GitHub theme check still runs at startup and at most every five minutes while visible without changing local files. Subsequent small fixes increment the patch version from this baseline.
 
 ## Signed portable app updates
 

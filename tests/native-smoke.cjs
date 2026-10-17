@@ -98,7 +98,7 @@ function sampleFrames(page, duration = 800) {
     const preview = await previewBrowser.newPage();
     await preview.addInitScript(() => {
       window.__TAURI__ = { core: { invoke: async command => {
-        if (command === 'get_status') return { ready: !!window.previewReady || !!window.previewInstalled, installed: !!window.previewInstalled };
+        if (command === 'get_status') return { ready: !!window.previewReady || !!window.previewInstalled, installed: !!window.previewInstalled, theme_version: window.previewInstalled ? '0.7.0' : null };
         if (command === 'update_theme') {
           await new Promise(resolve => setTimeout(resolve, 150));
           if (window.previewUpdateState === 'error') throw new Error('The published theme is unavailable.');
@@ -109,7 +109,7 @@ function sampleFrames(page, duration = 800) {
           const currentVersion = document.querySelector('.version').textContent.slice(1);
           return { available: window.previewAppUpdate === 'available', currentVersion, version: '2.0.0' };
         }
-        if (command === 'check_theme_update') return { available: false, installedVersion: null, version: '0.8.2' };
+        if (command === 'check_theme_update') return { available: !!window.previewInstalled, installedVersion: '0.7.0', version: '0.8.0' };
         if (command === 'install_app_update') {
           await new Promise(resolve => setTimeout(resolve, 150));
           throw new Error('The downloaded app failed verification. Hotori has not been changed.');
@@ -126,22 +126,22 @@ function sampleFrames(page, duration = 800) {
     await preview.screenshot({ path: path.join(qa, 'vencord-required.png') });
     await preview.locator('#vencord-dialog button').click();
     assert.equal(await preview.locator('#vencord-dialog').isVisible(), false);
-    assert(await preview.locator('#update-theme').isDisabled());
+    assert.equal(await preview.locator('#theme-update-notice').isVisible(), false);
     await preview.evaluate(() => { window.previewReady = true; window.dispatchEvent(new Event('focus')); });
     await preview.waitForFunction(() => !document.querySelector('#install').disabled);
     assert.equal(await preview.locator('.vencord-notice').isVisible(), false, 'Vencord without Hotori must hide the requirement message');
     await preview.evaluate(() => { window.previewReady = false; window.dispatchEvent(new Event('focus')); });
     await preview.locator('.vencord-notice').waitFor({ state: 'visible' });
     await preview.evaluate(() => { window.previewInstalled = true; window.dispatchEvent(new Event('focus')); });
-    await preview.waitForFunction(() => !document.querySelector('#update-theme').disabled);
-    await preview.locator('#update-theme').click();
+    await preview.locator('#theme-update-notice').waitFor({ state: 'visible' });
+    await preview.locator('#theme-update-notice').click();
     assert(await preview.locator('#customize').isDisabled());
     await preview.waitForFunction(() => document.querySelector('#home-status').textContent.includes('updated to v0.8.0'));
     await preview.evaluate(() => window.previewUpdateState = 'unchanged');
-    await preview.locator('#update-theme').click();
+    await preview.locator('#theme-update-notice').click();
     await preview.waitForFunction(() => document.querySelector('#home-status').textContent.includes('already up to date'));
     await preview.evaluate(() => window.previewUpdateState = 'error');
-    await preview.locator('#update-theme').click();
+    await preview.locator('#theme-update-notice').click();
     await preview.waitForFunction(() => document.querySelector('#home-status').dataset.error === 'true');
     assert((await preview.locator('#home-status').textContent()).includes('published theme is unavailable'));
     assert.equal(await preview.locator('#app').getAttribute('data-page'), 'installer');
@@ -239,7 +239,7 @@ function sampleFrames(page, duration = 800) {
     assert.equal(await page.locator('.installer-card .vencord-notice').count(), 1);
     assert.equal(await page.locator('.vencord-notice').isVisible(), false);
     assert.equal(await page.locator('.dock-group').count(), 3);
-    assert.equal(await page.locator('.dock-button').count(), 6);
+    assert.equal(await page.locator('.dock-button').count(), 5);
     assert(await page.locator('#installation-heading').isVisible());
     assert(await page.locator('#customization-heading').isVisible());
     assert.equal(await page.evaluate(() => window.__TAURI__.window.getCurrentWindow().isDecorated()), false);
@@ -302,11 +302,13 @@ function sampleFrames(page, duration = 800) {
     assert.equal(await page.locator('#theme-version-value').textContent(), `v${bundledTheme.match(/@version\s+([^\s]+)/)[1]}`);
     await assert.rejects(fs.access(source));
     if (process.env.HOTORI_TEST_REMOTE_UPDATE === '1') {
-      await page.locator('#update-theme').click();
-      await page.waitForFunction(() => !document.querySelector('#update-theme').disabled, null, { timeout: 40000 });
-      assert.equal(await page.locator('#home-status').getAttribute('data-error'), 'true', 'Unpublished repository should report an update error');
-      assert.equal(await fs.readFile(destination, 'utf8'), bundledTheme, 'A failed download must leave the installed theme untouched');
-      console.log('PASS: live GitHub updater reports unavailable source without changing the installed theme.');
+      await page.waitForFunction(() => !checkingTheme, null, { timeout: 40000 });
+      if (await page.locator('#theme-update-notice').isVisible()) {
+        await page.locator('#theme-update-notice').click();
+        await page.waitForFunction(() => !updatingTheme, null, { timeout: 40000 });
+        assert.equal(await page.locator('#home-status').getAttribute('data-error'), 'false');
+      }
+      console.log('PASS: live theme-update availability check and conditional update action.');
     }
 
     // A downloaded source cached by the updater becomes Customize/Reset's defaults.

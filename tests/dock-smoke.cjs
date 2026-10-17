@@ -36,7 +36,8 @@ const { pathToFileURL } = require('node:url');
     assert.equal(await page.evaluate(() => window.testCommands.filter(command => command === 'check_app_update').length), 1, 'Checks for an app update on startup');
     assert(await page.locator('#app-update-bubble').isVisible());
     const dock = page.locator('#command-dock');
-    assert.equal(await dock.locator('button').count(), 6);
+    assert.equal(await dock.locator('button').count(), 5);
+    assert.equal(await page.locator('#update-theme').count(), 0);
     assert.equal(await dock.locator('.dock-group').count(), 3);
     const resting = await dock.boundingBox();
     assert.equal(Math.round(resting.width), 76);
@@ -73,8 +74,6 @@ const { pathToFileURL } = require('node:url');
     await page.keyboard.press('Enter');
     await page.waitForFunction(() => !document.querySelector('#customize').disabled);
     assert.equal(await page.locator('#theme-version-value').textContent(), 'v0.8.0');
-    await page.locator('#update-theme').click();
-    await page.waitForFunction(() => document.querySelector('#home-status').textContent.includes('1.2.0'));
     await page.locator('#folder').click();
     await page.locator('#update-app').click();
     await page.locator('#app-update-dialog').waitFor({ state: 'visible' });
@@ -108,7 +107,7 @@ const { pathToFileURL } = require('node:url');
     assert.equal(await page.locator('.home-brand').evaluate(el => getComputedStyle(el).animationName), 'none');
     assert.deepEqual(errors, []);
     const commands = await page.evaluate(() => window.testCommands);
-    for (const command of ['install_theme', 'update_theme', 'uninstall_theme', 'load_settings', 'open_theme_folder', 'check_app_update']) assert(commands.includes(command), command);
+    for (const command of ['install_theme', 'uninstall_theme', 'load_settings', 'open_theme_folder', 'check_app_update']) assert(commands.includes(command), command);
     for (const outcome of ['current', 'offline']) {
       const startup = await browser.newPage();
       await startup.addInitScript(outcome => {
@@ -139,6 +138,6 @@ const { pathToFileURL } = require('node:url');
       assert((await startup.locator('#home-status').evaluate(el => getComputedStyle(el).backdropFilter)).includes('blur(10px)'));
       await startup.close();
     }
-    console.log('PASS: startup update availability/current/offline, synchronized bubbles, status glass, magnification, keyboard, reduced motion, all six actions, and 560–1600px layouts.');
+    console.log('PASS: startup update availability/current/offline, synchronized bubbles, status glass, magnification, keyboard, reduced motion, five dock actions, and 560–1600px layouts.');
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

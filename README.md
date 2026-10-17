@@ -22,7 +22,7 @@
 
 <p>Hotori is a Windows installer and customizer in one app.<br>Install or remove the theme, preview wallpapers, and save each category separately.</p>
 
-<p><strong>Update theme</strong> brings in the latest theme while keeping your saved settings.<br><strong>Reset to defaults</strong> gives you a fresh start whenever you want.</p>
+<p>When a newer theme is available, click the update notice beside your installed theme version to update while keeping your saved settings.<br><strong>Reset to defaults</strong> gives you a fresh start whenever you want.</p>
 
 <img src="assets/readme-divider.svg" alt="" width="560">
 
