@@ -3,7 +3,7 @@
  * @author tsuki
  * @authorId 109679787630399488
  * @authorLink https://plusinsta.xyz
- * @version 0.8.0
+ * @version 0.8.1
  * @description A Discord theme inspired by Liquid Glass.
  */
 
@@ -2080,43 +2080,63 @@ img[class*="avatar_"],
         box-sizing: border-box;
         margin: 4px !important;
         flex-direction: row;
+        position: relative;
+        container-type: size;
+        overflow: hidden;
         mask: none !important;
         -webkit-mask: none !important;
     }
 
+    /* Keep native vertical wheel scrolling, then rotate its viewport into
+       the horizontal rail. Counter-rotate the tiles to keep icons upright. */
     .tree_ef3116 {
-        flex-direction: row !important;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(-90deg);
+        transform-origin: center;
+        flex-direction: column !important;
         align-items: center;
         min-width: 0;
-        width: 100%;
-        height: 100%;
+        width: 100cqh;
+        height: 100cqw;
     }
 
     .wrapper_ef3116 .scroller_ef3116 {
         display: flex !important;
         /* The scroller can itself be a vertical Stack, not just contain one. */
-        flex-direction: row !important;
+        flex-direction: column !important;
         flex-wrap: nowrap !important;
         justify-content: flex-start !important;
         gap: var(--space-xs, 8px) !important;
         flex: 1 1 auto;
         align-items: center !important;
         min-width: 0;
+        max-width: 100%;
         height: 100%;
         box-sizing: border-box;
-        padding: 8px 12px !important;
-        overflow-x: auto !important;
-        overflow-y: hidden !important;
+        padding: 12px 8px !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
         scrollbar-gutter: auto !important;
+        scrollbar-width: none !important;
+        min-height: 0;
+        width: 100%;
+        overscroll-behavior-y: contain;
     }
 
-    /* Only layout containers become rows; keep each icon's own centering. */
+    .wrapper_ef3116 .scroller_ef3116::-webkit-scrollbar {
+        width: 0 !important;
+        height: 0 !important;
+    }
+
+    /* Keep native column flow inside the rotated scroll viewport. */
     .scroller_ef3116 > div:not(.listItem__650eb):not([hidden]),
     .scroller_ef3116 [data-list-id="guildsnav"],
     .scroller_ef3116 .stack_dbd263[data-direction="vertical"],
     .folderGuildsList__48112 {
         display: flex !important;
-        flex-direction: row !important;
+        flex-direction: column !important;
         flex-wrap: nowrap !important;
         align-items: center !important;
         justify-content: flex-start !important;
@@ -2131,6 +2151,8 @@ img[class*="avatar_"],
         flex: 0 0 var(--guildbar-folder-size);
         width: var(--guildbar-folder-size) !important;
         margin-block: 0 !important;
+        transform: rotate(90deg);
+        transform-origin: center;
     }
 
     /* The divider must not reserve an entire server-sized slot after DM. */
@@ -2163,7 +2185,7 @@ img[class*="avatar_"],
 
     .folderGroup__48112 {
         display: flex;
-        flex-direction: row !important;
+        flex-direction: column !important;
         align-items: center;
         gap: var(--space-xs, 8px);
         flex: 0 0 auto;
@@ -2216,6 +2238,7 @@ img[class*="avatar_"],
     }
 
     .bottomRailNotifCenterButton_ef3116 {
+        transform: rotate(90deg);
         flex: 0 0 auto;
         padding: 8px;
     }
