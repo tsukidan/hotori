@@ -36,7 +36,7 @@ Small fixes increment the patch version by 0.0.1 (for example, 1.0.0 → 1.0.1).
 
 Build and verify the local EXE first. Wait for the user's verification and explicit publishing instruction before pushing or changing GitHub releases.
 
-Current local app version: **1.3.1**. This patch moves category saving into the persistent editor footer, simplifies text color editing, adds tinted glass sliders, anchors avatar size and liquid color intensity to 90–110% of source defaults, and reorders wallpaper controls around cropped 16:9 previews. The 1.3.0 minor release introduced separate glass panels for settings navigation and the selected category, keyboard navigation, and per-category draft and scroll preservation. It also includes the installed-theme version bubble added in 1.2.2. Subsequent small fixes increment the patch version from this baseline.
+Current local app version: **1.3.2**. This patch checks GitHub's theme version on startup when a theme is installed and at most every five minutes while the app is visible. The installed-theme bubble shows a separated update action only when GitHub has a newer semantic version; the check never changes local theme files. Patch 1.3.1 refined persistent saving, slider ranges, colors, and wallpaper previews after the 1.3.0 settings redesign. Subsequent small fixes increment the patch version from this baseline.
 
 ## Signed portable app updates
 

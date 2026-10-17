@@ -26,6 +26,7 @@ const { pathToFileURL } = require('node:url');
           case 'load_settings': return [];
           case 'open_theme_folder': return true;
           case 'check_app_update': return { available: true, currentVersion: document.querySelector('.version').textContent.slice(1), version: '9.0.0' };
+          case 'check_theme_update': return { available: false, installedVersion: '0.8.0', version: '0.8.0' };
           default: throw new Error(`Unexpected command: ${command}`);
         }
       } } };
@@ -120,6 +121,7 @@ const { pathToFileURL } = require('node:url');
             if (outcome === 'offline') throw new Error('Offline');
             return { available: false, currentVersion: document.querySelector('.version').textContent.slice(1) };
           }
+          if (command === 'check_theme_update') return { available: false, installedVersion: '0.8.0', version: '0.8.0' };
           throw new Error(command);
         } } };
       }, outcome);

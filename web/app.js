@@ -6,6 +6,10 @@ let updatingTheme = false;
 let checkingApp = false;
 let installingApp = false;
 let status = { ready: false, installed: false };
+let themeUpdate = null;
+let checkingTheme = false;
+let themeCheckedFor;
+let themeCheckedAt = 0;
 let fields = [];
 let navigationTimer;
 let savedValues = new Map();
@@ -40,6 +44,7 @@ function updateButtons() {
   $("install").disabled = busy || !status.ready || status.installed;
   $("install").querySelector(".button-label").textContent = busy ? "Working…" : status.installed ? "Installed" : "Install";
   $("update-theme").disabled = busy || !status.installed;
+  $("theme-update-notice").disabled = busy || !status.installed;
   $("update-theme").querySelector(".button-label").textContent = busy && updatingTheme ? "Updating…" : "Update theme";
   $("uninstall").disabled = busy || !status.installed;
   $("customize").disabled = busy || !status.installed;
@@ -57,11 +62,36 @@ async function refresh() {
   if (!invoke || busy) return;
   try {
     status = await invoke("get_status");
-    $("theme-version").hidden = !status.installed;
-    $("theme-version-value").textContent = status.theme_version ? `v${status.theme_version}` : "Version unavailable";
+    renderThemeVersion();
     document.querySelector(".vencord-notice").hidden = status.ready;
     updateButtons();
+    if (status.installed && !checkingTheme && (themeCheckedFor !== status.theme_version || Date.now() - themeCheckedAt >= 300000)) {
+      checkForThemeUpdate();
+    }
   } catch (error) { message("home-status", String(error), true); }
+}
+
+function renderThemeVersion() {
+  $("theme-version").hidden = !status.installed;
+  const version = status.theme_version ? `v${status.theme_version}` : "Version unavailable";
+  if ($("theme-version-value").textContent !== version) $("theme-version-value").textContent = version;
+  const available = status.installed && themeUpdate?.available && themeUpdate.installedVersion === status.theme_version;
+  $("theme-update-notice").hidden = !available;
+  if (available) {
+    const label = `v${themeUpdate.version} available`;
+    if ($("theme-update-label").textContent !== label) $("theme-update-label").textContent = label;
+    $("theme-update-notice").title = `Update your theme to v${themeUpdate.version}. Your customization settings will be preserved.`;
+  }
+}
+
+async function checkForThemeUpdate() {
+  if (!invoke || checkingTheme || !status.installed) return;
+  checkingTheme = true;
+  themeCheckedFor = status.theme_version;
+  themeCheckedAt = Date.now();
+  try { themeUpdate = await invoke("check_theme_update"); }
+  catch { themeUpdate = null; }
+  finally { checkingTheme = false; renderThemeVersion(); }
 }
 
 function navigate(page) {
@@ -576,10 +606,13 @@ $("update-theme").addEventListener("click", async () => {
   message("home-status", "Downloading the latest Hotori theme… Your saved settings will be preserved.", false, "download");
   try {
     const result = await invoke("update_theme");
+    themeUpdate = { available: false, version: result.version, installedVersion: result.version };
+    themeCheckedFor = result.version; themeCheckedAt = Date.now();
     message("home-status", result.changed ? `Theme updated to v${result.version}. Your customization settings were preserved.` : `Theme v${result.version} is already up to date. Your settings are unchanged.`, false, "check");
   } catch (error) { message("home-status", `Could not update theme: ${error}`, true); }
   finally { busy = false; updatingTheme = false; await refresh(); updateButtons(); }
 });
+$("theme-update-notice").addEventListener("click", () => $("update-theme").click());
 $("uninstall").addEventListener("click", () => operation("uninstall_theme", "Theme uninstalled."));
 $("folder").addEventListener("click", async () => {
   if (busy || !invoke) return;

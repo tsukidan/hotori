@@ -19,6 +19,37 @@ pub struct UpdateResult {
     pub version: String,
 }
 
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ThemeCheck {
+    pub available: bool,
+    pub version: String,
+    pub installed_version: Option<String>,
+}
+
+pub fn check(folder: &Path) -> Result<ThemeCheck, String> {
+    let installed = installed_version(folder);
+    compare_versions(installed.as_deref(), &download()?)
+}
+
+fn compare_versions(installed: Option<&str>, published: &str) -> Result<ThemeCheck, String> {
+    if metadata(published, "@name") != Some("Hotori") {
+        return Err("The published file is not the Hotori release theme.".into());
+    }
+    let version =
+        metadata(published, "@version").ok_or("The published theme is missing its version.")?;
+    let latest = semver::Version::parse(version)
+        .map_err(|_| "The published theme version is invalid.".to_owned())?;
+    let available = installed
+        .and_then(|value| semver::Version::parse(value).ok())
+        .is_some_and(|current| latest.cmp_precedence(&current).is_gt());
+    Ok(ThemeCheck {
+        available,
+        version: version.to_owned(),
+        installed_version: installed.map(str::to_owned),
+    })
+}
+
 pub fn update(folder: &Path) -> Result<UpdateResult, String> {
     let path = folder.join(crate::installer::DESTINATION);
     let original = fs::read_to_string(&path)
@@ -367,6 +398,46 @@ fn replace(path: &Path, expected: Option<&str>, content: &str) -> Result<(), Str
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn update_notice_requires_a_newer_valid_theme_version() {
+        let published = "/**\n * @name Hotori\n * @version 0.8.10\n */";
+        assert!(
+            compare_versions(Some("0.8.9"), published)
+                .unwrap()
+                .available
+        );
+        assert!(
+            !compare_versions(Some("0.8.10"), published)
+                .unwrap()
+                .available
+        );
+        assert!(
+            !compare_versions(Some("0.9.0"), published)
+                .unwrap()
+                .available
+        );
+        assert!(!compare_versions(None, published).unwrap().available);
+        assert!(
+            !compare_versions(Some("unknown"), published)
+                .unwrap()
+                .available
+        );
+        assert!(
+            compare_versions(Some("0.8.10-beta.1"), published)
+                .unwrap()
+                .available
+        );
+        assert!(
+            !compare_versions(Some("0.8.10+local"), published)
+                .unwrap()
+                .available
+        );
+        assert!(compare_versions(Some("0.8.0"), "/** @name Other\n * @version 9.0.0 */").is_err());
+        assert!(
+            compare_versions(Some("0.8.0"), "/** @name Hotori\n * @version invalid */").is_err()
+        );
+    }
 
     #[test]
     fn downloaded_defaults_survive_restart_and_ignore_mismatched_versions() {

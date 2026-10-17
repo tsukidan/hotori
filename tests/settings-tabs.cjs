@@ -23,6 +23,7 @@ const { pathToFileURL } = require('node:url');
       window.__TAURI__ = { core: { invoke: async (command, args) => {
         if (command === 'get_status') return { ready: true, installed: true, theme_version: '0.8.0' };
         if (command === 'check_app_update') return { available: false };
+        if (command === 'check_theme_update') return { available: false, installedVersion: '0.8.0', version: '0.8.0' };
         if (command === 'load_settings') return structuredClone(saved);
         if (command === 'reset_settings') { saved = structuredClone(defaults); window.savedSettings = saved; return structuredClone(saved); }
         if (command === 'save_settings') {

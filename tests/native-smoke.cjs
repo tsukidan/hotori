@@ -109,6 +109,7 @@ function sampleFrames(page, duration = 800) {
           const currentVersion = document.querySelector('.version').textContent.slice(1);
           return { available: window.previewAppUpdate === 'available', currentVersion, version: '2.0.0' };
         }
+        if (command === 'check_theme_update') return { available: false, installedVersion: null, version: '0.8.2' };
         if (command === 'install_app_update') {
           await new Promise(resolve => setTimeout(resolve, 150));
           throw new Error('The downloaded app failed verification. Hotori has not been changed.');

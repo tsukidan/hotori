@@ -387,10 +387,19 @@ input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius
   -webkit-backdrop-filter: blur(10px) saturate(150%);
   box-shadow: inset 0 1px 1px #ffffff33, 0 2px 8px #00000026;
 }
-.theme-version { margin: 12px 0 0; color: var(--muted); }
+.theme-version { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; margin: 12px 0 0; color: var(--muted); }
 .theme-version[hidden] { display: none; }
 .theme-version > .icon { width: 22px; height: 22px; stroke-width: 1.8; color: #fff3ef; }
 .theme-version strong { margin-left: 5px; color: #fff3ef; font-weight: 600; }
+.theme-update-notice {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 24px;
+  border: 0; border-left: 1px solid #ffffff33; border-radius: 0; padding: 0 0 0 12px;
+  background: transparent; color: var(--accent); font-size: 13px; font-weight: 600; cursor: pointer;
+}
+.theme-update-notice[hidden] { display: none; }
+.theme-update-notice .icon { width: 17px; height: 17px; stroke-width: 1.8; }
+.theme-update-notice:hover:not(:disabled) { color: #fff3ef; }
+.theme-update-notice:disabled { opacity: .5; cursor: default; }
 #home-status > .icon { width: 22px; height: 22px; color: #fff3ef; stroke-width: 1.8; }
 #home-status[data-error="true"] > .icon { color: inherit; }
 .status-copy, .status-detail { display: contents; }

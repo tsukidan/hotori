@@ -115,6 +115,16 @@ fn reset_settings(state: tauri::State<AppState>) -> Result<Vec<settings::Field>,
 }
 
 #[tauri::command]
+async fn check_theme_update(
+    state: tauri::State<'_, AppState>,
+) -> Result<updates::ThemeCheck, String> {
+    let folder = state.folder()?.to_owned();
+    tauri::async_runtime::spawn_blocking(move || updates::check(&folder))
+        .await
+        .map_err(|e| e.to_string())?
+}
+
+#[tauri::command]
 async fn update_theme(state: tauri::State<'_, AppState>) -> Result<updates::UpdateResult, String> {
     let folder = state.folder()?.to_owned();
     let result = tauri::async_runtime::spawn_blocking(move || updates::update(&folder))
@@ -225,6 +235,7 @@ fn main() {
             save_settings,
             reset_settings,
             update_theme,
+            check_theme_update,
             check_app_update,
             install_app_update,
             open_theme_folder,
