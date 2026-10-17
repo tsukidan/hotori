@@ -3,7 +3,7 @@
  * @author tsuki
  * @authorId 109679787630399488
  * @authorLink https://plusinsta.xyz
- * @version 0.8.1
+ * @version 0.8.2
  * @description A Discord theme inspired by Liquid Glass.
  */
 
@@ -2714,6 +2714,135 @@ img[class*="avatar_"],
 
 .root__1042d .body__1042d {
     background: transparent !important;
+}
+
+/* Server state rings live outside Discord's masked SVG, so their glow can
+   extend beyond the image. An absolute transparent border reserves the same
+   visual footprint in every state without resizing the icon or its slot. */
+.wrapper_ef3116 .listItem__650eb:has(.blobContainer_e5445c .wrapper__6e9f8) .wrapper__58105 {
+    visibility: hidden !important;
+}
+
+.wrapper_ef3116 .blobContainer_e5445c:has(.wrapper__6e9f8) {
+    position: relative;
+    --hotori-server-ring: transparent;
+    --hotori-server-glow: 0 0 0 transparent;
+}
+
+.wrapper_ef3116 .blobContainer_e5445c:has(.wrapper__6e9f8)::after {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border: 2px solid var(--hotori-server-ring);
+    border-radius: calc(var(--radius-md, 12px) + 2px);
+    box-sizing: border-box;
+    box-shadow: var(--hotori-server-glow);
+    pointer-events: none;
+    z-index: 3;
+    transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+/* Prefer explicit unread semantics; the native unread pill is a fallback.
+   A hover-only pill must not mark an otherwise read server as unread. */
+.wrapper_ef3116 .listItem__650eb:is(:has([data-unread="true"]), :has([aria-label*="unread" i]), :has(.item__58105.visible__58105:not(.hovered__58105):not(.selected__58105))) .blobContainer_e5445c:has(.wrapper__6e9f8) {
+    --hotori-server-ring: #ffffff;
+    --hotori-server-glow: 0 0 6px 1px rgba(255, 255, 255, 0.55),
+                          0 0 14px 2px rgba(255, 255, 255, 0.32),
+                          0 0 24px 3px rgba(255, 255, 255, 0.16);
+}
+
+/* Selected takes precedence over unread, including while hovered. */
+.wrapper_ef3116 .listItem__650eb:has(.item__58105.selected__58105) .blobContainer_e5445c:has(.wrapper__6e9f8),
+.wrapper_ef3116 .blobContainer_e5445c:is(.selected_e5445c, :has(.wrapper__6e9f8.selected__6e9f8), :has([aria-selected="true"])) {
+    --hotori-server-ring: var(--main-color) !important;
+    --hotori-server-glow: 0 0 6px 2px color-mix(in srgb, var(--main-color) 85%, transparent),
+                          0 0 16px 4px color-mix(in srgb, var(--main-color) 60%, transparent),
+                          0 0 30px 6px color-mix(in srgb, var(--main-color) 32%, transparent) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .wrapper_ef3116 .blobContainer_e5445c::after { transition: none; }
+}
+
+/* Clear selected-channel surface: the sidebar supplies the glass behind it.
+   Keep the existing outline and edge highlights without a cloudy extra coat. */
+.sidebarList__5e434 .modeSelected__2ea32 {
+    background: transparent !important;
+    background-image: none !important;
+}
+
+/* Discord's selected-link fill must not cover the channel's glass surface. */
+.modeSelected__2ea32 .link__2ea32,
+.modeSelected__2ea32:hover .link__2ea32 {
+    background: transparent !important;
+}
+
+/* Reserve the selected-channel geometry in every row so hovering never shifts
+   icons or text. Animate only paint properties, reusing the selected edges. */
+.sidebarList__5e434 .wrapper__2ea32 {
+    box-sizing: border-box;
+    border: 1px solid transparent !important;
+    border-radius: 16px !important;
+    margin: 4px !important;
+    transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.sidebarList__5e434 .wrapper__2ea32:not(.modeSelected__2ea32) {
+    box-shadow: inset 0 1px 1px transparent, 0 2px 8px transparent,
+                inset 1px 1px 0 transparent, inset -1px -1px 0 transparent !important;
+}
+
+.sidebarList__5e434 .wrapper__2ea32:is(:hover, :focus-within, .modeSelected__2ea32) {
+    border-color: var(--glass-border) !important;
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
+}
+
+.sidebarList__5e434 .wrapper__2ea32:is(:hover, :focus-within, :active) .link__2ea32 {
+    background: transparent !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sidebarList__5e434 .wrapper__2ea32 { transition: none; }
+}
+
+/* Server Boost cards: cover the shared card container across card variants,
+   preserving the native progress colors and layout. */
+.container__5573a {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 16px !important;
+    box-shadow: var(--glass-shadow), var(--glass-edge-shadow) !important;
+    box-sizing: border-box;
+}
+
+/* Shared Events-list and creation-dialog shell. Creation has no medium class;
+   retain Discord's native sizing while applying the same glass surface. */
+.root__49fc1.fullscreenOnMobile__49fc1.rootWithShadow__49fc1 {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 16px !important;
+    box-shadow: var(--glass-shadow), var(--glass-edge-shadow) !important;
+    --modal-footer-background: transparent;
+}
+
+.root__49fc1.fullscreenOnMobile__49fc1.rootWithShadow__49fc1 > :is(.header__49fc1, .content__49fc1, .footer__49fc1) {
+    background: transparent !important;
+}
+
+/* Event location options can contain a leading icon without the optional
+   withLeadingIcon class. Reserve its gutter based on the actual child. */
+.root__49fc1 .radioGroupOption__64e61:has(> .radioItemIcon__64e61) {
+    padding-inline-start: calc(16px + var(--custom-radio-text-start) + var(--custom-radio-icon-offset)) !important;
+}
+
+.root__49fc1 .radioGroupOption__64e61 > .radioItemIcon__64e61 {
+    inset-block-start: 12px !important;
 }
 
 /* END OF HOTORI DEV THEME */
