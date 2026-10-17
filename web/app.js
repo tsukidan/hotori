@@ -10,6 +10,15 @@ let fields = [];
 let navigationTimer;
 let savedValues = new Map();
 let categoryGroups = new Map();
+let selectedCategory = "Glass Appearance";
+const categoryDescriptions = {
+  "Glass Appearance": "Choose your glass style, then fine-tune its blur, intensity, and tint.",
+  "Wallpapers": "Set the scene with your own backgrounds and adjust their dimming.",
+  "Colors": "Set your accent and the shared color for messages and input text.",
+  "Avatars": "Find the right size and shape for your conversations.",
+  "Messages": "Give your conversations room and make mentions stand out.",
+  "Server List": "Arrange your servers in the layout that suits you.",
+};
 
 function message(id, text, error = false, symbol = "info", detailSymbol = "") {
   if (id === "home-status") {
@@ -48,6 +57,8 @@ async function refresh() {
   if (!invoke || busy) return;
   try {
     status = await invoke("get_status");
+    $("theme-version").hidden = !status.installed;
+    $("theme-version-value").textContent = status.theme_version ? `v${status.theme_version}` : "Version unavailable";
     document.querySelector(".vencord-notice").hidden = status.ready;
     updateButtons();
   } catch (error) { message("home-status", String(error), true); }
@@ -75,6 +86,7 @@ function element(tag, className, text) {
 }
 
 const iconPaths = {
+  tag: '<path d="M3 3h8l10 10-8 8L3 11V3Z"/><circle cx="7.5" cy="7.5" r="1"/>',
   info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10h.01"/>',
   check: '<circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/>',
   alert: '<path d="m12 3 10 18H2L12 3Z"/><path d="M12 9v5m0 3h.01"/>',
@@ -194,16 +206,37 @@ function categoryFor(field) {
 function updateCategoryButtons() {
   for (const [category, group] of categoryGroups) {
     const dirty = fields.some(field => categoryFor(field) === category && field.value !== savedValues.get(field.name));
-    group.save.disabled = busy || !invoke || !dirty;
-    group.save.dataset.dirty = String(dirty);
-    group.save.dataset.state = busy && group.saving ? "saving" : dirty ? "dirty" : group.saved ? "saved" : "unchanged";
-    group.save.querySelector(".button-label").textContent = group.saving ? "Saving…" : dirty ? "Save changes" : group.saved ? "Saved" : "Save changes";
+    group.dirty = dirty;
     group.note.textContent = dirty ? "Unsaved changes" : group.saved ? "Changes saved" : "No changes";
+    group.tab.dataset.dirty = String(dirty);
   }
+  const group = categoryGroups.get(selectedCategory);
+  const save = $("save-category");
+  save.disabled = busy || !invoke || !group?.dirty;
+  save.dataset.category = selectedCategory;
+  save.dataset.dirty = String(!!group?.dirty);
+  save.dataset.state = group?.saving ? "saving" : group?.dirty ? "dirty" : group?.saved ? "saved" : "unchanged";
+  save.setAttribute("aria-label", `Save ${selectedCategory}`);
+  save.querySelector(".button-label").textContent = group?.saving ? "Saving…" : group?.saved && !group?.dirty ? "Saved" : "Save changes";
+}
+function selectCategory(category) {
+  const previous = categoryGroups.get(selectedCategory);
+  if (previous) previous.scroll = $("settings-form").scrollTop;
+  selectedCategory = category;
+  for (const [name, group] of categoryGroups) {
+    const active = name === category;
+    group.panel.hidden = !active;
+    group.tab.setAttribute("aria-selected", String(active));
+    group.tab.tabIndex = active ? 0 : -1;
+  }
+  $("settings-title").textContent = category;
+  $("settings-description").textContent = categoryDescriptions[category];
+  $("settings-form").scrollTop = categoryGroups.get(category)?.scroll || 0;
+  updateCategoryButtons();
 }
 async function saveCategory(category) {
   const group = categoryGroups.get(category);
-  if (busy || !invoke || group.save.disabled) return;
+  if (busy || !invoke || !group?.dirty) return;
   const submitted = new Map(fields.filter(field => categoryFor(field) === category).map(field => [field.name, field.value]));
   const edits = fields.map(field => ({ name: field.name, value: submitted.has(field.name) ? submitted.get(field.name) : savedValues.get(field.name) }));
   busy = true; group.saving = true; updateButtons();
@@ -283,7 +316,7 @@ function wallpaperControl(field, control) {
     } catch (error) { feedback.textContent = `Could not use this image: ${error}`; }
     finally { busy = false; updateButtons(); local.disabled = link.disabled = clear.disabled = false; picker.value = ""; }
   });
-  actions.append(local, link, clear); control.append(actions, input, picker, notice, preview, feedback);
+  actions.append(local, link, clear); control.append(preview, input, actions, picker, notice, feedback);
   sync(); showPreview();
   return input;
 }
@@ -296,8 +329,11 @@ function renderFields() {
     ["Avatars", "user", true], ["Messages", "message", true],
   ];
   const sections = new Map();
-  for (const [title, symbol, open] of layouts) {
-    const group = disclosure(title, symbol, open);
+  for (const [title] of layouts) {
+    const panel = element("section", "settings-section");
+    const content = element("div", "section-content");
+    panel.append(content);
+    const group = { details: panel, content };
     sections.set(title, group); fragment.append(group.details);
   }
   const submenus = new Map();
@@ -320,7 +356,7 @@ function renderFields() {
       case "Wallpapers": return target("Wallpapers");
       case "Background dimming": return target("Wallpapers", field.name.startsWith("--settings") ? "Settings Background Dimming" : "Main Background Dimming", "sun", true);
       case "Accent color": return target("Colors");
-      case "Text & icon colors": return target("Colors", /interactive|icon/.test(field.name) ? "Icon Colors" : "Text Colors", /interactive|icon/.test(field.name) ? "pointer" : "text", true);
+      case "Text & icon colors": return target("Colors");
       case "Avatars": return target("Avatars");
       case "Message spacing": return target("Messages");
       case "Mention highlights": return target("Messages", "Mention Highlights", "message", true);
@@ -329,13 +365,16 @@ function renderFields() {
     }
   }
   fields.forEach((field, index) => {
+    const sharedText = fields.some(item => item.name === "--secondary-ui-color") ? "--secondary-ui-color" : "--text-normal";
+    if (field.section === "Text & icon colors" && field.name !== sharedText) return;
     const row = element("div", `setting-row${field.kind === "color" ? " color-field" : ""}`);
     row.dataset.name = field.name;
+    if (field.kind === "image") row.classList.add("wallpaper-row");
     const info = element("div", "setting-info");
     const label = element("label", "setting-label");
-    label.append(icon(fieldIcon(field)), document.createTextNode(field.label));
+    label.append(icon(fieldIcon(field)), document.createTextNode(field.name === sharedText ? "Message & Input Text" : field.label));
     label.htmlFor = `field-${index}`;
-    const hint = element("p", "setting-hint", field.hint);
+    const hint = element("p", "setting-hint", field.name === sharedText ? "Shared color for messages, input text, and neutral interface text." : field.hint);
     hint.id = `hint-${index}`;
     label.title = field.hint;
     info.append(label, hint);
@@ -355,15 +394,12 @@ function renderFields() {
       control.append(input);
     } else if (field.slider) {
       const spec = field.slider;
-      const isBlur = field.name === "--blur-val" || field.name === "--liquid-blur-val";
+      const isRelative = spec.avatarPercent || ["--blur-val", "--liquid-blur-val", "--liquid-saturation"].includes(field.name);
       const isRoundness = field.name === "--avatar-radius";
       const baseline = (spec.min + spec.max) / 2;
-      const toDisplay = value => spec.avatarPercent ? 100 + (Number(value) - 40) * 20 / 30
-        : isRoundness ? Math.min(100, Number(value) * 2)
-        : isBlur ? Number(value) / baseline * 100 : Number(value);
-      const toTheme = value => spec.avatarPercent ? 40 + (value - 100) * 30 / 20
-        : isRoundness ? value / 2 : isBlur ? value * baseline / 100 : value;
-      const unit = spec.avatarPercent || isRoundness || isBlur || field.unit === "%" ? "%" : field.unit === "pixels" ? "px" : "";
+      const toDisplay = value => isRoundness ? Math.min(100, Number(value) * 2) : isRelative ? Number(value) / baseline * 100 : Number(value);
+      const toTheme = value => isRoundness ? value / 2 : isRelative ? value * baseline / 100 : value;
+      const unit = isRelative || isRoundness || field.unit === "%" ? "%" : field.unit === "pixels" ? "px" : "";
       input = element("input"); input.type = "range";
       input.min = Math.ceil(Number(toDisplay(spec.min).toFixed(8)));
       input.max = Math.floor(Number(toDisplay(spec.max).toFixed(8)));
@@ -398,6 +434,10 @@ function renderFields() {
         const rgb = input.value.slice(1).match(/../g).map((c) => parseInt(c, 16));
         field.value = hexAlpha ? input.value + Math.round(field.opacity * 255).toString(16).padStart(2, "0")
           : field.alphaEnabled ? `rgba(${rgb.join(", ")}, ${field.opacity})` : input.value;
+        if (field.name === "--secondary-ui-color") {
+          const messageText = fields.find(item => item.name === "--text-normal");
+          if (messageText) messageText.value = input.value;
+        }
       };
       input.addEventListener("input", colorChanged);
       if (field.alphaEnabled) {
@@ -424,21 +464,47 @@ function renderFields() {
     row.append(info, control); destination(field).append(row);
   });
   categoryGroups = new Map();
+  const tabs = document.createDocumentFragment();
   for (const [category, group] of sections) {
     if (!group.content.children.length) { group.details.remove(); continue; }
-    const footer = element("div", "category-footer");
-    const note = element("span", "category-status", "No changes"); note.setAttribute("role", "status");
-    const save = element("button", "button primary category-save"); save.type = "button";
-    save.setAttribute("aria-label", `Save ${category}`); save.dataset.category = category;
-    save.append(icon("save"), element("span", "button-label", "Save changes"));
-    save.addEventListener("click", () => saveCategory(category));
-    footer.append(note, save); group.content.append(footer);
-    categoryGroups.set(category, { save, note, saved: false, saving: false });
+    const note = element("span", "category-status visually-hidden", "No changes"); note.setAttribute("role", "status");
+    group.content.append(note);
+    const key = category.toLowerCase().replaceAll(" ", "-");
+    const tab = element("button", "category-tab"); tab.type = "button";
+    tab.id = `category-${key}`; tab.setAttribute("role", "tab");
+    tab.setAttribute("aria-controls", `panel-${key}`);
+    note.id = `category-status-${key}`; tab.setAttribute("aria-describedby", note.id);
+    tab.append(icon(layouts.find(layout => layout[0] === category)[1]), element("span", "", category));
+    const dirty = element("span", "category-dirty"); dirty.setAttribute("aria-hidden", "true"); tab.append(dirty);
+    tab.addEventListener("click", () => selectCategory(category));
+    group.details.id = `panel-${key}`; group.details.setAttribute("role", "tabpanel");
+    group.details.setAttribute("aria-labelledby", tab.id);
+    tabs.append(tab);
+    categoryGroups.set(category, { note, tab, panel: group.details, scroll: 0, dirty: false, saved: false, saving: false });
   }
   $("settings-list").replaceChildren(fragment);
-  $("settings-form").scrollTop = 0;
+  $("settings-categories").replaceChildren(tabs);
+  $("settings-list").querySelectorAll('input[type="range"]').forEach(input => {
+      const tint = () => input.style.setProperty("--range-progress", `${(Number(input.value) - Number(input.min)) / (Number(input.max) - Number(input.min)) * 100}%`);
+    input.addEventListener("input", tint); tint();
+  });
+  if (categoryGroups.size) selectCategory(categoryGroups.has(selectedCategory) ? selectedCategory : categoryGroups.keys().next().value);
   updateCategoryButtons();
 }
+
+$("settings-categories").addEventListener("keydown", event => {
+  const tabs = [...$("settings-categories").querySelectorAll('[role="tab"]')];
+  const index = tabs.indexOf(document.activeElement);
+  if (index < 0) return;
+  let next;
+  if (event.key === "ArrowDown") next = (index + 1) % tabs.length;
+  else if (event.key === "ArrowUp") next = (index - 1 + tabs.length) % tabs.length;
+  else if (event.key === "Home") next = 0;
+  else if (event.key === "End") next = tabs.length - 1;
+  else return;
+  event.preventDefault(); tabs[next].click(); tabs[next].focus();
+});
+$("save-category").addEventListener("click", () => saveCategory(selectedCategory));
 
 async function operation(command, success) {
   if (busy || !invoke) return;

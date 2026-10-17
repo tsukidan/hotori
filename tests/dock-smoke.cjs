@@ -19,7 +19,7 @@ const { pathToFileURL } = require('node:url');
       window.__TAURI__ = { core: { invoke: async command => {
         window.testCommands.push(command);
         switch (command) {
-          case 'get_status': return { ready: true, installed };
+          case 'get_status': return { ready: true, installed, theme_version: installed ? '0.8.0' : null };
           case 'install_theme': installed = true; return;
           case 'uninstall_theme': installed = false; return;
           case 'update_theme': return { changed: true, version: '1.2.0' };
@@ -71,6 +71,7 @@ const { pathToFileURL } = require('node:url');
     assert.equal(Math.round((await dock.boundingBox()).width), 244, 'Keyboard focus expands labels');
     await page.keyboard.press('Enter');
     await page.waitForFunction(() => !document.querySelector('#customize').disabled);
+    assert.equal(await page.locator('#theme-version-value').textContent(), 'v0.8.0');
     await page.locator('#update-theme').click();
     await page.waitForFunction(() => document.querySelector('#home-status').textContent.includes('1.2.0'));
     await page.locator('#folder').click();
@@ -112,7 +113,7 @@ const { pathToFileURL } = require('node:url');
       await startup.addInitScript(outcome => {
         window.startupChecks = 0;
         window.__TAURI__ = { core: { invoke: async command => {
-          if (command === 'get_status') return { ready: true, installed: true };
+          if (command === 'get_status') return { ready: true, installed: true, theme_version: '0.8.0' };
           if (command === 'check_app_update') {
             window.startupChecks++;
             await new Promise(resolve => setTimeout(resolve, 150));

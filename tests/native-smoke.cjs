@@ -189,7 +189,9 @@ function sampleFrames(page, duration = 800) {
     assert(page, 'Native Tauri page should be open');
     const errors = [];
     page.on('pageerror', e => errors.push(e.message));
+    const showCategory = category => page.getByRole('tab', { name: category, exact: true }).click();
     const saveCategory = async category => {
+      await showCategory(category);
       const button = page.getByRole('button', { name: `Save ${category}`, exact: true });
       await button.scrollIntoViewIfNeeded();
       await button.evaluate(el => el.addEventListener('pointerdown', () => { window.saveScrollBefore = document.querySelector('#settings-form').scrollTop; }, { once: true }));
@@ -201,8 +203,8 @@ function sampleFrames(page, duration = 800) {
       assert(await button.isDisabled());
     };
     const saveAndBack = async () => {
-      while (await page.locator('.category-save:not(:disabled)').count()) {
-        const category = await page.locator('.category-save:not(:disabled)').first().getAttribute('data-category');
+      while (await page.locator('[role="tab"][data-dirty="true"]').count()) {
+        const category = await page.locator('[role="tab"][data-dirty="true"]').first().textContent();
         await saveCategory(category);
       }
       assert.equal(await page.locator('#app').getAttribute('data-page'), 'settings');
@@ -211,7 +213,7 @@ function sampleFrames(page, duration = 800) {
     };
     await page.waitForFunction(() => !document.getElementById('install').disabled);
     const geometry = () => page.evaluate(() => {
-      const glass = document.querySelector(document.querySelector('#app').dataset.page === 'settings' ? '.settings-card' : '.home-content').getBoundingClientRect();
+      const glass = document.querySelector(document.querySelector('#app').dataset.page === 'settings' ? '.settings-workspace' : '.home-content').getBoundingClientRect();
       const bg = document.querySelector('.wallpaper');
       return { centered: Math.abs(glass.x + glass.width / 2 - innerWidth / 2) < 2,
         backgroundCount: document.querySelectorAll('.wallpaper').length,
@@ -296,6 +298,7 @@ function sampleFrames(page, duration = 800) {
     await page.locator('#install').click();
     await page.waitForFunction(() => !document.getElementById('customize').disabled);
     assert.equal(await fs.readFile(destination, 'utf8'), bundledTheme);
+    assert.equal(await page.locator('#theme-version-value').textContent(), `v${bundledTheme.match(/@version\s+([^\s]+)/)[1]}`);
     await assert.rejects(fs.access(source));
     if (process.env.HOTORI_TEST_REMOTE_UPDATE === '1') {
       await page.locator('#update-theme').click();
@@ -311,6 +314,7 @@ function sampleFrames(page, duration = 800) {
     await fs.mkdir(cacheFolder, { recursive: true });
     await fs.writeFile(path.join(cacheFolder, 'theme-defaults.css'), publishedDefaults);
     await fs.writeFile(destination, publishedDefaults.replace('--blur-val: 30px;', '--blur-val: 33px;').replace('--main-color: #5865f2;', '--main-color: #112233;'));
+    await page.waitForFunction(() => document.querySelector('#theme-version-value').textContent === 'v999.0.0');
     await page.locator('#customize').click();
     await page.waitForTimeout(380);
     assert.equal(await page.getByLabel('Acrylic Blur', { exact: true }).getAttribute('aria-valuetext'), '110%');
@@ -327,10 +331,12 @@ function sampleFrames(page, duration = 800) {
     await page.waitForTimeout(380);
     assert.equal(await page.getByLabel('Main Background', { exact: true }).inputValue(), '');
     assert.equal(await page.getByLabel('Settings Background', { exact: true }).inputValue(), '');
-    assert.equal(await page.locator('.category-save').count(), 6);
+    assert.equal(await page.locator('.category-save').count(), 1);
+    assert.equal(await page.locator('.settings-footer .category-save').count(), 1);
     assert.equal(await page.locator('.category-save:not(:disabled)').count(), 0);
     assert.equal(await page.locator('.settings-header #back').count(), 0);
     assert.equal(await page.locator('.settings-footer #back').count(), 1);
+    await showCategory('Wallpapers');
     await page.getByLabel('Main Background', { exact: true }).fill('https://example.com/test.jpg');
     await page.getByLabel('Main Background', { exact: true }).fill('');
     await saveAndBack();
@@ -350,6 +356,13 @@ function sampleFrames(page, duration = 800) {
         return row.querySelector('input[type="text"]').readOnly && !document.getElementById('back').disabled;
       }, name);
       await row.locator('.wallpaper-preview').waitFor({ state: 'visible' });
+      const wallpaperOrder = await row.evaluate(el => {
+        const preview = el.querySelector('.wallpaper-preview').getBoundingClientRect();
+        const input = el.querySelector('input[type="text"]').getBoundingClientRect();
+        const actions = el.querySelector('.wallpaper-actions').getBoundingClientRect();
+        return preview.bottom <= input.top && input.bottom <= actions.top && Math.abs(preview.width / preview.height - 16 / 9) < .02;
+      });
+      assert(wallpaperOrder, 'Wallpaper preview is cropped to 16:9 above the input and actions');
       assert((await row.locator('.wallpaper-notice').textContent()).includes('won’t be uploaded'));
     }
     await fs.unlink(originalImage);
@@ -391,11 +404,12 @@ function sampleFrames(page, duration = 800) {
     await page.waitForFunction(() => document.querySelector('#app').dataset.page === 'settings');
     await page.waitForTimeout(380);
     assert.equal(context.pages().length, 1, 'Customize must not open another WebView');
-    assert.equal(await page.locator('.setting-row').count(), 30);
+    assert.equal(await page.locator('.setting-row').count(), 21);
     assert.equal(await page.getByText('server-list-top-padding', { exact: true }).count(), 0);
     await page.screenshot({ path: path.join(qa, 'tauri-settings.png') });
     assert.equal(await page.locator('#settings-list details:not([open])').count(), 0);
-    assert.equal(await page.locator('.section-heading').first().textContent(), 'Server List');
+    assert.equal(await page.getByRole('tab').first().textContent(), 'Server List');
+    assert.equal(await page.locator('[role="tabpanel"]:visible').count(), 1);
     assert.equal(await page.locator('[data-name="--chat-input-gap"]').count(), 0);
     assert.equal(await page.getByLabel('Acrylic Blur', { exact: true }).getAttribute('aria-valuetext'), '100%');
     assert.equal(await page.getByLabel('Liquid Glass Blur', { exact: true }).getAttribute('aria-valuetext'), '100%');
@@ -404,14 +418,19 @@ function sampleFrames(page, duration = 800) {
     const g = await geometry();
     assert(g.centered && !g.overflow && g.backgroundCount === 1 && g.cover && g.bgTransform === 'none');
     assert(g.blur.includes('blur(16px)'));
-    assert.equal(await page.locator('.color-grid [data-name="--text-muted"]').count(), 1);
-    assert.equal(await page.locator('.color-grid [data-name="--interactive-hover"]').count(), 1);
+    assert.equal(await page.locator('[data-name="--text-muted"], [data-name="--interactive-hover"]').count(), 0);
+    assert.equal(await page.getByLabel('Liquid Glass Color Intensity', { exact: true }).getAttribute('min'), '90');
+    assert.equal(await page.getByLabel('Liquid Glass Color Intensity', { exact: true }).getAttribute('max'), '110');
+    assert.equal(await page.getByLabel('Liquid Glass Color Intensity', { exact: true }).getAttribute('aria-valuetext'), '100%');
     assert.equal(await page.getByLabel('Acrylic Blur', { exact: true }).getAttribute('min'), '90');
     assert.equal(await page.getByLabel('Acrylic Blur', { exact: true }).getAttribute('max'), '110');
-    await page.locator('[data-name="--text-normal"]').scrollIntoViewIfNeeded();
+    await showCategory('Colors');
+    await page.getByLabel('Message & Input Text', { exact: true }).scrollIntoViewIfNeeded();
     await page.screenshot({ path: path.join(qa, 'hotori-color-grid.png') });
+    await showCategory('Avatars');
     await page.locator('[data-name="--message-avatar-size"]').scrollIntoViewIfNeeded();
     await page.screenshot({ path: path.join(qa, 'hotori-avatars.png') });
+    await showCategory('Glass Appearance');
     await page.locator('[data-name="--blur-val"]').scrollIntoViewIfNeeded();
     await page.screenshot({ path: path.join(qa, 'hotori-blur-sliders.png') });
     assert(await page.locator('input[type="range"]').evaluateAll(inputs => inputs.every(input => input.step === '1' && Number.isInteger(Number(input.min)) && Number.isInteger(Number(input.max)))));
@@ -438,15 +457,21 @@ function sampleFrames(page, duration = 800) {
     assert.equal(await page.getByLabel('Acrylic Blur', { exact: true }).inputValue(), '100');
     await page.getByLabel('Acrylic Blur', { exact: true }).fill('110');
     await page.getByLabel('Glass Profile', { exact: true }).selectOption('Liquid Glass');
+    await page.getByLabel('Liquid Glass Color Intensity', { exact: true }).fill('110');
+    await showCategory('Colors');
     await page.getByLabel('Accent Color', { exact: true }).fill('#123456');
+    await page.getByLabel('Message & Input Text', { exact: true }).fill('#c0ffee');
+    await showCategory('Wallpapers');
     await page.getByLabel('Main Background', { exact: true }).fill('');
     // Exercise a native range control without opening the OS color chooser.
     await page.getByLabel('Main Background · Top Dimming opacity', { exact: true }).fill('50');
+    await showCategory('Avatars');
     const avatar = page.getByLabel('Message Avatar Size', { exact: true });
-    assert.equal(await avatar.getAttribute('max'), '120');
-    assert.equal(await avatar.getAttribute('aria-valuetext'), '100%');
-    await avatar.fill('120');
-    assert.equal(await avatar.getAttribute('aria-valuetext'), '120%');
+    assert.equal(await avatar.getAttribute('min'), '90');
+    assert.equal(await avatar.getAttribute('max'), '110');
+    assert.equal(await avatar.getAttribute('aria-valuetext'), '67%');
+    await avatar.fill('110');
+    assert.equal(await avatar.getAttribute('aria-valuetext'), '110%');
     const radius = page.getByLabel('Avatar Roundness', { exact: true });
     assert.equal(await radius.getAttribute('aria-valuetext'), '60%');
     assert.equal(await radius.getAttribute('title'), '0% is square; 100% is a full circle.');
@@ -460,8 +485,9 @@ function sampleFrames(page, duration = 800) {
     assert(partial.includes('--main-color: #ec5757;'), 'Saving glass must not save the color draft');
     assert(partial.includes('--message-avatar-size: 40px;'), 'Saving glass must not save the avatar draft');
     assert.equal(await page.getByLabel('Accent Color', { exact: true }).inputValue(), '#123456');
-    assert.equal(await avatar.inputValue(), '120');
+    assert.equal(await avatar.inputValue(), '110');
     // Repeated category saves keep the session current.
+    await showCategory('Glass Appearance');
     await page.getByLabel('Acrylic Blur', { exact: true }).fill('109');
     await saveCategory('Glass Appearance');
     await page.getByLabel('Acrylic Blur', { exact: true }).fill('110');
@@ -473,11 +499,13 @@ function sampleFrames(page, duration = 800) {
     assert(saved.includes('--blur-profile: var(--blur-liquid);'));
     assert(saved.includes('--main-color: #123456;'));
     assert(saved.includes('--main-bg: none;'));
-    assert(saved.includes('--message-avatar-size: 70px;'));
+    assert(saved.includes('--message-avatar-size: 66px;'));
+    assert(saved.includes('--liquid-saturation: 242%;'));
     assert(saved.includes('--avatar-radius: 50%;'));
     assert(saved.includes('--chat-input-gap: 12px;'));
     assert(saved.includes('--bg-overlay-top: rgba(12, 16, 24, 0.5);'));
-    assert(saved.includes('--text-normal: #ffffff !important;'));
+    assert(saved.includes('--text-normal: #c0ffee !important;'));
+    assert(saved.includes('--secondary-ui-color: #c0ffee;'));
     assert(saved.endsWith('.implementation { color: red; }\n'));
     assert(saved.includes('--server-list-top-padding: 12px;'));
 
@@ -485,6 +513,7 @@ function sampleFrames(page, duration = 800) {
     await page.waitForTimeout(380);
     await page.locator('#customize').click();
     await page.waitForTimeout(380);
+    await showCategory('Colors');
     await page.getByLabel('Accent Color', { exact: true }).fill('#abcdef');
     await page.getByRole('button', { name: 'Reset to defaults', exact: true }).click();
     await page.waitForFunction(() => document.querySelector('#settings-status').textContent === 'All customization options reset and saved to defaults.');
@@ -511,6 +540,7 @@ function sampleFrames(page, duration = 800) {
     await page.waitForTimeout(380);
     await page.locator('#customize').click();
     await page.waitForTimeout(380);
+    await showCategory('Colors');
     await fs.appendFile(destination, '/* External edit */\n');
     await page.getByLabel('Accent Color', { exact: true }).fill('#abcdef');
     await page.getByRole('button', { name: 'Save Colors', exact: true }).click();
@@ -537,6 +567,7 @@ function sampleFrames(page, duration = 800) {
       await page.waitForTimeout(380);
       const settings = await geometry();
       assert(settings.centered && !settings.overflow && settings.cover);
+      await showCategory('Wallpapers');
       await expandMenus();
       const form = page.locator('#settings-form');
       await form.evaluate(el => el.scrollTop = el.scrollHeight);
@@ -547,6 +578,7 @@ function sampleFrames(page, duration = 800) {
     }
     await page.locator('#uninstall').click();
     await page.waitForFunction(() => document.getElementById('customize').disabled && !document.getElementById('install').disabled);
+    assert.equal(await page.locator('#theme-version').isVisible(), false);
     await assert.rejects(fs.access(destination));
     assert.equal(await fs.readFile(source, 'utf8'), theme);
     assert.deepEqual((await fs.readdir(folder)).sort(), ['devhotori.theme.css', 'hotori-assets']);

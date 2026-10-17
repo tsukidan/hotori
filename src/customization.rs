@@ -144,13 +144,17 @@ pub fn explanation(name: &str, value: &str) -> &'static str {
         n if n.contains("overlay") => "Controls wallpaper darkening. Higher opacity means darker.",
         "--blur-val" => "Higher values make acrylic glass more frosted.",
         "--liquid-blur-val" => "Adjusts how softly liquid glass blurs the wallpaper.",
-        "--liquid-saturation" => "100% is natural color; increase for more vivid glass.",
+        "--liquid-saturation" => {
+            "100% is the theme default. Adjust between 90% and 110% of its color intensity."
+        }
         "--glass-light" | "--glass-dark" => {
             "Choose the tint and transparency for this glass preset."
         }
         "--main-color" => "Main accent for buttons, links, and navigation.",
         "--chat-input-gap" => "Extra space above the message box while someone is typing.",
-        "--message-avatar-size" => "Normal avatars are 40 pixels. Bigger values enlarge them.",
+        "--message-avatar-size" => {
+            "100% is the theme default. Adjust avatar size between 90% and 110%."
+        }
         "--avatar-radius" => "0% is square; 100% is a full circle.",
         "--server-list-layout" => {
             if value == "Horizontal" {

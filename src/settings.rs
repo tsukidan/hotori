@@ -32,11 +32,11 @@ fn slider(name: &str, value: &str, defaults: Option<&Settings>) -> Option<Slider
     value.parse::<f64>().ok().filter(|v| v.is_finite())?;
     let (min, max, step, avatar_percent) = match name {
         "--avatar-radius" => (0.0, 50.0, 0.5, false),
-        "--message-avatar-size" => (0.0, 70.0, 0.1, true),
-        "--blur-val" | "--liquid-blur-val" | "--liquid-saturation" => {
+        "--blur-val" | "--liquid-blur-val" | "--liquid-saturation" | "--message-avatar-size" => {
             let fallback = match name {
                 "--blur-val" => 24.0,
                 "--liquid-blur-val" => 2.5,
+                "--message-avatar-size" => 60.0,
                 _ => 220.0,
             };
             let default = defaults
@@ -47,7 +47,7 @@ fn slider(name: &str, value: &str, defaults: Option<&Settings>) -> Option<Slider
             // Bounds stay anchored to source defaults, never to the last saved customization.
             let min = (default * 90.0).round() / 100.0;
             let max = (default * 110.0).round() / 100.0;
-            (min, max, 0.01, false)
+            (min, max, 0.01, name == "--message-avatar-size")
         }
         _ => return None,
     };
@@ -190,7 +190,7 @@ mod tests {
         let saturation = slider("--liquid-saturation", "230", Some(&defaults)).unwrap();
         assert_eq!((saturation.min, saturation.max), (198.0, 242.0));
         let avatar = slider("--message-avatar-size", "40", None).unwrap();
-        assert_eq!((avatar.min, avatar.max), (0.0, 70.0));
+        assert_eq!((avatar.min, avatar.max), (54.0, 66.0));
         assert!(avatar.avatar_percent);
         let radius = slider("--avatar-radius", "50", None).unwrap();
         assert_eq!((radius.min, radius.max), (0.0, 50.0));

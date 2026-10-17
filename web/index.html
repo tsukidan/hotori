@@ -31,6 +31,7 @@
           <h2>Hotori — a theme inspired by Liquid Glass.</h2>
           <p class="description">A Discord theme inspired by Liquid Glass. Make it yours with acrylic or liquid glass, custom backgrounds, colors and blur. Adjust avatar size and shape, message spacing, mention highlights, and your server list layout.</p>
           <p id="home-status" class="status" role="status" aria-live="polite">Checking your theme…</p>
+          <p id="theme-version" class="theme-version" role="status" aria-live="polite" hidden><span data-icon="tag"></span><span>Installed theme <strong id="theme-version-value"></strong></span></p>
           <p class="vencord-notice" hidden>!! Vencord is required for this theme !!</p>
         </div>
       </div>
@@ -57,10 +58,16 @@
       </nav>
     </section>
     <section id="settings-page" class="page settings-page" aria-labelledby="settings-title" inert>
+      <div class="settings-workspace">
+      <aside class="glass settings-sidebar" aria-label="Customization navigation">
+        <div class="sidebar-brand"><span data-icon="glass"></span><div><strong>Hotori</strong><span>Make it yours</span></div></div>
+        <p class="sidebar-label">Customization</p>
+        <div id="settings-categories" class="settings-categories" role="tablist" aria-label="Theme categories" aria-orientation="vertical"></div>
+      </aside>
       <div class="glass settings-card">
         <header class="settings-header">
           <h2 id="settings-title" tabindex="-1">Make Hotori yours</h2>
-          <p>Glass, color, and atmosphere. Fine-tune every detail of your Discord.</p>
+          <p id="settings-description">Glass, color, and atmosphere. Fine-tune every detail of your Discord.</p>
         </header>
         <form id="settings-form" class="settings-scroll" aria-label="Theme options">
           <div id="settings-list"></div>
@@ -68,10 +75,12 @@
         <footer class="settings-footer">
           <p id="settings-status" class="status" role="status" aria-live="polite">Save changes in each category.</p>
           <div class="settings-actions">
+          <button id="save-category" class="button primary category-save" type="button" disabled><span data-icon="save"></span><span class="button-label">Save changes</span></button>
           <button id="reset-defaults" class="button" type="button" title="Restore and save all customization options to the theme defaults."><span data-icon="reset"></span>Reset to defaults</button>
           <button id="back" class="button" type="button"><span data-icon="back"></span>Back</button>
           </div>
         </footer>
+      </div>
       </div>
     </section>
   </main>
@@ -90,6 +99,6 @@
       <button id="app-update-install" class="button primary" type="button">Download &amp; restart</button>
     </div>
   </dialog>
-  <span class="version" aria-label="Version 1.2.1">v1.2.1</span>
+  <span class="version" aria-label="Version 1.3.1">v1.3.1</span>
 </body>
 </html>

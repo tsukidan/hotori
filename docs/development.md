@@ -36,7 +36,7 @@ Small fixes increment the patch version by 0.0.1 (for example, 1.0.0 → 1.0.1).
 
 Build and verify the local EXE first. Wait for the user's verification and explicit publishing instruction before pushing or changing GitHub releases.
 
-Current local app version: **1.2.1**. Patch 1.2.1 aligns status icons and text in shared left columns. The 1.2.0 minor release added the vertical glass dock, shared expansion for the conditional app-update bubble, automatic startup update checks, and the revised home layout and status messages. Subsequent small fixes increment the patch version from this baseline.
+Current local app version: **1.3.1**. This patch moves category saving into the persistent editor footer, simplifies text color editing, adds tinted glass sliders, anchors avatar size and liquid color intensity to 90–110% of source defaults, and reorders wallpaper controls around cropped 16:9 previews. The 1.3.0 minor release introduced separate glass panels for settings navigation and the selected category, keyboard navigation, and per-category draft and scroll preservation. It also includes the installed-theme version bubble added in 1.2.2. Subsequent small fixes increment the patch version from this baseline.
 
 ## Signed portable app updates
 

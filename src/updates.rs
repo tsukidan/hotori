@@ -249,6 +249,13 @@ fn variables(css: &str) -> Result<Vec<Variable>, String> {
     Ok(variables)
 }
 
+pub(crate) fn installed_version(folder: &Path) -> Option<String> {
+    let css = fs::read_to_string(folder.join(crate::installer::DESTINATION)).ok()?;
+    metadata(&css, "@version")
+        .filter(|version| !version.is_empty())
+        .map(str::to_owned)
+}
+
 fn metadata<'a>(css: &'a str, key: &str) -> Option<&'a str> {
     let header = css.trim_start().strip_prefix("/**")?.split_once("*/")?.0;
     header.lines().find_map(|line| {

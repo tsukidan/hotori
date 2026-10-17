@@ -26,6 +26,7 @@ impl AppState {
 struct InstallStatus {
     ready: bool,
     installed: bool,
+    theme_version: Option<String>,
 }
 
 #[tauri::command]
@@ -34,6 +35,7 @@ fn get_status(state: tauri::State<AppState>) -> InstallStatus {
     InstallStatus {
         ready: folder.is_some_and(|p| p.is_dir()),
         installed: folder.is_some_and(|p| p.join(installer::DESTINATION).is_file()),
+        theme_version: folder.and_then(|p| updates::installed_version(p)),
     }
 }
 
