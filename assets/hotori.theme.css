@@ -1278,10 +1278,9 @@ svg {
     color: var(--main-color) !important;
 }
 
-/* Glass for message-body text links and the explicitly selected embed author
-   links. Other embed text, media links, and mention pills stay separate. */
-.messageContent_c19a55 a[href]:not(.mention):not(:has(img, video, svg)):not(:where(.embed__623de *, .embedFull__623de *)),
-a.embedAuthorNameLink__623de.embedLink__623de.embedAuthorName__623de {
+/* Glass for message-body text links. Embed links use the card typography
+   below rather than adding a separate glass pill to every label. */
+.messageContent_c19a55 a[href]:not(.mention):not(:has(img, video, svg)):not(:where(.embed__623de *, .embedFull__623de *)) {
     display: inline-block;
     box-sizing: border-box;
     max-width: 100%;
@@ -1376,15 +1375,6 @@ a.embedAuthorNameLink__623de.embedLink__623de.embedAuthorName__623de {
 
 .subtitleContainer_f75fb0 .toolbar__9293f .searchBar_c322aa {
     --glass-child-radius: 999px;
-}
-
-/* Author links sit on existing embed glass too: match the description's
-   lighter nested tint and reuse the embed's blur instead of filtering twice. */
-:is(.embed__623de, .embedFull__623de) a.embedAuthorNameLink__623de.embedLink__623de.embedAuthorName__623de {
-    background: var(--glass-background-subtle) !important;
-    background-image: var(--glass-sheen) !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
 }
 
 /* Embed descriptions, field subtext, footers, and linked titles share the
@@ -2916,6 +2906,131 @@ img[class*="avatar_"],
 .container__75920 .baseControlItemTitle_dbfbe0 {
     font-weight: 600;
     line-height: 1.4;
+}
+
+/* Reaction hover details: one glass shell around the emoji and reactor text. */
+.reactionTooltip_bbcccb {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 12px !important;
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Attachment actions: support the hover-button group and composer previews. */
+.hoverButtonGroup__06ab4,
+.upload_aa605f .miniPopover_aa605f {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 8px !important;
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
+}
+
+.hoverButtonGroup__06ab4 .hoverButton__06ab4 {
+    background: transparent !important;
+    transition: background-color 150ms ease;
+}
+
+.hoverButtonGroup__06ab4 .hoverButton__06ab4:is(:hover, :focus-visible),
+.upload_aa605f .miniPopover_aa605f :is(button, [role="button"]):hover {
+    background-color: var(--glass-background-subtle) !important;
+}
+
+/* Tooltips render in a portal outside the upload. Match only while its action
+   group is hovered/focused, leaving other tooltip types unchanged. */
+body:has(.hoverButton__06ab4:is(:hover, :focus-visible), .upload_aa605f .actionBar_aa605f:is(:hover, :focus-within)) :is(.tooltip_fa450a, .tooltip_c36707) {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 8px !important;
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
+    color: #ffffff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+body:has(.hoverButton__06ab4:is(:hover, :focus-visible), .upload_aa605f .actionBar_aa605f:is(:hover, :focus-within)) .tooltip_fa450a .tooltipContent_fa450a {
+    background: transparent !important;
+    border-radius: inherit;
+}
+
+body:has(.hoverButton__06ab4:is(:hover, :focus-visible), .upload_aa605f .actionBar_aa605f:is(:hover, :focus-within)) .tooltip_fa450a .tooltipContent_fa450a,
+body:has(.hoverButton__06ab4:is(:hover, :focus-visible), .upload_aa605f .actionBar_aa605f:is(:hover, :focus-within)) .tooltip_fa450a .tooltipContent_fa450a * {
+    color: #ffffff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+body:has(.hoverButton__06ab4:is(:hover, :focus-visible), .upload_aa605f .actionBar_aa605f:is(:hover, :focus-within)) .tooltip_c36707 .tooltipPointer_c36707 {
+    display: none;
+}
+
+/* Embed typography: one outer glass card with a clear reading hierarchy.
+   Keep Discord's thumbnail grid, fields and playback controls intact. */
+.embedFull__623de > .grid__623de {
+    padding: 14px 16px 16px !important;
+}
+
+:is(.embed__623de, .embedFull__623de) :is(a, .embedProvider__623de, .embedAuthorName__623de, .embedTitle__623de, .embedDescription__623de, .embedFooterText__623de) {
+    -webkit-text-stroke: 0 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.65),
+                 0 2px 5px rgba(0, 0, 0, 0.3) !important;
+}
+
+:is(.embed__623de, .embedFull__623de) :is(.embedProvider__623de, .embedAuthorNameLink__623de, .embedTitleLink__623de, .embedDescription__623de, .embedFooterText__623de) {
+    background: transparent !important;
+    background-image: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    margin-inline: 0 !important;
+}
+
+:is(.embed__623de, .embedFull__623de) :is(.embedProvider__623de, .embedProvider__623de a) {
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-size: 13px !important;
+    line-height: 1.4;
+    font-weight: 500 !important;
+}
+
+:is(.embed__623de, .embedFull__623de) :is(.embedAuthorName__623de, .embedAuthorNameLink__623de) {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-size: 14px !important;
+    line-height: 1.4;
+    font-weight: 600 !important;
+}
+
+:is(.embed__623de, .embedFull__623de) :is(.embedTitle__623de, .embedTitleLink__623de) {
+    color: #ffffff !important;
+    font-size: 20px !important;
+    line-height: 1.35 !important;
+    font-weight: 700 !important;
+    overflow-wrap: anywhere;
+}
+
+:is(.embed__623de, .embedFull__623de) .embedDescription__623de {
+    color: rgba(255, 255, 255, 0.92) !important;
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+.embedFull__623de .embedMedia__623de {
+    margin-top: 14px;
+    border-radius: 10px;
+}
+
+:is(.embed__623de, .embedFull__623de) :is(.embedProvider__623de a, .embedAuthorNameLink__623de, .embedTitleLink__623de):is(:hover, :focus-visible) {
+    text-decoration: underline !important;
+    text-underline-offset: 3px;
 }
 
 /* END OF HOTORI DEV THEME */
