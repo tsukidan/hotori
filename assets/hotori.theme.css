@@ -3,7 +3,7 @@
  * @author tsuki
  * @authorId 109679787630399488
  * @authorLink https://plusinsta.xyz
- * @version 0.8.4
+ * @version 0.8.5
  * @description A Discord theme inspired by Liquid Glass.
  */
 
@@ -846,9 +846,9 @@ svg {
     display: none !important;
 }
 
-/* One slim glass surface for the unread separator, including its NEW label.
-   Date-only dividers keep their separate existing treatment. */
-.divider__908e2.isUnread__908e2 {
+/* One slim glass surface for unread and date separators. Both labels sit
+   directly on the bar rather than painting a separate pill or blur layer. */
+.divider__908e2:is(.isUnread__908e2, .hasContent__908e2) {
     height: 18px !important;
     min-height: 18px;
     margin: 8px 4px !important;
@@ -863,11 +863,11 @@ svg {
     border-radius: 9px !important;
 }
 
-.divider__908e2.isUnread__908e2::before {
+.divider__908e2:is(.isUnread__908e2, .hasContent__908e2)::before {
     display: none !important;
 }
 
-.divider__908e2.isUnread__908e2 :is(.unreadPill__908e2, .content__908e2) {
+.divider__908e2:is(.isUnread__908e2, .hasContent__908e2) :is(.unreadPill__908e2, .content__908e2) {
     position: static !important;
     inset: auto !important;
     width: auto !important;
