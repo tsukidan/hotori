@@ -6,3 +6,8 @@
 
 # Private signing material must never enter Git.
 *.dpapi
+
+# Retired source/artwork retained locally; active UI assets live in web/assets/.
+/assets/background.jpeg
+/assets/logo.png
+/legacy/slint/
