@@ -36,7 +36,7 @@ Small fixes increment the patch version by 0.0.1 (for example, 1.0.0 → 1.0.1).
 
 Build and verify the local EXE first. Wait for the user's verification and explicit publishing instruction before pushing or changing GitHub releases.
 
-Current local app version: **1.3.3**. This patch removes the redundant manual theme-update action from the dock. Theme updates are started directly from the installed-version bubble when a newer version is available. The 1.3.2 GitHub theme check still runs at startup and at most every five minutes while visible without changing local files. Subsequent small fixes increment the patch version from this baseline.
+Current local app version: **1.3.4**. This patch adds a subtle static Acrylic grain to the app's blurred panels, dock, status bubbles, dialogs, and window controls. The 96px tile is reused unchanged from theme commit 677a029, with pixel alpha 6/255 (approximately 2.4%); it is a background layer and adds no blur filter or animation. The wallpaper and bundled theme are unchanged. Patch 1.3.3 removed the redundant dock theme-update action in favor of the version-bubble notice. Subsequent small fixes increment the patch version from this baseline.
 
 ## Signed portable app updates
 

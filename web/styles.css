@@ -8,6 +8,8 @@
   --border: #ffe4da38;
   --duration: 320ms;
   --ease: cubic-bezier(.22,.7,.18,1);
+  /* Original static 96px Acrylic tile: alpha 6/255, approximately 2.4%. */
+  --app-acrylic-grain: url("assets/acrylic-grain.png");
 }
 * { box-sizing: border-box; }
 body { margin: 0; width: 100vw; height: 100dvh; overflow: hidden; }
@@ -35,7 +37,7 @@ h1 { margin: 0; line-height: 0; }
 .logo { display: block; width: min(100%, 500px); height: auto; max-height: 126px; object-fit: contain; margin: 0 auto; }
 .tagline { margin: 12px 0 24px; color: #f3c7ba; font-size: 16px; text-shadow: 0 2px 14px #000; }
 .glass {
-  background: linear-gradient(135deg, #fff0e41a, #210d163d);
+  background: var(--app-acrylic-grain) repeat, linear-gradient(135deg, #fff0e41a, #210d163d);
   border: 1px solid var(--border); border-radius: 24px;
   backdrop-filter: blur(16px) saturate(125%);
   -webkit-backdrop-filter: blur(16px) saturate(125%);
@@ -165,7 +167,7 @@ details[open] > summary > .icon { transform: rotate(180deg); }
 .titlebar-drag span { font-size: 13px; font-weight: 650; letter-spacing: .4px; color: #fff1eccc; }
 .window-controls {
   display: flex; gap: 2px; padding: 3px; border: 1px solid #ffffff1a; border-radius: 16px;
-  background: #0c10183d;
+  background: var(--app-acrylic-grain) repeat #0c10183d;
   backdrop-filter: blur(24px) saturate(150%);
   -webkit-backdrop-filter: blur(24px) saturate(150%);
   box-shadow: inset 0 1px 1px #ffffff66, 0 2px 8px #00000026;
@@ -253,7 +255,7 @@ details[open] > summary > .icon { transform: rotate(180deg); }
   display: grid; grid-template-columns: 236px minmax(0, 1fr); gap: 22px;
 }
 .settings-sidebar, .settings-card {
-  min-width: 0; background: linear-gradient(135deg, #ffffff0a, #0c101814);
+  min-width: 0; background: var(--app-acrylic-grain) repeat, linear-gradient(135deg, #ffffff0a, #0c101814);
   border-color: #ffffff1a; box-shadow: inset 0 1px 1px #ffffff33, 0 2px 8px #00000026;
 }
 .settings-sidebar { display: flex; flex-direction: column; padding: 24px 16px 18px; min-height: 0; }
@@ -381,7 +383,7 @@ input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius
   gap: 6px 12px; font-size: 14px; line-height: 1.5;
   width: fit-content; max-width: 100%; padding: 12px 16px; border-radius: 16px;
   border: 1px solid #ffffff1a;
-  background: linear-gradient(135deg, #ffffff0a, #0c101814);
+  background: var(--app-acrylic-grain) repeat, linear-gradient(135deg, #ffffff0a, #0c101814);
   backdrop-filter: blur(10px) saturate(150%);
   -webkit-backdrop-filter: blur(10px) saturate(150%);
   box-shadow: inset 0 1px 1px #ffffff33, 0 2px 8px #00000026;
@@ -426,7 +428,7 @@ input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius
 .dock-surface {
   position: absolute; inset: 0; z-index: -1; border-radius: 30px;
   border: 1px solid #ffffff1a;
-  background: linear-gradient(135deg, #ffffff0a, #0c101814);
+  background: var(--app-acrylic-grain) repeat, linear-gradient(135deg, #ffffff0a, #0c101814);
   backdrop-filter: blur(10px) saturate(150%);
   -webkit-backdrop-filter: blur(10px) saturate(150%);
   box-shadow: inset 0 1px 1px #ffffff33, 0 2px 8px #00000026;
