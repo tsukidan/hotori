@@ -189,6 +189,8 @@ function sampleFrames(page, duration = 800) {
     }
     assert(page, 'Native Tauri page should be open');
     const errors = [];
+    const materialWarnings = [];
+    page.on('console', message => { if (/LiquidGlass fallback|Glass content capture unavailable/.test(message.text())) { materialWarnings.push(message.text()); console.log('Material diagnostic:', message.text()); } });
     page.on('pageerror', e => errors.push(e.message));
     const showCategory = category => page.getByRole('tab', { name: category, exact: true }).click();
     const saveCategory = async category => {
@@ -268,7 +270,7 @@ function sampleFrames(page, duration = 800) {
     await hoverSession.detach();
     await page.emulateMedia({ reducedMotion: 'no-preference' });
     await page.waitForTimeout(950);
-    await page.waitForFunction(() => document.documentElement.dataset.glassRenderer === 'webgl-lens');
+    await page.waitForFunction(() => document.documentElement.dataset.glassRenderer === 'reference-liquidglass');
     assert(await page.locator('.window-controls > .glass-render-layer').evaluate(el => el.width > 100));
     assert.equal(await page.locator('.titlebar').evaluate(el => getComputedStyle(el).transform), 'none');
     assert.equal(await page.locator('.titlebar').evaluate(el => el.getAnimations().length), 0, 'Finished arrival must release its backdrop root');
@@ -580,6 +582,8 @@ function sampleFrames(page, duration = 800) {
       await page.waitForTimeout(380);
     }
     await page.locator('#uninstall').click();
+    assert.deepEqual(materialWarnings, [], 'The reference renderer must remain active through customization and resizing');
+    assert.equal(await page.locator('html').getAttribute('data-glass-renderer'), 'reference-liquidglass');
     await page.waitForFunction(() => document.getElementById('customize').disabled && !document.getElementById('install').disabled);
     assert.equal(await page.locator('#theme-version').isVisible(), false);
     await assert.rejects(fs.access(destination));

@@ -329,27 +329,40 @@ details[open] > summary > .icon { transform: rotate(180deg); }
 }
 .wallpaper-actions { justify-content: flex-start; }
 .wallpaper-notice, .wallpaper-feedback { text-align: left; }
-input[type="range"] {
-  --range-tint: #efb3a6; appearance: none; -webkit-appearance: none;
-  height: 28px; margin: 3px 0; background: transparent; cursor: pointer;
+/* A continuous pill: the native range supplies interaction and accessibility,
+   while the rounded fill meets the track without a protruding thumb. */
+.range-surface { position: relative; min-width: 0; height: 28px; margin: 3px 0; }
+.opacity-input .range-surface { flex: 1; }
+.range-track {
+  position: absolute; inset: 8px 0; border-radius: 999px; overflow: hidden;
+  background: #ffffff24;
+  box-shadow: inset 0 0 0 1px #ffffff0d;
+  pointer-events: none;
 }
-input[type="range"]::-webkit-slider-runnable-track {
-  height: 10px; border-radius: 99px; border: 1px solid #ffffff29;
-  background: linear-gradient(to right, color-mix(in srgb, var(--range-tint) 52%, transparent) var(--range-progress, 50%), #ffffff0d var(--range-progress, 50%));
-  box-shadow: inset 0 1px 2px #0003, 0 1px 0 #ffffff16;
+.range-fill {
+  width: var(--range-progress, 50%); height: 100%; border-radius: inherit;
+  background: #ffece7;
+  box-shadow: inset 0 1px 0 #ffffff59;
 }
-input[type="range"]::-webkit-slider-thumb {
-  appearance: none; -webkit-appearance: none; width: 24px; height: 24px; margin-top: -8px;
-  border-radius: 50%; border: 1px solid #ffffff70;
-  background: linear-gradient(135deg, #ffffff88, color-mix(in srgb, var(--range-tint) 66%, #ffffff22));
-  box-shadow: inset 0 1px 2px #ffffffb3, inset 0 -2px 4px #ffffff1a, 0 3px 9px #0005;
-  transition: box-shadow 150ms, border-color 150ms;
+.range-surface:has(input:focus-visible) .range-track { outline: 2px solid #fff0e5bd; outline-offset: 4px; }
+.range-surface input[type="range"] {
+  appearance: none; -webkit-appearance: none; position: absolute; inset: 0;
+  width: 100%; height: 100%; margin: 0; background: transparent; cursor: pointer;
+  border: 0; outline: none;
 }
-input[type="range"]:hover::-webkit-slider-thumb { border-color: #ffffffb3; box-shadow: inset 0 1px 2px #fff, 0 3px 12px #efb3a640; }
-input[type="range"]::-moz-range-track { height: 8px; border-radius: 99px; border: 1px solid #ffffff29; background: #ffffff0d; box-shadow: inset 0 1px 2px #0003; }
-input[type="range"]::-moz-range-progress { height: 8px; border-radius: 99px; background: color-mix(in srgb, var(--range-tint) 52%, transparent); }
-input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; border: 1px solid #ffffff70; background: linear-gradient(135deg, #ffffff88, var(--range-tint)); box-shadow: inset 0 1px 2px #ffffffb3, 0 3px 9px #0005; }
-@media (prefers-reduced-motion: reduce) { input[type="range"]::-webkit-slider-thumb { transition: none; } }
+.range-surface input[type="range"]::-webkit-slider-runnable-track { height: 12px; border: 0; background: transparent; box-shadow: none; }
+.range-surface input[type="range"]::-webkit-slider-thumb {
+  appearance: none; -webkit-appearance: none; width: 0; height: 12px;
+  border: 0; background: transparent; box-shadow: none;
+}
+.range-surface input[type="range"]::-moz-range-track { height: 12px; border: 0; background: transparent; }
+.range-surface input[type="range"]::-moz-range-progress { background: transparent; }
+.range-surface input[type="range"]::-moz-range-thumb { width: 0; height: 12px; border: 0; background: transparent; }
+@media (forced-colors: active) {
+  .range-track { background: Canvas; outline: 1px solid CanvasText; }
+  .range-fill { background: Highlight; forced-color-adjust: none; }
+}
+
 
 
 .app-update-row { display: flex; justify-content: center; margin-top: 18px; }

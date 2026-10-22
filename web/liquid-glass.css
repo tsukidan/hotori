@@ -31,7 +31,7 @@
 }
 .glass, .settings-sidebar, .settings-card {
   --glass-surface-blur: 4px; --glass-surface-saturation: 140%;
-  --glass-tint: #21191d33; border-radius: 38px;
+  --glass-tint: #21191d33; border-radius: 60px;
   background: radial-gradient(ellipse at 10% 0%, #ffffff09, transparent 60%), var(--glass-tint);
   box-shadow: var(--glass-key-shadow), 0 14px 36px #00000030;
 }
@@ -71,20 +71,10 @@ input[type="color"]::-webkit-color-swatch { border: 0; border-radius: 9px; }
   -webkit-backdrop-filter: blur(var(--glass-surface-blur)) saturate(var(--glass-surface-saturation)) var(--glass-refraction);
 }
 .settings-header, .settings-footer { border-color: #ffffff1a; }
-.settings-header { border-radius: 38px 38px 0 0; }
-.settings-footer { border-radius: 0 0 38px 38px; background: #170f1410; }
+.settings-header { border-radius: 60px 60px 0 0; }
+.settings-footer { border-radius: 0 0 60px 60px; background: #170f1410; }
 .wallpaper-preview { border-radius: 24px; border-color: #ffffff29; }
 .dock-button::before { border-radius: 999px; background: #ffffff0c; }
-input[type="range"]::-webkit-slider-runnable-track {
-  border-color: #ffffff26;
-  background: linear-gradient(to right, #ffc7b573 var(--range-progress, 50%), #ffffff0a var(--range-progress, 50%));
-  box-shadow: inset 0 1px 3px #0000002b, 0 1px .5px #ffffff24;
-}
-input[type="range"]::-webkit-slider-thumb {
-  background: radial-gradient(ellipse at 26% 12%, #ffffff96, #ffffff16 48%, #ffc7b52b);
-  border-color: #ffffff7a;
-  box-shadow: inset 1px 1px 1px #ffffffb3, inset -1px -1px 1px #ffffff47, 0 3px 8px #0000003d;
-}
 /* Chromium's native customizable picker keeps select semantics and keyboard
    behavior while letting its popup use the same optical surface treatment. */
 @supports (appearance: base-select) {
@@ -110,23 +100,31 @@ input[type="range"]::-webkit-slider-thumb {
   background: transparent !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
-  border-color: #ffffff26;
-  box-shadow: 0 5px 14px #00000024;
+  border-color: transparent;
+  box-shadow: none;
 }
 .shader-glass::after { display: none; }
 .glass-render-layer { display: none; }
 .shader-glass > .glass-render-layer {
   display: block;
-  position: absolute; inset: -1px; width: calc(100% + 2px); height: calc(100% + 2px);
-  border-radius: inherit; z-index: -1; pointer-events: none;
+  position: absolute; inset: auto;
+  border-radius: 0; z-index: -1; pointer-events: none;
 }
 input.shader-glass, select.shader-glass, textarea.shader-glass {
   background: var(--shader-surface-image) center / 100% 100% no-repeat !important;
 }
-.shader-glass.button:hover:not(:disabled), .shader-glass.category-tab:hover { border-color: #ffffff38; }
-.shader-glass.category-tab[aria-selected="true"] { border-color: #fff4ea70; box-shadow: inset 0 0 0 1px #ffffff0c, 0 3px 12px #0002; }
+.shader-glass.button:hover:not(:disabled), .shader-glass.category-tab:hover { border-color: transparent; }
+.shader-glass.category-tab[aria-selected="true"] { border-color: #fff4ea40; box-shadow: none; }
+@supports (appearance: base-select) {
+  select.shader-glass::picker(select) {
+    background: var(--shader-picker-image, #20161c66) center / 100% 100% no-repeat;
+    backdrop-filter: none; border-color: transparent;
+    box-shadow: 0 4px 14px #0003;
+  }
+}
 @media (prefers-reduced-transparency: reduce) {
   .optical-glass { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; background: #271c24 !important; }
   .optical-glass::after { display: none; }
+  select::picker(select) { background: #271c24 !important; backdrop-filter: none !important; }
 }
 @media (prefers-reduced-motion: reduce) { select::picker-icon { transition: none; } }

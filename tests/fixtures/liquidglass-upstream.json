@@ -1,0 +1,22 @@
+{
+  "version": "1.0.3",
+  "commit": "59af227103795f06421a96e2c7d3dceb081decd2",
+  "source": "https://cdn.jsdelivr.net/npm/@ybouane/liquidglass@1.0.3/dist/index.js",
+  "blocks": [
+    {
+      "begin": "// src/defaults.ts",
+      "end": "// node_modules/",
+      "sha256": "a1db360b4a52bc08f4b2c1a7802967035ac57eb9a61e60b7e65d8b57adc487cd"
+    },
+    {
+      "begin": "// src/shaders.ts",
+      "end": "// src/GlassRenderer.ts",
+      "sha256": "baa10a2aff4dd9c288011b1099b6a94a0b4d4628c6bca3a8b72710c5f31b5c22"
+    },
+    {
+      "begin": "// src/GlassRenderer.ts",
+      "end": "// src/LiquidGlass.ts",
+      "sha256": "12e538dcd1ef8a0fc8bcdf86da54c42a364e71192ba136d2262b4d2ff199fc81"
+    }
+  ]
+}

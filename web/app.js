@@ -514,7 +514,12 @@ function renderFields() {
   $("settings-list").replaceChildren(fragment);
   $("settings-categories").replaceChildren(tabs);
   $("settings-list").querySelectorAll('input[type="range"]').forEach(input => {
-      const tint = () => input.style.setProperty("--range-progress", `${(Number(input.value) - Number(input.min)) / (Number(input.max) - Number(input.min)) * 100}%`);
+    const surface = element("div", "range-surface");
+    const track = element("div", "range-track");
+    const fill = element("div", "range-fill");
+    track.setAttribute("aria-hidden", "true");
+    track.append(fill); input.before(surface); surface.append(track, input);
+    const tint = () => surface.style.setProperty("--range-progress", `${(Number(input.value) - Number(input.min)) / (Number(input.max) - Number(input.min)) * 100}%`);
     input.addEventListener("input", tint); tint();
   });
   if (categoryGroups.size) selectCategory(categoryGroups.has(selectedCategory) ? selectedCategory : categoryGroups.keys().next().value);
