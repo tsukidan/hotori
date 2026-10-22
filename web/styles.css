@@ -8,8 +8,8 @@
   --border: #ffe4da38;
   --duration: 320ms;
   --ease: cubic-bezier(.22,.7,.18,1);
-  /* Original static 96px Acrylic tile: alpha 6/255, approximately 2.4%. */
-  --app-acrylic-grain: url("assets/acrylic-grain.png");
+  /* Clear glass surfaces do not use Acrylic grain. */
+  --app-acrylic-grain: none;
 }
 * { box-sizing: border-box; }
 body { margin: 0; width: 100vw; height: 100dvh; overflow: hidden; }

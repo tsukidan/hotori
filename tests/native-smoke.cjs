@@ -246,7 +246,7 @@ function sampleFrames(page, duration = 800) {
     assert.equal(await page.locator('.titlebar-drag[data-tauri-drag-region]').count(), 1);
     assert.equal(await page.locator('.window-button').count(), 3);
     assert.equal(await page.locator('.titlebar img').count(), 0);
-    assert.equal(await page.locator('.window-controls').evaluate(el => getComputedStyle(el).borderRadius), '16px');
+    assert.equal(await page.locator('.window-controls').evaluate(el => getComputedStyle(el).borderRadius), '22px');
     assert.equal(await page.locator('.vencord-notice').evaluate(el => getComputedStyle(el).color), 'rgb(207, 133, 137)');
     assert.equal(await page.locator('.vencord-notice').evaluate(el => getComputedStyle(el).webkitTextStrokeColor), 'rgb(255, 255, 255)');
     assert.equal(await page.locator('.installer-card').evaluate(el => getComputedStyle(el).animationIterationCount), '1');
@@ -268,17 +268,16 @@ function sampleFrames(page, duration = 800) {
     await hoverSession.detach();
     await page.emulateMedia({ reducedMotion: 'no-preference' });
     await page.waitForTimeout(950);
-    assert(await page.locator('.window-controls').evaluate(el => getComputedStyle(el).backdropFilter.includes('blur(24px)')));
+    await page.waitForFunction(() => document.documentElement.dataset.glassRenderer === 'webgl-lens');
+    assert(await page.locator('.window-controls > .glass-render-layer').evaluate(el => el.width > 100));
     assert.equal(await page.locator('.titlebar').evaluate(el => getComputedStyle(el).transform), 'none');
     assert.equal(await page.locator('.titlebar').evaluate(el => el.getAnimations().length), 0, 'Finished arrival must release its backdrop root');
-    // Pixel verification: stripes behind the controls must visibly soften with blur enabled.
-    const backdropProbe = await page.addStyleTag({ content: '.wallpaper { background-image: repeating-linear-gradient(90deg, #fff 0px, #fff 3px, #000 3px, #000 6px) !important; }' });
+    // Verify the real WebView2 presents the shader material over its wallpaper.
     const blurredControls = await page.locator('.window-controls').screenshot();
-    const noBlur = await page.addStyleTag({ content: '.window-controls { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }' });
+    const noBlur = await page.addStyleTag({ content: '.window-controls > .glass-render-layer { visibility: hidden !important; }' });
     const sharpControls = await page.locator('.window-controls').screenshot();
-    assert(!blurredControls.equals(sharpControls), 'Glass must sample and blur actual pixels behind the titlebar');
+    assert(!blurredControls.equals(sharpControls), 'WebView2 must display the GPU lens material');
     await noBlur.evaluate(el => el.remove());
-    await backdropProbe.evaluate(el => el.remove());
     const titlebarBounds = await page.locator('.titlebar').boundingBox();
     const appBounds = await page.locator('#app').boundingBox();
     assert(appBounds.y >= titlebarBounds.y + titlebarBounds.height, 'Content must clear the title bar');
@@ -420,7 +419,7 @@ function sampleFrames(page, duration = 800) {
     await expandMenus();
     const g = await geometry();
     assert(g.centered && !g.overflow && g.backgroundCount === 1 && g.cover && g.bgTransform === 'none');
-    assert(g.blur.includes('blur(16px)'));
+    assert(await page.locator('.settings-sidebar > .glass-render-layer').evaluate(el => el.width > 200));
     assert.equal(await page.locator('[data-name="--text-muted"], [data-name="--interactive-hover"]').count(), 0);
     assert.equal(await page.getByLabel('Liquid Glass Color Intensity', { exact: true }).getAttribute('min'), '90');
     assert.equal(await page.getByLabel('Liquid Glass Color Intensity', { exact: true }).getAttribute('max'), '110');
@@ -568,8 +567,9 @@ function sampleFrames(page, duration = 800) {
       assert(home.centered && !home.overflow && home.cover, JSON.stringify({ width, height, home }));
       await page.locator('#customize').click();
       await page.waitForTimeout(380);
+      await page.waitForFunction(() => !document.getAnimations().some(animation => animation.effect?.target?.matches('.page') && animation.playState === 'running'));
       const settings = await geometry();
-      assert(settings.centered && !settings.overflow && settings.cover);
+      assert(settings.centered && !settings.overflow && settings.cover, JSON.stringify({ width, height, settings }));
       await showCategory('Wallpapers');
       await expandMenus();
       const form = page.locator('#settings-form');

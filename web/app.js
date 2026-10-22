@@ -652,6 +652,8 @@ $("reset-defaults").addEventListener("click", async () => {
 });
 $("back").addEventListener("click", () => { if (!busy) navigate("installer"); });
 document.addEventListener("keydown", (event) => {
+  // Let a customizable select's own popup consume Escape before page navigation.
+  if (event.key === "Escape" && event.target.closest?.("select")) return;
   if (event.key === "Escape" && $("app").dataset.page === "settings" && !busy) navigate("installer");
 });
 $("settings-form").addEventListener("submit", event => event.preventDefault());

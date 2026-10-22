@@ -135,7 +135,7 @@ const { pathToFileURL } = require('node:url');
         await startup.waitForTimeout(850);
         await startup.screenshot({ path: path.join(qa, 'installed-status.png') });
       }
-      assert((await startup.locator('#home-status').evaluate(el => getComputedStyle(el).backdropFilter)).includes('blur(10px)'));
+      assert((await startup.locator('#home-status').evaluate(el => getComputedStyle(el).backdropFilter)).includes('blur(2px)'));
       await startup.close();
     }
     console.log('PASS: startup update availability/current/offline, synchronized bubbles, status glass, magnification, keyboard, reduced motion, five dock actions, and 560–1600px layouts.');

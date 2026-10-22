@@ -1,6 +1,6 @@
 {
   "name": "hotori-ui-tests",
   "private": true,
-  "scripts": { "test:native": "node tests/native-smoke.cjs", "test:dock": "node tests/dock-smoke.cjs", "test:settings": "node tests/settings-tabs.cjs", "test:theme-update": "node tests/theme-update-notice.cjs" },
+  "scripts": { "test:native": "node tests/native-smoke.cjs", "test:dock": "node tests/dock-smoke.cjs", "test:settings": "node tests/settings-tabs.cjs", "test:theme-update": "node tests/theme-update-notice.cjs", "test:glass": "node tests/liquid-glass.cjs" },
   "devDependencies": { "playwright": "1.62.1" }
 }
