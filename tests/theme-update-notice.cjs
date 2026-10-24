@@ -57,6 +57,7 @@ const { pathToFileURL } = require('node:url');
         assert.equal(await page.locator('#theme-version-value').textContent(), 'v0.8.3');
         assert.equal(await page.evaluate(() => window.themeInstalls), 1);
         await page.locator('#uninstall').click();
+        await page.locator('#uninstall-confirm').click();
         await page.waitForFunction(() => !status.installed);
         assert.equal(await page.locator('#theme-version').isVisible(), false);
       }

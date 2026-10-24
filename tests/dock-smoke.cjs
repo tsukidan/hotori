@@ -83,6 +83,17 @@ const { pathToFileURL } = require('node:url');
     await page.locator('#back').click();
     await page.waitForTimeout(400);
     await page.locator('#uninstall').click();
+    assert.equal(await page.locator('#uninstall-dialog').isVisible(), true);
+    assert.equal(await page.locator('#uninstall-cancel').evaluate(el => el === document.activeElement), true);
+    assert.equal(await page.locator('#install').isDisabled(), true);
+    await page.locator('#uninstall-cancel').click();
+    assert.equal(await page.locator('#install').isDisabled(), true);
+    await page.locator('#uninstall').click();
+    await page.keyboard.press('Escape');
+    assert.equal(await page.locator('#uninstall-dialog').isVisible(), false);
+    assert.equal(await page.locator('#install').isDisabled(), true);
+    await page.locator('#uninstall').click();
+    await page.locator('#uninstall-confirm').click();
     await page.waitForFunction(() => !document.querySelector('#install').disabled);
     for (const [width, height] of [[1600, 900], [1120, 780], [800, 600], [560, 560]]) {
       await page.locator('#install').evaluate(el => el.blur());

@@ -616,7 +616,16 @@ $("theme-update-notice").addEventListener("click", async () => {
   } catch (error) { message("home-status", `Could not update theme: ${error}`, true); }
   finally { busy = false; updatingTheme = false; await refresh(); updateButtons(); }
 });
-$("uninstall").addEventListener("click", () => operation("uninstall_theme", "Theme uninstalled."));
+$("uninstall").addEventListener("click", () => {
+  if (busy || !invoke || !status.installed) return;
+  $("uninstall-dialog").showModal();
+});
+$("uninstall-cancel").addEventListener("click", () => $("uninstall-dialog").close());
+$("uninstall-confirm").addEventListener("click", () => {
+  if (busy || !$("uninstall-dialog").open) return;
+  $("uninstall-dialog").close();
+  operation("uninstall_theme", "Theme uninstalled.");
+});
 $("folder").addEventListener("click", async () => {
   if (busy || !invoke) return;
   busy = true; updateButtons();

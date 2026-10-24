@@ -582,6 +582,14 @@ function sampleFrames(page, duration = 800) {
       await page.waitForTimeout(380);
     }
     await page.locator('#uninstall').click();
+    assert.equal(await page.locator('#uninstall-dialog').isVisible(), true);
+    assert(await fs.readFile(destination, 'utf8'), 'Opening the prompt must not uninstall');
+    await page.locator('#uninstall-cancel').click();
+    assert(await fs.readFile(destination, 'utf8'), 'Cancel must keep the theme installed');
+    await page.locator('#uninstall').click();
+    await page.waitForFunction(() => document.getElementById('uninstall-dialog').classList.contains('shader-glass'));
+    await page.screenshot({ path: path.join(qa, 'hotori-uninstall-confirm.png') });
+    await page.locator('#uninstall-confirm').click();
     assert.deepEqual(materialWarnings, [], 'The reference renderer must remain active through customization and resizing');
     assert.equal(await page.locator('html').getAttribute('data-glass-renderer'), 'reference-liquidglass');
     await page.waitForFunction(() => document.getElementById('customize').disabled && !document.getElementById('install').disabled);

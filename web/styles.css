@@ -1,5 +1,18 @@
+/* Inter 4.1, SIL OFL 1.1. Bundled locally for consistent Windows typography. */
+@font-face {
+  font-family: "Hotori Inter"; src: url("assets/fonts/InterVariable.woff2") format("woff2");
+  font-style: normal; font-weight: 100 900; font-display: swap;
+}
+@font-face {
+  font-family: "Hotori Inter"; src: url("assets/fonts/InterVariable-Italic.woff2") format("woff2");
+  font-style: italic; font-weight: 100 900; font-display: swap;
+}
 :root {
-  font-family: "Segoe UI", system-ui, sans-serif;
+  font-family: "Hotori Inter", system-ui, sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-kerning: normal;
+  letter-spacing: -.011em;
   color: #fff1ec;
   background: #160b10;
   font-synthesis: none;
@@ -21,7 +34,7 @@ button { -webkit-user-select: none; user-select: none; }
   background-size: cover; background-position: left center; background-repeat: no-repeat;
   pointer-events: none;
 }
-#app { position: relative; width: 100%; height: 100%; overflow: hidden; }
+#app { position: relative; width: 100%; height: 100%; overflow: clip; }
 .page {
   position: absolute; inset: 0; display: grid; place-items: center;
   padding: clamp(16px, 3.5vh, 36px) clamp(16px, 4vw, 48px);
@@ -51,7 +64,7 @@ h2 { margin: 0; font-size: clamp(25px, 3vw, 31px); font-weight: 600; line-height
 .button {
   min-height: 50px; padding: 12px 18px; border-radius: 16px; border: 1px solid #ffe6dd40;
   color: #fff3ef; background: linear-gradient(135deg, #ffffff15, #00000024);
-  box-shadow: inset 0 1px 0 #ffffff16; cursor: pointer; font-size: 14px; font-weight: 600;
+  box-shadow: inset 0 1px 0 #ffffff16; cursor: pointer; font-size: 14px; font-weight: 500;
   transition: background-color 120ms, border-color 120ms;
 }
 .button:hover:not(:disabled) { background-color: #ffffff18; border-color: #ffe6dd88; }
@@ -109,7 +122,7 @@ input[type="range"] { width: 100%; min-width: 0; accent-color: #efb3a6; }
 .description { max-width: 650px; margin-bottom: 22px; }
 .action-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
 .action-group { padding: 20px; background: #160b123d; border: 1px solid #ffe8dd28; border-radius: 18px; }
-.action-group h3 { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 0; font-size: 21px; font-weight: 750; }
+.action-group h3 { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 0; font-size: 21px; font-weight: 600; }
 .action-group h3 .icon { color: var(--accent); }
 .action-group p { color: var(--muted); font-size: 12px; margin: 9px 0 18px; }
 .actions { grid-template-columns: 1fr; padding-top: 0; border: 0; gap: 10px; }
@@ -119,21 +132,21 @@ summary { display: flex; align-items: center; justify-content: space-between; ga
 summary::-webkit-details-marker { display: none; }
 summary > .icon { color: var(--muted); transition: transform 160ms; }
 details[open] > summary > .icon { transform: rotate(180deg); }
-.section-heading { display: flex; align-items: center; gap: 13px; margin: 0; padding: 24px 0; font-size: 26px; font-weight: 800; color: #fff0e9; }
+.section-heading { display: flex; align-items: center; gap: 13px; margin: 0; padding: 24px 0; font-size: 26px; font-weight: 600; color: #fff0e9; }
 .section-heading .icon { width: 27px; height: 27px; color: var(--accent); }
 .section-content { padding-bottom: 18px; }
 .setting-label { display: flex; align-items: center; justify-content: center; gap: 8px; }
 .setting-label .icon { width: 17px; height: 17px; color: var(--accent); }
 .submenu { margin-top: 10px; border: 1px solid #ffe8dd25; border-radius: 14px; background: #13091124; }
 .submenu > summary { padding: 16px; }
-.submenu-heading { margin: 0; display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 700; color: #f3c4b5; }
+.submenu-heading { margin: 0; display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 600; color: #f3c4b5; }
 .submenu-content { padding: 0 14px 4px; }
 .color-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding-bottom: 14px; }
 .color-grid .setting-row { margin-bottom: 0; grid-template-columns: 1fr; gap: 14px; padding: 18px 14px; }
 .color-grid .setting-hint { font-size: 11px; }
 .color-grid .color-input { gap: 16px; }
 .color-input input[type="color"] { width: 62px; height: 38px; }
-.range-output { text-align: center; color: #fff1ec; font-weight: 650; font-size: 17px; font-variant-numeric: tabular-nums; }
+.range-output { text-align: center; color: #fff1ec; font-weight: 600; font-size: 17px; font-variant-numeric: tabular-nums; }
 .range-endpoints { display: flex; justify-content: space-between; gap: 12px; font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
 .setting-control:has(input[type="range"]) { gap: 8px; }
 @media (max-width: 720px) {
@@ -150,7 +163,7 @@ details[open] > summary > .icon { transform: rotate(180deg); }
 .settings-section .section-heading { padding-left: 32px; padding-right: 32px; justify-content: center; }
 
 .tagline, .installer-card > h2 { font-style: italic; }
-.vencord-notice { margin: 20px 0 0; color: #cf8589; -webkit-text-stroke: .5px #fff; paint-order: stroke fill; font-size: 19px; font-weight: 650; line-height: 1.4; text-align: center; text-shadow: 0 2px 12px #000; }
+.vencord-notice { margin: 20px 0 0; color: #cf8589; -webkit-text-stroke: .5px #fff; paint-order: stroke fill; font-size: 19px; font-weight: 600; line-height: 1.4; text-align: center; text-shadow: 0 2px 12px #000; }
 .version { position: fixed; right: 16px; bottom: 12px; color: #fff; opacity: .6; font-size: 12px; pointer-events: none; z-index: 5; }
 .page { padding-bottom: 40px; }
 
@@ -164,7 +177,7 @@ details[open] > summary > .icon { transform: rotate(180deg); }
 }
 .titlebar-drag { display: flex; align-items: center; gap: 10px; flex: 1; height: 100%; min-width: 0; }
 .titlebar-drag > * { pointer-events: none; }
-.titlebar-drag span { font-size: 13px; font-weight: 650; letter-spacing: .4px; color: #fff1eccc; }
+.titlebar-drag span { font-size: 13px; font-weight: 500; letter-spacing: -.01em; color: #fff1eccc; }
 .window-controls {
   display: flex; gap: 2px; padding: 3px; border: 1px solid #ffffff1a; border-radius: 16px;
   background: var(--app-acrylic-grain) repeat #0c10183d;
@@ -225,6 +238,19 @@ details[open] > summary > .icon { transform: rotate(180deg); }
 .vencord-dialog h2 { font-size: 25px; }
 .vencord-dialog p { margin: 18px 0 24px; color: var(--muted); line-height: 1.6; }
 .vencord-dialog .button { min-width: 120px; }
+#uninstall-dialog { scrollbar-width: none; overflow-x: hidden; }
+#uninstall-dialog::-webkit-scrollbar { display: none; width: 0; height: 0; }
+#uninstall-dialog[open] { animation: hotori-prompt-in 260ms cubic-bezier(.16, 1, .3, 1) both; }
+#uninstall-dialog[open]::backdrop { animation: hotori-prompt-backdrop-in 220ms ease-out both; }
+@keyframes hotori-prompt-in {
+  from { opacity: 0; transform: translateY(10px) scale(.96); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes hotori-prompt-backdrop-in { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  #uninstall-dialog[open], #uninstall-dialog[open]::backdrop { animation: none; }
+}
+.button.destructive { color: #ffd1d1; }
 
 .wallpaper-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
 .wallpaper-actions .button { min-height: 38px; padding: 8px 10px; font-size: 12px; border-radius: 12px; }
@@ -261,16 +287,22 @@ details[open] > summary > .icon { transform: rotate(180deg); }
 .settings-sidebar { display: flex; flex-direction: column; padding: 24px 16px 18px; min-height: 0; }
 .sidebar-brand { display: flex; align-items: center; gap: 12px; padding: 0 8px 24px; border-bottom: 1px solid #ffffff16; }
 .sidebar-brand > .icon { width: 30px; height: 30px; stroke-width: 1.5; }
-.sidebar-brand strong { display: block; font-size: 19px; font-weight: 650; }
+.sidebar-brand strong { display: block; font-size: 19px; font-weight: 600; }
 .sidebar-brand div > span { display: block; font-size: 12px; color: var(--muted); margin-top: 3px; }
-.sidebar-label { margin: 24px 8px 12px; font-size: 10px; letter-spacing: 1.6px; text-transform: uppercase; color: var(--muted); }
+.sidebar-label { margin: 24px 8px 12px; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
 .settings-categories { min-height: 0; overflow-y: auto; padding: 4px; margin: -4px; display: grid; gap: 9px; }
+.settings-categories, .settings-scroll {
+  scrollbar-width: none; scrollbar-gutter: auto; overflow-x: hidden;
+}
+.settings-categories::-webkit-scrollbar, .settings-scroll::-webkit-scrollbar,
+.settings-page select::picker(select)::-webkit-scrollbar { display: none; width: 0; height: 0; }
+.settings-page select::picker(select) { scrollbar-width: none; }
 .category-tab {
   display: flex; align-items: center; gap: 11px; min-height: 48px; width: 100%; padding: 12px;
   border: 1px solid #ffffff1a; border-radius: 15px; color: #fff3ef;
   background: linear-gradient(135deg, #ffffff0a, #0c101814);
   box-shadow: inset 0 1px 0 #ffffff14; cursor: pointer; text-align: left;
-  font-size: 13px; font-weight: 550; transition: background-color 150ms, border-color 150ms;
+  font-size: 13px; font-weight: 500; transition: background-color 150ms, border-color 150ms;
 }
 .category-tab .icon { width: 19px; height: 19px; stroke-width: 1.7; }
 .category-tab:hover { background-color: #ffffff0c; border-color: #ffffff38; }
@@ -452,7 +484,7 @@ details[open] > summary > .icon { transform: rotate(180deg); }
 .dock-heading {
   position: absolute; top: 4px; right: 10px; margin: 0;
   font-size: 9px; line-height: 14px; font-weight: 600;
-  letter-spacing: 1.4px; text-transform: uppercase; white-space: nowrap;
+  letter-spacing: 1px; text-transform: uppercase; white-space: nowrap;
   color: #ffffff99; opacity: 0; transform: translateX(8px);
   transition: opacity 150ms ease, transform 300ms ease;
 }
@@ -482,7 +514,7 @@ details[open] > summary > .icon { transform: rotate(180deg); }
 }
 .dock-button .button-label {
   position: absolute; top: 50%; right: 76px; transform: translate(10px, -50%);
-  white-space: nowrap; font-size: 13px; font-weight: 550; opacity: 0;
+  white-space: nowrap; font-size: 13px; font-weight: 500; opacity: 0;
   transition: opacity 140ms ease, transform 300ms var(--ease);
 }
 .command-dock:is(:hover, :focus-within) .button-label { opacity: 1; transform: translate(0, -50%); transition-delay: 90ms; }
@@ -519,3 +551,8 @@ details[open] > summary > .icon { transform: rotate(180deg); }
   .command-dock, .dock-heading, .dock-symbol, .dock-button .button-label, .dock-button::before { transition: none; }
   .command-dock .dock-symbol, .command-dock:is(:hover, :focus-within) .dock-symbol { transform: none; }
 }
+
+/* Optical display spacing for titles, relaxed spacing for small captions. */
+h2, .section-heading, .sidebar-brand strong { letter-spacing: -.025em; }
+.submenu-heading, .setting-label, .range-output { letter-spacing: -.015em; }
+.setting-hint, .range-endpoints, .settings-footer .status, .version { letter-spacing: 0; }
