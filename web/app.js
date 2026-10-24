@@ -757,7 +757,32 @@ async function initialize() {
   setInterval(() => { if (!document.hidden) refresh(); }, 2000);
   window.addEventListener("focus", refresh);
 }
+// Re-evaluate the item under a stationary pointer when the category list scrolls.
+// Delegation also covers tabs replaced after a save or reset.
+function initializeCategoryMotion() {
+  const list = $("settings-categories");
+  let pointer = null, frame = 0;
+  function update() {
+    frame = 0;
+    const target = pointer && document.elementFromPoint(pointer.x, pointer.y)?.closest('.category-tab');
+    for (const tab of list.querySelectorAll('.category-tab')) {
+      tab.classList.toggle('category-near-pointer', target === tab);
+    }
+  }
+  const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
+  list.addEventListener('pointermove', event => {
+    if (event.pointerType === 'touch') return;
+    pointer = { x: event.clientX, y: event.clientY }; schedule();
+  }, { passive: true });
+  const clear = () => { pointer = null; schedule(); };
+  list.addEventListener('pointerleave', clear);
+  list.addEventListener('pointercancel', clear);
+  list.addEventListener('scroll', schedule, { passive: true });
+  window.addEventListener('blur', clear);
+}
+
 document.querySelectorAll("[data-icon]").forEach(node => node.replaceWith(icon(node.dataset.icon)));
+initializeCategoryMotion();
 initializeDock();
 initializeTitlebar();
 initialize();

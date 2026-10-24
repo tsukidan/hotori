@@ -114,7 +114,26 @@ input.shader-glass, select.shader-glass, textarea.shader-glass {
   background: var(--shader-surface-image) center / 100% 100% no-repeat !important;
 }
 .shader-glass.button:hover:not(:disabled), .shader-glass.category-tab:hover { border-color: transparent; }
-.shader-glass.category-tab[aria-selected="true"] { border-color: #f5f6f740; box-shadow: none; }
+.settings-categories { padding: 12px; margin: -12px; }
+.settings-categories .category-tab {
+  transform-origin: center;
+  transition: transform 220ms cubic-bezier(.2,.8,.2,1), background-color 220ms,
+    border-color 280ms, box-shadow 280ms;
+}
+.settings-categories .category-tab.category-near-pointer,
+.settings-categories .category-tab:focus-visible { transform: scale(1.025); }
+.settings-categories .category-tab[aria-selected="true"],
+.settings-categories .category-tab:focus-visible {
+  border-color: color-mix(in srgb, var(--accent) 85%, transparent);
+  box-shadow: inset 0 0 10px color-mix(in srgb, var(--accent) 18%, transparent),
+    0 0 6px 1px color-mix(in srgb, var(--accent) 55%, transparent),
+    0 0 16px 2px color-mix(in srgb, var(--accent) 36%, transparent);
+}
+@media (prefers-reduced-motion: reduce) {
+  .settings-categories .category-tab { transition: none; }
+  .settings-categories .category-tab.category-near-pointer,
+  .settings-categories .category-tab:focus-visible { transform: none; }
+}
 @supports (appearance: base-select) {
   select.shader-glass::picker(select) {
     background: var(--shader-picker-image, #171a1e66) center / 100% 100% no-repeat;
