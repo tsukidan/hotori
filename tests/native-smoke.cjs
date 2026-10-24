@@ -6,6 +6,7 @@ const fs = require('node:fs/promises');
 const path = require('node:path');
 const assert = require('node:assert/strict');
 const net = require('node:net');
+const http = require('node:http');
 
 const root = path.resolve(__dirname, '..');
 const qa = path.join(root, 'target', 'qa');
@@ -176,7 +177,7 @@ function sampleFrames(page, duration = 800) {
       WEBVIEW2_USER_DATA_FOLDER: path.join(appdata, 'webview-profile'),
       WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS: `--remote-debugging-port=${port} --remote-debugging-address=127.0.0.1` }
   });
-  let browser;
+  let browser, wallpaperServer;
   try {
     await waitForDebug(port, child);
     browser = await chromium.connectOverCDP(`http://127.0.0.1:${port}`);
@@ -215,6 +216,8 @@ function sampleFrames(page, duration = 800) {
       await page.waitForFunction(() => document.querySelector('#app').dataset.page === 'installer');
     };
     await page.waitForFunction(() => !document.getElementById('install').disabled);
+    await page.waitForFunction(() => document.querySelector('#installer-title.shader-glass > canvas')?.width > 0);
+    assert.equal(await page.getByRole('heading', { name: 'Hotori', exact: true }).count(), 1);
     const geometry = () => page.evaluate(() => {
       const glass = document.querySelector(document.querySelector('#app').dataset.page === 'settings' ? '.settings-workspace' : '.home-content').getBoundingClientRect();
       const bg = document.querySelector('.wallpaper');
@@ -249,7 +252,10 @@ function sampleFrames(page, duration = 800) {
     assert.equal(await page.locator('.window-button').count(), 3);
     assert.equal(await page.locator('.titlebar img').count(), 0);
     assert.equal(await page.locator('.window-controls').evaluate(el => getComputedStyle(el).borderRadius), '22px');
-    assert.equal(await page.locator('.vencord-notice').evaluate(el => getComputedStyle(el).color), 'rgb(207, 133, 137)');
+    assert(await page.locator('.vencord-notice').evaluate(el => {
+      const accent = document.documentElement.style.getPropertyValue('--accent').match(/\d+/g);
+      return accent && getComputedStyle(el).color === `rgb(${accent.join(', ')})`;
+    }), 'The notice uses the wallpaper accent instead of fixed pink');
     assert.equal(await page.locator('.vencord-notice').evaluate(el => getComputedStyle(el).webkitTextStrokeColor), 'rgb(255, 255, 255)');
     assert.equal(await page.locator('.installer-card').evaluate(el => getComputedStyle(el).animationIterationCount), '1');
     const hoverSession = await context.newCDPSession(page);
@@ -291,6 +297,8 @@ function sampleFrames(page, duration = 800) {
     assert.equal(await page.evaluate(() => window.__TAURI__.window.getCurrentWindow().isMaximized()), false);
     await page.locator('.titlebar-drag').dblclick();
     await page.waitForFunction(() => document.getElementById('window-maximize').getAttribute('aria-label') === 'Restore');
+    // Let the native maximize animation settle before a separate double-click.
+    await page.waitForTimeout(600);
     await page.locator('.titlebar-drag').dblclick();
     await page.waitForFunction(() => document.getElementById('window-maximize').getAttribute('aria-label') === 'Maximize');
     await page.locator('#window-maximize').hover();
@@ -372,32 +380,69 @@ function sampleFrames(page, duration = 800) {
     await fs.unlink(originalImage);
     await saveAndBack();
     const localTheme = await fs.readFile(destination, 'utf8');
+    await page.waitForFunction(() => document.querySelector('.wallpaper').style.getPropertyValue('--app-wallpaper').startsWith('url("blob:'));
     assert(/--main-bg: url\('vencord:\/\/\/themes\/hotori-assets\/[a-f0-9]{16}\.png'\);/.test(localTheme));
     assert(/--settings-bg: url\('vencord:\/\/\/themes\/hotori-assets\/[a-f0-9]{16}\.png'\);/.test(localTheme));
     const managedAssets = await fs.readdir(path.join(folder, 'hotori-assets'));
     assert.equal(managedAssets.length, 1, 'Identical images should share one managed copy');
     assert.deepEqual(await fs.readFile(path.join(folder, 'hotori-assets', managedAssets[0])), imageBytes);
+    await page.locator('#customize').click();
+    await showCategory('Wallpapers');
+    const largeLocalImage = require('./fixtures/large-wallpaper.cjs')(imageBytes);
+    for (const variant of [
+      { name: 'large-first.png', mimeType: 'image/png', buffer: largeLocalImage },
+      { name: 'another.jpeg', mimeType: 'image/jpeg', buffer: await fs.readFile(path.join(root, 'web/assets/background.jpeg')) },
+      { name: 'large-again.png', mimeType: 'image/png', buffer: largeLocalImage },
+    ]) {
+      const previous = await page.locator('.wallpaper').evaluate(el => el.style.getPropertyValue('--app-wallpaper'));
+      await page.locator('[data-name="--main-bg"] input[type="file"]').setInputFiles(variant);
+      await page.waitForFunction(() => !document.getElementById('save-category').disabled);
+      await saveCategory('Wallpapers');
+      await page.waitForFunction(previous => {
+        const value = document.querySelector('.wallpaper').style.getPropertyValue('--app-wallpaper');
+        return value.startsWith('url("blob:') && value !== previous && value.length < 200;
+      }, previous);
+      assert(await page.locator('.wallpaper').evaluate(async el => {
+        const image = new Image(); image.src = el.style.getPropertyValue('--app-wallpaper').slice(5, -2);
+        await image.decode(); return image.naturalWidth > 0;
+      }));
+    }
+    await page.locator('#back').click();
     await page.waitForTimeout(380);
     await page.locator('#customize').click();
     await page.waitForTimeout(380);
     for (const name of ['--main-bg', '--settings-bg']) await page.locator(`[data-name="${name}"] .wallpaper-preview`).waitFor({ state: 'visible' });
     const mainWallpaper = page.locator('[data-name="--main-bg"]');
-    await page.route('https://example.com/hotori-preview.png', route => route.fulfill({ contentType: 'image/png', body: imageBytes }));
+    const localAppBackground = await page.locator('.wallpaper').evaluate(el => el.style.getPropertyValue('--app-wallpaper'));
+    const remoteBytes = await fs.readFile(path.join(root, 'web/assets/background.jpeg'));
+    wallpaperServer = http.createServer((request, response) => {
+      response.setHeader('Content-Type', 'image/jpeg');
+      response.end(remoteBytes); // Deliberately no CORS header.
+    });
+    await new Promise(resolve => wallpaperServer.listen(0, '127.0.0.1', resolve));
+    const remoteWallpaper = `http://127.0.0.1:${wallpaperServer.address().port}/wallpaper.jpg`;
     await mainWallpaper.getByRole('button', { name: 'Use image link', exact: true }).click();
     assert((await mainWallpaper.locator('.wallpaper-notice').textContent()).includes('contacts that website'));
-    await page.getByLabel('Main Background', { exact: true }).fill('https://example.com/hotori-preview.png');
+    await page.getByLabel('Main Background', { exact: true }).fill(remoteWallpaper);
     await page.getByLabel('Main Background', { exact: true }).press('Tab');
     await mainWallpaper.locator('.wallpaper-preview').waitFor({ state: 'visible' });
     assert.equal(await page.locator('#app').evaluate(el => el.scrollTop), 0, 'Hidden file picker must not scroll the whole app');
     await mainWallpaper.scrollIntoViewIfNeeded();
     await page.screenshot({ path: path.join(qa, 'hotori-wallpapers.png') });
     await saveAndBack();
-    assert((await fs.readFile(destination, 'utf8')).includes("--main-bg: url('https://example.com/hotori-preview.png');"));
+    assert((await fs.readFile(destination, 'utf8')).includes(`--main-bg: url('${remoteWallpaper}');`));
+    await page.waitForFunction(previous => {
+      const value = document.querySelector('.wallpaper').style.getPropertyValue('--app-wallpaper');
+      return value.startsWith('url("blob:') && value !== previous;
+    }, localAppBackground);
+    assert.notEqual(await page.locator('.wallpaper').evaluate(el => el.style.getPropertyValue('--app-wallpaper')), localAppBackground);
+    assert.equal(await page.locator('html').getAttribute('data-glass-renderer'), 'reference-liquidglass');
     await page.waitForTimeout(380);
     await page.locator('#customize').click();
     await page.waitForTimeout(380);
     for (const name of ['--main-bg', '--settings-bg']) await page.locator(`[data-name="${name}"]`).getByRole('button', { name: 'Clear background', exact: true }).click();
     await saveAndBack();
+    await page.waitForFunction(() => !document.querySelector('.wallpaper').style.getPropertyValue('--app-wallpaper'));
     assert.equal(await fs.readFile(destination, 'utf8'), bundledTheme);
     // A separate fixture exercises customizations and preservation of user-authored CSS.
     await fs.writeFile(source, theme);
@@ -613,6 +658,7 @@ function sampleFrames(page, duration = 800) {
   } finally {
     if (browser) await browser.close();
     child.kill();
+    if (wallpaperServer) await new Promise(resolve => wallpaperServer.close(resolve));
     // Preserve the disposable profile and screenshots for diagnostics; no user theme is touched.
   }
 })().catch(error => { console.error(error); process.exitCode = 1; });

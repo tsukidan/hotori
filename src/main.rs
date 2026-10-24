@@ -27,6 +27,7 @@ struct InstallStatus {
     ready: bool,
     installed: bool,
     theme_version: Option<String>,
+    main_background: Option<String>,
 }
 
 #[tauri::command]
@@ -36,6 +37,7 @@ fn get_status(state: tauri::State<AppState>) -> InstallStatus {
         ready: folder.is_some_and(|p| p.is_dir()),
         installed: folder.is_some_and(|p| p.join(installer::DESTINATION).is_file()),
         theme_version: folder.and_then(|p| updates::installed_version(p)),
+        main_background: folder.and_then(|p| wallpapers::installed_background(p)),
     }
 }
 
@@ -212,6 +214,15 @@ async fn wallpaper_preview(
         .map_err(|e| e.to_string())
 }
 
+#[tauri::command]
+async fn app_wallpaper(state: tauri::State<'_, AppState>, uri: String) -> Result<String, String> {
+    let folder = state.folder()?.to_owned();
+    tauri::async_runtime::spawn_blocking(move || wallpapers::app_preview(&folder, &uri))
+        .await
+        .map_err(|e| e.to_string())?
+        .map_err(|e| e.to_string())
+}
+
 fn main() {
     if app_updates::helper_entry() {
         return;
@@ -240,7 +251,8 @@ fn main() {
             install_app_update,
             open_theme_folder,
             import_wallpaper,
-            wallpaper_preview
+            wallpaper_preview,
+            app_wallpaper
         ])
         .run(tauri::generate_context!())
         .expect("Could not start Hotori");

@@ -6,19 +6,20 @@
   <meta name="color-scheme" content="dark">
   <title>Hotori</title>
   <link rel="preload" href="assets/fonts/InterVariable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/Nunito-Variable.ttf" as="font" type="font/ttf" crossorigin>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="liquid-glass.css">
+  <script src="wallpaper-accent.js" defer></script>
   <script src="app.js" defer></script>
   <script src="liquid-glass.js" defer></script>
   <script src="vendor/liquidglass/liquidglass.js" defer></script>
+  <script src="glass-wordmark.js" defer></script>
   <script src="glass-shader.js" defer></script>
 </head>
 <body>
   <div class="wallpaper" aria-hidden="true"></div>
   <header class="titlebar" aria-label="Hotori window">
-    <div class="titlebar-drag" data-tauri-drag-region>
-      <span>Hotori</span>
-    </div>
+    <div class="titlebar-drag" data-tauri-drag-region></div>
     <div class="window-controls" aria-label="Window controls">
       <button id="window-minimize" class="window-button" type="button" aria-label="Minimize" title="Minimize"><span data-icon="minimize"></span></button>
       <button id="window-maximize" class="window-button" type="button" aria-label="Maximize" title="Maximize"><span data-icon="maximize"></span></button>
@@ -29,7 +30,7 @@
     <section id="installer-page" class="page installer-page" aria-labelledby="installer-title">
       <div class="home-content">
         <div class="home-brand">
-          <h1 id="installer-title"><img class="logo" src="assets/logo.png" alt="Hotori"></h1>
+          <h1 id="installer-title" class="glass-wordmark" aria-label="Hotori"><span class="wordmark-fallback" aria-hidden="true">Hotori</span></h1>
           <p class="tagline">If only the snow could fall slower...</p>
         </div>
         <div class="installer-card">
@@ -111,6 +112,6 @@
       <button id="app-update-install" class="button primary" type="button">Download &amp; restart</button>
     </div>
   </dialog>
-  <span class="version" aria-label="Version 1.6.5">v1.6.5</span>
+  <span class="version" aria-label="Version 1.6.16">v1.6.16</span>
 </body>
 </html>

@@ -16,3 +16,5 @@ The adapter uses the original HtmlCapture font handling, html-to-image capture, 
 Remote wallpaper previews without CORS remain visible in the native UI but are excluded from the sampled scene. A one-pixel origin-clean probe isolates them before composition so one external preview cannot disable the renderer. Local and same-origin content is sampled normally. This respects the browser's canvas access rules; it does not proxy remote requests or relax external network permissions.
 
 Original deployed bundle SHA-256: 9630e5af0e9c27c3a88a2c4a7096a4f5e0f12e92afc6333f1552835dcc399bed
+
+The separate glyph shader in web/glass-wordmark.js adapts the upstream MIT-licensed optical equations (biconvex rays, chromatic separation, Fresnel, multi-light Blinn-Phong, depth brightness and inner-rim lighting) to a cached text distance field. It uses the same renderer's scene and blur textures. Letter geometry, a 12 CSS-pixel ray bound, and glyph-scale bevel/lighting settings are Hotori adaptations; this does not modify the vendored panel shader or claim equivalence to Apple's renderer.

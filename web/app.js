@@ -15,6 +15,8 @@ let navigationTimer;
 let savedValues = new Map();
 let categoryGroups = new Map();
 let selectedCategory = "Glass Appearance";
+let appBackgroundSelection, appBackgroundRequest = 0, appBackgroundLoaded = false, appBackgroundAttempt = 0;
+let appBackgroundObjectURL;
 const categoryDescriptions = {
   "Glass Appearance": "Choose your glass style, then fine-tune its blur, intensity, and tint.",
   "Wallpapers": "Set the scene with your own backgrounds and adjust their dimming.",
@@ -61,6 +63,7 @@ async function refresh() {
   if (!invoke || busy) return;
   try {
     status = await invoke("get_status");
+    syncAppBackground(status.installed ? status.main_background : "");
     renderThemeVersion();
     document.querySelector(".vencord-notice").hidden = status.ready;
     updateButtons();
@@ -68,6 +71,46 @@ async function refresh() {
       checkForThemeUpdate();
     }
   } catch (error) { message("home-status", String(error), true); }
+}
+
+async function syncAppBackground(value) {
+  const uri = value || "";
+  if (uri === appBackgroundSelection && (appBackgroundLoaded || Date.now() - appBackgroundAttempt < 300000)) return;
+  appBackgroundSelection = uri; appBackgroundAttempt = Date.now(); appBackgroundLoaded = false;
+  const request = ++appBackgroundRequest;
+  const wallpaper = document.querySelector('.wallpaper');
+  const clear = () => {
+    wallpaper.style.removeProperty('--app-wallpaper');
+    if (appBackgroundObjectURL) URL.revokeObjectURL(appBackgroundObjectURL);
+    appBackgroundObjectURL = undefined;
+    window.HotoriAccent?.useDefault();
+  };
+  if (!uri) { clear(); appBackgroundLoaded = true; return; }
+  let candidate;
+  try {
+    const source = await invoke("app_wallpaper", { uri });
+    if (request !== appBackgroundRequest) return;
+    if (!/^data:image\/(?:png|jpeg|gif|webp);base64,[A-Za-z0-9+/=]+$/.test(source)) throw new Error("Invalid wallpaper image.");
+    // Large data URLs exceed Chromium's CSS custom-property value limit.
+    // Keep the pixels in a Blob and put only its short object URL in CSS.
+    const separator = source.indexOf(',');
+    const decoded = atob(source.slice(separator + 1));
+    const bytes = new Uint8Array(decoded.length);
+    for (let index = 0; index < decoded.length; index++) bytes[index] = decoded.charCodeAt(index);
+    candidate = URL.createObjectURL(new Blob([bytes], { type: source.slice(5, source.indexOf(';')) }));
+    const image = new Image(); image.src = candidate; await image.decode();
+    if (request !== appBackgroundRequest) return;
+    wallpaper.style.setProperty('--app-wallpaper', `url("${candidate}")`);
+    window.HotoriAccent?.fromImage(image);
+    const previous = appBackgroundObjectURL;
+    appBackgroundObjectURL = candidate; candidate = undefined;
+    if (previous) URL.revokeObjectURL(previous);
+    appBackgroundLoaded = true;
+  } catch {
+    if (request === appBackgroundRequest) clear();
+  } finally {
+    if (candidate) URL.revokeObjectURL(candidate);
+  }
 }
 
 function renderThemeVersion() {
@@ -280,7 +323,7 @@ async function saveCategory(category) {
     group.saved = true;
     message("settings-status", `${category} saved. Other unsaved changes stay in the editor.`);
   } catch (error) { message("settings-status", String(error), true); }
-  finally { busy = false; group.saving = false; updateButtons(); }
+  finally { busy = false; group.saving = false; await refresh(); updateButtons(); }
 }
 
 function wallpaperControl(field, control) {
@@ -662,7 +705,7 @@ $("reset-defaults").addEventListener("click", async () => {
     $("settings-form").scrollTop = scroll;
     message("settings-status", "All customization options reset and saved to defaults.");
   } catch (error) { message("settings-status", String(error), true); }
-  finally { busy = false; updateButtons(); }
+  finally { busy = false; await refresh(); updateButtons(); }
 });
 $("back").addEventListener("click", () => { if (!busy) navigate("installer"); });
 document.addEventListener("keydown", (event) => {

@@ -1,15 +1,16 @@
 "use strict";
 
 // Hotori's hierarchy adapter for the pinned LiquidGlass 1.0.3 renderer.
-// The vendor owns every optical equation, blur pass, and material shadow.
+// The vendor owns panel optics and blur; glass-wordmark.js adds glyph optics.
 (() => {
   const vendor = window.HotoriLiquidGlass;
   if (!vendor) return;
-  const selector = '.glass, .dock-surface, .dock-symbol, .window-controls, .window-button, #home-status, .theme-version, .button, .category-tab, .submenu, .setting-row, .input, select';
+  const selector = '.glass, .glass-wordmark, .dock-surface, .dock-symbol, .window-controls, .window-button, #home-status, .theme-version, .button, .category-tab, .submenu, .setting-row, .input, select';
   const excluded = '.glass-render-layer, .glass-optics-definitions, [data-glass-exclude], script, style, link, iframe';
   const reduced = matchMedia('(prefers-reduced-transparency: reduce)');
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   const layers = new Map(), captures = new Map();
+  const isAcrylic = element => !!element.closest('#settings-page') && !element.matches('.settings-card, .settings-sidebar');
   const mediaAccess = new WeakMap();
   const mediaProbe = document.createElement('canvas'); mediaProbe.width = mediaProbe.height = 1;
   const scene = document.createElement('canvas'), sceneContext = scene.getContext('2d');
@@ -19,6 +20,7 @@
   let renderer, frame = 0, failed = false, image, imageURL = '', lastSize = '', dpr = 1;
   let styles, captureGeneration = 0;
   try { renderer = new vendor.GlassRenderer(); } catch { return; }
+  const wordmark = window.HotoriGlassWordmark ? new window.HotoriGlassWordmark(renderer) : null;
   renderer.canvas.dataset.glassExclude = '';
   const styleOf = element => {
     if (!styles.has(element)) styles.set(element, getComputedStyle(element));
@@ -35,6 +37,7 @@
   renderer.canvas.addEventListener('webglcontextlost', event => { event.preventDefault(); fallback(); });
   renderer.canvas.addEventListener('webglcontextrestored', () => { failed = false; lastSize = ''; schedule(); });
   fonts.prefetchFontEmbedCSS().then(schedule).catch(() => {});
+  document.fonts.ready.then(() => { wordmark?.invalidate(); schedule(); });
 
   // These are the live website's presets, with Hotori's existing control sizes.
   function material(element, box) {
@@ -44,6 +47,12 @@
     const config = { ...vendor.DEFAULTS, blurAmount: dock ? .5 : .25 };
     if (main) Object.assign(config, { blurAmount: .3, refraction: 1.2, chromAberration: .2, zRadius: 60, brightness: -.2 });
     if (button) Object.assign(config, { blurAmount: .3, brightness: -.1 });
+    if (isAcrylic(element)) {
+      Object.assign(config, {
+        blurAmount: 0,
+        refraction: 0, chromAberration: 0, specular: 0, fresnel: 0, edgeHighlight: 0, brightness: -.06,
+      });
+    }
     const scale = Math.min(box.width / (element.offsetWidth || box.width), box.height / (element.offsetHeight || box.height));
     config.cornerRadius = Math.min(parseFloat(styleOf(element).borderTopLeftRadius) || 0, (element.offsetWidth || box.width) / 2, (element.offsetHeight || box.height) / 2) * scale;
     config.zRadius *= scale;
@@ -92,7 +101,7 @@
     const box = wallpaper.getBoundingClientRect();
     const cover = Math.max(box.width / image.naturalWidth, box.height / image.naturalHeight);
     const width = image.naturalWidth * cover, height = image.naturalHeight * cover;
-    sceneContext.fillStyle = '#160b10'; sceneContext.fillRect(0, 0, scene.width, scene.height);
+    sceneContext.fillStyle = styleOf(document.documentElement).backgroundColor; sceneContext.fillRect(0, 0, scene.width, scene.height);
     sceneContext.drawImage(image, box.left * dpr, (box.top + (box.height - height) / 2) * dpr, width * dpr, height * dpr);
     const colors = style.backgroundImage.split('url(')[0].match(/rgba?\([^)]+\)/g);
     if (colors?.length >= 2) {
@@ -117,11 +126,17 @@
   function paintGlass(element, box) {
     const layer = layerFor(element), width = Math.round((box.width + pad * 2) * dpr), height = Math.round((box.height + pad * 2) * dpr);
     if (!element.classList.contains('shader-glass')) element.classList.add('shader-glass');
-    renderer.uploadAndBlur(scene, Math.round((box.left - pad) * dpr), Math.round((box.top - pad) * dpr), width, height, material(element, box).blurAmount);
-    renderer.clear(); renderer.renderGlassPanel(material(element, box), box.width, box.height, dpr);
+    const isWordmark = element.matches('.glass-wordmark');
+    const config = material(element, box);
     if (layer.canvas.width !== width || layer.canvas.height !== height) { layer.canvas.width = width; layer.canvas.height = height; }
     layer.context.clearRect(0, 0, width, height);
-    layer.context.drawImage(renderer.canvas, 0, 0, width, height, 0, 0, width, height);
+    if (isAcrylic(element)) paintAcrylic(layer.context, box, config.cornerRadius);
+    else {
+      renderer.uploadAndBlur(scene, Math.round((box.left - pad) * dpr), Math.round((box.top - pad) * dpr), width, height, isWordmark ? .25 : config.blurAmount);
+      if (isWordmark && wordmark) wordmark.render(element, width, height, dpr, pad * dpr);
+      else { renderer.clear(); renderer.renderGlassPanel(config, box.width, box.height, dpr); }
+      layer.context.drawImage(renderer.canvas, 0, 0, width, height, 0, 0, width, height);
+    }
     if (layer.image) {
       // Replaced controls cannot host a canvas; use its exact interior as paint.
       const interior = document.createElement('canvas'); interior.width = Math.round(box.width * dpr); interior.height = Math.round(box.height * dpr);
@@ -134,6 +149,28 @@
       if (position !== layer.position) { layer.canvas.style.cssText = position; layer.position = position; }
     }
     withClip(element, () => sceneContext.drawImage(layer.canvas, (box.left - pad) * dpr, (box.top - pad) * dpr, width, height));
+  }
+  function paintAcrylic(context, box, radius) {
+    const padding = pad * dpr, blur = 24 * dpr;
+    const left = (box.left - pad) * dpr, top = (box.top - pad) * dpr;
+    // Capture a three-sigma margin so the fixed 24 CSS-pixel blur samples
+    // beyond the card boundary rather than darkening its edges.
+    const x = Math.max(0, Math.floor(left - blur * 3)), y = Math.max(0, Math.floor(top - blur * 3));
+    const width = Math.min(scene.width - x, Math.ceil(context.canvas.width + blur * 6));
+    const height = Math.min(scene.height - y, Math.ceil(context.canvas.height + blur * 6));
+    context.save();
+    context.filter = `blur(${blur}px)`;
+    context.drawImage(scene, x, y, width, height, x - left, y - top, width, height);
+    context.filter = 'none';
+    context.globalCompositeOperation = 'destination-in';
+    context.beginPath(); context.roundRect(padding, padding, box.width * dpr, box.height * dpr, radius * dpr);
+    context.fillStyle = '#fff'; context.fill();
+    context.globalCompositeOperation = 'source-atop';
+    context.fillStyle = 'rgba(16, 18, 22, .20)'; context.fillRect(0, 0, context.canvas.width, context.canvas.height);
+    context.globalCompositeOperation = 'destination-over';
+    context.shadowColor = 'rgba(0, 0, 0, .24)'; context.shadowBlur = 10 * dpr; context.shadowOffsetY = 2 * dpr;
+    context.fillStyle = 'rgba(0, 0, 0, .10)'; context.fill();
+    context.restore();
   }
   function ownsPaint(element) {
     const style = styleOf(element);
@@ -200,6 +237,7 @@
     if (box.width < 1 || box.height < 1 || box.bottom < -pad || box.top > innerHeight + pad || box.right < -pad || box.left > innerWidth + pad) return;
     const glass = element.matches(selector);
     if (glass) paintGlass(element, box);
+    if (glass && element.matches('.glass-wordmark')) return;
     const branch = !!element.querySelector(selector);
     if (!branch) { if (element.childNodes.length || element.matches('input, select, textarea, img')) paintContent(element, false, box); return; }
     if (ownsPaint(element)) paintContent(element, true, box);
@@ -217,12 +255,11 @@
       if (!options.length) continue;
       const left = Math.min(...options.map(box => box.left)) - 7, top = Math.min(...options.map(box => box.top)) - 7;
       const width = Math.max(...options.map(box => box.right)) - left + 7, height = Math.max(...options.map(box => box.bottom)) - top + 7;
-      const config = { ...vendor.DEFAULTS, blurAmount: .25, cornerRadius: 24 };
       const w = Math.round((width + pad * 2) * dpr), h = Math.round((height + pad * 2) * dpr);
-      renderer.uploadAndBlur(scene, Math.round((left - pad) * dpr), Math.round((top - pad) * dpr), w, h, config.blurAmount);
-      renderer.clear(); renderer.renderGlassPanel(config, width, height, dpr);
+      const acrylic = document.createElement('canvas'); acrylic.width = w; acrylic.height = h;
+      paintAcrylic(acrylic.getContext('2d'), { left, top, width, height }, Math.min(30, width / 2, height / 2));
       const interior = document.createElement('canvas'); interior.width = Math.round(width * dpr); interior.height = Math.round(height * dpr);
-      interior.getContext('2d').drawImage(renderer.canvas, Math.round(pad * dpr), Math.round(pad * dpr), interior.width, interior.height, 0, 0, interior.width, interior.height);
+      interior.getContext('2d').drawImage(acrylic, Math.round(pad * dpr), Math.round(pad * dpr), interior.width, interior.height, 0, 0, interior.width, interior.height);
       select.style.setProperty('--shader-picker-image', `url("${interior.toDataURL()}")`);
     }
   }

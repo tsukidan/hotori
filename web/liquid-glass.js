@@ -92,6 +92,10 @@
       if (!surface.isConnected) { resize.unobserve(surface); surfaces.delete(surface); continue; }
       const page = surface.closest('.page');
       if (page?.inert || !surface.checkVisibility({ checkVisibilityCSS: true })) continue;
+      if (surface.closest('#settings-page') && !surface.matches('.settings-card, .settings-sidebar')) {
+        for (const property of ['--glass-refraction', '--glass-sheen-image', '--glass-picker-refraction', '--glass-picker-sheen-image']) surface.style.removeProperty(property);
+        continue;
+      }
       if (!supported || reduceTransparency.matches) { surface.style.removeProperty('--glass-refraction'); continue; }
       const width = surface.offsetWidth, height = surface.offsetHeight;
       if (width < 2 || height < 2) continue;
@@ -102,7 +106,7 @@
       surface.style.setProperty('--glass-refraction', `url("#${optics.id}")`);
       surface.style.setProperty('--glass-sheen-image', `url("${optics.sheen}")`);
       if (surface.tagName === 'SELECT' && CSS.supports('appearance', 'base-select')) {
-        const picker = opticalMap(width, surface.options.length * 40 + 14, 24, true);
+        const picker = opticalMap(width, surface.options.length * 40 + 14, 30, true);
         used.add(picker.id);
         surface.style.setProperty('--glass-picker-refraction', `url("#${picker.id}")`);
         surface.style.setProperty('--glass-picker-sheen-image', `url("${picker.sheen}")`);

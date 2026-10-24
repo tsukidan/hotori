@@ -32,7 +32,7 @@ const { createHash } = require('node:crypto');
       page.on('console', message => { if (message.type() === 'warning' && /capture|fallback/i.test(message.text())) warnings.push(message.text()); });
       await page.goto(`http://127.0.0.1:${server.address().port}/index.html`);
       await page.waitForFunction(() => document.documentElement.dataset.glassRenderer === 'reference-liquidglass');
-      await page.addStyleTag({ content: '#app {visibility:hidden!important} .comparison-probe{position:fixed!important;left:200px;top:180px;width:240px;height:140px;min-height:0!important;padding:0!important;border:0!important;border-radius:60px;z-index:20!important} .comparison-text-layout{position:fixed;inset:0;display:grid;grid-template-columns:215px 210px 1fr;grid-template-rows:205px 80px 1fr;pointer-events:none;z-index:10} .comparison-text{grid-area:2/2;margin:0;font:20px/26px "Segoe UI";color:white;white-space:pre-line;}' });
+      await page.addStyleTag({ content: '#app {visibility:hidden!important} .comparison-probe{position:fixed!important;left:200px;top:180px;width:240px;height:140px;min-height:0!important;padding:0!important;border:0!important;border-radius:60px;z-index:20!important} .comparison-text-layout{position:fixed;inset:0;display:grid;grid-template-columns:215px 210px 1fr;grid-template-rows:205px 80px 1fr;pointer-events:none;z-index:10} .comparison-text{grid-area:2/2;margin:0;font:20px/26px "Segoe UI";letter-spacing:normal;color:white;white-space:pre-line;}' });
       await page.evaluate(() => {
         const canvas = document.createElement('canvas'); canvas.width = 1600; canvas.height = 900;
         const context = canvas.getContext('2d');
@@ -60,7 +60,7 @@ const { createHash } = require('node:crypto');
           const doc=iframe.contentDocument;doc.open();doc.write('<!doctype html><html><head></head><body style="margin:0"><div id="root" style="position:relative;width:1600px;height:900px;display:grid;grid-template-columns:215px 210px 1fr;grid-template-rows:205px 80px 1fr"></div></body></html>');doc.close();
           await new Promise((resolve,reject)=>{const script=doc.createElement('script');script.src=location.origin+'/vendor/liquidglass/liquidglass.js';script.onload=resolve;script.onerror=reject;doc.head.append(script);});
           const root=doc.getElementById('root'),image=doc.createElement('img');image.src=window.comparisonImage;image.style.cssText='position:absolute;inset:0;width:1600px;height:900px;z-index:0';root.append(image);await image.decode();
-          if(name==='text'){const text=doc.createElement('p');text.style.cssText='grid-area:2/2;margin:0;font:20px/26px "Segoe UI";color:white;white-space:pre-line;z-index:10';text.textContent='Captured foreground\nText and icons below\nThe actual glass lens';root.append(text);}
+          if(name==='text'){const text=doc.createElement('p');text.style.cssText='grid-area:2/2;margin:0;font:20px/26px "Segoe UI";letter-spacing:normal;color:white;white-space:pre-line;z-index:10';text.textContent='Captured foreground\nText and icons below\nThe actual glass lens';root.append(text);}
           const glass=doc.createElement('div');glass.style.cssText='position:absolute;left:200px;top:180px;width:240px;height:140px;z-index:20';glass.dataset.config=JSON.stringify(config);root.append(glass);
           const glasses=[glass];
           if(name==='layers'){
