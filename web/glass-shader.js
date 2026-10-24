@@ -5,11 +5,11 @@
 (() => {
   const vendor = window.HotoriLiquidGlass;
   if (!vendor) return;
-  const selector = '.glass, .glass-wordmark, .dock-surface, .dock-symbol, .window-controls, .window-button, #home-status, .theme-version, .button, .category-tab, .submenu, .setting-row, .input, select';
+  const selector = '.glass, .glass-wordmark, .dock-surface, .dock-symbol, .window-controls, .window-button, #home-status, .theme-version, .button, .category-tab, .submenu, .setting-row, .guide-step, .input, select';
   const excluded = '.glass-render-layer, .glass-optics-definitions, [data-glass-exclude], script, style, link, iframe';
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   const layers = new Map(), captures = new Map();
-  const isAcrylic = element => !!element.closest('#settings-page') && !element.matches('.settings-card, .settings-sidebar');
+  const isAcrylic = element => element.matches('.guide-step') || (!!element.closest('#settings-page') && !element.matches('.settings-card, .settings-sidebar'));
   const mediaAccess = new WeakMap();
   const mediaProbe = document.createElement('canvas'); mediaProbe.width = mediaProbe.height = 1;
   const scene = document.createElement('canvas'), sceneContext = scene.getContext('2d');

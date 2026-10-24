@@ -243,8 +243,11 @@ function sampleFrames(page, duration = 800) {
     assert.equal(await page.locator('.tagline').evaluate(el => getComputedStyle(el).fontStyle), 'italic');
     assert.equal(await page.locator('.installer-card .vencord-notice').count(), 1);
     assert.equal(await page.locator('.vencord-notice').isVisible(), false);
-    assert.equal(await page.locator('.dock-group').count(), 3);
-    assert.equal(await page.locator('.dock-button').count(), 5);
+    assert.equal(await page.locator('.dock-group').count(), 4);
+    assert.equal(await page.locator('.dock-button').count(), 7);
+    await page.locator('#installation-guide').click();
+    await page.waitForFunction(() => document.getElementById('guide-dialog').classList.contains('shader-glass'));
+    await page.locator('#guide-close').click();
     assert(await page.locator('#installation-heading').isVisible());
     assert(await page.locator('#customization-heading').isVisible());
     assert.equal(await page.evaluate(() => window.__TAURI__.window.getCurrentWindow().isDecorated()), false);

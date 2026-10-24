@@ -42,6 +42,11 @@
         </div>
       </div>
       <nav id="command-dock" class="command-dock" aria-label="Hotori commands">
+        <section id="app-update-bubble" class="dock-group dock-update-bubble" aria-labelledby="application-heading" hidden>
+          <div class="dock-surface" aria-hidden="true"></div>
+          <h3 id="application-heading" class="dock-heading">Application</h3>
+          <div class="dock-item"><button id="update-app" class="dock-button" disabled><span class="dock-symbol"><span data-icon="app-update"></span></span><span class="button-label">Update Hotori</span></button></div>
+        </section>
         <div class="dock-main">
         <div class="dock-surface" aria-hidden="true"></div>
         <section class="dock-group" aria-labelledby="installation-heading">
@@ -54,12 +59,12 @@
           <div class="dock-item"><button id="customize" class="dock-button" disabled><span class="dock-symbol"><span data-icon="sliders"></span></span><span class="button-label">Customize</span></button></div>
           <div class="dock-item"><button id="folder" class="dock-button" disabled><span class="dock-symbol"><span data-icon="folder"></span></span><span class="button-label">Themes folder</span></button></div>
         </section>
-        </div>
-        <section id="app-update-bubble" class="dock-group dock-update-bubble" aria-labelledby="application-heading" hidden>
-          <div class="dock-surface" aria-hidden="true"></div>
-          <h3 id="application-heading" class="dock-heading">Application</h3>
-          <div class="dock-item"><button id="update-app" class="dock-button" disabled><span class="dock-symbol"><span data-icon="app-update"></span></span><span class="button-label">Update Hotori</span></button></div>
+        <section class="dock-group" aria-labelledby="getting-started-heading">
+          <h3 id="getting-started-heading" class="dock-heading">Getting started</h3>
+          <div class="dock-item"><button id="installation-guide" class="dock-button" type="button"><span class="dock-symbol"><span data-icon="book"></span></span><span class="button-label">Installation Guide</span></button></div>
+          <div class="dock-item"><button id="download-vencord" class="dock-button" type="button"><span class="dock-symbol"><span data-icon="download"></span></span><span class="button-label">Download Vencord</span></button></div>
         </section>
+        </div>
       </nav>
     </section>
     <section id="settings-page" class="page settings-page" aria-labelledby="settings-title" inert>
@@ -89,6 +94,26 @@
       </div>
     </section>
   </main>
+  <dialog id="guide-dialog" class="glass vencord-dialog guide-dialog" aria-labelledby="guide-title" aria-describedby="guide-intro">
+    <header class="guide-header">
+      <h2 id="guide-title">Installation Guide</h2>
+      <p id="guide-intro">From a fresh Discord install to your own Hotori setup. Already finished a step? Continue with the next one.</p>
+    </header>
+    <div class="guide-scroll" tabindex="0" role="region" aria-label="Installation steps">
+      <ol class="guide-steps">
+        <li class="guide-step"><h3>Start with Discord for Windows</h3><p>Install the Discord desktop app and sign in. Open it at least once before installing Vencord. This guide is for the Windows desktop app.</p></li>
+        <li class="guide-step"><h3>Install Vencord</h3><p>Choose <strong>Download Vencord</strong> below to open vencord.dev in your browser. Download <strong>VencordInstaller.exe</strong>, run it normally (not as administrator), select your Discord installation, and choose <strong>Install</strong>. If you use more than one Discord version, select the one you actually open.</p><p>Fully quit Discord, including its system-tray icon, then reopen it. In Discord’s User Settings, look for the <strong>Vencord</strong> section. If it is missing, check that you patched the correct Discord installation.</p></li>
+        <li class="guide-step"><h3>Install the Hotori theme</h3><p>Return to Hotori and close this guide. Once Vencord is detected, choose <strong>Install</strong> at the top of the dock. Hotori places the theme in your Vencord themes folder; you do not need to copy the CSS yourself.</p><p>If Install stays unavailable, open Discord once after installing Vencord, then reopen Hotori.</p></li>
+        <li class="guide-step"><h3>Enable Hotori in Discord</h3><p>Open <strong>User Settings → Vencord → Themes → Local Themes</strong> and turn on <strong>Hotori</strong>. If it is not listed yet, reopen the Themes page or restart Discord. Turn off other full themes if their styles overlap with Hotori.</p></li>
+        <li class="guide-step"><h3>Make it yours</h3><p>Return to Hotori and choose <strong>Customize</strong>. Pick a category on the left, such as <strong>Glass Appearance</strong>, <strong>Wallpapers</strong>, or <strong>Server List</strong>, then adjust the options on the right.</p><p>Choose your glass profile, set a wallpaper from a local image or image link, and adjust the available appearance controls. Choose <strong>Save changes</strong> at the bottom after editing each category. Switching categories keeps your drafts; Back discards unsaved changes.</p><p>Your saved Main Background also becomes Hotori’s app background, and the app samples an accent color from it. If Discord has not picked up your saved theme changes, restart Discord.</p></li>
+        <li class="guide-step"><h3>Keep your setup current</h3><p>The installed-theme version bubble offers a theme update when one is available. <strong>Update Hotori</strong> appears separately for app updates. <strong>Reset to defaults</strong> saves the default customization values; use it only when you want to reset your settings.</p></li>
+      </ol>
+    </div>
+    <footer class="guide-actions">
+      <button id="guide-download-vencord" class="button" type="button"><span data-icon="download"></span>Download Vencord</button>
+      <button id="guide-close" class="button primary" type="button" autofocus>Done</button>
+    </footer>
+  </dialog>
   <dialog id="uninstall-dialog" class="glass vencord-dialog" aria-labelledby="uninstall-title" aria-describedby="uninstall-description">
     <h2 id="uninstall-title">Uninstall Hotori?</h2>
     <p id="uninstall-description">This removes the theme and its saved customizations from Vencord. You can install Hotori again later.</p>
@@ -112,6 +137,6 @@
       <button id="app-update-install" class="button primary" type="button">Download &amp; restart</button>
     </div>
   </dialog>
-  <span class="version" aria-label="Version 1.6.18">v1.6.18</span>
+  <span class="version" aria-label="Version 1.6.21">v1.6.21</span>
 </body>
 </html>

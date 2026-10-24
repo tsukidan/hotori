@@ -177,6 +177,15 @@ async fn install_app_update(
 }
 
 #[tauri::command]
+fn open_vencord_download() -> Result<(), String> {
+    std::process::Command::new("explorer.exe")
+        .arg("https://vencord.dev/download/")
+        .spawn()
+        .map_err(|e| e.to_string())?;
+    Ok(())
+}
+
+#[tauri::command]
 fn open_theme_folder(state: tauri::State<AppState>) -> Result<bool, String> {
     let folder = state.folder()?;
     let exists = folder.is_dir();
@@ -250,6 +259,7 @@ fn main() {
             check_app_update,
             install_app_update,
             open_theme_folder,
+            open_vencord_download,
             import_wallpaper,
             wallpaper_preview,
             app_wallpaper

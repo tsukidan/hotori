@@ -244,15 +244,35 @@ details[open] > summary > .icon { transform: rotate(180deg); }
 .vencord-dialog .button { min-width: 120px; }
 #uninstall-dialog { scrollbar-width: none; overflow-x: hidden; }
 #uninstall-dialog::-webkit-scrollbar { display: none; width: 0; height: 0; }
-#uninstall-dialog[open] { animation: hotori-prompt-in 260ms cubic-bezier(.16, 1, .3, 1) both; }
-#uninstall-dialog[open]::backdrop { animation: hotori-prompt-backdrop-in 220ms ease-out both; }
+:is(#uninstall-dialog, #guide-dialog)[open] { animation: hotori-prompt-in 260ms cubic-bezier(.16, 1, .3, 1) both; }
+:is(#uninstall-dialog, #guide-dialog)[open]::backdrop { animation: hotori-prompt-backdrop-in 220ms ease-out both; }
+.guide-dialog { width: min(720px, calc(100vw - 40px)); max-height: calc(100dvh - 100px); padding: 28px; overflow: hidden; text-align: left; }
+.guide-dialog[open] { display: flex; flex-direction: column; gap: 18px; }
+.guide-header, .guide-actions { flex-shrink: 0; }
+.guide-header p { margin: 10px 0 0; font-size: 13px; }
+.guide-scroll { min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; padding: 4px 8px 4px 4px; }
+.guide-scroll::-webkit-scrollbar { display: none; }
+.guide-steps { margin: 0; padding: 0; list-style: none; counter-reset: guide-step; }
+.guide-steps li { position: relative; counter-increment: guide-step; padding: 22px; margin-bottom: 14px; border: 1px solid #ffffff14; border-radius: 36px; }
+.guide-steps li::before { content: counter(guide-step) "."; position: absolute; top: 22px; left: 22px; color: var(--accent); font-size: 16px; font-weight: 600; }
+.guide-steps li:last-child { margin-bottom: 4px; }
+.guide-steps h3 { margin: 0 0 8px; padding-left: 25px; font-size: 16px; }
+.guide-steps p { margin: 8px 0 0; font-size: 13px; line-height: 1.75; }
+.guide-steps strong { color: #f5f6f7; font-weight: 600; }
+.guide-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; padding-top: 16px; border-top: 1px solid #ffffff1f; }
+.guide-actions .button { min-width: 0; }
+@media (max-width: 600px) {
+  .guide-dialog { padding: 24px; }
+  .guide-dialog[open] { gap: 12px; }
+  .guide-header h2 { font-size: 22px; }
+}
 @keyframes hotori-prompt-in {
   from { opacity: 0; transform: translateY(10px) scale(.96); }
   to { opacity: 1; transform: none; }
 }
 @keyframes hotori-prompt-backdrop-in { from { opacity: 0; } to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) {
-  #uninstall-dialog[open], #uninstall-dialog[open]::backdrop { animation: none; }
+  :is(#uninstall-dialog, #guide-dialog)[open], :is(#uninstall-dialog, #guide-dialog)[open]::backdrop { animation: none; }
 }
 .button.destructive { color: #ff5757; }
 

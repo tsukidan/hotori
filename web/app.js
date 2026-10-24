@@ -167,6 +167,7 @@ const iconPaths = {
   restore: '<path d="M9 5V3h12v12h-2"/><rect x="3" y="9" width="12" height="12" rx="1.5"/>',
   close: '<path d="m6 6 12 12M18 6 6 18"/>',
   download: '<path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/>',
+  book: '<path d="M12 5C9 3 5 3 3 4v15c3-1 6-1 9 1 3-2 6-2 9-1V4c-2-1-6-1-9 1Zm0 0v15"/>',
   "app-update": '<rect x="3" y="3" width="18" height="18" rx="5"/><path d="M12 17V7m-4 4 4-4 4 4"/>',
   trash: '<path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7m4-7v7"/>',
   sliders: '<path d="M4 7h5m4 0h7M4 17h9m4 0h3M9 4v6m4-6v6m0 4v6m4-6v6"/>',
@@ -664,6 +665,21 @@ $("uninstall").addEventListener("click", () => {
   $("uninstall-dialog").showModal();
 });
 $("uninstall-cancel").addEventListener("click", () => $("uninstall-dialog").close());
+$("installation-guide").addEventListener("click", () => {
+  $("guide-dialog").showModal();
+  $("guide-dialog").querySelector('.guide-scroll').scrollTop = 0;
+});
+$("guide-close").addEventListener("click", () => $("guide-dialog").close());
+async function downloadVencord() {
+  if (!invoke) return;
+  try { await invoke("open_vencord_download"); }
+  catch (error) {
+    const target = $("guide-dialog").open ? "guide-intro" : "home-status";
+    message(target, `Could not open the Vencord download page: ${error}`, true);
+  }
+}
+$("download-vencord").addEventListener("click", downloadVencord);
+$("guide-download-vencord").addEventListener("click", downloadVencord);
 $("uninstall-confirm").addEventListener("click", () => {
   if (busy || !$("uninstall-dialog").open) return;
   $("uninstall-dialog").close();

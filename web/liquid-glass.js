@@ -3,7 +3,7 @@
 // Refract the compositor's real backdrop, never a screenshot or a copy of the
 // wallpaper. Foreground text, icons, inputs and hit targets remain native DOM.
 (() => {
-  const selector = '.glass, .dock-surface, .dock-symbol, .window-controls, .window-button, #home-status, .theme-version, .button, .category-tab, .submenu, .setting-row, .input, select';
+  const selector = '.glass, .dock-surface, .dock-symbol, .window-controls, .window-button, #home-status, .theme-version, .button, .category-tab, .submenu, .setting-row, .guide-step, .input, select';
   const ns = 'http://www.w3.org/2000/svg';
   const surfaces = new Set();
   const cache = new Map();
@@ -91,7 +91,7 @@
       if (!surface.isConnected) { resize.unobserve(surface); surfaces.delete(surface); continue; }
       const page = surface.closest('.page');
       if (page?.inert || !surface.checkVisibility({ checkVisibilityCSS: true })) continue;
-      if (surface.closest('#settings-page') && !surface.matches('.settings-card, .settings-sidebar')) {
+      if (surface.matches('.guide-step') || (surface.closest('#settings-page') && !surface.matches('.settings-card, .settings-sidebar'))) {
         for (const property of ['--glass-refraction', '--glass-sheen-image', '--glass-picker-refraction', '--glass-picker-sheen-image']) surface.style.removeProperty(property);
         continue;
       }
