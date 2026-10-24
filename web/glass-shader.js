@@ -7,7 +7,6 @@
   if (!vendor) return;
   const selector = '.glass, .glass-wordmark, .dock-surface, .dock-symbol, .window-controls, .window-button, #home-status, .theme-version, .button, .category-tab, .submenu, .setting-row, .input, select';
   const excluded = '.glass-render-layer, .glass-optics-definitions, [data-glass-exclude], script, style, link, iframe';
-  const reduced = matchMedia('(prefers-reduced-transparency: reduce)');
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   const layers = new Map(), captures = new Map();
   const isAcrylic = element => !!element.closest('#settings-page') && !element.matches('.settings-card, .settings-sidebar');
@@ -265,10 +264,6 @@
   }
   function render() {
     frame = 0; if (failed || renderer.contextLost) return;
-    if (reduced.matches) {
-      for (const [element] of layers) element.classList.remove('shader-glass');
-      document.documentElement.dataset.glassRenderer = 'translucent-fallback'; return;
-    }
     styles = new Map();
     try {
       dpr = devicePixelRatio || 1;
@@ -317,5 +312,5 @@
   }, { passive: true });
   for (const event of ['pointerdown','pointerup','pointercancel','visibilitychange']) document.addEventListener(event, schedule, true);
   document.addEventListener('hotori:glass-invalidate', () => { for (const entry of captures.values()) entry.dirty = true; schedule(); });
-  reduced.addEventListener('change', schedule); schedule();
+  schedule();
 })();

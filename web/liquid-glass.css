@@ -141,11 +141,6 @@ input.shader-glass, select.shader-glass, textarea.shader-glass {
     box-shadow: 0 4px 14px #0003;
   }
 }
-@media (prefers-reduced-transparency: reduce) {
-  .optical-glass { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; background: #22262b !important; }
-  .optical-glass::after { display: none; }
-  select::picker(select) { background: #22262b !important; backdrop-filter: none !important; }
-}
 @media (prefers-reduced-motion: reduce) { select::picker-icon { transition: none; } }
 
 /* The two outer panes remain liquid glass. Only their inner controls,

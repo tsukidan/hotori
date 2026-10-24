@@ -8,7 +8,6 @@
   const surfaces = new Set();
   const cache = new Map();
   const supported = CSS.supports('backdrop-filter', 'url("#hotori-optics")');
-  const reduceTransparency = matchMedia('(prefers-reduced-transparency: reduce)');
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const svg = document.createElementNS(ns, 'svg');
   svg.classList.add('glass-optics-definitions');
@@ -96,7 +95,7 @@
         for (const property of ['--glass-refraction', '--glass-sheen-image', '--glass-picker-refraction', '--glass-picker-sheen-image']) surface.style.removeProperty(property);
         continue;
       }
-      if (!supported || reduceTransparency.matches) { surface.style.removeProperty('--glass-refraction'); continue; }
+      if (!supported) { surface.style.removeProperty('--glass-refraction'); continue; }
       const width = surface.offsetWidth, height = surface.offsetHeight;
       if (width < 2 || height < 2) continue;
       const radius = Math.min(parseFloat(getComputedStyle(surface).borderTopLeftRadius) || 0, width / 2, height / 2);
@@ -118,7 +117,7 @@
       value.filter.remove(); cache.delete(key);
       if (cache.size <= 96) break;
     }
-    if (!document.querySelector('.shader-glass')) document.documentElement.dataset.glassRenderer = supported && !reduceTransparency.matches ? 'backdrop-refraction' : 'translucent-fallback';
+    if (!document.querySelector('.shader-glass')) document.documentElement.dataset.glassRenderer = supported ? 'backdrop-refraction' : 'translucent-fallback';
   }
   function schedule() { if (!frame) frame = requestAnimationFrame(update); }
   const resize = new ResizeObserver(() => {
@@ -132,7 +131,6 @@
   document.addEventListener('transitionend', schedule, true);
   document.addEventListener('toggle', schedule, true);
   document.addEventListener('close', schedule, true);
-  reduceTransparency.addEventListener('change', schedule);
   // The material responds to interaction without a perpetual render loop.
   let hoverFrame = 0, hoverTarget, pointer;
   document.addEventListener('pointermove', event => {
