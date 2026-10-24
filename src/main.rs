@@ -44,7 +44,10 @@ fn get_status(state: tauri::State<AppState>) -> InstallStatus {
 #[tauri::command]
 async fn install_theme(state: tauri::State<'_, AppState>) -> Result<(), String> {
     let folder = state.folder()?.to_owned();
-    tauri::async_runtime::spawn_blocking(move || installer::install(&folder))
+    tauri::async_runtime::spawn_blocking(move || {
+        installer::ensure_discord_closed()?;
+        installer::install_and_enable(&folder)
+    })
         .await
         .map_err(|e| e.to_string())?
         .map_err(|e| e.to_string())

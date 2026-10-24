@@ -298,19 +298,24 @@ function sampleFrames(page, duration = 800) {
     await page.locator('#window-maximize').click();
     await page.waitForFunction(() => document.getElementById('window-maximize').getAttribute('aria-label') === 'Maximize');
     assert.equal(await page.evaluate(() => window.__TAURI__.window.getCurrentWindow().isMaximized()), false);
-    await page.locator('.titlebar-drag').dblclick();
+    await page.waitForTimeout(1000);
+    await page.locator('.titlebar-drag').dblclick({ delay: 100 });
     await page.waitForFunction(() => document.getElementById('window-maximize').getAttribute('aria-label') === 'Restore');
     // Let the native maximize animation settle before a separate double-click.
-    await page.waitForTimeout(600);
-    await page.locator('.titlebar-drag').dblclick();
+    await page.waitForTimeout(1000);
+    await page.locator('.titlebar-drag').dblclick({ delay: 100 });
     await page.waitForFunction(() => document.getElementById('window-maximize').getAttribute('aria-label') === 'Maximize');
     await page.locator('#window-maximize').hover();
     await page.screenshot({ path: path.join(qa, 'hotori-titlebar.png') });
     await page.locator('.titlebar-drag').hover();
     await page.screenshot({ path: path.join(qa, 'tauri-home.png') });
     await page.locator('#install').click();
+    await page.waitForFunction(() => !busy);
+    assert.equal(await page.locator('#home-status').getAttribute('data-error'), 'false', 'Fully quit Discord before running the native installation test');
     await page.waitForFunction(() => !document.getElementById('customize').disabled);
     assert.equal(await fs.readFile(destination, 'utf8'), bundledTheme);
+    const vencordSettings = JSON.parse(await fs.readFile(path.join(appdata, 'Vencord/settings/settings.json'), 'utf8'));
+    assert(vencordSettings.enabledThemes.includes('hotori.theme.css'), 'Install automatically enables the theme');
     assert.equal(await page.locator('#theme-version-value').textContent(), `v${bundledTheme.match(/@version\s+([^\s]+)/)[1]}`);
     await assert.rejects(fs.access(source));
     if (process.env.HOTORI_TEST_REMOTE_UPDATE === '1') {

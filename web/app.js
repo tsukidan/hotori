@@ -647,7 +647,7 @@ $("app-update-install").addEventListener("click", async () => {
   }
 });
 
-$("install").addEventListener("click", () => operation("install_theme", "Installed. Enable Hotori in Vencord’s Themes settings."));
+$("install").addEventListener("click", () => operation("install_theme", "Installed and enabled. Open Discord to use Hotori."));
 $("theme-update-notice").addEventListener("click", async () => {
   if (busy || !invoke) return;
   busy = true; updatingTheme = true; updateButtons();
