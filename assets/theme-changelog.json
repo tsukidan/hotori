@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "versions": {
+    "0.8.12": [
+      {"title": "Unread markers", "description": "Channel unread dots now pulse gently with a soft white glow."},
+      {"title": "Reduced motion", "description": "Unread dots stay steady when reduced motion is enabled."}
+    ],
+    "0.8.11": [{"title": "Sidebar separators", "description": "Consistent neutral divider lines and aligned spacing in the channel sidebar."}],
+    "0.8.10": [
+      {"title": "Unread markers", "description": "Glowing white dots stay fully visible in the channel list."},
+      {"title": "Channels", "description": "Channel icons stay aligned when unread status changes."}
+    ],
+    "0.8.9": [
+      {"title": "Mentions", "description": "Rounder glass pills with more padding and subtle reflections."},
+      {"title": "Links", "description": "Softer rounded corners and refined glass highlights."}
+    ],
+    "0.8.8": [{"title": "Acrylic", "description": "Reduced grain opacity for a more transparent finish."}],
+    "0.8.7": [{"title": "Acrylic", "description": "Added subtle static grain to acrylic surfaces."}],
+    "0.8.6": [
+      {"title": "Embeds", "description": "Refined embed typography and attachment hover controls."},
+      {"title": "Theme updates", "description": "Updated theme version so the installer detects these changes."}
+    ],
+    "0.8.5": [{"title": "Date dividers", "description": "Date separators now share the theme's glass separator styling."}],
+    "0.8.4": [{"title": "Settings", "description": "Improved settings panel readability."}],
+    "0.8.3": [{"title": "Unread separator", "description": "Unified the unread separator's glass bar appearance."}],
+    "0.8.2": [{"title": "Server list", "description": "Added server rings and refined glass styling."}],
+    "0.8.1": [{"title": "Scrolling", "description": "Fixed mouse-wheel scrolling in the horizontal server list."}],
+    "0.8.0": [{"title": "Theme release", "description": "Updated the theme version to 0.8.0."}],
+    "0.7.1": [{"title": "Installer support", "description": "Bundled Hotori with the app and added settings-preserving theme updates."}]
+  }
+}

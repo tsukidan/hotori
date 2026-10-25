@@ -59,6 +59,10 @@ const assert = require('node:assert/strict');
           rect.width === innerWidth && rect.height === innerHeight;
       }), 'The first visible window must already use the saved, centered background');
       await page.waitForFunction(() => document.documentElement.dataset.glassRenderer === 'reference-liquidglass');
+      const installedVersion = theme.match(/@version\s+([^\s]+)/)[1];
+      const changelog = JSON.parse(await fs.readFile(path.join(root, 'assets/theme-changelog.json'), 'utf8'));
+      await page.waitForFunction(() => document.querySelector('#theme-changelog-items strong'));
+      assert((await page.locator('#theme-changelog-items').textContent()).includes(changelog.versions[installedVersion][0].title), 'Native app finds notes for its actual installed theme');
     } finally {
       if (browser) await browser.close();
       const exited = new Promise(resolve => child.once('exit', resolve));

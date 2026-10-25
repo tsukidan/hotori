@@ -5,6 +5,7 @@ mod installer;
 mod settings;
 mod updates;
 mod wallpapers;
+mod theme_changelog;
 
 use serde::Serialize;
 use tauri::Manager;
@@ -244,6 +245,12 @@ fn show_main_window(app: tauri::AppHandle) -> Result<(), String> {
     window.set_focus().map_err(|e| e.to_string())
 }
 
+#[tauri::command]
+async fn get_theme_changelog(app: tauri::AppHandle, refresh: bool) -> Result<theme_changelog::Catalog, String> {
+    let cache = app.path().app_cache_dir().map_err(|e| e.to_string())?;
+    tauri::async_runtime::spawn_blocking(move || theme_changelog::load(&cache, refresh)).await.map_err(|e| e.to_string())
+}
+
 fn main() {
     if app_updates::helper_entry() {
         return;
@@ -275,7 +282,8 @@ fn main() {
             import_wallpaper,
             wallpaper_preview,
             app_wallpaper,
-            show_main_window
+            show_main_window,
+            get_theme_changelog
         ])
         .run(tauri::generate_context!())
         .expect("Could not start Hotori");

@@ -132,33 +132,40 @@ function renderThemeVersion() {
   }
 }
 
-// Theme release notes, verified against commits touching assets/hotori.theme.css.
-// Keep these versioned: never show notes from a newer theme as installed changes.
-const themeChangelog = {
-  "0.8.10": [
-    ["Unread markers", "Glowing white dots stay fully visible in the channel list."],
-    ["Channels", "Channel icons stay aligned when unread status changes."],
-  ],
-  "0.8.9": [
-    ["Mentions", "Rounder glass pills with more padding and subtle reflections."],
-    ["Links", "Softer rounded corners and refined glass highlights."],
-  ],
-  "0.8.8": [["Acrylic", "Reduced grain opacity for a more transparent finish."]],
-  "0.8.7": [["Acrylic", "Added subtle static grain to acrylic surfaces."]],
-};
+// Theme notes are a separately published catalog, not app release notes.
+let themeChangelog = null, changelogLoading = false, changelogAttempt = 0, changelogRequestedVersion;
+async function loadThemeChangelog() {
+  changelogLoading = true; changelogAttempt = Date.now();
+  for (const refresh of [false, true]) {
+    try {
+      const catalog = await invoke('get_theme_changelog', { refresh });
+      if (catalog?.schemaVersion === 1 && catalog.versions && typeof catalog.versions === 'object') {
+        themeChangelog = catalog.versions;
+        renderThemeChangelog(status.theme_version);
+      }
+    } catch { /* Keep bundled/cached notes when offline. */ }
+  }
+  changelogLoading = false;
+  if (!themeChangelog) themeChangelog = {};
+  renderThemeChangelog(status.theme_version);
+}
 function renderThemeChangelog(version) {
-  const key = version || 'unknown';
-  const section = $("theme-changelog");
-  if (section.dataset.themeVersion === key) return;
-  section.dataset.themeVersion = key;
-  $("theme-changelog-version").textContent = version ? `Theme v${version}` : 'Theme version unavailable';
-  const notes = themeChangelog[key];
-  const items = notes ? notes.map(([label, description]) => {
+  const key = (version || '').trim().replace(/^v/, '').split('+')[0] || 'unknown';
+  if (status.installed && invoke && !changelogLoading && (key !== changelogRequestedVersion || Date.now() - changelogAttempt >= 300000)) {
+    changelogRequestedVersion = key; loadThemeChangelog();
+  }
+  const notes = themeChangelog && Object.hasOwn(themeChangelog, key) ? themeChangelog[key] : null;
+  const section = $('theme-changelog');
+  const signature = JSON.stringify([key, notes, !!themeChangelog]);
+  if (section.dataset.notesSignature === signature) return;
+  section.dataset.notesSignature = signature;
+  $('theme-changelog-version').textContent = version ? `Theme v${version.replace(/^v/, '')}` : 'Theme version unavailable';
+  const items = Array.isArray(notes) && notes.length ? notes.map(note => {
     const item = element('li');
-    item.append(element('strong', '', `${label}:`), document.createTextNode(` ${description}`));
+    item.append(element('strong', '', `${note.title}:`), document.createTextNode(` ${note.description}`));
     return item;
-  }) : [element('li', '', 'Release notes are not available for this theme version.')];
-  $("theme-changelog-items").replaceChildren(...items);
+  }) : [element('li', '', themeChangelog ? 'Release notes are not available for this theme version.' : 'Loading theme changes…')];
+  $('theme-changelog-items').replaceChildren(...items);
 }
 
 async function checkForThemeUpdate() {
