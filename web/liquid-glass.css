@@ -36,6 +36,7 @@
   box-shadow: var(--glass-key-shadow), 0 14px 36px #00000030;
 }
 .dock-surface { border-radius: 38px; --glass-surface-blur: 2px; --glass-tint: #181b202b; }
+.glass.home-intro { border-radius: 36px; }
 .dock-symbol { border: 1px solid #ffffff29; border-radius: 999px; --glass-surface-blur: 1px; --glass-tint: #ffffff06; }
 .dock-button:disabled .dock-symbol { opacity: .65; }
 .window-controls { border-radius: 22px; --glass-surface-blur: 2px; }
@@ -64,9 +65,11 @@
 input[type="color"], .color-input input[type="color"] { border-radius: 14px; background: #ffffff0c; border-color: #ffffff30; }
 input[type="color"]::-webkit-color-swatch-wrapper { padding: 1px; }
 input[type="color"]::-webkit-color-swatch { border: 0; border-radius: 9px; }
-#home-status, .theme-version {
+#home-status, .theme-version, .home-intro {
   border-radius: 26px; --glass-surface-blur: 2px; --glass-tint: #171a1e2b;
+  --glass-surface-saturation: 155%;
   background: radial-gradient(ellipse at var(--glass-light-x, 22%) var(--glass-light-y, 0%), #ffffff04, transparent 65%), var(--glass-tint);
+  box-shadow: var(--glass-key-shadow), 0 5px 16px #00000024;
   backdrop-filter: blur(var(--glass-surface-blur)) saturate(var(--glass-surface-saturation)) var(--glass-refraction);
   -webkit-backdrop-filter: blur(var(--glass-surface-blur)) saturate(var(--glass-surface-saturation)) var(--glass-refraction);
 }

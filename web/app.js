@@ -827,7 +827,32 @@ function initializeCategoryMotion() {
   window.addEventListener('blur', clear);
 }
 
+function initializeAppOverlay() {
+  const input = $("app-overlay-range"), toggle = $("app-overlay-toggle");
+  const control = toggle.closest('.app-overlay-control');
+  const key = 'hotori.appOverlayOpacity';
+  try {
+    const saved = localStorage.getItem(key);
+    if (saved !== null && /^\d{1,3}$/.test(saved)) input.value = String(Math.min(100, Number(saved)));
+  } catch { /* Storage may be disabled; the control still works. */ }
+  function apply(persist) {
+    const value = Math.min(100, Math.max(0, Number(input.value)));
+    document.documentElement.style.setProperty('--app-overlay-opacity', String(value / 100));
+    control.style.setProperty('--range-progress', `${value}%`);
+    if (persist) { try { localStorage.setItem(key, String(value)); } catch {} }
+    document.dispatchEvent(new Event('hotori:backdrop-change'));
+  }
+  input.addEventListener('input', () => apply(true));
+  const expanded = () => toggle.setAttribute('aria-expanded', String(control.matches(':hover, :focus-within')));
+  for (const event of ['pointerenter', 'pointerleave', 'focusin']) control.addEventListener(event, expanded);
+  control.addEventListener('focusout', () => requestAnimationFrame(expanded));
+  toggle.addEventListener('click', () => input.focus({ preventScroll: true }));
+  control.addEventListener('keydown', event => { if (event.key === 'Escape') { document.activeElement.blur(); } });
+  apply(false);
+}
+
 document.querySelectorAll("[data-icon]").forEach(node => node.replaceWith(icon(node.dataset.icon)));
+initializeAppOverlay();
 initializeCategoryMotion();
 initializeDock();
 initializeTitlebar();

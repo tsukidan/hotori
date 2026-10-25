@@ -40,7 +40,7 @@
 
   // These are the live website's presets, with Hotori's existing control sizes.
   function material(element, box) {
-    const main = element.matches('.glass:not(.submenu)');
+    const main = element.matches('.glass:not(.submenu):not(.home-intro)');
     const dock = element.matches('.dock-surface');
     const button = element.matches('button, .category-tab, .dock-symbol');
     const config = { ...vendor.DEFAULTS, blurAmount: dock ? .5 : .25 };
@@ -312,5 +312,6 @@
   }, { passive: true });
   for (const event of ['pointerdown','pointerup','pointercancel','visibilitychange']) document.addEventListener(event, schedule, true);
   document.addEventListener('hotori:glass-invalidate', () => { for (const entry of captures.values()) entry.dirty = true; schedule(); });
+  document.addEventListener('hotori:backdrop-change', schedule);
   schedule();
 })();

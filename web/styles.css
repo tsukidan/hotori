@@ -34,7 +34,7 @@ button, input, select { font: inherit; }
 button { -webkit-user-select: none; user-select: none; }
 .wallpaper {
   position: fixed; inset: 0;
-  background-image: linear-gradient(#00000077, #000000b8), var(--app-wallpaper, url("assets/background.jpeg"));
+  background-image: linear-gradient(rgb(0 0 0 / var(--app-overlay-opacity, .6)), rgb(0 0 0 / var(--app-overlay-opacity, .6))), var(--app-wallpaper, url("assets/background.jpeg"));
   background-size: cover; background-position: center center; background-repeat: no-repeat;
   pointer-events: none;
 }
@@ -448,6 +448,9 @@ details[open] > summary > .icon { transform: rotate(180deg); }
 .installer-card { padding: 0; max-width: 600px; text-align: left; }
 .installer-card h2 { font-size: clamp(25px, 2vw, 30px); line-height: 1.25; font-weight: 500; text-wrap: balance; }
 .installer-card .description { margin: 18px 0 0; max-width: 550px; font-size: 14px; line-height: 1.85; }
+.home-intro { padding: 22px; }
+.home-intro h2 { color: #fff; font-style: italic; text-shadow: 0 2px 14px #000; }
+.home-intro .description { color: #f5f6f7; font-weight: 500; text-shadow: 0 2px 14px #000; }
 .installer-card .status { margin-top: 30px; }
 #home-status, .theme-version {
   display: grid; grid-template-columns: 22px minmax(0, 1fr); align-items: start;
@@ -491,14 +494,29 @@ details[open] > summary > .icon { transform: rotate(180deg); }
 }
 
 /* A fixed right edge lets the glass window unfold into the room on its left. */
-.command-dock {
+.dock-rail {
   position: absolute; z-index: 3; right: clamp(20px, 2.5vw, 44px); top: 50%;
-  transform: translateY(-50%); width: 76px;
+  transform: translateY(-50%); width: 76px; display: flex; flex-direction: column; align-items: flex-end; gap: 12px;
+}
+.command-dock {
+  position: relative; width: 76px; flex-shrink: 0;
   display: flex; flex-direction: column; gap: 12px;
   color: #fff;
   transition: width 480ms cubic-bezier(.22,1.15,.36,1);
 }
 .command-dock:is(:hover, :focus-within) { width: 244px; }
+.app-overlay-control { position: relative; isolation: isolate; flex-shrink: 0; width: 76px; height: 56px; transition: width 400ms cubic-bezier(.22,1,.36,1); }
+.app-overlay-control:is(:hover, :focus-within) { width: 244px; }
+.app-overlay-control .dock-surface { border-radius: 999px; }
+.overlay-toggle { position: absolute; top: 0; left: calc(100% - 66px); width: 56px; height: 56px; display: grid; place-items: center; padding: 0; background: transparent; border: 0; border-radius: 999px; color: #fff; cursor: pointer; transition: left 400ms cubic-bezier(.22,1,.36,1); }
+.overlay-toggle .icon { width: 26px; height: 26px; stroke-width: 1.8; }
+.app-overlay-control:is(:hover, :focus-within) .overlay-toggle { left: 4px; }
+.overlay-range { position: absolute; left: 64px; right: 18px; top: 11px; margin: 3px 0; opacity: 0; visibility: hidden; transition: opacity 180ms, visibility 0s 180ms; }
+.app-overlay-control:is(:hover, :focus-within) .overlay-range { opacity: 1; visibility: visible; transition-delay: 120ms, 0s; }
+@media (max-height: 680px) { .command-dock .dock-item { height: 42px; } }
+@media (prefers-reduced-motion: reduce) {
+  .app-overlay-control, .overlay-toggle, .overlay-range { transition: none; }
+}
 .dock-main, .dock-update-bubble { position: relative; isolation: isolate; padding: 16px 10px; }
 .dock-update-bubble { padding-top: 24px; }
 .dock-update-bubble[hidden] { display: none; }

@@ -34,8 +34,10 @@
           <p class="tagline">If only the snow could fall slower...</p>
         </div>
         <div class="installer-card">
-          <h2>Hotori — a theme inspired by Liquid Glass.</h2>
-          <p class="description">A Discord theme inspired by Liquid Glass. Make it yours with acrylic or liquid glass, custom backgrounds, colors and blur. Adjust avatar size and shape, message spacing, mention highlights, and your server list layout.</p>
+          <div class="glass home-intro">
+            <h2>Hotori — a theme inspired by Liquid Glass.</h2>
+            <p class="description">A Discord theme inspired by Liquid Glass. Make it yours with acrylic or liquid glass, custom backgrounds, colors and blur. Adjust avatar size and shape, message spacing, mention highlights, and your server list layout.</p>
+          </div>
           <p id="home-status" class="status" role="status" aria-live="polite">Checking your theme…</p>
           <div id="theme-version" class="theme-version" role="status" aria-live="polite" hidden>
             <div class="theme-version-heading"><span data-icon="tag"></span><span>Installed theme <strong id="theme-version-value"></strong></span><button id="theme-update-notice" class="theme-update-notice" type="button" hidden><span data-icon="reset"></span><span id="theme-update-label"></span></button></div>
@@ -47,6 +49,7 @@
           <p class="vencord-notice" hidden>!! Vencord is required for this theme !!</p>
         </div>
       </div>
+      <div class="dock-rail">
       <nav id="command-dock" class="command-dock" aria-label="Hotori commands">
         <section id="app-update-bubble" class="dock-group dock-update-bubble" aria-labelledby="application-heading" hidden>
           <div class="dock-surface" aria-hidden="true"></div>
@@ -72,6 +75,15 @@
         </section>
         </div>
       </nav>
+      <div class="app-overlay-control">
+        <div class="dock-surface" aria-hidden="true"></div>
+        <button id="app-overlay-toggle" class="overlay-toggle" type="button" aria-label="App background overlay opacity" aria-controls="app-overlay-range" aria-expanded="false"><span data-icon="sun"></span></button>
+        <div class="range-surface overlay-range">
+          <div class="range-track" aria-hidden="true"><div class="range-fill"></div></div>
+          <input id="app-overlay-range" type="range" min="0" max="100" step="1" value="60" aria-label="App background overlay opacity">
+        </div>
+      </div>
+      </div>
     </section>
     <section id="settings-page" class="page settings-page" aria-labelledby="settings-title" inert>
       <div class="settings-workspace">
@@ -143,6 +155,6 @@
       <button id="app-update-install" class="button primary" type="button">Download &amp; restart</button>
     </div>
   </dialog>
-  <span class="version" aria-label="Version 1.6.25">v1.6.25</span>
+  <span class="version" aria-label="Version 1.6.30">v1.6.30</span>
 </body>
 </html>
