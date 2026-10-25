@@ -685,7 +685,7 @@ h2, .section-heading, .sidebar-brand strong { letter-spacing: -.025em; }
 .preview-user-label { display: flex; flex-direction: column; min-width: 0; }
 .preview-user-label > span { font-size: .8em; }
 .preview-user-tools { display: flex; gap: .4em; margin-left: auto; }
-.wallpaper-row:not(:has(.wallpaper-discord-preview)) .wallpaper-preview { object-fit: contain; max-height: 260px; }
+.wallpaper-row:not(:has(.wallpaper-discord-preview)) .wallpaper-preview { width: min(100%, 360px); object-fit: cover; object-position: center; max-height: none; aspect-ratio: 1398 / 1293; }
 .crop-dialog { width: min(800px, calc(100vw - 32px)); max-height: calc(100dvh - 80px); overflow-y: auto; overflow-x: hidden; scrollbar-width: none; padding: 24px; }
 .crop-dialog::-webkit-scrollbar { display: none; }
 .crop-dialog h2 { margin-bottom: 18px; }

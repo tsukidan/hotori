@@ -1,6 +1,8 @@
 "use strict";
 
 (() => {
+  // Full settings panel in the supplied reference: 1398 x 1293 pixels.
+  const settingsAspect = 1398 / 1293;
   const localPrefix = 'vencord:///themes/hotori-assets/';
   let api, colors = [], paletteSource = '', paletteGeneration = 0;
   let seen = new Set(), views = [], previews = [], cropDialog;
@@ -118,12 +120,10 @@
     const instructions = node('p', 'crop-hint', 'Drag to position. Use the slider or mouse wheel to zoom.');
     const ratioLabel = node('label', 'crop-control', 'Aspect ratio');
     const ratio = node('select'); ratio.setAttribute('aria-label', 'Crop aspect ratio');
-    const originalRatio = image.naturalWidth / image.naturalHeight;
-    const gcd = (a, b) => b ? gcd(b, a % b) : a, divisor = gcd(image.naturalWidth, image.naturalHeight);
-    const options = main ? [['16:9', 16 / 9]] : [[`Original · ${image.naturalWidth / divisor}:${image.naturalHeight / divisor} (suggested)`, originalRatio], ['16:9', 16 / 9], ['4:3', 4 / 3], ['1:1', 1], ['9:16', 9 / 16]];
-    options.forEach(([label, value]) => { const option = node('option', '', label); option.value = String(value); ratio.append(option); });
-    ratio.disabled = main; ratio.value = String(main ? 16 / 9 : initial?.ratio || originalRatio);
-    if (!ratio.value) ratio.selectedIndex = 0;
+    const aspect = main ? 16 / 9 : settingsAspect;
+    const option = node('option', '', main ? '16:9' : 'Settings panel · 466:431');
+    option.value = String(aspect); ratio.append(option);
+    ratio.disabled = true; ratio.value = String(aspect);
     ratioLabel.append(ratio);
     const zoomLabel = node('label', 'crop-control', 'Zoom');
     const range = node('input'); range.type = 'range'; range.min = '1'; range.max = '4'; range.step = '.01'; range.value = String(initial?.zoom || 1);
@@ -262,7 +262,7 @@
         if (request !== previewRequest || current !== field.value || !root.isConnected) return;
         image.src = source; image.hidden = false;
         if (stage) stage.hidden = false;
-        else image.style.aspectRatio = String(decoded.naturalWidth / decoded.naturalHeight);
+        else image.style.aspectRatio = String(settingsAspect);
         if (main && paletteRequest === paletteGeneration) publishPalette(decoded, current);
         updatePreviewColors();
       } catch (error) {
