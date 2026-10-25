@@ -3,7 +3,7 @@
  * @author tsuki
  * @authorId 109679787630399488
  * @authorLink https://plusinsta.xyz
- * @version 0.8.10
+ * @version 0.8.11
  * @description A Discord theme inspired by Liquid Glass.
  */
 
@@ -3067,6 +3067,45 @@ body:has(.hoverButton__06ab4:is(:hover, :focus-visible), .upload_aa605f .actionB
                 0 0 10px rgba(255, 255, 255, 0.35) !important;
     pointer-events: none;
     z-index: 1;
+}
+
+/* Channel-list separators use one neutral line regardless of glass color.
+   The Boost container's native bottom border otherwise paints a second rule
+   under our pseudo-element. Normalize its box so both rules share gutters. */
+.sidebarList__5e434 .container__0d0f9 {
+    margin-inline: 0 !important;
+    padding-inline: 0 !important;
+    border-bottom: none !important;
+}
+
+.sidebarList__5e434 .container__0d0f9 > .contentContainer__0d0f9 {
+    margin-inline: 8px;
+}
+
+.sidebarList__5e434 .container__0d0f9::after,
+.sidebarList__5e434 .sectionDivider__629e4 {
+    content: "" !important;
+    display: block !important;
+    position: static !important;
+    inset: auto !important;
+    box-sizing: border-box;
+    flex: 0 0 auto;
+    width: calc(100% - 16px) !important;
+    height: 2px !important;
+    margin: 12px 8px 0 !important;
+    border: none !important;
+    border-radius: 999px !important;
+    background: rgba(255, 255, 255, 0.28) !important;
+    background-image: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+    opacity: 1 !important;
+    pointer-events: none;
+}
+
+.sidebarList__5e434 .sectionDividerWithBottom__629e4 {
+    margin-bottom: 8px !important;
 }
 
 /* END OF HOTORI DEV THEME */
