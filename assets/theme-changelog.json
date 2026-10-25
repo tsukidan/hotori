@@ -1,6 +1,9 @@
 {
   "schemaVersion": 1,
   "versions": {
+    "0.8.13": [
+      {"title": "Unread markers", "description": "Smaller white notification dots with a brighter halo and a quicker, smoother pulse."}
+    ],
     "0.8.12": [
       {"title": "Unread markers", "description": "Channel unread dots now pulse gently with a soft white glow."},
       {"title": "Reduced motion", "description": "Unread dots stay steady when reduced motion is enabled."}

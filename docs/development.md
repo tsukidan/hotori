@@ -24,6 +24,8 @@ Fully quit Discord (including its tray process) before running native installati
 
 Every theme release must update **both** `assets/hotori.theme.css` and `assets/theme-changelog.json` in the same push. Add short, user-facing notes under the exact new theme version. Run `cargo test --release --locked theme_changelog::tests` before publishing theme changes. The app reads this catalog from the default branch independently of app releases; do not substitute app release notes for theme notes.
 
+Run `python scripts/check-theme-changelog.py` before pushing theme changes. The **Theme release notes** GitHub Actions check runs the same validation on pushes and pull requests, reporting a failure if the current theme version has no notes. This check reports problems; preventing direct pushes requires branch protection configured separately.
+
 Update `assets/hotori.theme.css` in this repository. Keep the name `Hotori`, bump `@version`, retain exactly one `END OF USER SETTINGS` marker, and keep each user-setting declaration on its own line.
 
 The app's theme update notice fetches this file from the repository's default branch when clicked. Existing values in the user-settings section are preserved when their variables still exist in the new theme. New variables use published defaults; removed variables disappear with the old implementation. Metadata and implementation come from the published file. Downloads are limited to 2 MB with a 30-second timeout; invalid downloads and detected concurrent edits abort the update.
