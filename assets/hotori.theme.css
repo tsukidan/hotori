@@ -3,7 +3,7 @@
  * @author tsuki
  * @authorId 109679787630399488
  * @authorLink https://plusinsta.xyz
- * @version 0.8.11
+ * @version 0.8.12
  * @description A Discord theme inspired by Liquid Glass.
  */
 
@@ -3065,8 +3065,27 @@ body:has(.hoverButton__06ab4:is(:hover, :focus-visible), .upload_aa605f .actionB
     background: #ffffff !important;
     box-shadow: 0 0 4px 1px rgba(255, 255, 255, 0.7),
                 0 0 10px rgba(255, 255, 255, 0.35) !important;
+    animation: hotori-channel-unread-pulse 2.8s ease-in-out infinite;
     pointer-events: none;
     z-index: 1;
+}
+
+/* Breathe the existing white dot/glow without resizing it or animating blur. */
+@keyframes hotori-channel-unread-pulse {
+    0%, 100% { opacity: 0.55; }
+    50% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sidebarList__5e434 .wrapper__2ea32 .unread__2ea32 {
+        animation: none;
+        opacity: 1;
+    }
+}
+
+.reduce-motion .sidebarList__5e434 .wrapper__2ea32 .unread__2ea32 {
+    animation: none;
+    opacity: 1;
 }
 
 /* Channel-list separators use one neutral line regardless of glass color.
