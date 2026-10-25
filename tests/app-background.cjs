@@ -30,6 +30,10 @@ const http = require('node:http');
       let saved = ['--main-bg', '--settings-bg'].map((name, i) => ({ name, label: i ? 'Settings Background' : 'Main Background', section: 'Wallpapers', kind: 'image', value: i ? '' : initial, hint: 'Choose a wallpaper.' }));
       window.__TAURI__ = { core: { invoke: async (command, args) => {
         if (command === 'get_status') return structuredClone(window.backgroundStatus);
+        if (command === 'show_main_window') {
+          window.firstVisibleBackground = document.querySelector('.wallpaper').style.getPropertyValue('--app-wallpaper');
+          window.backgroundWindowShown = true; return;
+        }
         if (command === 'check_app_update' || command === 'check_theme_update') return { available: false };
         if (command === 'load_settings') return structuredClone(saved);
         if (command === 'save_settings') {
@@ -53,6 +57,7 @@ const http = require('node:http');
     }, { initial, png, jpeg, large });
     await page.goto(`http://127.0.0.1:${server.address().port}/index.html`);
     await page.waitForFunction(() => !document.getElementById('customize').disabled);
+    await page.waitForFunction(() => window.backgroundWindowShown);
     return page;
   }
   const paint = page => page.locator('.wallpaper').evaluate(el => el.style.getPropertyValue('--app-wallpaper'));
@@ -66,6 +71,11 @@ const http = require('node:http');
   try {
     const page = await open();
     assert.equal(await paint(page), '');
+    assert.equal(await page.locator('.wallpaper').evaluate(el => {
+      const rect = el.getBoundingClientRect(), style = getComputedStyle(el);
+      return rect.x === 0 && rect.y === 0 && rect.width === innerWidth && rect.height === innerHeight &&
+        style.backgroundPosition === '50% 50%, 50% 50%' && style.backgroundSize === 'cover, cover' && style.transform === 'none';
+    }), true, 'Wallpaper is viewport-sized, centered cover without an extra transform');
     assert((await page.locator('.wallpaper').evaluate(el => getComputedStyle(el).backgroundImage)).includes('assets/background.jpeg'));
     await page.locator('#customize').click();
     await page.getByRole('tab', { name: 'Wallpapers', exact: true }).click();
@@ -101,6 +111,7 @@ const http = require('node:http');
     await page.waitForTimeout(500);
     assert.equal(await paint(page), '', 'An old request cannot restore a cleared background');
     const reopened = await open('vencord:///themes/hotori-assets/1234567890abcdef.png');
+    assert((await reopened.evaluate(() => window.firstVisibleBackground)).startsWith('url("blob:'), 'Saved image must be applied before the native window is shown');
     await waitCustom(reopened);
     assert.equal(await imageHash(reopened), await imageHash(reopened, png), 'Saved local background is restored on startup');
     await reopened.waitForFunction(() => document.documentElement.dataset.glassRenderer === 'reference-liquidglass');

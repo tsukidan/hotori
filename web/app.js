@@ -63,7 +63,7 @@ async function refresh() {
   if (!invoke || busy) return;
   try {
     status = await invoke("get_status");
-    syncAppBackground(status.installed ? status.main_background : "");
+    await syncAppBackground(status.installed ? status.main_background : "");
     renderThemeVersion();
     document.querySelector(".vencord-notice").hidden = status.ready;
     updateButtons();
@@ -801,4 +801,14 @@ document.querySelectorAll("[data-icon]").forEach(node => node.replaceWith(icon(n
 initializeCategoryMotion();
 initializeDock();
 initializeTitlebar();
-initialize();
+initialize().finally(async () => {
+  // Decode the selected image before the native window's first visible frame.
+  // The default also needs decoding when there is no installed/custom image.
+  if (!appBackgroundObjectURL) {
+    const image = new Image(); image.src = 'assets/background.jpeg';
+    try { await image.decode(); } catch { /* A readable UI still opens. */ }
+  }
+  if (invoke) {
+    try { await invoke('show_main_window'); } catch (error) { console.warn('Could not show main window:', error); }
+  }
+});

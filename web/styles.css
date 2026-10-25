@@ -33,9 +33,9 @@ body { margin: 0; width: 100vw; height: 100dvh; overflow: hidden; }
 button, input, select { font: inherit; }
 button { -webkit-user-select: none; user-select: none; }
 .wallpaper {
-  position: fixed; inset: 0 -90% 0 0;
+  position: fixed; inset: 0;
   background-image: linear-gradient(#00000077, #000000b8), var(--app-wallpaper, url("assets/background.jpeg"));
-  background-size: cover; background-position: left center; background-repeat: no-repeat;
+  background-size: cover; background-position: center center; background-repeat: no-repeat;
   pointer-events: none;
 }
 #app { position: relative; width: 100%; height: 100%; overflow: clip; }

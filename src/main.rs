@@ -7,6 +7,7 @@ mod updates;
 mod wallpapers;
 
 use serde::Serialize;
+use tauri::Manager;
 use std::{path::PathBuf, sync::Mutex};
 
 struct AppState {
@@ -227,12 +228,20 @@ async fn wallpaper_preview(
 }
 
 #[tauri::command]
-async fn app_wallpaper(state: tauri::State<'_, AppState>, uri: String) -> Result<String, String> {
+async fn app_wallpaper(app: tauri::AppHandle, state: tauri::State<'_, AppState>, uri: String) -> Result<String, String> {
     let folder = state.folder()?.to_owned();
-    tauri::async_runtime::spawn_blocking(move || wallpapers::app_preview(&folder, &uri))
+    let cache = app.path().app_cache_dir().map_err(|e| e.to_string())?.join("wallpapers");
+    tauri::async_runtime::spawn_blocking(move || wallpapers::cached_app_preview(&folder, &uri, &cache))
         .await
         .map_err(|e| e.to_string())?
         .map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+fn show_main_window(app: tauri::AppHandle) -> Result<(), String> {
+    let window = app.get_webview_window("main").ok_or("Main window unavailable.")?;
+    window.show().map_err(|e| e.to_string())?;
+    window.set_focus().map_err(|e| e.to_string())
 }
 
 fn main() {
@@ -265,7 +274,8 @@ fn main() {
             open_vencord_download,
             import_wallpaper,
             wallpaper_preview,
-            app_wallpaper
+            app_wallpaper,
+            show_main_window
         ])
         .run(tauri::generate_context!())
         .expect("Could not start Hotori");

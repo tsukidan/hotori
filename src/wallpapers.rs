@@ -60,6 +60,36 @@ pub fn app_preview(folder: &Path, uri: &str) -> io::Result<String> {
     Ok(format!("data:{mime};base64,{}", STANDARD.encode(bytes)))
 }
 
+// Local selections already persist in hotori-assets. Keep linked images on
+// disk too so subsequent launches do not depend on a network request.
+pub fn cached_app_preview(folder: &Path, uri: &str, cache: &Path) -> io::Result<String> {
+    if valid_uri(uri) {
+        return preview(folder, uri);
+    }
+    let url = reqwest::Url::parse(uri).map_err(io::Error::other)?;
+    if !matches!(url.scheme(), "http" | "https") {
+        return Err(io::Error::other("Invalid wallpaper URL."));
+    }
+    use sha2::{Digest, Sha256};
+    let path = cache.join(format!("{:x}.image", Sha256::digest(uri.as_bytes())));
+    if fs::metadata(&path).is_ok_and(|metadata| metadata.len() <= MAX_BYTES as u64) {
+        if let Ok(bytes) = fs::read(&path) {
+            if let Ok((_, mime)) = image_type(&bytes) {
+                return Ok(format!("data:{mime};base64,{}", STANDARD.encode(bytes)));
+            }
+        }
+    }
+    let source = app_preview(folder, uri)?;
+    if let Some((_, encoded)) = source.split_once(',') {
+        if let Ok(bytes) = STANDARD.decode(encoded) {
+            if fs::create_dir_all(cache).is_ok() {
+                let _ = fs::write(path, bytes);
+            }
+        }
+    }
+    Ok(source)
+}
+
 pub fn valid_uri(uri: &str) -> bool {
     uri.strip_prefix(PREFIX)
         .and_then(|name| name.split_once('.'))
@@ -152,6 +182,38 @@ pub fn preview(folder: &Path, uri: &str) -> io::Result<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn linked_app_wallpaper_is_reused_from_disk_without_network() {
+        use std::io::Read;
+        let cache = std::env::temp_dir().join(format!("hotori-app-cache-{}", std::process::id()));
+        fs::create_dir_all(&cache).unwrap();
+        let listener = std::net::TcpListener::bind("127.0.0.1:0").unwrap();
+        let uri = format!("http://{}/saved.png", listener.local_addr().unwrap());
+        let server = std::thread::spawn(move || {
+            let (mut socket, _) = listener.accept().unwrap();
+            let mut request = [0u8; 4096];
+            let _ = socket.read(&mut request);
+            let bytes = include_bytes!("../icons/icon.png");
+            write!(
+                socket,
+                "HTTP/1.1 200 OK\r\nContent-Length: {}\r\nConnection: close\r\n\r\n",
+                bytes.len()
+            )
+            .unwrap();
+            socket.write_all(bytes).unwrap();
+        });
+        let first = cached_app_preview(Path::new("."), &uri, &cache).unwrap();
+        server.join().unwrap();
+        // The server is gone; a second launch must use the saved bytes.
+        assert_eq!(
+            cached_app_preview(Path::new("."), &uri, &cache).unwrap(),
+            first
+        );
+        assert_eq!(fs::read_dir(&cache).unwrap().count(), 1);
+        assert!(cached_app_preview(Path::new("."), "file:///C:/secret.png", &cache).is_err());
+        fs::remove_dir_all(cache).unwrap();
+    }
+
     #[test]
     fn local_image_is_copied_deduplicated_and_scoped() {
         let folder =

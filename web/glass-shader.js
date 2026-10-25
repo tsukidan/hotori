@@ -101,7 +101,7 @@
     const cover = Math.max(box.width / image.naturalWidth, box.height / image.naturalHeight);
     const width = image.naturalWidth * cover, height = image.naturalHeight * cover;
     sceneContext.fillStyle = styleOf(document.documentElement).backgroundColor; sceneContext.fillRect(0, 0, scene.width, scene.height);
-    sceneContext.drawImage(image, box.left * dpr, (box.top + (box.height - height) / 2) * dpr, width * dpr, height * dpr);
+    sceneContext.drawImage(image, (box.left + (box.width - width) / 2) * dpr, (box.top + (box.height - height) / 2) * dpr, width * dpr, height * dpr);
     const colors = style.backgroundImage.split('url(')[0].match(/rgba?\([^)]+\)/g);
     if (colors?.length >= 2) {
       const gradient = sceneContext.createLinearGradient(0, box.top * dpr, 0, box.bottom * dpr);
