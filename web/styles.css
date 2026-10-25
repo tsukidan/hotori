@@ -459,10 +459,17 @@ details[open] > summary > .icon { transform: rotate(180deg); }
   -webkit-backdrop-filter: blur(10px) saturate(150%);
   box-shadow: inset 0 1px 1px #ffffff33, 0 2px 8px #00000026;
 }
-.theme-version { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; margin: 12px 0 0; color: var(--muted); }
+.theme-version { display: flex; flex-direction: column; align-items: stretch; gap: 10px; margin: 12px 0 0; color: var(--muted); }
+.theme-version-heading { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; }
 .theme-version[hidden] { display: none; }
-.theme-version > .icon { width: 22px; height: 22px; stroke-width: 1.8; color: #f5f6f7; }
+.theme-version-heading > .icon { width: 22px; height: 22px; stroke-width: 1.8; color: #f5f6f7; }
 .theme-version strong { margin-left: 5px; color: #f5f6f7; font-weight: 600; }
+.app-changelog { padding-top: 10px; border-top: 1px solid #ffffff1f; font-size: 12px; line-height: 1.5; }
+.app-changelog p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; margin: 0 0 6px; }
+.app-changelog p > span { font-size: 10px; }
+.app-changelog strong { margin-left: 0; font-weight: 700; }
+.app-changelog ul { margin: 0; padding-left: 17px; }
+.app-changelog li + li { margin-top: 4px; }
 .theme-update-notice {
   display: inline-flex; align-items: center; gap: 8px; min-height: 24px;
   border: 0; border-left: 1px solid #ffffff33; border-radius: 0; padding: 0 0 0 12px;

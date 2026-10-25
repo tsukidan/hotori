@@ -37,7 +37,17 @@
           <h2>Hotori — a theme inspired by Liquid Glass.</h2>
           <p class="description">A Discord theme inspired by Liquid Glass. Make it yours with acrylic or liquid glass, custom backgrounds, colors and blur. Adjust avatar size and shape, message spacing, mention highlights, and your server list layout.</p>
           <p id="home-status" class="status" role="status" aria-live="polite">Checking your theme…</p>
-          <p id="theme-version" class="theme-version" role="status" aria-live="polite" hidden><span data-icon="tag"></span><span>Installed theme <strong id="theme-version-value"></strong></span><button id="theme-update-notice" class="theme-update-notice" type="button" hidden><span data-icon="reset"></span><span id="theme-update-label"></span></button></p>
+          <div id="theme-version" class="theme-version" role="status" aria-live="polite" hidden>
+            <div class="theme-version-heading"><span data-icon="tag"></span><span>Installed theme <strong id="theme-version-value"></strong></span><button id="theme-update-notice" class="theme-update-notice" type="button" hidden><span data-icon="reset"></span><span id="theme-update-label"></span></button></div>
+            <section class="app-changelog" aria-label="App changelog">
+              <p><strong>Changelog</strong><span>App v1.6.24</span></p>
+              <ul>
+                <li><strong>Startup:</strong> Your saved wallpaper is ready when Hotori opens.</li>
+                <li><strong>Background:</strong> Centered cover sizing without extra zoom.</li>
+                <li><strong>Offline:</strong> Linked wallpapers are cached for future launches.</li>
+              </ul>
+            </section>
+          </div>
           <p class="vencord-notice" hidden>!! Vencord is required for this theme !!</p>
         </div>
       </div>
@@ -137,6 +147,6 @@
       <button id="app-update-install" class="button primary" type="button">Download &amp; restart</button>
     </div>
   </dialog>
-  <span class="version" aria-label="Version 1.6.23">v1.6.23</span>
+  <span class="version" aria-label="Version 1.6.24">v1.6.24</span>
 </body>
 </html>
