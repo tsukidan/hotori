@@ -343,7 +343,7 @@ function sampleFrames(page, duration = 800) {
     await page.waitForFunction(() => document.querySelector('#settings-status').textContent.includes('reset and saved'));
     assert((await fs.readFile(destination, 'utf8')).includes('--blur-val: 30px;'));
     assert.equal(await page.getByLabel('Acrylic Blur', { exact: true }).getAttribute('aria-valuetext'), '100%');
-    assert.equal(await page.getByLabel('Accent Color', { exact: true }).inputValue(), '#5865f2');
+    assert.equal(await page.getByLabel('Main Color', { exact: true }).inputValue(), '#5865f2');
     await page.locator('#back').click();
     await page.waitForTimeout(380);
     await fs.writeFile(destination, bundledTheme);
@@ -372,6 +372,7 @@ function sampleFrames(page, duration = 800) {
     for (const name of ['--main-bg', '--settings-bg']) {
       const row = page.locator(`[data-name="${name}"]`);
       await row.locator('input[type="file"]').setInputFiles(originalImage);
+      await page.getByRole('button', {name: 'Use crop', exact: true}).click();
       await page.waitForFunction(name => {
         const row = document.querySelector(`[data-name="${name}"]`);
         return row.querySelector('input[type="text"]').readOnly && !document.getElementById('back').disabled;
@@ -381,10 +382,10 @@ function sampleFrames(page, duration = 800) {
         const preview = el.querySelector('.wallpaper-preview').getBoundingClientRect();
         const input = el.querySelector('input[type="text"]').getBoundingClientRect();
         const actions = el.querySelector('.wallpaper-actions').getBoundingClientRect();
-        return preview.bottom <= input.top && input.bottom <= actions.top && Math.abs(preview.width / preview.height - 16 / 9) < .02;
+        return preview.bottom <= input.top && input.bottom <= actions.top && (el.dataset.name !== '--main-bg' || Math.abs(preview.width / preview.height - 16 / 9) < .02);
       });
       assert(wallpaperOrder, 'Wallpaper preview is cropped to 16:9 above the input and actions');
-      assert((await row.locator('.wallpaper-notice').textContent()).includes('won’t be uploaded'));
+      assert((await row.locator('.wallpaper-notice').textContent()).includes('saved locally'));
     }
     await fs.unlink(originalImage);
     await saveAndBack();
@@ -393,8 +394,9 @@ function sampleFrames(page, duration = 800) {
     assert(/--main-bg: url\('vencord:\/\/\/themes\/hotori-assets\/[a-f0-9]{16}\.png'\);/.test(localTheme));
     assert(/--settings-bg: url\('vencord:\/\/\/themes\/hotori-assets\/[a-f0-9]{16}\.png'\);/.test(localTheme));
     const managedAssets = await fs.readdir(path.join(folder, 'hotori-assets'));
-    assert.equal(managedAssets.length, 1, 'Identical images should share one managed copy');
-    assert.deepEqual(await fs.readFile(path.join(folder, 'hotori-assets', managedAssets[0])), imageBytes);
+    assert(managedAssets.length >= 2, 'Managed files retain the original and the different crops');
+    const assetBytes = await Promise.all(managedAssets.map(name => fs.readFile(path.join(folder, 'hotori-assets', name))));
+    assert(assetBytes.some(bytes => bytes.equals(imageBytes)), 'The unmodified original is retained for recropping');
     await page.locator('#customize').click();
     await showCategory('Wallpapers');
     const largeLocalImage = require('./fixtures/large-wallpaper.cjs')(imageBytes);
@@ -405,6 +407,9 @@ function sampleFrames(page, duration = 800) {
     ]) {
       const previous = await page.locator('.wallpaper').evaluate(el => el.style.getPropertyValue('--app-wallpaper'));
       await page.locator('[data-name="--main-bg"] input[type="file"]').setInputFiles(variant);
+      await page.getByLabel('Crop zoom', {exact: true}).fill('1.25');
+      await page.getByLabel('Crop zoom', {exact: true}).dispatchEvent('input');
+      await page.getByRole('button', {name: 'Use crop', exact: true}).click();
       await page.waitForFunction(() => !document.getElementById('save-category').disabled);
       await saveCategory('Wallpapers');
       await page.waitForFunction(previous => {
@@ -431,15 +436,16 @@ function sampleFrames(page, duration = 800) {
     await new Promise(resolve => wallpaperServer.listen(0, '127.0.0.1', resolve));
     const remoteWallpaper = `http://127.0.0.1:${wallpaperServer.address().port}/wallpaper.jpg`;
     await mainWallpaper.getByRole('button', { name: 'Use image link', exact: true }).click();
-    assert((await mainWallpaper.locator('.wallpaper-notice').textContent()).includes('contacts that website'));
+    assert((await mainWallpaper.locator('.wallpaper-notice').textContent()).includes('contact that website'));
     await page.getByLabel('Main Background', { exact: true }).fill(remoteWallpaper);
     await page.getByLabel('Main Background', { exact: true }).press('Tab');
+    await page.getByRole('button', {name: 'Use crop', exact: true}).click();
     await mainWallpaper.locator('.wallpaper-preview').waitFor({ state: 'visible' });
     assert.equal(await page.locator('#app').evaluate(el => el.scrollTop), 0, 'Hidden file picker must not scroll the whole app');
     await mainWallpaper.scrollIntoViewIfNeeded();
     await page.screenshot({ path: path.join(qa, 'hotori-wallpapers.png') });
     await saveAndBack();
-    assert((await fs.readFile(destination, 'utf8')).includes(`--main-bg: url('${remoteWallpaper}');`));
+    assert((await fs.readFile(destination, 'utf8')).includes("--main-bg: url('vencord:///themes/hotori-assets/"), 'Linked image crops are saved locally');
     await page.waitForFunction(previous => {
       const value = document.querySelector('.wallpaper').style.getPropertyValue('--app-wallpaper');
       return value.startsWith('url("blob:') && value !== previous;
@@ -517,7 +523,7 @@ function sampleFrames(page, duration = 800) {
     await page.getByLabel('Glass Profile', { exact: true }).selectOption('Liquid Glass');
     await page.getByLabel('Liquid Glass Color Intensity', { exact: true }).fill('110');
     await showCategory('Colors');
-    await page.getByLabel('Accent Color', { exact: true }).fill('#123456');
+    await page.getByLabel('Main Color', { exact: true }).fill('#123456');
     await page.getByLabel('Message & Input Text', { exact: true }).fill('#c0ffee');
     await showCategory('Wallpapers');
     await page.getByLabel('Main Background', { exact: true }).fill('');
@@ -542,7 +548,7 @@ function sampleFrames(page, duration = 800) {
     assert(partial.includes('--blur-val: 26.4px;'));
     assert(partial.includes('--main-color: #ec5757;'), 'Saving glass must not save the color draft');
     assert(partial.includes('--message-avatar-size: 40px;'), 'Saving glass must not save the avatar draft');
-    assert.equal(await page.getByLabel('Accent Color', { exact: true }).inputValue(), '#123456');
+    assert.equal(await page.getByLabel('Main Color', { exact: true }).inputValue(), '#123456');
     assert.equal(await avatar.inputValue(), '110');
     // Repeated category saves keep the session current.
     await showCategory('Glass Appearance');
@@ -572,7 +578,7 @@ function sampleFrames(page, duration = 800) {
     await page.locator('#customize').click();
     await page.waitForTimeout(380);
     await showCategory('Colors');
-    await page.getByLabel('Accent Color', { exact: true }).fill('#abcdef');
+    await page.getByLabel('Main Color', { exact: true }).fill('#abcdef');
     await page.getByRole('button', { name: 'Reset to defaults', exact: true }).click();
     await page.locator('#reset-confirm').click();
     await page.waitForFunction(() => document.querySelector('#settings-status').textContent === 'All customization options reset and saved to defaults.');
@@ -589,8 +595,8 @@ function sampleFrames(page, duration = 800) {
     assert(reset.includes('--chat-input-gap: 12px;'));
     assert(reset.includes('--server-list-top-padding: 12px;'));
     assert(reset.endsWith('.implementation { color: red; }\n'));
-    assert.equal(await page.getByLabel('Accent Color', { exact: true }).inputValue(), '#5865f2');
-    await page.getByLabel('Accent Color', { exact: true }).fill('#112233');
+    assert.equal(await page.getByLabel('Main Color', { exact: true }).inputValue(), '#5865f2');
+    await page.getByLabel('Main Color', { exact: true }).fill('#112233');
     await saveCategory('Colors');
     assert((await fs.readFile(destination, 'utf8')).includes('--main-color: #112233;'));
     await page.locator('#back').click();
@@ -601,7 +607,7 @@ function sampleFrames(page, duration = 800) {
     await page.waitForTimeout(380);
     await showCategory('Colors');
     await fs.appendFile(destination, '/* External edit */\n');
-    await page.getByLabel('Accent Color', { exact: true }).fill('#abcdef');
+    await page.getByLabel('Main Color', { exact: true }).fill('#abcdef');
     await page.getByRole('button', { name: 'Save Colors', exact: true }).click();
     await page.waitForFunction(() => document.querySelector('#settings-status').dataset.error === 'true');
     assert.equal(await page.locator('#app').getAttribute('data-page'), 'settings');

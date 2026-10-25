@@ -277,7 +277,7 @@
       for (const [element] of layers) if (!element.isConnected) { resize.unobserve(element); layers.delete(element); }
       for (const [element] of captures) if (!element.isConnected) { resize.unobserve(element); captures.delete(element); }
       document.documentElement.dataset.glassRenderer = 'reference-liquidglass';
-      if (document.getAnimations().some(animation => animation.playState === 'running')) schedule();
+      if (document.getAnimations().some(animation => animation.playState === 'running' && animation.animationName !== 'palette-notification')) schedule();
     } catch (error) { console.warn('LiquidGlass fallback:', error); fallback(); }
   }
   function invalidateContent(element) {

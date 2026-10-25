@@ -79,15 +79,16 @@ const http = require('node:http');
     assert((await page.locator('.wallpaper').evaluate(el => getComputedStyle(el).backgroundImage)).includes('assets/background.jpeg'));
     await page.locator('#customize').click();
     await page.getByRole('tab', { name: 'Wallpapers', exact: true }).click();
-    const main = page.getByLabel('Main Background', { exact: true });
-    await main.fill('https://example.com/main.jpg');
+    // Crop interaction is tested in wallpaper-tools.cjs; isolate saved/draft background synchronization here.
+    const setDraft = (name, value) => page.evaluate(({name, value}) => { fields.find(field => field.name === name).value = value; updateCategoryButtons(); }, {name, value});
+    await setDraft('--main-bg', 'https://example.com/main.jpg');
     assert.equal(await paint(page), '', 'Drafts do not replace the saved app background');
     await page.getByRole('button', { name: 'Save Wallpapers', exact: true }).click();
     await waitCustom(page);
     assert.equal(await imageHash(page), await imageHash(page, jpeg));
     for (const [uri, expected] of [['https://example.com/large.png', large], ['https://example.com/again.jpg', jpeg], ['https://example.com/large-again.png', large]]) {
       const previous = await paint(page);
-      await main.fill(uri);
+      await setDraft('--main-bg', uri);
       await page.getByRole('button', { name: 'Save Wallpapers', exact: true }).click();
       await page.waitForFunction(previous => {
         const value = document.querySelector('.wallpaper').style.getPropertyValue('--app-wallpaper');
@@ -96,7 +97,7 @@ const http = require('node:http');
       assert((await paint(page)).length < 200, 'Large image pixels must not be placed directly in CSS variables');
       assert.equal(await imageHash(page), await imageHash(page, expected));
     }
-    await page.getByLabel('Settings Background', { exact: true }).fill('https://example.com/settings.jpg');
+    await setDraft('--settings-bg', 'https://example.com/settings.jpg');
     await page.getByRole('button', { name: 'Save Wallpapers', exact: true }).click();
     await page.evaluate(() => refresh());
     assert.equal(await page.evaluate(() => window.backgroundLoads.length), 4, 'Unchanged wallpaper is not downloaded on every refresh');

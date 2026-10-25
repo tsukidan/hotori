@@ -1,6 +1,20 @@
 {
   "name": "hotori-ui-tests",
   "private": true,
-  "scripts": { "test:native": "node tests/native-smoke.cjs", "test:dock": "node tests/dock-smoke.cjs", "test:settings": "node tests/settings-tabs.cjs", "test:theme-update": "node tests/theme-update-notice.cjs", "test:glass": "node tests/liquid-glass.cjs", "test:glass-reference": "node tests/liquid-glass-reference.cjs", "test:background": "node tests/app-background.cjs", "test:wordmark": "node tests/glass-wordmark.cjs", "test:acrylic-accent": "node tests/acrylic-accent.cjs" },
-  "devDependencies": { "playwright": "1.62.1" }
+  "scripts": {
+    "test:native": "node tests/native-smoke.cjs",
+    "test:dock": "node tests/dock-smoke.cjs",
+    "test:settings": "node tests/settings-tabs.cjs",
+    "test:theme-update": "node tests/theme-update-notice.cjs",
+    "test:glass": "node tests/liquid-glass.cjs",
+    "test:glass-reference": "node tests/liquid-glass-reference.cjs",
+    "test:background": "node tests/app-background.cjs",
+    "test:wordmark": "node tests/glass-wordmark.cjs",
+    "test:acrylic-accent": "node tests/acrylic-accent.cjs",
+    "test:wallpapers": "node tests/wallpaper-tools.cjs",
+    "test:native-wallpapers": "node tests/native-wallpaper-tools.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
+  }
 }

@@ -213,6 +213,13 @@ const iconPaths = {
   glass: '<rect x="4" y="4" width="16" height="16" rx="4"/><path d="m8 13 5-5m-2 8 5-5"/>',
   image: '<rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1.5"/><path d="m3 17 6-6 4 4 3-3 5 5"/>',
   sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1 1m12 12 1 1M5 19l1-1M18 6l1-1"/>',
+  speaker: '<path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="M15 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/>',
+  search: '<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/>',
+  mic: '<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8"/>',
+  headphones: '<path d="M3 14v-3a9 9 0 0 1 18 0v3"/><rect x="3" y="12" width="4" height="8" rx="2"/><rect x="17" y="12" width="4" height="8" rx="2"/>',
+  gear: '<path d="m10 3 .5-1h3L14 3l1 2 2 .5 2-1 2 2-1 2 .5 2 2 1v3l-2 1-.5 2 1 2-2 2-2-1-2 .5-1 2h-3l-1-2-2-.5-2 1-2-2 1-2-.5-2-2-1v-3l2-1 .5-2-1-2 2-2 2 1 2-.5 1-2Z"/><circle cx="12" cy="12" r="3"/>',
+  bell: '<path d="M5 16h14l-2-3V9a5 5 0 0 0-10 0v4l-2 3Zm5 4h4"/>',
+  pin: '<path d="m16 3 5 5-5 1-3 5-3-3 5-3 1-5ZM10 14l-7 7"/>',
   blur: '<circle cx="12" cy="12" r="9"/><path d="M8 6v12m4-14v16m4-14v12"/>',
   palette: '<path d="M12 3a9 9 0 1 0 0 18h1a2 2 0 0 0 1-4c-1-1 0-3 2-3h2c4 0 3-11-6-11Z"/><circle cx="7" cy="10" r=".7"/><circle cx="10" cy="6.5" r=".7"/><circle cx="15" cy="7" r=".7"/>',
   text: '<path d="M4 5h16M12 5v15M8 20h8"/>',
@@ -339,6 +346,7 @@ function selectCategory(category) {
   }
   $("settings-title").textContent = category;
   $("settings-description").textContent = categoryDescriptions[category];
+  window.HotoriWallpaperTools?.visit(category);
   $("settings-form").scrollTop = categoryGroups.get(category)?.scroll || 0;
   updateCategoryButtons();
 }
@@ -362,71 +370,32 @@ async function saveCategory(category) {
   finally { busy = false; group.saving = false; await refresh(); updateButtons(); }
 }
 
+function wallpaperBridge() {
+  return { invoke, icon, fields: () => fields, busy: () => busy,
+    changed: updateCategoryButtons, select: selectCategory, current: () => selectedCategory, saveColor: saveRecommendedColor,
+    setBusy(value) { busy = value; updateButtons(); } };
+}
 function wallpaperControl(field, control) {
-  const localPrefix = "vencord:///themes/hotori-assets/";
-  const input = element("input", "input"); input.type = "text"; input.spellcheck = false;
-  input.placeholder = "https://example.com/image.jpg";
-  const actions = element("div", "wallpaper-actions");
-  const local = element("button", "button", "Choose local image"); local.type = "button"; local.prepend(icon("folder"));
-  const link = element("button", "button", "Use image link"); link.type = "button"; link.prepend(icon("image"));
-  const clear = element("button", "button", "Clear background"); clear.type = "button"; clear.prepend(icon("trash"));
-  const picker = element("input", "wallpaper-picker"); picker.type = "file"; picker.hidden = true; picker.tabIndex = -1; picker.accept = "image/png,image/jpeg,image/gif,image/webp";
-  picker.setAttribute("aria-label", `${field.label} local image`);
-  const notice = element("p", "wallpaper-notice");
-  const feedback = element("p", "wallpaper-feedback"); feedback.setAttribute("role", "status");
-  const preview = element("img", "wallpaper-preview"); preview.alt = `${field.label} preview`; preview.hidden = true; preview.referrerPolicy = "no-referrer";
-  let previewRequest = 0;
-  const isLocal = () => field.value.startsWith(localPrefix);
-  const sync = () => {
-    input.readOnly = isLocal();
-    input.value = isLocal() ? "Local image selected" : field.value;
-    updateCategoryButtons();
-    local.setAttribute("aria-pressed", String(isLocal()));
-    link.setAttribute("aria-pressed", String(!isLocal()));
-    notice.textContent = isLocal()
-      ? "This image stays on your computer and won’t be uploaded. Hotori keeps a copy, so moving or deleting the original won’t affect it."
-      : "Discord will load this image from the provided website. The link must point directly to an image. Previewing also contacts that website.";
-  };
-  const showPreview = async (data) => {
-    const request = ++previewRequest;
-    preview.hidden = true; preview.removeAttribute("src"); feedback.textContent = "";
-    if (!field.value) return;
-    try {
-      const src = data || (isLocal() ? await invoke("wallpaper_preview", { uri: field.value }) : field.value);
-      if (request !== previewRequest) return;
-      if (!isLocal() && !/^https?:\/\//i.test(src)) throw new Error("Enter a direct HTTP or HTTPS image link.");
-      preview.onload = () => { if (request === previewRequest) { preview.hidden = false; feedback.textContent = ""; } };
-      preview.onerror = () => { if (request === previewRequest) { preview.hidden = true; feedback.textContent = "Could not preview this image. Check the link or choose another file."; } };
-      preview.src = src;
-    } catch (error) { if (request === previewRequest) feedback.textContent = String(error); }
-  };
-  input.addEventListener("input", () => { if (!input.readOnly) field.value = input.value.trim(); });
-  input.addEventListener("change", () => showPreview());
-  local.addEventListener("click", () => picker.click());
-  link.addEventListener("click", () => {
-    if (isLocal()) { field.value = ""; sync(); showPreview(); }
-    input.focus();
-  });
-  clear.addEventListener("click", () => { field.value = ""; picker.value = ""; sync(); showPreview(); });
-  picker.addEventListener("change", async () => {
-    const file = picker.files[0]; if (!file || busy) return;
-    if (file.size > 10 * 1024 * 1024) { feedback.textContent = "Choose an image smaller than 10 MB."; picker.value = ""; return; }
-    busy = true; updateButtons(); local.disabled = link.disabled = clear.disabled = true;
-    feedback.textContent = "Copying your image locally…";
-    try {
-      const data = await new Promise((resolve, reject) => {
-        const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = () => reject(new Error("Could not read this image.")); reader.readAsDataURL(file);
-      });
-      const check = new Image(); check.src = data; await check.decode();
-      field.value = await invoke("import_wallpaper", { data });
-      sync(); await showPreview(data);
-      message("settings-status", "Local image copied. Save changes to apply it to your theme.");
-    } catch (error) { feedback.textContent = `Could not use this image: ${error}`; }
-    finally { busy = false; updateButtons(); local.disabled = link.disabled = clear.disabled = false; picker.value = ""; }
-  });
-  actions.append(local, link, clear); control.append(preview, input, actions, picker, notice, feedback);
-  sync(); showPreview();
-  return input;
+  return window.HotoriWallpaperTools.control(field, control, wallpaperBridge());
+}
+async function saveRecommendedColor(name, hex) {
+  const field = fields.find(item => item.name === name);
+  if (busy || !invoke || !field || !/^#[0-9a-f]{6}$/i.test(hex)) return;
+  const rgb = hex.slice(1).match(/../g).map(value => parseInt(value, 16));
+  const value = field.alphaEnabled ? `rgba(${rgb.join(', ')}, ${field.opacity})` : hex;
+  const previous = field.value;
+  const edits = fields.map(item => ({ name: item.name, value: item.name === name ? value : savedValues.get(item.name) }));
+  const scroll = $('settings-form').scrollTop;
+  busy = true; updateButtons();
+  try {
+    const updated = await invoke('save_settings', { edits });
+    const canonical = updated.find(item => item.name === name);
+    savedValues.set(name, canonical.value);
+    if (field.value === previous) Object.assign(field, canonical);
+    renderFields(); $('settings-form').scrollTop = scroll;
+    message('settings-status', `${field.label} saved. Other unsaved changes stay in the editor.`);
+  } catch (error) { message('settings-status', String(error), true); }
+  finally { busy = false; await refresh(); updateButtons(); }
 }
 
 function renderFields() {
@@ -452,6 +421,7 @@ function renderFields() {
     if (!submenus.has(key)) {
       const group = disclosure(title, symbol, true, true);
       if (grid) group.content.classList.add("color-grid");
+      if (section === "Wallpapers") { group.details.classList.add("wallpaper-group"); group.details.dataset.wallpaper = title === 'Main Background' ? 'main' : 'settings'; }
       parent.append(group.details); submenus.set(key, group.content);
     }
     return submenus.get(key);
@@ -461,8 +431,8 @@ function renderFields() {
       case "Glass appearance": return target("Glass Appearance");
       case "Blur & saturation": return target("Glass Appearance", "Blur & Intensity", "blur");
       case "Glass tints": return target("Glass Appearance", "Tint Presets", "palette", true);
-      case "Wallpapers": return target("Wallpapers");
-      case "Background dimming": return target("Wallpapers", field.name.startsWith("--settings") ? "Settings Background Dimming" : "Main Background Dimming", "sun", true);
+      case "Wallpapers": return target("Wallpapers", field.name === "--settings-bg" ? "Settings Background" : "Main Background", "image");
+      case "Background dimming": return target("Wallpapers", field.name.startsWith("--settings") ? "Settings Background" : "Main Background", "image");
       case "Accent color": return target("Colors");
       case "Text & icon colors": return target("Colors");
       case "Avatars": return target("Avatars");
@@ -480,7 +450,7 @@ function renderFields() {
     if (field.kind === "image") row.classList.add("wallpaper-row");
     const info = element("div", "setting-info");
     const label = element("label", "setting-label");
-    label.append(icon(fieldIcon(field)), document.createTextNode(field.name === sharedText ? "Message & Input Text" : field.label));
+    label.append(icon(fieldIcon(field)), document.createTextNode(field.name === sharedText ? "Message & Input Text" : field.name === "--main-color" ? "Main Color" : field.label));
     label.htmlFor = `field-${index}`;
     const hint = element("p", "setting-hint", field.name === sharedText ? "Shared color for messages, input text, and neutral interface text." : field.hint);
     hint.id = `hint-${index}`;
@@ -539,6 +509,7 @@ function renderFields() {
       colorLine.append(input, value); control.append(colorLine);
       const colorChanged = () => {
         value.textContent = input.value.toUpperCase();
+        field.color = input.value;
         const rgb = input.value.slice(1).match(/../g).map((c) => parseInt(c, 16));
         field.value = hexAlpha ? input.value + Math.round(field.opacity * 255).toString(16).padStart(2, "0")
           : field.alphaEnabled ? `rgba(${rgb.join(", ")}, ${field.opacity})` : input.value;
@@ -602,6 +573,7 @@ function renderFields() {
     input.addEventListener("input", tint); tint();
   });
   if (categoryGroups.size) selectCategory(categoryGroups.has(selectedCategory) ? selectedCategory : categoryGroups.keys().next().value);
+  window.HotoriWallpaperTools.mount(wallpaperBridge());
   updateCategoryButtons();
 }
 
@@ -772,8 +744,8 @@ document.addEventListener("keydown", (event) => {
   if (event.key === "Escape" && $("app").dataset.page === "settings" && !busy) navigate("installer");
 });
 $("settings-form").addEventListener("submit", event => event.preventDefault());
-$("settings-form").addEventListener("input", updateCategoryButtons);
-$("settings-form").addEventListener("change", updateCategoryButtons);
+$("settings-form").addEventListener("input", () => { updateCategoryButtons(); window.HotoriWallpaperTools.updatePreviewColors(); });
+$("settings-form").addEventListener("change", () => { updateCategoryButtons(); window.HotoriWallpaperTools.updatePreviewColors(); });
 // Clear/link buttons change the value programmatically before this bubble listener runs.
 $("settings-form").addEventListener("click", updateCategoryButtons);
 
