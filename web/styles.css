@@ -34,7 +34,7 @@ button, input, select { font: inherit; }
 button { -webkit-user-select: none; user-select: none; }
 .wallpaper {
   position: fixed; inset: 0;
-  background-image: linear-gradient(rgb(0 0 0 / var(--app-overlay-opacity, .6)), rgb(0 0 0 / var(--app-overlay-opacity, .6))), var(--app-wallpaper, url("assets/background.jpeg"));
+  background-image: linear-gradient(rgb(0 0 0 / var(--app-overlay-opacity, .6)), rgb(0 0 0 / var(--app-overlay-opacity, .6))), var(--app-wallpaper, var(--app-default-wallpaper, none));
   background-size: cover; background-position: center center; background-repeat: no-repeat;
   pointer-events: none;
 }

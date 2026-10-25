@@ -47,6 +47,8 @@ const assert = require('node:assert/strict');
         assert(releaseImage, 'The first launch requests the saved image');
         assert.equal(await page.evaluate(() => window.__TAURI__.window.getCurrentWindow().isVisible()), false,
           'The window must stay hidden while the saved wallpaper is loading');
+        assert(!await page.locator('.wallpaper').evaluate(el => getComputedStyle(el).backgroundImage.includes('assets/background.jpeg')),
+          'Startup CSS must not expose the bundled wallpaper while the saved image is pending');
         releaseImage();
       }
       await page.waitForFunction(async () => await window.__TAURI__.window.getCurrentWindow().isVisible());

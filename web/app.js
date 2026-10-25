@@ -79,13 +79,17 @@ async function syncAppBackground(value) {
   appBackgroundSelection = uri; appBackgroundAttempt = Date.now(); appBackgroundLoaded = false;
   const request = ++appBackgroundRequest;
   const wallpaper = document.querySelector('.wallpaper');
-  const clear = () => {
+  const clear = async () => {
+    const image = new Image(); image.src = 'assets/background.jpeg';
+    try { await image.decode(); } catch { /* A readable UI still opens. */ }
+    if (request !== appBackgroundRequest) return;
+    wallpaper.style.setProperty('--app-default-wallpaper', 'url("assets/background.jpeg")');
     wallpaper.style.removeProperty('--app-wallpaper');
     if (appBackgroundObjectURL) URL.revokeObjectURL(appBackgroundObjectURL);
     appBackgroundObjectURL = undefined;
     window.HotoriAccent?.useDefault();
   };
-  if (!uri) { clear(); appBackgroundLoaded = true; return; }
+  if (!uri) { await clear(); if (request === appBackgroundRequest) appBackgroundLoaded = true; return; }
   let candidate;
   try {
     const source = await invoke("app_wallpaper", { uri });
@@ -101,13 +105,14 @@ async function syncAppBackground(value) {
     const image = new Image(); image.src = candidate; await image.decode();
     if (request !== appBackgroundRequest) return;
     wallpaper.style.setProperty('--app-wallpaper', `url("${candidate}")`);
+    wallpaper.style.removeProperty('--app-default-wallpaper');
     window.HotoriAccent?.fromImage(image);
     const previous = appBackgroundObjectURL;
     appBackgroundObjectURL = candidate; candidate = undefined;
     if (previous) URL.revokeObjectURL(previous);
     appBackgroundLoaded = true;
   } catch {
-    if (request === appBackgroundRequest) clear();
+    if (request === appBackgroundRequest) await clear();
   } finally {
     if (candidate) URL.revokeObjectURL(candidate);
   }
@@ -793,6 +798,7 @@ async function initializeTitlebar() {
 
 async function initialize() {
   if (!invoke) {
+    await syncAppBackground("");
     message("home-status", "Interface preview. Open Hotori to install or customize your theme.");
     updateButtons(); return;
   }
@@ -857,12 +863,8 @@ initializeCategoryMotion();
 initializeDock();
 initializeTitlebar();
 initialize().finally(async () => {
-  // Decode the selected image before the native window's first visible frame.
-  // The default also needs decoding when there is no installed/custom image.
-  if (!appBackgroundObjectURL) {
-    const image = new Image(); image.src = 'assets/background.jpeg';
-    try { await image.decode(); } catch { /* A readable UI still opens. */ }
-  }
+  // Startup CSS contains no bundled wallpaper. Only the selected/decoded image
+  // is eligible for the first native frame, including the GPU backdrop.
   if (invoke) {
     try { await invoke('show_main_window'); } catch (error) { console.warn('Could not show main window:', error); }
   }
