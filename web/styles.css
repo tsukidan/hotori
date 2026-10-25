@@ -242,10 +242,10 @@ details[open] > summary > .icon { transform: rotate(180deg); }
 .vencord-dialog h2 { font-size: 25px; }
 .vencord-dialog p { margin: 18px 0 24px; color: var(--muted); line-height: 1.6; }
 .vencord-dialog .button { min-width: 120px; }
-#uninstall-dialog { scrollbar-width: none; overflow-x: hidden; }
-#uninstall-dialog::-webkit-scrollbar { display: none; width: 0; height: 0; }
-:is(#uninstall-dialog, #guide-dialog)[open] { animation: hotori-prompt-in 260ms cubic-bezier(.16, 1, .3, 1) both; }
-:is(#uninstall-dialog, #guide-dialog)[open]::backdrop { animation: hotori-prompt-backdrop-in 220ms ease-out both; }
+:is(#uninstall-dialog, #reset-dialog) { scrollbar-width: none; overflow-x: hidden; }
+:is(#uninstall-dialog, #reset-dialog)::-webkit-scrollbar { display: none; width: 0; height: 0; }
+:is(#uninstall-dialog, #guide-dialog, #reset-dialog)[open] { animation: hotori-prompt-in 260ms cubic-bezier(.16, 1, .3, 1) both; }
+:is(#uninstall-dialog, #guide-dialog, #reset-dialog)[open]::backdrop { animation: hotori-prompt-backdrop-in 220ms ease-out both; }
 .guide-dialog { width: min(720px, calc(100vw - 40px)); max-height: calc(100dvh - 100px); padding: 28px; overflow: hidden; text-align: left; }
 .guide-dialog[open] { display: flex; flex-direction: column; gap: 18px; }
 .guide-header, .guide-actions { flex-shrink: 0; }
@@ -272,7 +272,7 @@ details[open] > summary > .icon { transform: rotate(180deg); }
 }
 @keyframes hotori-prompt-backdrop-in { from { opacity: 0; } to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) {
-  :is(#uninstall-dialog, #guide-dialog)[open], :is(#uninstall-dialog, #guide-dialog)[open]::backdrop { animation: none; }
+  :is(#uninstall-dialog, #guide-dialog, #reset-dialog)[open], :is(#uninstall-dialog, #guide-dialog, #reset-dialog)[open]::backdrop { animation: none; }
 }
 .button.destructive { color: #ff5757; }
 
@@ -607,3 +607,7 @@ details[open] > summary > .icon { transform: rotate(180deg); }
 h2, .section-heading, .sidebar-brand strong { letter-spacing: -.025em; }
 .submenu-heading, .setting-label, .range-output { letter-spacing: -.015em; }
 .setting-hint, .range-endpoints, .settings-footer .status, .version { letter-spacing: 0; }
+
+.settings-heading-row { display: flex; align-items: center; gap: 14px; }
+.settings-heading-row h2 { min-width: 0; }
+.settings-heading-row #back { flex-shrink: 0; min-width: 0; min-height: 40px; padding: 9px 12px; font-size: 12px; }

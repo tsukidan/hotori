@@ -94,7 +94,10 @@
       </aside>
       <div class="glass settings-card">
         <header class="settings-header">
-          <h2 id="settings-title" tabindex="-1">Make Hotori yours</h2>
+          <div class="settings-heading-row">
+            <button id="back" class="button settings-glass-action" type="button"><span data-icon="back"></span>Back</button>
+            <h2 id="settings-title" tabindex="-1">Make Hotori yours</h2>
+          </div>
           <p id="settings-description">Glass, color, and atmosphere. Fine-tune every detail of your Discord.</p>
         </header>
         <form id="settings-form" class="settings-scroll" aria-label="Theme options">
@@ -103,9 +106,8 @@
         <footer class="settings-footer">
           <p id="settings-status" class="status" role="status" aria-live="polite">Save changes in each category.</p>
           <div class="settings-actions">
-          <button id="save-category" class="button primary category-save" type="button" disabled><span data-icon="save"></span><span class="button-label">Save changes</span></button>
-          <button id="reset-defaults" class="button" type="button" title="Restore and save all customization options to the theme defaults."><span data-icon="reset"></span>Reset to defaults</button>
-          <button id="back" class="button" type="button"><span data-icon="back"></span>Back</button>
+          <button id="save-category" class="button primary category-save settings-glass-action" type="button" disabled><span data-icon="save"></span><span class="button-label">Save changes</span></button>
+          <button id="reset-defaults" class="button settings-glass-action" type="button" title="Restore and save all customization options to the theme defaults."><span data-icon="reset"></span>Reset to defaults</button>
           </div>
         </footer>
       </div>
@@ -132,6 +134,14 @@
       <button id="guide-close" class="button primary" type="button" autofocus>Done</button>
     </footer>
   </dialog>
+  <dialog id="reset-dialog" class="glass vencord-dialog" aria-labelledby="reset-title" aria-describedby="reset-description">
+    <h2 id="reset-title">Reset to defaults?</h2>
+    <p id="reset-description">This restores and saves the default theme settings across all categories, including wallpapers. Your customizations and unsaved changes will be reset.</p>
+    <div class="app-update-actions">
+      <button id="reset-cancel" class="button" type="button" autofocus>Cancel</button>
+      <button id="reset-confirm" class="button" type="button"><span data-icon="reset"></span>Reset all settings</button>
+    </div>
+  </dialog>
   <dialog id="uninstall-dialog" class="glass vencord-dialog" aria-labelledby="uninstall-title" aria-describedby="uninstall-description">
     <h2 id="uninstall-title">Uninstall Hotori?</h2>
     <p id="uninstall-description">This removes the theme and its saved customizations from Vencord. You can install Hotori again later.</p>
@@ -155,6 +165,6 @@
       <button id="app-update-install" class="button primary" type="button">Download &amp; restart</button>
     </div>
   </dialog>
-  <span class="version" aria-label="Version 1.6.31">v1.6.31</span>
+  <span class="version" aria-label="Version 1.6.32">v1.6.32</span>
 </body>
 </html>

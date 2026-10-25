@@ -149,14 +149,14 @@ input.shader-glass, select.shader-glass, textarea.shader-glass {
 /* The two outer panes remain liquid glass. Only their inner controls,
    submenus and category options use fixed 24px acrylic blur and tint. */
 .guide-step.optical-glass,
-.settings-page .optical-glass:not(.settings-card):not(.settings-sidebar) {
+.settings-page .optical-glass:not(.settings-card):not(.settings-sidebar):not(.settings-glass-action) {
   --glass-surface-blur: 24px; --glass-surface-saturation: 115%;
   --glass-tint: #10121660; --glass-sheen-image: none;
 }
 .guide-step.optical-glass::after,
-.settings-page .optical-glass:not(.settings-card):not(.settings-sidebar)::after { display: none; }
+.settings-page .optical-glass:not(.settings-card):not(.settings-sidebar):not(.settings-glass-action)::after { display: none; }
 .guide-step.shader-glass,
-.settings-page .shader-glass:not(:where(.settings-card, .settings-sidebar)) { border-color: #ffffff14; }
+.settings-page .shader-glass:not(:where(.settings-card, .settings-sidebar, .settings-glass-action)) { border-color: #ffffff14; }
 .shader-glass.button.primary, .shader-glass.category-tab[aria-selected="true"],
 .wallpaper-actions .shader-glass.button[aria-pressed="true"] {
   border-color: color-mix(in srgb, var(--accent) 65%, transparent);

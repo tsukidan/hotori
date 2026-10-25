@@ -69,9 +69,17 @@ const path = require('node:path');
     const calls = await page.evaluate(() => window.materialCalls.filter(call => call.height > 500));
     assert(calls.some(call => call.width < 300) && calls.some(call => call.width > 500), 'Both outer panes must use the glass renderer');
     assert(calls.every(({ config }) => config.refraction > 0 && config.fresnel > 0), 'The Hotori sidebar and Glass Appearance pane retain liquid glass');
-    assert.equal(await page.evaluate(() => window.materialCalls.filter(call => call.width > 150 && call.height < 400).length), 0, 'Inner controls use acrylic painting, not the refractive shader');
-    assert(await page.evaluate(() => window.acrylicFilters.length > 5 && window.acrylicFilters.every(value => value === 'blur(24px)')), 'Acrylic uses a real fixed 24px blur');
+    const actionWidths = await page.locator('.settings-glass-action').evaluateAll(elements => elements.map(el => el.getBoundingClientRect().width));
+    assert.equal(await page.evaluate(widths => window.materialCalls.filter(call => call.width > 150 && call.height < 400 && !widths.some(width => Math.abs(width - call.width) < 1)).length, actionWidths), 0, 'Only the three settings actions use glass among inner controls');
     await page.keyboard.press('Escape');
+    for (const action of ['#back', '#reset-defaults', '#save-category']) {
+      assert(await page.locator(action).evaluate(el => el.style.getPropertyValue('--glass-refraction').startsWith('url(')), 'Settings actions retain compositor refraction');
+    }
+    await page.locator('#reset-defaults').click();
+    await page.waitForFunction(() => document.querySelector('#reset-dialog').classList.contains('shader-glass'));
+    await page.screenshot({ path: path.join(root, 'target/qa/reset-confirm-glass.png') });
+    await page.locator('#reset-cancel').click();
+    assert(await page.evaluate(() => window.acrylicFilters.length > 5 && window.acrylicFilters.every(value => value === 'blur(24px)')), 'Acrylic uses a real fixed 24px blur');
     assert.equal(await page.locator('select').evaluate(el => el.style.getPropertyValue('--glass-refraction')), '', 'Fallback must not generate an SVG lens for acrylic');
     assert(await page.locator('.settings-card').evaluate(el => el.style.getPropertyValue('--glass-refraction').startsWith('url(')), 'Outer panes retain compositor lens fallback');
     assert.equal(await page.locator('.category-tab').evaluate(el => getComputedStyle(el).getPropertyValue('--glass-surface-blur').trim()), '24px');
@@ -84,7 +92,7 @@ const path = require('node:path');
       return rgb && rgb[1] > rgb[0] * 1.5 && rgb[1] > rgb[2] * 1.5;
     });
     const accent = await page.locator('html').evaluate(el => el.style.getPropertyValue('--accent').match(/\d+/g).map(Number));
-    assert.equal(await page.locator('.range-fill').evaluate(el => getComputedStyle(el).backgroundColor), `rgb(${accent.join(', ')})`);
+    assert.equal(await page.locator('.settings-page .range-fill').evaluate(el => getComputedStyle(el).backgroundColor), `rgb(${accent.join(', ')})`);
     await fs.mkdir(path.join(root, 'target/qa'), { recursive: true });
     await page.screenshot({ path: path.join(root, 'target/qa/acrylic-options-green.png') });
     await page.evaluate(async () => {
@@ -93,6 +101,7 @@ const path = require('node:path');
     await page.waitForFunction(() => document.documentElement.style.getPropertyValue('--accent') === 'rgb(184 196 210)');
     const session = await page.context().newCDPSession(page);
     await session.send('Emulation.setDeviceMetricsOverride', { width: 1600, height: 900, deviceScaleFactor: 2, mobile: false });
+    await page.evaluate(() => window.dispatchEvent(new Event('resize')));
     await page.waitForFunction(() => devicePixelRatio === 2 && window.acrylicFilters.includes('blur(48px)'));
     assert.deepEqual(errors, []);
     console.log('PASS: both outer panes retain liquid glass; inner controls, navigation options and dropdowns use real 24 CSS-pixel acrylic at DPR 1 and 2; wallpaper accents, neutral text and grayscale fallback remain correct.');

@@ -339,6 +339,7 @@ function sampleFrames(page, duration = 800) {
     await page.waitForTimeout(380);
     assert.equal(await page.getByLabel('Acrylic Blur', { exact: true }).getAttribute('aria-valuetext'), '110%');
     await page.locator('#reset-defaults').click();
+    await page.locator('#reset-confirm').click();
     await page.waitForFunction(() => document.querySelector('#settings-status').textContent.includes('reset and saved'));
     assert((await fs.readFile(destination, 'utf8')).includes('--blur-val: 30px;'));
     assert.equal(await page.getByLabel('Acrylic Blur', { exact: true }).getAttribute('aria-valuetext'), '100%');
@@ -354,8 +355,8 @@ function sampleFrames(page, duration = 800) {
     assert.equal(await page.locator('.category-save').count(), 1);
     assert.equal(await page.locator('.settings-footer .category-save').count(), 1);
     assert.equal(await page.locator('.category-save:not(:disabled)').count(), 0);
-    assert.equal(await page.locator('.settings-header #back').count(), 0);
-    assert.equal(await page.locator('.settings-footer #back').count(), 1);
+    assert.equal(await page.locator('.settings-header #back').count(), 1);
+    assert.equal(await page.locator('.settings-footer #back').count(), 0);
     await showCategory('Wallpapers');
     await page.getByLabel('Main Background', { exact: true }).fill('https://example.com/test.jpg');
     await page.getByLabel('Main Background', { exact: true }).fill('');
@@ -573,6 +574,7 @@ function sampleFrames(page, duration = 800) {
     await showCategory('Colors');
     await page.getByLabel('Accent Color', { exact: true }).fill('#abcdef');
     await page.getByRole('button', { name: 'Reset to defaults', exact: true }).click();
+    await page.locator('#reset-confirm').click();
     await page.waitForFunction(() => document.querySelector('#settings-status').textContent === 'All customization options reset and saved to defaults.');
     assert.equal(await page.locator('#app').getAttribute('data-page'), 'settings');
     assert.equal(await page.locator('.category-save:not(:disabled)').count(), 0);
@@ -605,6 +607,7 @@ function sampleFrames(page, duration = 800) {
     assert.equal(await page.locator('#app').getAttribute('data-page'), 'settings');
     const externallyEdited = await fs.readFile(destination, 'utf8');
     await page.getByRole('button', { name: 'Reset to defaults', exact: true }).click();
+    await page.locator('#reset-confirm').click();
     await page.waitForFunction(() => !document.querySelector('#reset-defaults').disabled);
     assert.equal(await page.locator('#settings-status').getAttribute('data-error'), 'true');
     assert.equal(await fs.readFile(destination, 'utf8'), externallyEdited);

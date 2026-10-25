@@ -745,8 +745,14 @@ $("customize").addEventListener("click", async () => {
   } catch (error) { message("home-status", `Could not load settings: ${error}`, true); }
   finally { busy = false; updateButtons(); }
 });
-$("reset-defaults").addEventListener("click", async () => {
+$("reset-defaults").addEventListener("click", () => {
   if (busy || !invoke) return;
+  $("reset-dialog").showModal();
+});
+$("reset-cancel").addEventListener("click", () => $("reset-dialog").close());
+$("reset-confirm").addEventListener("click", async () => {
+  if (busy || !invoke || !$("reset-dialog").open) return;
+  $("reset-dialog").close();
   busy = true; updateButtons();
   const scroll = $("settings-form").scrollTop;
   try {
@@ -760,6 +766,7 @@ $("reset-defaults").addEventListener("click", async () => {
 });
 $("back").addEventListener("click", () => { if (!busy) navigate("installer"); });
 document.addEventListener("keydown", (event) => {
+  if (document.querySelector('dialog[open]')) return;
   // Let a customizable select's own popup consume Escape before page navigation.
   if (event.key === "Escape" && event.target.closest?.("select")) return;
   if (event.key === "Escape" && $("app").dataset.page === "settings" && !busy) navigate("installer");

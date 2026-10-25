@@ -91,7 +91,7 @@
       if (!surface.isConnected) { resize.unobserve(surface); surfaces.delete(surface); continue; }
       const page = surface.closest('.page');
       if (page?.inert || !surface.checkVisibility({ checkVisibilityCSS: true })) continue;
-      if (surface.matches('.guide-step') || (surface.closest('#settings-page') && !surface.matches('.settings-card, .settings-sidebar'))) {
+      if (surface.matches('.guide-step') || (surface.closest('#settings-page') && !surface.matches('.settings-card, .settings-sidebar, .settings-glass-action'))) {
         for (const property of ['--glass-refraction', '--glass-sheen-image', '--glass-picker-refraction', '--glass-picker-sheen-image']) surface.style.removeProperty(property);
         continue;
       }

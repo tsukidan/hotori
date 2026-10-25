@@ -101,6 +101,7 @@ const http = require('node:http');
     await page.evaluate(() => refresh());
     assert.equal(await page.evaluate(() => window.backgroundLoads.length), 4, 'Unchanged wallpaper is not downloaded on every refresh');
     await page.getByRole('button', { name: 'Reset to defaults', exact: true }).click();
+    await page.locator('#reset-confirm').click();
     await page.waitForFunction(() => !document.querySelector('.wallpaper').style.getPropertyValue('--app-wallpaper'));
     await page.evaluate(async () => { window.backgroundStatus.main_background = 'https://example.com/broken.jpg'; await refresh(); });
     assert.equal(await paint(page), '');
