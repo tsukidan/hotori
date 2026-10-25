@@ -3,7 +3,7 @@
  * @author tsuki
  * @authorId 109679787630399488
  * @authorLink https://plusinsta.xyz
- * @version 0.8.12
+ * @version 0.8.13
  * @description A Discord theme inspired by Liquid Glass.
  */
 
@@ -3057,23 +3057,32 @@ body:has(.hoverButton__06ab4:is(:hover, :focus-visible), .upload_aa605f .actionB
     inset-inline-start: 8px !important;
     inset-inline-end: auto;
     top: 50%;
-    margin-top: -3px !important;
-    width: 6px !important;
-    height: 6px !important;
+    margin-top: 0 !important;
+    transform: translateY(-50%);
+    width: 5px !important;
+    height: 5px !important;
     border: none !important;
     border-radius: 50% !important;
     background: #ffffff !important;
-    box-shadow: 0 0 4px 1px rgba(255, 255, 255, 0.7),
-                0 0 10px rgba(255, 255, 255, 0.35) !important;
-    animation: hotori-channel-unread-pulse 2.8s ease-in-out infinite;
+    opacity: 1;
+    box-shadow: 0 0 5px 2px #ffffffbb,
+                0 0 12px #ffffff99;
+    animation: hotori-channel-unread-pulse 1.8s ease-in-out infinite;
     pointer-events: none;
     z-index: 1;
 }
 
-/* Breathe the existing white dot/glow without resizing it or animating blur. */
+/* Fade the white core and soften its halo together, as in the supplied
+   recommendation-dot example. No layout, backdrop-filter or size animation. */
 @keyframes hotori-channel-unread-pulse {
-    0%, 100% { opacity: 0.55; }
-    50% { opacity: 1; }
+    0%, 100% {
+        opacity: 1;
+        box-shadow: 0 0 5px 2px #ffffffbb, 0 0 12px #ffffff99;
+    }
+    50% {
+        opacity: 0.35;
+        box-shadow: 0 0 3px 1px #ffffff66, 0 0 8px #ffffff55;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
