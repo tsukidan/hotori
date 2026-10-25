@@ -242,8 +242,8 @@ details[open] > summary > .icon { transform: rotate(180deg); }
 .vencord-dialog h2 { font-size: 25px; }
 .vencord-dialog p { margin: 18px 0 24px; color: var(--muted); line-height: 1.6; }
 .vencord-dialog .button { min-width: 120px; }
-:is(#uninstall-dialog, #reset-dialog) { scrollbar-width: none; overflow-x: hidden; }
-:is(#uninstall-dialog, #reset-dialog)::-webkit-scrollbar { display: none; width: 0; height: 0; }
+:is(#uninstall-dialog, #reset-dialog, #app-update-dialog) { scrollbar-width: none; overflow-x: hidden; }
+:is(#uninstall-dialog, #reset-dialog, #app-update-dialog)::-webkit-scrollbar { display: none; width: 0; height: 0; }
 :is(#uninstall-dialog, #guide-dialog, #reset-dialog)[open] { animation: hotori-prompt-in 260ms cubic-bezier(.16, 1, .3, 1) both; }
 :is(#uninstall-dialog, #guide-dialog, #reset-dialog)[open]::backdrop { animation: hotori-prompt-backdrop-in 220ms ease-out both; }
 .guide-dialog { width: min(720px, calc(100vw - 40px)); max-height: calc(100dvh - 100px); padding: 28px; overflow: hidden; text-align: left; }
