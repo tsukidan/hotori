@@ -3,7 +3,7 @@
  * @author tsuki
  * @authorId 109679787630399488
  * @authorLink https://plusinsta.xyz
- * @version 0.8.9
+ * @version 0.8.10
  * @description A Discord theme inspired by Liquid Glass.
  */
 
@@ -3043,6 +3043,30 @@ body:has(.hoverButton__06ab4:is(:hover, :focus-visible), .upload_aa605f .actionB
 :is(.embed__623de, .embedFull__623de) :is(.embedProvider__623de a, .embedAuthorNameLink__623de, .embedTitleLink__623de):is(:hover, :focus-visible) {
     text-decoration: underline !important;
     text-underline-offset: 3px;
+}
+
+/* Channel unread marker: keep the full circle inside the row/scroll viewport
+   instead of Discord's half-pill at a negative inline offset. Reserve the
+   same gutter in read/unread rows so channel icons never shift on updates. */
+.sidebarList__5e434 .wrapper__2ea32 .link__2ea32 {
+    padding-inline-start: 24px !important;
+}
+
+.sidebarList__5e434 .wrapper__2ea32 .unread__2ea32 {
+    position: absolute;
+    inset-inline-start: 8px !important;
+    inset-inline-end: auto;
+    top: 50%;
+    margin-top: -3px !important;
+    width: 6px !important;
+    height: 6px !important;
+    border: none !important;
+    border-radius: 50% !important;
+    background: #ffffff !important;
+    box-shadow: 0 0 4px 1px rgba(255, 255, 255, 0.7),
+                0 0 10px rgba(255, 255, 255, 0.35) !important;
+    pointer-events: none;
+    z-index: 1;
 }
 
 /* END OF HOTORI DEV THEME */
