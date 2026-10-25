@@ -3,7 +3,7 @@
  * @author tsuki
  * @authorId 109679787630399488
  * @authorLink https://plusinsta.xyz
- * @version 0.8.13
+ * @version 0.8.14
  * @description A Discord theme inspired by Liquid Glass.
  */
 
@@ -496,6 +496,11 @@
     background-size: cover !important;
     background-position: center !important;
     background-attachment: fixed !important;
+}
+
+/* Forum post list: reveal the theme wallpaper behind the posts. */
+.container_f369db {
+    background: transparent !important;
 }
 
 /* =============================================================================================

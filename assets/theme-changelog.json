@@ -1,6 +1,9 @@
 {
   "schemaVersion": 1,
   "versions": {
+    "0.8.14": [
+      {"title": "Forum posts", "description": "Removed the solid black background behind forum post lists so the theme wallpaper shows through."}
+    ],
     "0.8.13": [
       {"title": "Unread markers", "description": "Smaller white notification dots with a brighter halo and a quicker, smoother pulse."}
     ],
