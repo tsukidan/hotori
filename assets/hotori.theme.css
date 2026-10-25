@@ -3,7 +3,7 @@
  * @author tsuki
  * @authorId 109679787630399488
  * @authorLink https://plusinsta.xyz
- * @version 0.8.14
+ * @version 0.8.15
  * @description A Discord theme inspired by Liquid Glass.
  */
 
@@ -501,6 +501,18 @@
 /* Forum post list: reveal the theme wallpaper behind the posts. */
 .container_f369db {
     background: transparent !important;
+}
+
+/* Forum post cards: share Hotori's material without changing native card layout.
+   List, grid, and media variants come from the client's cached forum styles. */
+.container_f369db :is(.container_faa96b, .container__9a337, .container_a2d698) {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    box-shadow: var(--glass-shadow), var(--glass-edge-shadow) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 16px !important;
 }
 
 /* =============================================================================================

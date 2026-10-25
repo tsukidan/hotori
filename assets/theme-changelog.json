@@ -1,6 +1,9 @@
 {
   "schemaVersion": 1,
   "versions": {
+    "0.8.15": [
+      {"title": "Forum post cards", "description": "Added rounded glass backgrounds and soft shadows to forum post cards while preserving their layout and the transparent post list."}
+    ],
     "0.8.14": [
       {"title": "Forum posts", "description": "Removed the solid black background behind forum post lists so the theme wallpaper shows through."}
     ],
