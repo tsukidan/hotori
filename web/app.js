@@ -117,6 +117,7 @@ function renderThemeVersion() {
   $("theme-version").hidden = !status.installed;
   const version = status.theme_version ? `v${status.theme_version}` : "Version unavailable";
   if ($("theme-version-value").textContent !== version) $("theme-version-value").textContent = version;
+  renderThemeChangelog(status.theme_version);
   const available = status.installed && themeUpdate?.available && themeUpdate.installedVersion === status.theme_version;
   $("theme-update-notice").hidden = !available;
   if (available) {
@@ -124,6 +125,35 @@ function renderThemeVersion() {
     if ($("theme-update-label").textContent !== label) $("theme-update-label").textContent = label;
     $("theme-update-notice").title = `Update your theme to v${themeUpdate.version}. Your customization settings will be preserved.`;
   }
+}
+
+// Theme release notes, verified against commits touching assets/hotori.theme.css.
+// Keep these versioned: never show notes from a newer theme as installed changes.
+const themeChangelog = {
+  "0.8.10": [
+    ["Unread markers", "Glowing white dots stay fully visible in the channel list."],
+    ["Channels", "Channel icons stay aligned when unread status changes."],
+  ],
+  "0.8.9": [
+    ["Mentions", "Rounder glass pills with more padding and subtle reflections."],
+    ["Links", "Softer rounded corners and refined glass highlights."],
+  ],
+  "0.8.8": [["Acrylic", "Reduced grain opacity for a more transparent finish."]],
+  "0.8.7": [["Acrylic", "Added subtle static grain to acrylic surfaces."]],
+};
+function renderThemeChangelog(version) {
+  const key = version || 'unknown';
+  const section = $("theme-changelog");
+  if (section.dataset.themeVersion === key) return;
+  section.dataset.themeVersion = key;
+  $("theme-changelog-version").textContent = version ? `Theme v${version}` : 'Theme version unavailable';
+  const notes = themeChangelog[key];
+  const items = notes ? notes.map(([label, description]) => {
+    const item = element('li');
+    item.append(element('strong', '', `${label}:`), document.createTextNode(` ${description}`));
+    return item;
+  }) : [element('li', '', 'Release notes are not available for this theme version.')];
+  $("theme-changelog-items").replaceChildren(...items);
 }
 
 async function checkForThemeUpdate() {

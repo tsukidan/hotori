@@ -39,13 +39,9 @@
           <p id="home-status" class="status" role="status" aria-live="polite">Checking your theme…</p>
           <div id="theme-version" class="theme-version" role="status" aria-live="polite" hidden>
             <div class="theme-version-heading"><span data-icon="tag"></span><span>Installed theme <strong id="theme-version-value"></strong></span><button id="theme-update-notice" class="theme-update-notice" type="button" hidden><span data-icon="reset"></span><span id="theme-update-label"></span></button></div>
-            <section class="app-changelog" aria-label="App changelog">
-              <p><strong>Changelog</strong><span>App v1.6.24</span></p>
-              <ul>
-                <li><strong>Startup:</strong> Your saved wallpaper is ready when Hotori opens.</li>
-                <li><strong>Background:</strong> Centered cover sizing without extra zoom.</li>
-                <li><strong>Offline:</strong> Linked wallpapers are cached for future launches.</li>
-              </ul>
+            <section id="theme-changelog" class="theme-changelog" aria-label="Theme changelog">
+              <p><strong>Changelog</strong><span id="theme-changelog-version"></span></p>
+              <ul id="theme-changelog-items"></ul>
             </section>
           </div>
           <p class="vencord-notice" hidden>!! Vencord is required for this theme !!</p>
@@ -147,6 +143,6 @@
       <button id="app-update-install" class="button primary" type="button">Download &amp; restart</button>
     </div>
   </dialog>
-  <span class="version" aria-label="Version 1.6.24">v1.6.24</span>
+  <span class="version" aria-label="Version 1.6.25">v1.6.25</span>
 </body>
 </html>

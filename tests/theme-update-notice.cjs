@@ -9,13 +9,14 @@ const { pathToFileURL } = require('node:url');
   const qa = path.resolve(__dirname, '../target/qa');
   await fs.mkdir(qa, { recursive: true });
   try {
-    for (const scenario of ['outdated', 'current', 'newer', 'offline', 'unknown', 'absent']) {
+    for (const scenario of ['outdated', 'current', 'newer', 'offline', 'unknown', 'absent', 'latest-theme', 'previous-theme']) {
       const page = await browser.newPage({ viewport: { width: 1600, height: 900 } });
       const errors = [];
       page.on('pageerror', error => errors.push(error.message));
       await page.addInitScript(scenario => {
         let installed = scenario !== 'absent';
-        let version = scenario === 'unknown' ? null : scenario === 'newer' ? '0.9.0' : scenario === 'current' ? '0.8.3' : '0.8.2';
+        let version = scenario === 'latest-theme' ? '0.8.10' : scenario === 'previous-theme' ? '0.8.9' : scenario === 'unknown' ? null : scenario === 'newer' ? '0.9.0' : scenario === 'current' ? '0.8.3' : '0.8.2';
+        window.setThemeVersion = next => { version = next; };
         window.themeChecks = 0; window.themeInstalls = 0;
         window.__TAURI__ = { core: { invoke: async command => {
           if (command === 'get_status') return { ready: true, installed, theme_version: version };
@@ -32,11 +33,27 @@ const { pathToFileURL } = require('node:url');
       }, scenario);
       await page.goto(pathToFileURL(path.resolve(__dirname, '../web/index.html')).href);
       await page.waitForFunction(() => status.ready && !checkingTheme);
+      if (scenario === 'latest-theme' || scenario === 'previous-theme') {
+        assert.equal(await page.locator('#theme-changelog-version').textContent(), scenario === 'latest-theme' ? 'Theme v0.8.10' : 'Theme v0.8.9');
+        const notes = await page.locator('#theme-changelog-items').textContent();
+        assert(notes.includes(scenario === 'latest-theme' ? 'Unread markers:' : 'Mentions:'));
+        assert(!notes.includes('Startup:') && !notes.includes('Offline:'));
+        if (scenario === 'previous-theme') {
+          await page.evaluate(async () => { window.setThemeVersion('0.8.10'); await refresh(); });
+          assert((await page.locator('#theme-changelog-items').textContent()).includes('Unread markers:'));
+          assert(!(await page.locator('#theme-changelog-items').textContent()).includes('Mentions:'));
+        }
+        await page.waitForTimeout(500);
+        await page.screenshot({ path: path.join(qa, `changelog-${scenario}.png`) });
+      } else if (scenario !== 'absent') {
+        assert((await page.locator('#theme-changelog-items').textContent()).includes('not available for this theme version'));
+      }
       const notice = page.locator('#theme-update-notice');
       assert.equal(await notice.isVisible(), scenario === 'outdated', scenario);
-      assert.equal(await page.evaluate(() => window.themeChecks), scenario === 'absent' ? 0 : 1);
+      const expectedChecks = scenario === 'absent' ? 0 : scenario === 'previous-theme' ? 2 : 1;
+      assert.equal(await page.evaluate(() => window.themeChecks), expectedChecks);
       await page.evaluate(async () => { await refresh(); await refresh(); });
-      assert.equal(await page.evaluate(() => window.themeChecks), scenario === 'absent' ? 0 : 1, 'Local status polling must not repeat GitHub checks');
+      assert.equal(await page.evaluate(() => window.themeChecks), expectedChecks, 'Local status polling must not repeat GitHub checks');
       if (scenario === 'outdated') {
         assert.equal(await page.locator('#theme-update-label').textContent(), 'v0.8.3 available');
         await page.waitForTimeout(850);
