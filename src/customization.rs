@@ -79,6 +79,7 @@ pub fn choices(name: &str) -> Vec<(&'static str, &'static str)> {
             ("Dark Glass", "var(--glass-dark)"),
             ("Light Glass", "var(--glass-light)"),
         ],
+        "--show-friends-sidebar" => vec![("Hidden", "0"), ("Shown", "1")],
         "--server-list-layout" => vec![
             ("Vertical", "var(--vertical)"),
             ("Horizontal", "var(--horizontal)"),
@@ -119,6 +120,7 @@ pub fn label(name: &str) -> String {
         "--mention-glass-tint" => "Mention Highlight",
         "--mention-glass-hover" => "Mention Hover Highlight",
         "--mention-glass-accent" => "Mention Accent Color",
+        "--show-friends-sidebar" => "Friends Sidebar",
         "--server-list-layout" => "Server List Layout",
         _ => return name.trim_start_matches("--").replace('-', " "),
     }
@@ -127,6 +129,13 @@ pub fn label(name: &str) -> String {
 
 pub fn explanation(name: &str, value: &str) -> &'static str {
     match name {
+        "--show-friends-sidebar" => {
+            if value == "Shown" {
+                "Shows Discord’s persistent right-side Friends sidebar. The main Friends page and server member list stay available."
+            } else {
+                "Hides the entire right-side Friends sidebar and its layout space. The main Friends page and server member list stay available."
+            }
+        }
         "--blur-profile" => match value {
             "Liquid Glass" => "Clearer glass with refractive edges and vivid colors.",
             "No Glass" => "Removes glass tint, borders, shadows, and blur.",
@@ -237,6 +246,7 @@ pub fn section(name: &str) -> &'static str {
         "--chat-input-gap" => "Message spacing",
         "--message-avatar-size" | "--avatar-radius" => "Avatars",
         n if n.contains("mention") => "Mention highlights",
+        "--show-friends-sidebar" => "Friends sidebar",
         n if n.contains("server-list") => "Server list",
         _ => "Text & icon colors",
     }
@@ -295,6 +305,7 @@ fn validate(name: &str, value: &str) -> io::Result<()> {
         ]
         .contains(&core),
         "--glass-background" => ["var(--glass-light)", "var(--glass-dark)"].contains(&core),
+        "--show-friends-sidebar" => ["0", "1"].contains(&core),
         "--server-list-layout" => ["var(--vertical)", "var(--horizontal)"].contains(&core),
         "--main-bg" | "--settings-bg" => {
             let url = display_value(name, core);
@@ -375,6 +386,19 @@ pub fn save(path: &Path, settings: &Settings, values: &[String]) -> io::Result<S
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn friends_sidebar_choices_map_to_valid_css() {
+        let name = "--show-friends-sidebar";
+        assert_eq!(display_value(name, "0"), "Hidden");
+        assert_eq!(display_value(name, "1 !important"), "Shown");
+        assert_eq!(css_value(name, "Shown", "0"), "1");
+        assert_eq!(css_value(name, "Hidden", "1 !important"), "0 !important");
+        assert!(validate(name, "0").is_ok());
+        assert!(validate(name, "1 !important").is_ok());
+        for invalid in ["2", "-1", "true", "Shown", "0.5"] {
+            assert!(validate(name, invalid).is_err());
+        }
+    }
     #[test]
     fn friendly_choices_and_hidden_fields_preserve_css() {
         assert_eq!(

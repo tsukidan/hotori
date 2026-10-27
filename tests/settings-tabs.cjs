@@ -18,6 +18,9 @@ const { pathToFileURL } = require('node:url');
         name: `--test-${category}-${index}`, section, label: `${section} ${index + 1}`, hint: 'Adjust this detail of your theme.',
         kind: 'number', value: '12', unit: 'pixels',
       })));
+      defaults.push({ name: '--show-friends-sidebar', section: 'Friends sidebar', label: 'Friends Sidebar',
+        hint: 'Show or hide the persistent right-side Friends sidebar.', kind: 'choice', value: 'Hidden',
+        choices: ['Hidden', 'Shown'], choiceHints: ['Hide the sidebar.', 'Show the sidebar.'] });
       let saved = structuredClone(defaults);
       window.savedSettings = saved;
       window.__TAURI__ = { core: { invoke: async (command, args) => {
@@ -61,6 +64,20 @@ const { pathToFileURL } = require('node:url');
       return { siblings: sidebar.parentElement === editor.parentElement, gap: b.left - a.right };
     });
     assert(surfaces.siblings && surfaces.gap > 0);
+    await tab('Server List').click();
+    const friends = page.getByLabel('Friends Sidebar', { exact: true });
+    assert.equal(await friends.inputValue(), 'Hidden');
+    await friends.selectOption('Shown');
+    assert.equal(await tab('Server List').getAttribute('data-dirty'), 'true');
+    await page.getByRole('button', { name: 'Save Server List', exact: true }).click();
+    await page.waitForFunction(() => window.savedSettings.find(f => f.name === '--show-friends-sidebar').value === 'Shown');
+    await tab('Colors').click();
+    await tab('Server List').click();
+    assert.equal(await friends.inputValue(), 'Shown');
+    await friends.selectOption('Hidden');
+    await page.getByRole('button', { name: 'Save Server List', exact: true }).click();
+    await page.waitForFunction(() => window.savedSettings.find(f => f.name === '--show-friends-sidebar').value === 'Hidden');
+    await tab('Glass Appearance').click();
     await page.getByLabel('Glass appearance 1', { exact: true }).fill('24');
     await tab('Wallpapers').click();
     assert.equal(await page.getByLabel('Glass appearance 1', { exact: true }).isVisible(), false);

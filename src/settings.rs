@@ -152,6 +152,30 @@ pub fn values(settings: &Settings, edits: &[Edit]) -> Result<Vec<String>, String
 mod tests {
     use super::*;
     #[test]
+    fn bundled_friends_sidebar_is_a_saveable_choice() {
+        let parsed = customization::parse(crate::installer::BUNDLED_THEME.into()).unwrap();
+        let rows = fields(&parsed, None);
+        let index = rows
+            .iter()
+            .position(|f| f.name == "--show-friends-sidebar")
+            .unwrap();
+        assert_eq!(rows[index].kind, "choice");
+        assert_eq!(rows[index].section, "Friends sidebar");
+        assert_eq!(rows[index].value, "Hidden");
+        assert_eq!(rows[index].choices, vec!["Hidden", "Shown"]);
+        let mut edits = rows
+            .iter()
+            .map(|f| Edit {
+                name: f.name.clone(),
+                value: f.value.clone(),
+            })
+            .collect::<Vec<_>>();
+        edits[index].value = "Shown".into();
+        assert_eq!(values(&parsed, &edits).unwrap()[index], "1");
+        edits[index].value = "Hidden".into();
+        assert_eq!(values(&parsed, &edits).unwrap()[index], "0");
+    }
+    #[test]
     fn bridge_preserves_unchanged_values_and_rejects_mismatched_fields() {
         let parsed = customization::parse(":root {\n--main-color: #abc !important;\n--glass-dark: rgba(12, 16, 24, 0.24);\n--blur-val: 24px;\n}\n/* END OF USER SETTINGS */".into()).unwrap();
         let rows = fields(&parsed, None);

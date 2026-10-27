@@ -323,7 +323,7 @@ function disclosure(title, symbol, open, submenu = false) {
 function categoryFor(field) {
   return ({ "Glass appearance": "Glass Appearance", "Blur & saturation": "Glass Appearance", "Glass tints": "Glass Appearance",
     "Wallpapers": "Wallpapers", "Background dimming": "Wallpapers", "Accent color": "Colors", "Text & icon colors": "Colors",
-    "Avatars": "Avatars", "Message spacing": "Messages", "Mention highlights": "Messages", "Server list": "Server List" })[field.section] || "Colors";
+    "Avatars": "Avatars", "Message spacing": "Messages", "Mention highlights": "Messages", "Server list": "Server List", "Friends sidebar": "Server List" })[field.section] || "Colors";
 }
 function updateCategoryButtons() {
   for (const [category, group] of categoryGroups) {
@@ -446,6 +446,7 @@ function renderFields() {
       case "Message spacing": return target("Messages");
       case "Mention highlights": return target("Messages", "Mention Highlights", "message", true);
       case "Server list": return target("Server List");
+      case "Friends sidebar": return target("Server List", "Friends Sidebar", "user");
       default: return target("Colors", "Other Colors", "palette", true);
     }
   }
