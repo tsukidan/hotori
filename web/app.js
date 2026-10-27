@@ -621,6 +621,20 @@ async function checkForAppUpdate() {
   } finally { checkingApp = false; updateButtons(); }
 }
 
+function showAppUpdatePrompt(result) {
+  if (!result?.available || $('app-update-dialog').open) return;
+  const description = $('app-update-description');
+  description.replaceChildren(
+    document.createTextNode('Hotori '), element('strong', '', result.version),
+    document.createTextNode(' is available. You’re using '), element('strong', '', result.currentVersion),
+    document.createTextNode('. Hotori will close and reopen to finish the update.')
+  );
+  message('app-update-status', 'Your theme settings and wallpapers will be preserved.');
+  $('app-update-progress').hidden = true;
+  $('app-update-progress').value = 0;
+  $('app-update-dialog').showModal();
+}
+
 $("update-app").addEventListener("click", async () => {
   if (busy || !invoke) return;
   busy = true; updateButtons();
@@ -628,11 +642,7 @@ $("update-app").addEventListener("click", async () => {
   try {
     const result = await checkForAppUpdate();
     if (result.available) {
-      $("app-update-description").textContent = `Hotori ${result.version} is available. You’re using ${result.currentVersion}. Hotori will close and reopen to finish the update.`;
-      message("app-update-status", "Your theme settings and wallpapers will be preserved.");
-      $("app-update-progress").hidden = true;
-      $("app-update-progress").value = 0;
-      $("app-update-dialog").showModal();
+      showAppUpdatePrompt(result);
       message("home-status", `Hotori ${result.version} is available.`, false, "app-update");
     } else message("home-status", `You’re up to date. Hotori ${result.currentVersion} is installed.`);
   } catch (error) { message("home-status", String(error), true); }
@@ -791,8 +801,6 @@ async function initialize() {
   }
   await refresh();
   message("home-status", status.installed ? "Hotori is installed. Make it yours in Customize." : status.ready ? "Ready to install Hotori." : "Install Vencord first. Open Themes Folder will take you to its download page.", false, status.installed ? "check" : status.ready ? "download" : "alert", status.installed ? "sliders" : "");
-  // A failed startup check keeps the optional bubble hidden and leaves theme status intact.
-  checkForAppUpdate().catch(() => {});
   setInterval(() => { if (!document.hidden) refresh(); }, 2000);
   window.addEventListener("focus", refresh);
 }
@@ -854,5 +862,16 @@ initialize().finally(async () => {
   // is eligible for the first native frame, including the GPU backdrop.
   if (invoke) {
     try { await invoke('show_main_window'); } catch (error) { console.warn('Could not show main window:', error); }
+    // One automatic offer per launch, after the saved wallpaper and native window are ready.
+    // Wait for any user operation/modal instead of stacking prompts or interrupting a save.
+    checkForAppUpdate().then(result => {
+      if (!result.available) return;
+      const offer = () => {
+        if ($('app-update-dialog').open) return;
+        if (busy || document.querySelector('dialog[open]')) { setTimeout(offer, 500); return; }
+        showAppUpdatePrompt(result);
+      };
+      offer();
+    }).catch(() => {});
   }
 });
