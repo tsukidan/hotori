@@ -3,7 +3,7 @@
  * @author tsuki
  * @authorId 109679787630399488
  * @authorLink https://plusinsta.xyz
- * @version 0.8.15
+ * @version 0.8.16
  * @description A Discord theme inspired by Liquid Glass.
  */
 
@@ -142,6 +142,15 @@
     --server-list-layout: var(--vertical);
     --server-list-top-padding: 12px; /* Space above Discord/DM in vertical mode. */
     --server-list-horizontal-height: 80px; /* Room for icons and scrolling. */
+
+    /* =====================================================================================
+     * |                                                                                    |
+     * | 13. PERSISTENT FRIENDS SIDEBAR                                                     |
+     * |                                                                                    |
+     * ===================================================================================== */
+    /* 0 = hide completely; 1 = show Discord's right-side friends sidebar.
+       The server member list and the main Friends page remain available. */
+    --show-friends-sidebar: 0;
 
 }
 /* =============================================================================================
@@ -496,6 +505,14 @@
     background-size: cover !important;
     background-position: center !important;
     background-attachment: fixed !important;
+}
+
+/* Hide the entire persistent friends sidebar, including its border, resize
+   handle, and layout space. The visible state keeps Discord's native sizing. */
+@container style(--show-friends-sidebar: 0) {
+    .container_b17982 {
+        display: none !important;
+    }
 }
 
 /* Forum post list: reveal the theme wallpaper behind the posts. */

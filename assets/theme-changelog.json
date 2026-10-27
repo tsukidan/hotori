@@ -1,6 +1,9 @@
 {
   "schemaVersion": 1,
   "versions": {
+    "0.8.16": [
+      {"title": "Friends sidebar", "description": "Added an option to hide the persistent right-side friends sidebar and reclaim its space. Hidden by default; set --show-friends-sidebar to 1 to show it again. Server member lists remain available."}
+    ],
     "0.8.15": [
       {"title": "Forum post cards", "description": "Added rounded glass backgrounds and soft shadows to forum post cards while preserving their layout and the transparent post list."}
     ],
