@@ -704,3 +704,8 @@ h2, .section-heading, .sidebar-brand strong { letter-spacing: -.025em; }
 /* Quiet update copy, with version numbers kept easy to scan. */
 #app-update-description, #app-update-status { font-family: inherit; font-size: 14px; font-weight: 400; letter-spacing: -.01em; }
 #app-update-description strong { font-weight: 700; color: var(--text, #f5f6f7); }
+
+.guide-additional-title { margin: 28px 0 18px; padding-top: 22px; border-top: 1px solid #ffffff26; font-size: 16px; font-weight: 600; }
+.guide-additional li { counter-increment: none; }
+.guide-additional li::before { content: none; }
+.guide-additional h3 { padding-left: 0; }

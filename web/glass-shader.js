@@ -167,7 +167,8 @@
     context.globalCompositeOperation = 'source-atop';
     context.fillStyle = 'rgba(16, 18, 22, .20)'; context.fillRect(0, 0, context.canvas.width, context.canvas.height);
     if (darkerGuide) {
-      context.fillStyle = 'rgba(0, 0, 0, .10)'; context.fillRect(0, 0, context.canvas.width, context.canvas.height);
+      // Two successive 10% darkening adjustments combine to 19%.
+      context.fillStyle = 'rgba(0, 0, 0, .19)'; context.fillRect(0, 0, context.canvas.width, context.canvas.height);
     }
     context.globalCompositeOperation = 'destination-over';
     context.shadowColor = 'rgba(0, 0, 0, .24)'; context.shadowBlur = 10 * dpr; context.shadowOffsetY = 2 * dpr;
