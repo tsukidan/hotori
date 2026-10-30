@@ -129,7 +129,7 @@
     const config = material(element, box);
     if (layer.canvas.width !== width || layer.canvas.height !== height) { layer.canvas.width = width; layer.canvas.height = height; }
     layer.context.clearRect(0, 0, width, height);
-    if (isAcrylic(element)) paintAcrylic(layer.context, box, config.cornerRadius);
+    if (isAcrylic(element)) paintAcrylic(layer.context, box, config.cornerRadius, element.matches('.guide-step'));
     else {
       renderer.uploadAndBlur(scene, Math.round((box.left - pad) * dpr), Math.round((box.top - pad) * dpr), width, height, isWordmark ? .25 : config.blurAmount);
       if (isWordmark && wordmark) wordmark.render(element, width, height, dpr, pad * dpr);
@@ -149,7 +149,7 @@
     }
     withClip(element, () => sceneContext.drawImage(layer.canvas, (box.left - pad) * dpr, (box.top - pad) * dpr, width, height));
   }
-  function paintAcrylic(context, box, radius) {
+  function paintAcrylic(context, box, radius, darkerGuide = false) {
     const padding = pad * dpr, blur = 24 * dpr;
     const left = (box.left - pad) * dpr, top = (box.top - pad) * dpr;
     // Capture a three-sigma margin so the fixed 24 CSS-pixel blur samples
@@ -166,6 +166,9 @@
     context.fillStyle = '#fff'; context.fill();
     context.globalCompositeOperation = 'source-atop';
     context.fillStyle = 'rgba(16, 18, 22, .20)'; context.fillRect(0, 0, context.canvas.width, context.canvas.height);
+    if (darkerGuide) {
+      context.fillStyle = 'rgba(0, 0, 0, .10)'; context.fillRect(0, 0, context.canvas.width, context.canvas.height);
+    }
     context.globalCompositeOperation = 'destination-over';
     context.shadowColor = 'rgba(0, 0, 0, .24)'; context.shadowBlur = 10 * dpr; context.shadowOffsetY = 2 * dpr;
     context.fillStyle = 'rgba(0, 0, 0, .10)'; context.fill();

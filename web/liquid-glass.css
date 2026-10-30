@@ -169,3 +169,6 @@ input.shader-glass, select.shader-glass, textarea.shader-glass {
   }
   .settings-page select.shader-glass::picker(select) { backdrop-filter: none; }
 }
+
+/* Guide steps get an additional 10% black tint; the outer dialog stays unchanged. */
+.guide-step.optical-glass { --glass-tint: color-mix(in srgb, #10121660 90%, #000 10%); }
