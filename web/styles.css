@@ -244,8 +244,8 @@ details[open] > summary > .icon { transform: rotate(180deg); }
 .vencord-dialog .button { min-width: 120px; }
 :is(#uninstall-dialog, #reset-dialog, #app-update-dialog) { scrollbar-width: none; overflow-x: hidden; }
 :is(#uninstall-dialog, #reset-dialog, #app-update-dialog)::-webkit-scrollbar { display: none; width: 0; height: 0; }
-:is(#uninstall-dialog, #guide-dialog, #reset-dialog, #wallpaper-crop-dialog, #app-update-dialog)[open] { animation: hotori-prompt-in 260ms cubic-bezier(.16, 1, .3, 1) both; }
-:is(#uninstall-dialog, #guide-dialog, #reset-dialog, #wallpaper-crop-dialog, #app-update-dialog)[open]::backdrop { animation: hotori-prompt-backdrop-in 220ms ease-out both; }
+:is(#uninstall-dialog, #guide-dialog, #reset-dialog, #wallpaper-crop-dialog, #app-update-dialog, #app-changelog-dialog)[open] { animation: hotori-prompt-in 260ms cubic-bezier(.16, 1, .3, 1) both; }
+:is(#uninstall-dialog, #guide-dialog, #reset-dialog, #wallpaper-crop-dialog, #app-update-dialog, #app-changelog-dialog)[open]::backdrop { animation: hotori-prompt-backdrop-in 220ms ease-out both; }
 .guide-dialog { width: min(720px, calc(100vw - 40px)); max-height: calc(100dvh - 100px); padding: 28px; overflow: hidden; text-align: left; }
 .guide-dialog[open] { display: flex; flex-direction: column; gap: 18px; }
 .guide-header, .guide-actions { flex-shrink: 0; }
@@ -272,7 +272,7 @@ details[open] > summary > .icon { transform: rotate(180deg); }
 }
 @keyframes hotori-prompt-backdrop-in { from { opacity: 0; } to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) {
-  :is(#uninstall-dialog, #guide-dialog, #reset-dialog, #wallpaper-crop-dialog, #app-update-dialog)[open], :is(#uninstall-dialog, #guide-dialog, #reset-dialog, #wallpaper-crop-dialog, #app-update-dialog)[open]::backdrop { animation: none; }
+  :is(#uninstall-dialog, #guide-dialog, #reset-dialog, #wallpaper-crop-dialog, #app-update-dialog, #app-changelog-dialog)[open], :is(#uninstall-dialog, #guide-dialog, #reset-dialog, #wallpaper-crop-dialog, #app-update-dialog, #app-changelog-dialog)[open]::backdrop { animation: none; }
 }
 .button.destructive { color: #ff5757; }
 
@@ -513,7 +513,7 @@ details[open] > summary > .icon { transform: rotate(180deg); }
 .app-overlay-control:is(:hover, :focus-within) .overlay-toggle { left: 4px; }
 .overlay-range { position: absolute; left: 64px; right: 18px; top: 11px; margin: 3px 0; opacity: 0; visibility: hidden; transition: opacity 180ms, visibility 0s 180ms; }
 .app-overlay-control:is(:hover, :focus-within) .overlay-range { opacity: 1; visibility: visible; transition-delay: 120ms, 0s; }
-@media (max-height: 680px) { .command-dock .dock-item { height: 42px; } }
+@media (max-height: 680px) { .command-dock .dock-item { height: 38px; } }
 @media (prefers-reduced-motion: reduce) {
   .app-overlay-control, .overlay-toggle, .overlay-range { transition: none; }
 }
@@ -709,3 +709,17 @@ h2, .section-heading, .sidebar-brand strong { letter-spacing: -.025em; }
 .guide-additional li { counter-increment: none; }
 .guide-additional li::before { content: none; }
 .guide-additional h3 { padding-left: 0; }
+
+#app-changelog-dialog { scrollbar-width: none; overflow-x: hidden; }
+#app-changelog-dialog::-webkit-scrollbar { display: none; }
+.app-changelog-select { display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--muted); }
+.app-changelog-select select { min-width: 0; flex: 1; }
+.app-changelog-card { position: relative; overflow-wrap: anywhere; padding: 22px; border: 1px solid #ffffff14; border-radius: 36px; }
+.app-changelog-card h3 { margin: 0 0 5px; font-size: 19px; }
+.app-changelog-card time { font-size: 12px; color: var(--muted); }
+.app-changelog-card h4 { margin: 18px 0 8px; font-size: 14px; }
+.app-changelog-card p, .app-changelog-card li { font-size: 13px; line-height: 1.7; }
+.app-changelog-card p { margin: 10px 0; }
+.app-changelog-card ul { margin: 8px 0; padding-left: 20px; }
+.app-changelog-card li + li { margin-top: 7px; }
+.app-changelog-card strong { font-weight: 700; color: #f5f6f7; }

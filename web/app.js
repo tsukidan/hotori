@@ -862,6 +862,7 @@ initialize().finally(async () => {
   // is eligible for the first native frame, including the GPU backdrop.
   if (invoke) {
     try { await invoke('show_main_window'); } catch (error) { console.warn('Could not show main window:', error); }
+    await window.HotoriAppChangelog?.initialize(invoke, () => !busy);
     // One automatic offer per launch, after the saved wallpaper and native window are ready.
     // Wait for any user operation/modal instead of stacking prompts or interrupting a save.
     checkForAppUpdate().then(result => {

@@ -59,6 +59,23 @@ const assert = require('node:assert/strict');
           rect.width === innerWidth && rect.height === innerHeight;
       }), 'The first visible window must already use the saved, centered background');
       await page.waitForFunction(() => document.documentElement.dataset.glassRenderer === 'reference-liquidglass');
+      const appVersion = JSON.parse(await fs.readFile(path.join(root, 'tauri.conf.json'), 'utf8')).version;
+      if (first) {
+        await page.locator('#app-changelog-dialog').waitFor({ state: 'visible' });
+        assert.equal(await page.locator('.app-changelog-card h3').textContent(), `Hotori ${appVersion}`);
+        await page.waitForFunction(() => document.querySelector('.app-changelog-card').classList.contains('shader-glass'));
+        assert(await page.locator('#app-changelog-version option').count() >= 30);
+        await page.waitForTimeout(900);
+        const cardBox = await page.locator('.app-changelog-card').boundingBox();
+        const materialBox = await page.locator('.app-changelog-card > .glass-render-layer').boundingBox();
+        assert(Math.abs(cardBox.y + cardBox.height / 2 - materialBox.y - materialBox.height / 2) < 1, 'Acrylic canvas stays centered on its text card');
+        await page.screenshot({ path: path.join(root, 'target/qa/native-app-changelog.png') });
+        await page.locator('#app-changelog-close').click();
+        await page.waitForFunction(version => localStorage.getItem('hotori.appChangelogSeenVersion') === version, appVersion);
+      } else {
+        await page.waitForTimeout(500);
+        assert.equal(await page.locator('#app-changelog-dialog').isVisible(), false);
+      }
       const installedVersion = theme.match(/@version\s+([^\s]+)/)[1];
       const changelog = JSON.parse(await fs.readFile(path.join(root, 'assets/theme-changelog.json'), 'utf8'));
       await page.waitForFunction(() => document.querySelector('#theme-changelog-items strong'));
@@ -75,7 +92,7 @@ const assert = require('node:assert/strict');
     await new Promise(resolve => server.close(resolve));
     await launch(false);
     assert.equal(requests, 1, 'Relaunch reuses the persisted image with the server offline');
-    console.log('PASS: native window stays hidden until saved wallpaper is ready; centered viewport cover and GPU glass; offline relaunch uses disk cache.');
+    console.log('PASS: native window stays hidden until saved wallpaper is ready; centered viewport cover and GPU glass; real app changelog opens once with release history; offline relaunch uses disk cache.');
   } finally {
     releaseImage?.();
     if (server.listening) await new Promise(resolve => server.close(resolve));

@@ -246,6 +246,14 @@ fn show_main_window(app: tauri::AppHandle) -> Result<(), String> {
 }
 
 #[tauri::command]
+fn get_app_changelog() -> Result<serde_json::Value, String> {
+    let mut catalog: serde_json::Value = serde_json::from_str(include_str!("../assets/app-changelog.json"))
+        .map_err(|error| error.to_string())?;
+    catalog["currentVersion"] = serde_json::json!(env!("CARGO_PKG_VERSION"));
+    Ok(catalog)
+}
+
+#[tauri::command]
 async fn get_theme_changelog(app: tauri::AppHandle, refresh: bool) -> Result<theme_changelog::Catalog, String> {
     let cache = app.path().app_cache_dir().map_err(|e| e.to_string())?;
     tauri::async_runtime::spawn_blocking(move || theme_changelog::load(&cache, refresh)).await.map_err(|e| e.to_string())
@@ -283,8 +291,29 @@ fn main() {
             wallpaper_preview,
             app_wallpaper,
             show_main_window,
-            get_theme_changelog
+            get_theme_changelog,
+            get_app_changelog
         ])
         .run(tauri::generate_context!())
         .expect("Could not start Hotori");
+}
+
+#[cfg(test)]
+mod app_changelog_tests {
+    #[test]
+    fn app_catalog_covers_running_version_and_has_unique_history() {
+        let catalog = super::get_app_changelog().unwrap();
+        assert_eq!(catalog["schemaVersion"], 1);
+        let current = catalog["currentVersion"].as_str().unwrap();
+        let releases = catalog["releases"].as_array().unwrap();
+        let mut versions = std::collections::HashSet::new();
+        for release in releases {
+            let version = release["version"].as_str().unwrap();
+            assert!(semver::Version::parse(version).is_ok());
+            assert!(versions.insert(version));
+            assert!(!release["body"].as_str().unwrap().trim().is_empty());
+        }
+        assert!(versions.contains(current));
+        assert!(versions.contains("1.0.0"));
+    }
 }
