@@ -24,7 +24,7 @@ const path = require('node:path');
       window.accentStatus = { ready: true, installed: true, theme_version: '0.8.9', main_background: 'https://example.com/blue.png' };
       const fields = [
         { name: '--blur-profile', label: 'Glass Profile', section: 'Glass appearance', kind: 'choice', value: 'Acrylic', choices: ['Acrylic','Liquid Glass','No Glass'], choiceHints: ['','',''], hint: 'Choose a style.' },
-        { name: '--blur-val', label: 'Acrylic Blur', section: 'Blur & saturation', kind: 'number', value: '24', unit: 'pixels', slider: { min: 21.6, max: 26.4 }, hint: 'Fine-tune blur.' },
+        { name: '--blur-val', label: 'Acrylic Blur', section: 'Blur & saturation', kind: 'number', value: '24', unit: 'pixels', slider: { min: 12, max: 36 }, hint: 'Fine-tune blur.' },
       ];
       window.__TAURI__ = { core: { invoke: async command => {
         if (command === 'get_status') return structuredClone(window.accentStatus);

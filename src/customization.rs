@@ -151,10 +151,10 @@ pub fn explanation(name: &str, value: &str) -> &'static str {
         "--main-bg" => "Wallpaper behind your messages and channels.",
         "--settings-bg" => "Wallpaper displayed on Discord’s settings pages.",
         n if n.contains("overlay") => "Controls wallpaper darkening. Higher opacity means darker.",
-        "--blur-val" => "Higher values make acrylic glass more frosted.",
-        "--liquid-blur-val" => "Adjusts how softly liquid glass blurs the wallpaper.",
+        "--blur-val" => "100% is the theme default. Adjust acrylic blur between 50% and 150%.",
+        "--liquid-blur-val" => "100% is the theme default. Adjust liquid glass blur between 50% and 150%.",
         "--liquid-saturation" => {
-            "100% is the theme default. Adjust between 90% and 110% of its color intensity."
+            "100% is the theme default. Adjust between 50% and 150% of its color intensity."
         }
         "--glass-light" | "--glass-dark" => {
             "Choose the tint and transparency for this glass preset."

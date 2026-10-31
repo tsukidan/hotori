@@ -486,8 +486,8 @@ function sampleFrames(page, duration = 800) {
     assert.equal(await page.getByLabel('Liquid Glass Color Intensity', { exact: true }).getAttribute('min'), '90');
     assert.equal(await page.getByLabel('Liquid Glass Color Intensity', { exact: true }).getAttribute('max'), '110');
     assert.equal(await page.getByLabel('Liquid Glass Color Intensity', { exact: true }).getAttribute('aria-valuetext'), '100%');
-    assert.equal(await page.getByLabel('Acrylic Blur', { exact: true }).getAttribute('min'), '90');
-    assert.equal(await page.getByLabel('Acrylic Blur', { exact: true }).getAttribute('max'), '110');
+    assert.equal(await page.getByLabel('Acrylic Blur', { exact: true }).getAttribute('min'), '50');
+    assert.equal(await page.getByLabel('Acrylic Blur', { exact: true }).getAttribute('max'), '150');
     await showCategory('Colors');
     await page.getByLabel('Message & Input Text', { exact: true }).scrollIntoViewIfNeeded();
     await page.screenshot({ path: path.join(qa, 'hotori-color-grid.png') });

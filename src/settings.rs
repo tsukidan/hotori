@@ -45,8 +45,13 @@ fn slider(name: &str, value: &str, defaults: Option<&Settings>) -> Option<Slider
                 .filter(|v| v.is_finite() && *v > 0.0)
                 .unwrap_or(fallback);
             // Bounds stay anchored to source defaults, never to the last saved customization.
-            let min = (default * 90.0).round() / 100.0;
-            let max = (default * 110.0).round() / 100.0;
+            let (minimum, maximum) = if name == "--message-avatar-size" {
+                (90.0, 110.0)
+            } else {
+                (50.0, 150.0)
+            };
+            let min = (default * minimum).round() / 100.0;
+            let max = (default * maximum).round() / 100.0;
             (min, max, 0.01, name == "--message-avatar-size")
         }
         _ => return None,
@@ -208,11 +213,11 @@ mod tests {
     fn slider_bounds_use_source_defaults_and_do_not_drift_after_edits() {
         let defaults = customization::parse("--blur-val: 24px;\n--liquid-blur-val: 2.5px;\n--liquid-saturation: 220%;\n/* END OF USER SETTINGS */".into()).unwrap();
         let blur = slider("--blur-val", "26", Some(&defaults)).unwrap();
-        assert_eq!((blur.min, blur.max), (21.6, 26.4));
+        assert_eq!((blur.min, blur.max), (12.0, 36.0));
         let liquid = slider("--liquid-blur-val", "2.6", Some(&defaults)).unwrap();
-        assert_eq!((liquid.min, liquid.max), (2.25, 2.75));
+        assert_eq!((liquid.min, liquid.max), (1.25, 3.75));
         let saturation = slider("--liquid-saturation", "230", Some(&defaults)).unwrap();
-        assert_eq!((saturation.min, saturation.max), (198.0, 242.0));
+        assert_eq!((saturation.min, saturation.max), (110.0, 330.0));
         let avatar = slider("--message-avatar-size", "40", None).unwrap();
         assert_eq!((avatar.min, avatar.max), (54.0, 66.0));
         assert!(avatar.avatar_percent);
