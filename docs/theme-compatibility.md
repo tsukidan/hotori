@@ -47,7 +47,7 @@ Inputs accept raw CSS or a JSON array of objects with `css` fields; either snaps
 
 Never auto-apply ambiguous names such as `container`, `wrapper`, `root` or `banner`. Compare native declarations, sibling classes, component context and the live DOM. A missing class might be removed, moved or only absent from the current capture. Identical reaction variants can need more than one reviewed target. Explicit class tokens are preferable to broad substring selectors.
 
-Use `:is(.oldClass, .currentClass)` when supporting an overlapping Discord rollout. This preserves the specificity of a single class selector while retaining compatibility with the earlier build. Avoid wrapping the same aliases repeatedly. Check any generated class names embedded in attribute selectors separately. Keep declarations, custom-property names and layout intact unless a separate layout change is verified.
+Use current Discord class names directly by default. After the November 6 repair, the user requested removal of the old/new compatibility aliases while investigating scrolling lag. Their performance impact has not been established. Retain historical names in mapping records, not active selectors; add rollout compatibility aliases only when explicitly requested. More than one current component variant can still require a normal grouped selector. Check any generated class names embedded in attribute selectors separately. Keep declarations, custom-property names and layout intact unless a separate layout change is verified.
 
 ## Verify and publish
 

@@ -1,6 +1,9 @@
 {
   "schemaVersion": 1,
   "versions": {
+    "0.8.18": [
+      {"title": "Current Discord selectors", "description": "Removed legacy class-name compatibility aliases and retained only the current Discord selectors. Glass styling, blur values, layout rules, and customization settings are unchanged."}
+    ],
     "0.8.17": [
       {"title": "Discord compatibility", "description": "Restored wallpaper, glass panels, chat, channels, and settings styling after Discord renamed its internal CSS classes. Updated 371 class mappings while retaining compatibility with the previous client."}
     ],
