@@ -3,7 +3,7 @@
  * @author tsuki
  * @authorId 109679787630399488
  * @authorLink https://plusinsta.xyz
- * @version 0.8.18
+ * @version 0.9.0
  * @description A Discord theme inspired by Liquid Glass.
  */
 
@@ -619,7 +619,7 @@ svg {
 .scrollerContainer_zS9TPG,
 .editCard_xX0l5K,
 .addAnotherRuleCardContainer_Qt34kd,
-[class*="embedTitleLink_"],
+.embedTitleLink_XyW1ZT,
 .role_xL50-d,
 .innerContainer_s6-upr,
 .container_Xweo-z,
@@ -695,7 +695,7 @@ svg {
     color: #FFFFFF !important;
     fill: #FFFFFF !important;
 }
-[class*="embedTitleLink_"] {
+.embedTitleLink_XyW1ZT {
     padding: 5px !important;
     margin-left: -5px !important;
 }
@@ -981,21 +981,21 @@ svg {
     border-bottom-left-radius: 16px !important;
 }
 
-[class*="embedTitle_"],
-[class*="embedTitleLink_"] {
+:is(.embedTitle_RxomA0, .embedTitle_XyW1ZT),
+.embedTitleLink_XyW1ZT {
     color: #ffffff !important;
     font-weight: 800 !important;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2),
                  0 4px 12px rgba(0, 0, 0, 0.4) !important;
 }
 
-[class*="linkButtonIcon_"] svg,
-[class*="linkButtonIcon_"] path {
+.linkButtonIcon_zln_tS svg,
+.linkButtonIcon_zln_tS path {
     color: var(--main-color) !important;
     fill: currentColor !important;
 }
 
-[class*="linkButtonIcon_"] {
+.linkButtonIcon_zln_tS {
     color: var(--main-color) !important;
 }
 
@@ -1142,7 +1142,7 @@ svg {
     color: var(--secondary-ui-color) !important;
 }
 
-[class*="channelTextArea_"] svg {
+:is(.channelTextArea_2x8-Qn, .channelTextArea_z_gUBg, .channelTextArea_SY_P2T, .channelTextArea_UU236g, .channelTextArea_owUmX8) svg {
     color: #ffffff !important;
     fill: #ffffff !important;
 }
@@ -1191,7 +1191,7 @@ svg {
 }
 
 /* Autocomplete uses the live backdrop and selected glass profile. */
-[class*="autocomplete_"] {
+:is(.autocomplete_CAMiwx, .autocomplete_rg6La1, .autocomplete_5FdZ3J) {
     background: var(--glass-surface) !important;
     background-image: var(--glass-sheen) !important;
     backdrop-filter: var(--glass-filter) !important;
@@ -1202,7 +1202,7 @@ svg {
 }
 
 /* If Discord nests autocomplete wrappers, only the outer one needs glass. */
-[class*="autocomplete_"] [class*="autocomplete_"] {
+:is(.autocomplete_CAMiwx, .autocomplete_rg6La1, .autocomplete_5FdZ3J) :is(.autocomplete_CAMiwx, .autocomplete_rg6La1, .autocomplete_5FdZ3J) {
     background: transparent !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
@@ -1213,14 +1213,14 @@ svg {
 /* Attached autocomplete sits outside the input but inside its DOM subtree.
    Move the input's filter to a sibling background layer while it is open,
    so the input no longer blocks the popup's access to the page backdrop. */
-.channelTextArea_2x8-Qn:has([class*="autocomplete_"]) {
+.channelTextArea_2x8-Qn:has(:is(.autocomplete_CAMiwx, .autocomplete_rg6La1, .autocomplete_5FdZ3J)) {
     background: transparent !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     z-index: 0;
 }
 
-.channelTextArea_2x8-Qn:has([class*="autocomplete_"])::before {
+.channelTextArea_2x8-Qn:has(:is(.autocomplete_CAMiwx, .autocomplete_rg6La1, .autocomplete_5FdZ3J))::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -1950,7 +1950,7 @@ img[class*="avatar_"],
 .icon_Ax3P1g,
 .closeButton_QGyCSa,
 .actionMenuButton_pGckHv,
-[class*="embedTitleLink_"],
+.embedTitleLink_XyW1ZT,
 .cozy_2i8Bfm .header_2i8Bfm {
     box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
 }
@@ -1966,8 +1966,8 @@ img[class*="avatar_"],
 .outer_P1YEjQ:not(.custom-user-profile-theme) .innerContainer_s6-upr,
 .outer_P1YEjQ:not(.custom-user-profile-theme) .footerButton_YBm90d,
 .innerContainer_s6-upr .role_xL50-d,
-.embed_XyW1ZT [class*="embedTitleLink_"],
-.embedFull_XyW1ZT [class*="embedTitleLink_"],
+.embed_XyW1ZT .embedTitleLink_XyW1ZT,
+.embedFull_XyW1ZT .embedTitleLink_XyW1ZT,
 .embed_XyW1ZT .markup_ku1OHH code,
 .embedFull_XyW1ZT .markup_ku1OHH code {
     backdrop-filter: none !important;
@@ -1985,14 +1985,17 @@ img[class*="avatar_"],
    the existing backdrop-filter: none optimizations still take precedence. */
 /* Fine static grain on Acrylic surfaces only. The shared sheen slot paints
    the tile above the tint, without filtering text, icons or the backdrop. */
+/* Compute material tokens once per theme root, then inherit them. Repeating
+   these style queries on every span/icon adds work when Discord mounts rows.
+   Theme roots need class specificity to override their own base tokens. */
 @container style(--blur-profile: 0) {
-    :where(*) {
+    body, .theme-dark {
         --glass-sheen: var(--glass-acrylic-noise);
     }
 }
 
 @container style(--blur-profile: 1) {
-    :where(*) {
+    body, .theme-dark {
         /* Clear centers, with restrained light concentrated near the rim. */
         --glass-surface: color-mix(in srgb, var(--glass-background) 65%, transparent);
         --glass-background-subtle: color-mix(in srgb, var(--glass-background) 30%, transparent);
@@ -2005,7 +2008,8 @@ img[class*="avatar_"],
         --glass-unread-filter: var(--glass-filter);
     }
 
-    /* Smaller rounded lens and gentler displacement for short surfaces. */
+    /* Resolve the compact filter at its owner before descendants inherit it;
+       inherited custom properties otherwise keep the root's resolved lens. */
     .member_86es0b,
     .sm_F7qvhY.hasText_F7qvhY .buttonChildrenWrapper_F7qvhY,
     :is(.reaction_UNkajC, .reaction_MmKct8),
@@ -2019,9 +2023,14 @@ img[class*="avatar_"],
     .root_buf7nK,
     .title_ybUK7Z,
     .titleName_rh88Fa,
-    .titleWrapper_ybUK7Z::before,
     .subtitleContainer_z_gUBg .toolbar_ybUK7Z,
     .cozy_2i8Bfm .header_2i8Bfm {
+        --liquid-refraction: var(--liquid-refraction-compact);
+        --glass-filter: var(--liquid-refraction) blur(var(--glass-blur)) saturate(var(--glass-saturation)) brightness(var(--glass-brightness));
+        --glass-unread-filter: var(--glass-filter);
+    }
+
+    .titleWrapper_ybUK7Z::before {
         --liquid-refraction: var(--liquid-refraction-compact);
     }
 
@@ -2049,7 +2058,7 @@ img[class*="avatar_"],
 /* None removes the glass decoration entirely. Keep transparent zero shadows
    rather than 'none' so existing comma-separated shadow lists remain valid. */
 @container style(--blur-profile: 2) {
-    :where(*) {
+    body, .theme-dark {
         --glass-background: transparent;
         --glass-surface: transparent;
         --glass-background-subtle: transparent;
@@ -2074,7 +2083,7 @@ img[class*="avatar_"],
     .message_SY_P2T.mentioned_SY_P2T,
     .menu_M3qk4j,
     .submenu_M3qk4j,
-    [class*="autocomplete_"],
+    :is(.autocomplete_CAMiwx, .autocomplete_rg6La1, .autocomplete_5FdZ3J),
     .colorable_K9Xq13.disconnect_K9Xq13,
     .title_ybUK7Z,
     .titleName_rh88Fa,
@@ -3098,37 +3107,71 @@ body:has(.hoverButton_n2rO26:is(:hover, :focus-visible), .upload_JyxBSo .actionB
     border-radius: 50% !important;
     background: #ffffff !important;
     opacity: 1;
-    box-shadow: 0 0 5px 2px #ffffffbb,
-                0 0 12px #ffffff99;
+    box-shadow: none;
     animation: hotori-channel-unread-pulse 1.8s ease-in-out infinite;
     pointer-events: none;
     z-index: 1;
 }
 
-/* Fade the white core and soften its halo together, as in the supplied
-   recommendation-dot example. No layout, backdrop-filter or size animation. */
+/* Fixed halos crossfade instead of repainting an interpolated shadow every
+   frame. The core still fades on the original 1.8-second timing curve. */
+.sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N::before,
+.sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    box-shadow: 0 0 5px 2px #ffffffbb, 0 0 12px #ffffff99;
+    animation: hotori-channel-unread-halo 1.8s ease-in-out infinite;
+}
+
+.sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N::after {
+    box-shadow: 0 0 3px 1px #ffffff66, 0 0 8px #ffffff55;
+    animation-name: hotori-channel-unread-halo-soft;
+    opacity: 0;
+}
+
 @keyframes hotori-channel-unread-pulse {
     0%, 100% {
         opacity: 1;
-        box-shadow: 0 0 5px 2px #ffffffbb, 0 0 12px #ffffff99;
     }
     50% {
         opacity: 0.35;
-        box-shadow: 0 0 3px 1px #ffffff66, 0 0 8px #ffffff55;
     }
 }
 
+@keyframes hotori-channel-unread-halo {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+@keyframes hotori-channel-unread-halo-soft {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+}
+
 @media (prefers-reduced-motion: reduce) {
-    .sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N {
+    .sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N,
+    .sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N::before,
+    .sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N::after {
         animation: none;
         opacity: 1;
     }
 }
 
-.reduce-motion .sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N {
+.reduce-motion .sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N,
+.reduce-motion .sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N::before,
+.reduce-motion .sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N::after {
     animation: none;
     opacity: 1;
 }
+
+@media (prefers-reduced-motion: reduce) {
+    .sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N::after { opacity: 0; }
+}
+
+.reduce-motion .sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N::after { opacity: 0; }
 
 /* Channel-list separators use one neutral line regardless of glass color.
    The Boost container's native bottom border otherwise paints a second rule
@@ -3169,4 +3212,4 @@ body:has(.hoverButton_n2rO26:is(:hover, :focus-visible), .upload_JyxBSo .actionB
     margin-bottom: 8px !important;
 }
 
-/* END OF HOTORI DEV THEME */
+/* END OF HOTORI THEME */
