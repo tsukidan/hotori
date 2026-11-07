@@ -3,7 +3,7 @@
  * @author tsuki
  * @authorId 109679787630399488
  * @authorLink https://plusinsta.xyz
- * @version 0.8.16
+ * @version 0.8.17
  * @description A Discord theme inspired by Liquid Glass.
  */
 
@@ -414,37 +414,37 @@
 }
 
 /* Legacy components that bypass the complete color tokens. */
-.brandShine_d723f6 {
+:is(.brandShine_d723f6, .brandShine_EHx6SK) {
     color: hsl(from var(--brand-500) h s l / .1) !important;
 }
-.newUpsellBackground__65c15 {
+:is(.newUpsellBackground__65c15, .newUpsellBackground_qIotUB) {
     background: hsl(from var(--brand-500) h s l / .08) !important;
 }
-.buttonShine_b807c8 {
+:is(.buttonShine_b807c8, .buttonShine_1nVkKR) {
     color: hsl(from var(--brand-500) h s l / .1) !important;
 }
-.addCard__28d4e {
+:is(.addCard__28d4e, .addCard_uUFOpe) {
     background-color: hsl(from var(--brand-500) h s l / .25) !important;
     border: 2px dashed hsl(from var(--brand-500) h s l / .5) !important;
 }
-.addIconWrapper__28d4e {
+:is(.addIconWrapper__28d4e, .addIconWrapper_uUFOpe) {
     background-color: hsl(from var(--brand-500) h s l / .35) !important;
 }
-.clickBackground__29c87 {
+:is(.clickBackground__29c87, .clickBackground_BDrUP9) {
     background-color: hsl(from var(--brand-500) h s l / .9) !important;
 }
-.tivNavItemIconContainerSelected__4ccc5 {
+:is(.tivNavItemIconContainerSelected__4ccc5, .tivNavItemIconContainerSelected_zP0tg_) {
     background-color: hsl(from var(--brand-500) h s l / .9) !important;
 }
-.brandShineLight__7eea4 {
+:is(.brandShineLight__7eea4, .brandShineLight_02LA0a) {
     color: hsl(from var(--brand-500) h s l / .1) !important;
 }
 
 /* Literal blurple used by the shop selection border and card glow. */
-.shopCardSelected_bab2bc {
+:is(.shopCardSelected_bab2bc, .shopCardSelected_lmQhFf) {
     border-color: var(--main-color) !important;
 }
-.cardFlairGlow_abfd90 {
+:is(.cardFlairGlow_abfd90, .cardFlairGlow_RGwqSL) {
     background: conic-gradient(from 180deg at 50% 50%, var(--main-color) 0deg, var(--blurple-29) 60deg, var(--blurple-15) 120deg, var(--main-color) 180deg, var(--blurple-29) 240deg, var(--blurple-40) 300deg, var(--main-color) 1turn) !important;
 }
 
@@ -453,7 +453,7 @@
     25%, 75% { box-shadow: 0 0 25px 0 var(--main-color); }
 }
 
-.full-motion .card__892b9.highlighted__892b9 {
+.full-motion :is(.card__892b9, .card_3emZAO):is(.highlighted__892b9, .highlighted_3emZAO) {
     animation-name: hotori-owned-card-glow !important;
 }
 
@@ -495,12 +495,12 @@
  * | 04 | BASE APPLICATION & BACKGROUND                                                         |
  * |                                                                                            |
  * ============================================================================================= */
-.app_a3002d,
-.app__160d8 {
+:is(.app_a3002d, .app_YRXZu0),
+:is(.app__160d8, .app_QbT-Jy) {
     background: transparent !important;
 }
 
-.bg__960e4 {
+:is(.bg__960e4, .bg_Fd0FEH) {
     background-image: linear-gradient(to bottom, var(--bg-overlay-top), var(--bg-overlay-bottom)), var(--main-bg) !important;
     background-size: cover !important;
     background-position: center !important;
@@ -510,19 +510,19 @@
 /* Hide the entire persistent friends sidebar, including its border, resize
    handle, and layout space. The visible state keeps Discord's native sizing. */
 @container style(--show-friends-sidebar: 0) {
-    .container_b17982 {
+    :is(.container_b17982, .container_P8Fhjj) {
         display: none !important;
     }
 }
 
 /* Forum post list: reveal the theme wallpaper behind the posts. */
-.container_f369db {
+:is(.container_f369db, .container_BkGrJJ) {
     background: transparent !important;
 }
 
 /* Forum post cards: share Hotori's material without changing native card layout.
    List, grid, and media variants come from the client's cached forum styles. */
-.container_f369db :is(.container_faa96b, .container__9a337, .container_a2d698) {
+:is(.container_f369db, .container_BkGrJJ) :is(:is(.container_faa96b, .container_SOY5H6), :is(.container__9a337, .container_x1LvFB), :is(.container_a2d698, .container_tqg020)) {
     background: var(--glass-surface) !important;
     background-image: var(--glass-sheen) !important;
     backdrop-filter: var(--glass-filter) !important;
@@ -537,13 +537,13 @@
  * | 05 | GLOBAL TEXT & ICON OVERRIDES                                                          |
  * |                                                                                            |
  * ============================================================================================= */
-.name__5d473,
-.modeUnreadImportant__2ea32 .name__2ea32,
-.clickable__81391 {
+:is(.name__5d473, .name_Iy0c7A),
+:is(.modeUnreadImportant__2ea32, .modeUnreadImportant_TNyK-N) :is(.name__2ea32, .name_TNyK-N),
+:is(.clickable__81391, .clickable_fErCLM) {
     color: #ffffff !important;
 }
 
-.name__2ea32 {
+:is(.name__2ea32, .name_TNyK-N) {
     color: var(--secondary-ui-color) !important;
 }
 
@@ -556,83 +556,83 @@ svg {
  * | 06 | LIQUID GLASS STRUCTURAL PANELS                                                        |
  * |                                                                                            |
  * ============================================================================================= */
-.wrapper_ef3116,
-.sidebarList__5e434,
-.panels__5e434,
-.member_c8ffbb,
-.sm_a22cb0.hasText_a22cb0 .buttonChildrenWrapper_a22cb0,
-.full-motion .searchBar_c322aa,
-.overlay_b32ca4,
-.channelTextArea__74017,
-.jumpToPresentBar__0f481,
-.divider__908e2::before,
-.unreadPill__908e2,
-.container__06b03,
-.footerButton__272c7,
-.container__62dd3,
-.newMessagesBar__0f481,
-.root_bfe55a,
-.buttonSection__1405b,
-.reaction__23977,
-.tabBody__133bf,
-.nowPlayingColumn__133bf,
-.refresh-active-now .header__00943,
-.refresh-active-now .itemCard__7e549,
-.upload_aa605f,
-.modeSelected__2ea32,
-.title_edbb22,
-.trailing_c38106,
-.backForwardButtons__63abb,
-.content__908e2,
-.card__39ec2,
-.wrapper__926d7,
-.stackedBars__74017,
-.sidebarRegion__23e6b,
-.container__72c38,
-.modal_e44912,
-.searchResultsWrap_a98f3b,
-.searchResult__80bf8,
-.container__16eb0,
-.sidebarContainer__89463,
-.container__1dc40,
-.container_e928f4,
+:is(.wrapper_ef3116, .wrapper_5dqHTG),
+:is(.sidebarList__5e434, .sidebarList_pog62O),
+:is(.panels__5e434, .panels_pog62O),
+:is(.member_c8ffbb, .member_86es0b),
+:is(.sm_a22cb0, .sm_F7qvhY):is(.hasText_a22cb0, .hasText_F7qvhY) :is(.buttonChildrenWrapper_a22cb0, .buttonChildrenWrapper_F7qvhY),
+.full-motion :is(.searchBar_c322aa, .searchBar_i16Ad0),
+:is(.overlay_b32ca4, .overlay_A7qlid),
+:is(.channelTextArea__74017, .channelTextArea_2x8-Qn),
+:is(.jumpToPresentBar__0f481, .jumpToPresentBar_j9Vvzj),
+:is(.divider__908e2, .divider_4TfzT5)::before,
+:is(.unreadPill__908e2, .unreadPill_4TfzT5),
+:is(.container__06b03, .container_78NJ3W),
+:is(.footerButton__272c7, .footerButton_YBm90d),
+:is(.container__62dd3, .container_FNEkcu),
+:is(.newMessagesBar__0f481, .newMessagesBar_j9Vvzj),
+:is(.root_bfe55a, .root_rTsZa_),
+:is(.buttonSection__1405b, .buttonSection_9bvEB0),
+:is(.reaction__23977, .reaction_UNkajC, .reaction_MmKct8),
+:is(.tabBody__133bf, .tabBody_zrUwGA),
+:is(.nowPlayingColumn__133bf, .nowPlayingColumn_zrUwGA),
+.refresh-active-now :is(.header__00943, .header_o3hXTo),
+.refresh-active-now :is(.itemCard__7e549, .itemCard_-7KzVR),
+:is(.upload_aa605f, .upload_JyxBSo),
+:is(.modeSelected__2ea32, .modeSelected_TNyK-N),
+:is(.title_edbb22, .title_LnjVAX),
+:is(.trailing_c38106, .trailing_3zSH5d),
+:is(.backForwardButtons__63abb, .backForwardButtons_nS9Yqn),
+:is(.content__908e2, .content_4TfzT5),
+:is(.card__39ec2, .card_Bu4Al8),
+:is(.wrapper__926d7, .wrapper_lj7V-K),
+:is(.stackedBars__74017, .stackedBars_2x8-Qn),
+:is(.sidebarRegion__23e6b, .sidebarRegion_jnk11m),
+:is(.container__72c38, .container_UcGqzv),
+:is(.modal_e44912, .modal__F9ieB),
+:is(.searchResultsWrap_a98f3b, .searchResultsWrap_QHVbp3),
+:is(.searchResult__80bf8, .searchResult_N3Anbl),
+:is(.container__16eb0, .container_cbVzxY),
+:is(.sidebarContainer__89463, .sidebarContainer_rhYbEd),
+:is(.container__1dc40, .container_DV7fsY),
+:is(.container_e928f4, .container_vg4rr1),
 
-.table_e7d73e,
-.tier_a36dee,
-.wrapper__83b1d,
-.tierHeaderUnlocked_a36dee,
-.tierBody_a36dee,
-.soundTable__93d4a,
-.mainTableContainer__09a38,
-.checkmark_ce03f4,
-.roleRow__5f97b,
-.container_d8f25b,
-.icon_d8f25b,
-.card_b846e5,
-.joinOptions__959cb,
-.compactContainer_eaaeee,
-.card_dc2e44,
-.iconWrapper__4a3a5,
-.clickableContainer_d96a9c,
-.backgroundModifierContainer_d96a9c,
-.auditLog__43dab,
-.scrollerContainer__4b8d8,
-.editCard_a25a68,
-.addAnotherRuleCardContainer__0c1e8,
+:is(.table_e7d73e, .table_XTvD56),
+:is(.tier_a36dee, .tier_no-mtA),
+:is(.wrapper__83b1d, .wrapper_wc8r43),
+:is(.tierHeaderUnlocked_a36dee, .tierHeaderUnlocked_no-mtA),
+:is(.tierBody_a36dee, .tierBody_no-mtA),
+:is(.soundTable__93d4a, .soundTable_doBhuY),
+:is(.mainTableContainer__09a38, .mainTableContainer_-blG2T),
+:is(.checkmark_ce03f4, .checkmark_wQgDYn),
+:is(.roleRow__5f97b, .roleRow_YEKbw3),
+:is(.container_d8f25b, .container_Ax3P1g),
+:is(.icon_d8f25b, .icon_Ax3P1g),
+:is(.card_b846e5, .card_5Yn7E3),
+:is(.joinOptions__959cb, .joinOptions_i0EgQh),
+:is(.compactContainer_eaaeee, .compactContainer_k0R3Tk),
+:is(.card_dc2e44, .card_ZjaEbs),
+:is(.iconWrapper__4a3a5, .iconWrapper__wphjE),
+:is(.clickableContainer_d96a9c, .clickableContainer_zYsR7a),
+:is(.backgroundModifierContainer_d96a9c, .backgroundModifierContainer_zYsR7a),
+:is(.auditLog__43dab, .auditLog_LajYMK),
+:is(.scrollerContainer__4b8d8, .scrollerContainer_zS9TPG),
+:is(.editCard_a25a68, .editCard_xX0l5K),
+:is(.addAnotherRuleCardContainer__0c1e8, .addAnotherRuleCardContainer_Qt34kd),
 [class*="embedTitleLink_"],
-.role_af3987,
-.innerContainer_c2a763,
-.container_dca174,
-.contentHeader_e9e3ed,
-.actionButtons_cc1819,
-.closeButton__6088c,
-.authedAppV2__92059,
-.actionMenuButton__8dc78,
-.container__122e4,
-.file__0ccae,
-.shop__6db1d,
-.markup__75297 code,
-.outer_c0bea0:not(.custom-user-profile-theme) {
+:is(.role_af3987, .role_xL50-d),
+:is(.innerContainer_c2a763, .innerContainer_s6-upr),
+:is(.container_dca174, .container_Xweo-z),
+:is(.contentHeader_e9e3ed, .contentHeader_3Rvb29),
+:is(.actionButtons_cc1819, .actionButtons_Q2cxvN),
+:is(.closeButton__6088c, .closeButton_QGyCSa),
+:is(.authedAppV2__92059, .authedAppV2_-8GDCL),
+:is(.actionMenuButton__8dc78, .actionMenuButton_pGckHv),
+:is(.container__122e4, .container_4dy_KE),
+:is(.file__0ccae, .file_-9z-XO),
+:is(.shop__6db1d, .shop_Mqg79R),
+:is(.markup__75297, .markup_ku1OHH) code,
+:is(.outer_c0bea0, .outer_P1YEjQ):not(.custom-user-profile-theme) {
     background: var(--glass-surface) !important;
     background-image: var(--glass-sheen) !important;
     backdrop-filter: var(--glass-filter) !important;
@@ -645,7 +645,7 @@ svg {
 
 /* Keep multiline code text clear of the rounded glass edges. Border-box
    includes the inset in constrained widths; native pre-wrap handles resizing. */
-.markup__75297 pre code {
+:is(.markup__75297, .markup_ku1OHH) pre code {
     padding: 12px 16px !important;
     box-sizing: border-box;
 }
@@ -657,7 +657,7 @@ svg {
  * ============================================================================================= */
 /* Boost goal: glass belongs to the whole track, behind the native purple fill
    and labels. Avoid panel margins that offset the absolutely positioned fill. */
-.contentContainer__0d0f9 {
+:is(.contentContainer__0d0f9, .contentContainer_BFMMcK) {
     background: var(--glass-surface) !important;
     background-image: var(--glass-sheen) !important;
     backdrop-filter: var(--glass-filter) !important;
@@ -668,7 +668,7 @@ svg {
     isolation: isolate;
 }
 
-.progressContainer__0d0f9 {
+:is(.progressContainer__0d0f9, .progressContainer_BFMMcK) {
     background: transparent !important;
     border-radius: inherit;
 }
@@ -678,8 +678,8 @@ svg {
  * | 08 | SMALL GLASS SURFACES & PANEL DETAILS                                                  |
  * |                                                                                            |
  * ============================================================================================= */
-.item_caf372,
-.overlay__3b260 {
+:is(.item_caf372, .item_xyJHva),
+:is(.overlay__3b260, .overlay_-tj9SA) {
         background: var(--glass-surface) !important;
     background-image: var(--glass-sheen) !important;
     backdrop-filter: var(--glass-filter) !important;
@@ -688,10 +688,10 @@ svg {
     border: 1px solid var(--glass-border) !important;
     border-radius: 16px !important;
 }
-.sm_a22cb0 .buttonChildrenWrapper_a22cb0,
-.buttonInner_aec7ab,
-.winButton_c38106, .icon__0c4c4,
-.actionMenuButton__8dc78 svg path {
+:is(.sm_a22cb0, .sm_F7qvhY) :is(.buttonChildrenWrapper_a22cb0, .buttonChildrenWrapper_F7qvhY),
+:is(.buttonInner_aec7ab, .buttonInner_zpnerZ),
+:is(.winButton_c38106, .winButton_3zSH5d), :is(.icon__0c4c4, .icon_v966Ys),
+:is(.actionMenuButton__8dc78, .actionMenuButton_pGckHv) svg path {
     color: #FFFFFF !important;
     fill: #FFFFFF !important;
 }
@@ -699,29 +699,29 @@ svg {
     padding: 5px !important;
     margin-left: -5px !important;
 }
-.icon__4a3a5 {
+:is(.icon__4a3a5, .icon__wphjE) {
     color: #FFF !important;
 }
 
-.card_b846e5:before {
+:is(.card_b846e5, .card_5Yn7E3):before {
     background: rgba(255, 255, 255, 0.2) !important;
 }
 
-.soundTable__93d4a {
+:is(.soundTable__93d4a, .soundTable_doBhuY) {
     padding: 10px !important;
 }
 
-.refresh-active-now .header__00943 {
+.refresh-active-now :is(.header__00943, .header_o3hXTo) {
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
     background: rgba(0, 0, 0, 0.2) !important;
 }
 
-.banner__68edb,
-.banner__7f9c0 {
+:is(.banner__68edb, .banner_s9bWOi),
+:is(.banner__7f9c0, .banner_S_xUx6) {
     border-radius: 16px !important;
 }
 
-.custom-user-profile-theme .footerButton__272c7:before {
+.custom-user-profile-theme :is(.footerButton__272c7, .footerButton_YBm90d):before {
     background: transparent !important;
 }
 
@@ -730,53 +730,53 @@ svg {
  * | 09 | BACKGROUND STRIPPING & CLEANUP                                                        |
  * |                                                                                            |
  * ============================================================================================= */
-.sidebar__5e434,
-.container__89463,
-.contentContainer__89463,
-.container__2637a,
-.members_c8ffbb,
-.member__5d473,
-.member_c8ffbb,
-.scroller__99e7c,
-.container_c8ffbb,
-.chat_f75fb0,
-.secondary_a22cb0,
-.sm_a22cb0.hasText_a22cb0,
-.chatContent_f75fb0,
-.themedBackground__74017,
-.privateChannels_e6b769,
-.wrapper_cb9592.minimum_cb9592,
-.messagesPopoutWrap__432f4,
-.channelHeader__9f71b,
-.container__133bf,
-.chatTypingGradientAtBottom__36d07,
-.callContainer_cb9592,
-.channelChatWrapper_cb9592,
-.wrapper_cb9592,
-.activityPanel__5e434,
-.theme-dark .themed__9293f,
-.standardSidebarView__23e6b,
-.sidebarRegionScroller__23e6b,
-.layer__960e4,
-.contentRegion__23e6b,
-.contentRegionScroller__23e6b,
-.content_e9e3ed,
-.contentHeader_e9e3ed,
-.chatGradient__36d07,
-.high-contrast-mode .page__5e434,
-.theme-midnight .page__5e434,
-.messages__36d07,
-.quote__122e4,
-.aside_f58343,
+:is(.sidebar__5e434, .sidebar_pog62O),
+:is(.container__89463, .container_rhYbEd),
+:is(.contentContainer__89463, .contentContainer_rhYbEd),
+:is(.container__2637a, .container_H5ozaj),
+:is(.members_c8ffbb, .members_86es0b),
+:is(.member__5d473, .member_Iy0c7A),
+:is(.member_c8ffbb, .member_86es0b),
+:is(.scroller__99e7c, .scroller_Bce46W),
+:is(.container_c8ffbb, .container_86es0b),
+:is(.chat_f75fb0, .chat_z_gUBg),
+:is(.secondary_a22cb0, .secondary_F7qvhY),
+:is(.sm_a22cb0, .sm_F7qvhY):is(.hasText_a22cb0, .hasText_F7qvhY),
+:is(.chatContent_f75fb0, .chatContent_z_gUBg),
+:is(.themedBackground__74017, .themedBackground_2x8-Qn),
+:is(.privateChannels_e6b769, .privateChannels_u88IQl),
+:is(.wrapper_cb9592, .wrapper_hbKzX7):is(.minimum_cb9592, .minimum_hbKzX7),
+:is(.messagesPopoutWrap__432f4, .messagesPopoutWrap_6bgemo),
+:is(.channelHeader__9f71b, .channelHeader_3qIpbl),
+:is(.container__133bf, .container_zrUwGA),
+:is(.chatTypingGradientAtBottom__36d07, .chatTypingGradientAtBottom_8AE1Qq),
+:is(.callContainer_cb9592, .callContainer_hbKzX7),
+:is(.channelChatWrapper_cb9592, .channelChatWrapper_hbKzX7),
+:is(.wrapper_cb9592, .wrapper_hbKzX7),
+:is(.activityPanel__5e434, .activityPanel_pog62O),
+.theme-dark :is(.themed__9293f, .themed_ybUK7Z),
+:is(.standardSidebarView__23e6b, .standardSidebarView_jnk11m),
+:is(.sidebarRegionScroller__23e6b, .sidebarRegionScroller_jnk11m),
+:is(.layer__960e4, .layer_Fd0FEH),
+:is(.contentRegion__23e6b, .contentRegion_jnk11m),
+:is(.contentRegionScroller__23e6b, .contentRegionScroller_jnk11m),
+:is(.content_e9e3ed, .content_3Rvb29),
+:is(.contentHeader_e9e3ed, .contentHeader_3Rvb29),
+:is(.chatGradient__36d07, .chatGradient_8AE1Qq),
+.high-contrast-mode :is(.page__5e434, .page_pog62O),
+.theme-midnight :is(.page__5e434, .page_pog62O),
+:is(.messages__36d07, .messages_8AE1Qq),
+:is(.quote__122e4, .quote_4dy_KE),
+:is(.aside_f58343, .aside_HbUF2J),
  .shopScroll__08415,
- .shop__08415,
-.page__1feb0, .shopScroll__1feb0,
-.filterBar__11877{
+ :is(.shop__08415, .shop_XBXDcd),
+:is(.page__1feb0, .page_4Qm5zV), :is(.shopScroll__1feb0, .shopScroll_4Qm5zV),
+:is(.filterBar__11877, .filterBar_sO1rm5){
     background: transparent !important;
     border: none !important;
 }
 
-.custom-user-profile-theme .inner_c0bea0 {
+.custom-user-profile-theme :is(.inner_c0bea0, .inner_P1YEjQ) {
     border: none !important;
     border-radius: 16px !important;
     margin: 4px !important;
@@ -787,7 +787,7 @@ svg {
  * | 10 | DECORATIVE BORDERS & DIVIDERS                                                         |
  * |                                                                                            |
  * ============================================================================================= */
-.theme-dark .children__9293f:after {
+.theme-dark :is(.children__9293f, .children_ybUK7Z):after {
     content: "" !important;
     position: relative !important;
     display: block !important;
@@ -804,12 +804,12 @@ svg {
     margin: 0 12px !important;
 }
 
-.containerWithMargin__0d0f9::after,
-.sectionDivider__629e4,
-.separator_aa8da2,
-.divider_dbba93,
-.divider__44f7f,
-.divider__864b0 {
+:is(.containerWithMargin__0d0f9, .containerWithMargin_BFMMcK)::after,
+:is(.sectionDivider__629e4, .sectionDivider_ysO7Gy),
+:is(.separator_aa8da2, .separator_6zZYhF),
+:is(.divider_dbba93, .divider_mL61Cw),
+:is(.divider__44f7f, .divider_6vIioY),
+:is(.divider__864b0, .divider_md_YFn) {
     content: "" !important;
     display: block !important;
     width: calc(100% - 16px) !important;
@@ -832,28 +832,28 @@ svg {
  * ============================================================================================= */
 /* Offline row opacity creates a backdrop boundary that breaks the glass.
    Dim only the inner member content, leaving the blur surface opaque. */
-.member__5d473.offline__5d473 {
+:is(.member__5d473, .member_Iy0c7A):is(.offline__5d473, .offline_Iy0c7A) {
     opacity: 1 !important;
 }
 
-.member__5d473.offline__5d473 .memberInner__5d473 {
+:is(.member__5d473, .member_Iy0c7A):is(.offline__5d473, .offline_Iy0c7A) :is(.memberInner__5d473, .memberInner_Iy0c7A) {
     opacity: 0.3;
 }
 
-.member__5d473.offline__5d473:hover .memberInner__5d473,
-.member__5d473.offline__5d473:focus-within .memberInner__5d473 {
+:is(.member__5d473, .member_Iy0c7A):is(.offline__5d473, .offline_Iy0c7A):hover :is(.memberInner__5d473, .memberInner_Iy0c7A),
+:is(.member__5d473, .member_Iy0c7A):is(.offline__5d473, .offline_Iy0c7A):focus-within :is(.memberInner__5d473, .memberInner_Iy0c7A) {
     opacity: 1;
 }
 
-.sectionDivider_e6b769 {
+:is(.sectionDivider_e6b769, .sectionDivider_u88IQl) {
     display: none !important;
 }
 
-.searchBar_e6b769 {
+:is(.searchBar_e6b769, .searchBar_u88IQl) {
     border: none;
 }
 
-.divider__908e2 {
+:is(.divider__908e2, .divider_4TfzT5) {
     height: 10px !important;
     /* Keep this wrapper from restricting the date label's backdrop. */
     opacity: 1 !important;
@@ -866,7 +866,7 @@ svg {
 }
 
 /* The line and date label each blur the backdrop, without nesting filters. */
-.divider__908e2::before {
+:is(.divider__908e2, .divider_4TfzT5)::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -875,18 +875,18 @@ svg {
     pointer-events: none;
 }
 
-.separator_aa8da2,
-.divider_dbba93 {
+:is(.separator_aa8da2, .separator_6zZYhF),
+:is(.divider_dbba93, .divider_mL61Cw) {
     height: 5px !important;
 }
 
-.unreadPillCap__908e2 {
+:is(.unreadPillCap__908e2, .unreadPillCap_4TfzT5) {
     display: none !important;
 }
 
 /* One slim glass surface for unread and date separators. Both labels sit
    directly on the bar rather than painting a separate pill or blur layer. */
-.divider__908e2:is(.isUnread__908e2, .hasContent__908e2) {
+:is(.divider__908e2, .divider_4TfzT5):is(:is(.isUnread__908e2, .isUnread_4TfzT5), :is(.hasContent__908e2, .hasContent_4TfzT5)) {
     height: 18px !important;
     min-height: 18px;
     margin: 8px 4px !important;
@@ -901,11 +901,11 @@ svg {
     border-radius: 9px !important;
 }
 
-.divider__908e2:is(.isUnread__908e2, .hasContent__908e2)::before {
+:is(.divider__908e2, .divider_4TfzT5):is(:is(.isUnread__908e2, .isUnread_4TfzT5), :is(.hasContent__908e2, .hasContent_4TfzT5))::before {
     display: none !important;
 }
 
-.divider__908e2:is(.isUnread__908e2, .hasContent__908e2) :is(.unreadPill__908e2, .content__908e2) {
+:is(.divider__908e2, .divider_4TfzT5):is(:is(.isUnread__908e2, .isUnread_4TfzT5), :is(.hasContent__908e2, .hasContent_4TfzT5)) :is(:is(.unreadPill__908e2, .unreadPill_4TfzT5), :is(.content__908e2, .content_4TfzT5)) {
     position: static !important;
     inset: auto !important;
     width: auto !important;
@@ -930,15 +930,15 @@ svg {
  * | 12 | MISCELLANEOUS CHAT ELEMENTS & EMBEDS                                                  |
  * |                                                                                            |
  * ============================================================================================= */
-.full-motion .searchBar_c322aa,
-.container__16eb0 {
+.full-motion :is(.searchBar_c322aa, .searchBar_i16Ad0),
+:is(.container__16eb0, .container_cbVzxY) {
     color: #FFF !important;
 }
 
 /* Liquid Glass for Embeds (Link previews, bot messages, etc.) */
-.embed__623de,
-.embedFull__623de,
-.blockquoteContainer__75297 {
+:is(.embed__623de, .embed_XyW1ZT),
+:is(.embedFull__623de, .embedFull_XyW1ZT),
+:is(.blockquoteContainer__75297, .blockquoteContainer_ku1OHH) {
     background: var(--glass-surface) !important;
     background-image: var(--glass-sheen) !important;
     backdrop-filter: var(--glass-filter) !important;
@@ -952,8 +952,8 @@ svg {
 
 /* Image-only attachments stay unframed. Full link/bot embeds keep their glass,
    including embeds that also contain an image. */
-.imageContainer__0f481,
-.embed__623de:not(.embedFull__623de):has(.imageContainer__0f481) {
+:is(.imageContainer__0f481, .imageContainer_j9Vvzj),
+:is(.embed__623de, .embed_XyW1ZT):not(:is(.embedFull__623de, .embedFull_XyW1ZT)):has(:is(.imageContainer__0f481, .imageContainer_j9Vvzj)) {
     background: transparent !important;
     background-image: none !important;
     backdrop-filter: none !important;
@@ -962,22 +962,22 @@ svg {
     border: none !important;
 }
 
-.blockquoteDivider__75297 {
+:is(.blockquoteDivider__75297, .blockquoteDivider_ku1OHH) {
     display: none !important;
 }
 
-.markup__75297 blockquote {
+:is(.markup__75297, .markup_ku1OHH) blockquote {
     color: #FFF !important;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1),
                  0 2px 2px rgba(0, 0, 0, 0.4) !important;
     font-weight: 600 !important;
 }
 
-.grid__623de {
+:is(.grid__623de, .grid_XyW1ZT) {
     background: transparent !important;
 }
 
-.embed__623de > :first-child {
+:is(.embed__623de, .embed_XyW1ZT) > :first-child {
     border-top-left-radius: 16px !important;
     border-bottom-left-radius: 16px !important;
 }
@@ -1000,23 +1000,23 @@ svg {
     color: var(--main-color) !important;
 }
 
-.messageContent_c19a55 {
+:is(.messageContent_c19a55, .messageContent_2i8Bfm) {
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1),
                  0 4px 12px rgba(0, 0, 0, 0.2) !important;
     font-weight: 600 !important;
 }
 
-.cozy_fc8177,
-.wrapper_fc8177,
-.message__5126c {
+:is(.cozy_fc8177, .cozy_oITdBA),
+:is(.wrapper_fc8177, .wrapper_oITdBA),
+:is(.message__5126c, .message_SY_P2T) {
     background: transparent !important;
     box-shadow: none !important;
     border: none !important;
 }
 
-.message__5126c:hover,
-.cozy_fc8177:hover,
-.wrapper_fc8177:hover {
+:is(.message__5126c, .message_SY_P2T):hover,
+:is(.cozy_fc8177, .cozy_oITdBA):hover,
+:is(.wrapper_fc8177, .wrapper_oITdBA):hover {
     background: transparent !important;
     background-image: none !important;
 }
@@ -1027,7 +1027,7 @@ svg {
  * |                                                                                            |
  * ============================================================================================= */
 /* Message hover actions: one glass surface for reactions, reply, and more. */
-.buttonsInner__5126c {
+:is(.buttonsInner__5126c, .buttonsInner_SY_P2T) {
     background: var(--glass-surface) !important;
     background-image: var(--glass-sheen) !important;
     backdrop-filter: var(--glass-filter) !important;
@@ -1038,14 +1038,14 @@ svg {
 }
 
 /* Inner toolbar wrappers must not paint Discord's opaque panel over the glass. */
-.buttonsInner__5126c > :is([class*="wrapper_"], [role="toolbar"]) {
+:is(.buttonsInner__5126c, .buttonsInner_SY_P2T) > :is([class*="wrapper_"], [role="toolbar"]) {
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
     border-radius: inherit !important;
 }
 
-.buttonsInner__5126c :is([class*="button_"], [role="button"]):hover {
+:is(.buttonsInner__5126c, .buttonsInner_SY_P2T) :is([class*="button_"], [role="button"]):hover {
     background-color: var(--glass-background-subtle) !important;
 }
 
@@ -1056,7 +1056,7 @@ svg {
  * ============================================================================================= */
 /* Yellow glass with white, shadowed mention text in messages and the composer. */
 .mention,
-[data-slate-editor="true"] .wrapper_f61d60 {
+[data-slate-editor="true"] :is(.wrapper_f61d60, .wrapper_NDaLCQ) {
     display: inline-block;
     box-sizing: border-box;
     max-width: 100%;
@@ -1076,18 +1076,18 @@ svg {
 
 .mention.interactive:hover,
 .mention.interactive:focus-visible,
-[data-slate-editor="true"] .wrapper_f61d60:hover {
+[data-slate-editor="true"] :is(.wrapper_f61d60, .wrapper_NDaLCQ):hover {
     background-color: var(--mention-glass-hover) !important;
 }
 
 /* A highlighted message already supplies the backdrop blur for its mentions. */
-.message__5126c.mentioned__5126c .mention {
+:is(.message__5126c, .message_SY_P2T):is(.mentioned__5126c, .mentioned_SY_P2T) .mention {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
 }
 
 /* Mentioned message rows: yellow glass, with Discord's mention marker intact. */
-.message__5126c.mentioned__5126c {
+:is(.message__5126c, .message_SY_P2T):is(.mentioned__5126c, .mentioned_SY_P2T) {
     background: var(--mention-glass-tint) !important;
     /* Paint the accent in the background so it clips to the glass corners. */
     background-image: linear-gradient(to right, var(--mention-glass-accent) 0 3px, transparent 3px), var(--glass-sheen) !important;
@@ -1097,13 +1097,13 @@ svg {
     border-radius: 12px !important;
 }
 
-.message__5126c.mentioned__5126c:hover,
-.message__5126c.mentioned__5126c.selected__5126c {
+:is(.message__5126c, .message_SY_P2T):is(.mentioned__5126c, .mentioned_SY_P2T):hover,
+:is(.message__5126c, .message_SY_P2T):is(.mentioned__5126c, .mentioned_SY_P2T):is(.selected__5126c, .selected_SY_P2T) {
     background-color: var(--mention-glass-hover) !important;
     background-image: linear-gradient(to right, var(--mention-glass-accent) 0 3px, transparent 3px), var(--glass-sheen) !important;
 }
 
-.message__5126c.mentioned__5126c::before {
+:is(.message__5126c, .message_SY_P2T):is(.mentioned__5126c, .mentioned_SY_P2T)::before {
     content: none !important;
 }
 
@@ -1112,24 +1112,24 @@ svg {
  * | 14 | STARTUP / LOADING SCREEN TRANSPARENCY                                                 |
  * |                                                                                            |
  * ============================================================================================= */
-.container_a2f514,
+:is(.container_a2f514, .container_oDjP9R),
 [class*="ready_"] {
     background: transparent !important;
 }
 
-.scrollerSpacer__36d07,
+:is(.scrollerSpacer__36d07, .scrollerSpacer_8AE1Qq),
 [class*="wrapper_"] > [class*="spinner_"],
 [class*="chatContent_"] > div:first-child:not([class*="message_"]):not([class*="scrollerSpacer_"]) {
     background: transparent !important;
     box-shadow: none !important;
 }
 
-.scrollerContent__36d07,
-.wrapper_d852db {
+:is(.scrollerContent__36d07, .scrollerContent_8AE1Qq),
+:is(.wrapper_d852db, .wrapper_gFyPwI) {
     background: transparent !important;
 }
 
-.editor__1b31f {
+:is(.editor__1b31f, .editor_SHcSVi) {
     caret-color: #ffffff !important;
     color: #ffffff !important;
 }
@@ -1148,12 +1148,12 @@ svg {
     fill: #ffffff !important;
 }
 
-.icon__9293f {
+:is(.icon__9293f, .icon_ybUK7Z) {
     color: #ffffff !important;
 }
 
 /* Leading server channel icons (#, voice, forum, etc.). */
-.icon__2ea32 {
+:is(.icon__2ea32, .icon_TNyK-N) {
     color: var(--main-color) !important;
 }
 
@@ -1162,8 +1162,8 @@ svg {
  * | 16 | LIQUID GLASS CONTEXT MENU & AUTOCOMPLETE                                              |
  * |                                                                                            |
  * ============================================================================================= */
-.menu_c1e9c4,
-.submenu_c1e9c4 {
+:is(.menu_c1e9c4, .menu_M3qk4j),
+:is(.submenu_c1e9c4, .submenu_M3qk4j) {
     background: var(--glass-background-subtle) !important;
     background-image: var(--glass-sheen) !important;
     border: 1px solid var(--glass-border) !important;
@@ -1174,8 +1174,8 @@ svg {
     position: relative !important;
 }
 
-.menu_c1e9c4::before,
-.submenu_c1e9c4::before {
+:is(.menu_c1e9c4, .menu_M3qk4j)::before,
+:is(.submenu_c1e9c4, .submenu_M3qk4j)::before {
     content: "";
     position: absolute;
     top: 0;
@@ -1214,14 +1214,14 @@ svg {
 /* Attached autocomplete sits outside the input but inside its DOM subtree.
    Move the input's filter to a sibling background layer while it is open,
    so the input no longer blocks the popup's access to the page backdrop. */
-.channelTextArea__74017:has([class*="autocomplete_"]) {
+:is(.channelTextArea__74017, .channelTextArea_2x8-Qn):has([class*="autocomplete_"]) {
     background: transparent !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     z-index: 0;
 }
 
-.channelTextArea__74017:has([class*="autocomplete_"])::before {
+:is(.channelTextArea__74017, .channelTextArea_2x8-Qn):has([class*="autocomplete_"])::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -1240,7 +1240,7 @@ svg {
  * |                                                                                            |
  * ============================================================================================= */
 /* Header Text Liquid Glass Fix */
-.cozy_c19a55 .header_c19a55 {
+:is(.cozy_c19a55, .cozy_2i8Bfm) :is(.header_c19a55, .header_2i8Bfm) {
     background: var(--glass-surface) !important;
     background-image: var(--glass-sheen) !important;
     backdrop-filter: var(--glass-filter) !important;
@@ -1254,13 +1254,13 @@ svg {
     width: fit-content !important;
 }
 
-.cozy_c19a55 .headerText_c19a55 {
+:is(.cozy_c19a55, .cozy_2i8Bfm) :is(.headerText_c19a55, .headerText_2i8Bfm) {
     color: #ffffff !important;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
     font-weight: 600 !important;
 }
 
-.cozy_c19a55 .timestamp_c19a55 {
+:is(.cozy_c19a55, .cozy_2i8Bfm) :is(.timestamp_c19a55, .timestamp_2i8Bfm) {
     color: var(--secondary-ui-color) !important;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
 }
@@ -1272,8 +1272,8 @@ svg {
  * ============================================================================================= */
 /* Voice reconnect banner: shared Acrylic/Liquid surface for both states.
    Keep Discord's 32px layout and attached top corners. */
-.root_e373d2.connecting_e373d2,
-.root_e373d2.connected_e373d2 {
+:is(.root_e373d2, .root_buf7nK):is(.connecting_e373d2, .connecting_buf7nK),
+:is(.root_e373d2, .root_buf7nK):is(.connected_e373d2, .connected_buf7nK) {
     background: var(--glass-surface) !important;
     background-image: var(--glass-sheen) !important;
     backdrop-filter: var(--glass-filter) !important;
@@ -1284,12 +1284,12 @@ svg {
 }
 
 /* Retain a visible success cue without an opaque green banner. */
-.root_e373d2.connected_e373d2 .icon_e373d2 {
+:is(.root_e373d2, .root_buf7nK):is(.connected_e373d2, .connected_buf7nK) :is(.icon_e373d2, .icon_buf7nK) {
     color: var(--text-feedback-positive) !important;
 }
 
 /* Liquid Glass Disconnect Panel (Red Tint) */
-.colorable_f1ceac.disconnect_f1ceac {
+:is(.colorable_f1ceac, .colorable_K9Xq13):is(.disconnect_f1ceac, .disconnect_K9Xq13) {
     background: rgba(255, 0, 0, 0.6) !important;
     backdrop-filter: var(--glass-filter) !important;
     -webkit-backdrop-filter: var(--glass-filter) !important;
@@ -1301,7 +1301,7 @@ svg {
 }
 
 /* Legibility Stroke for Links */
-.markup__75297 a {
+:is(.markup__75297, .markup_ku1OHH) a {
     text-shadow: 
          1px  1px 0 #000000,
         -1px  1px 0 #000000,
@@ -1318,7 +1318,7 @@ svg {
 
 /* Glass for message-body text links. Embed links use the card typography
    below rather than adding a separate glass pill to every label. */
-.messageContent_c19a55 a[href]:not(.mention):not(:has(img, video, svg)):not(:where(.embed__623de *, .embedFull__623de *)) {
+:is(.messageContent_c19a55, .messageContent_2i8Bfm) a[href]:not(.mention):not(:has(img, video, svg)):not(:where(:is(.embed__623de, .embed_XyW1ZT) *, :is(.embedFull__623de, .embedFull_XyW1ZT) *)) {
     display: inline-block;
     box-sizing: border-box;
     max-width: 100%;
@@ -1347,8 +1347,8 @@ svg {
  * |                                                                                            |
  * ============================================================================================= */
 /* Channel titles sit inside a glass pill; the lettering stays solid. */
-.title__9293f,
-.titleName_aae012 {
+:is(.title__9293f, .title_ybUK7Z),
+:is(.titleName_aae012, .titleName_rh88Fa) {
     background: var(--glass-surface) !important;
     background-image: var(--glass-sheen) !important;
     -webkit-background-clip: border-box;
@@ -1368,12 +1368,12 @@ svg {
     font-size: 2em !important;
 }
 
-.titleName_aae012 {
+:is(.titleName_aae012, .titleName_rh88Fa) {
     font-size: 4rem !important;
 }
 
 /* One shared glass pill for the channel toolbar. */
-.subtitleContainer_f75fb0 .toolbar__9293f {
+:is(.subtitleContainer_f75fb0, .subtitleContainer_z_gUBg) :is(.toolbar__9293f, .toolbar_ybUK7Z) {
     background: var(--glass-surface) !important;
     background-image: var(--glass-sheen) !important;
     backdrop-filter: var(--glass-filter) !important;
@@ -1397,10 +1397,10 @@ svg {
    another already blurred ancestor .hotori-glass-parent (marker only).
    CSS cannot attach classes to Discord's DOM: add parent-scoped selectors
    to this list to reuse the same treatment on native Discord components. */
-:is(.hotori-glass-parent, .subtitleContainer_f75fb0 .toolbar__9293f, .messagesPopoutWrap__432f4, .embed__623de, .embedFull__623de) .hotori-glass-child,
-.subtitleContainer_f75fb0 .toolbar__9293f .searchBar_c322aa,
-.messagesPopoutWrap__432f4 .messageGroupWrapper__432f4,
-:is(.embed__623de, .embedFull__623de) :is(.embedDescription__623de, .embedFieldValue__623de, .embedFooterText__623de, .embedTitleLink__623de) {
+:is(.hotori-glass-parent, :is(.subtitleContainer_f75fb0, .subtitleContainer_z_gUBg) :is(.toolbar__9293f, .toolbar_ybUK7Z), :is(.messagesPopoutWrap__432f4, .messagesPopoutWrap_6bgemo), :is(.embed__623de, .embed_XyW1ZT), :is(.embedFull__623de, .embedFull_XyW1ZT)) .hotori-glass-child,
+:is(.subtitleContainer_f75fb0, .subtitleContainer_z_gUBg) :is(.toolbar__9293f, .toolbar_ybUK7Z) :is(.searchBar_c322aa, .searchBar_i16Ad0),
+:is(.messagesPopoutWrap__432f4, .messagesPopoutWrap_6bgemo) :is(.messageGroupWrapper__432f4, .messageGroupWrapper_6bgemo),
+:is(:is(.embed__623de, .embed_XyW1ZT), :is(.embedFull__623de, .embedFull_XyW1ZT)) :is(:is(.embedDescription__623de, .embedDescription_XyW1ZT), :is(.embedFieldValue__623de, .embedFieldValue_XyW1ZT), :is(.embedFooterText__623de, .embedFooterText_XyW1ZT), :is(.embedTitleLink__623de, .embedTitleLink_XyW1ZT)) {
     background: var(--glass-background-subtle) !important;
     background-image: var(--glass-sheen) !important;
     backdrop-filter: none !important;
@@ -1411,13 +1411,13 @@ svg {
     box-sizing: border-box;
 }
 
-.subtitleContainer_f75fb0 .toolbar__9293f .searchBar_c322aa {
+:is(.subtitleContainer_f75fb0, .subtitleContainer_z_gUBg) :is(.toolbar__9293f, .toolbar_ybUK7Z) :is(.searchBar_c322aa, .searchBar_i16Ad0) {
     --glass-child-radius: 999px;
 }
 
 /* Embed descriptions, field subtext, footers, and linked titles share the
    embed's existing blur. Let long text wrap inside its own glass surface. */
-:is(.embed__623de, .embedFull__623de) :is(.embedDescription__623de, .embedFieldValue__623de, .embedFooterText__623de, .embedTitleLink__623de) {
+:is(:is(.embed__623de, .embed_XyW1ZT), :is(.embedFull__623de, .embedFull_XyW1ZT)) :is(:is(.embedDescription__623de, .embedDescription_XyW1ZT), :is(.embedFieldValue__623de, .embedFieldValue_XyW1ZT), :is(.embedFooterText__623de, .embedFooterText_XyW1ZT), :is(.embedTitleLink__623de, .embedTitleLink_XyW1ZT)) {
     padding: 6px 10px !important;
     margin-inline: 0 !important;
     width: fit-content;
@@ -1426,7 +1426,7 @@ svg {
     overflow-wrap: anywhere;
 }
 
-:is(.embed__623de, .embedFull__623de) :is(.embedFooterText__623de, .embedTitleLink__623de) {
+:is(:is(.embed__623de, .embed_XyW1ZT), :is(.embedFull__623de, .embedFull_XyW1ZT)) :is(:is(.embedFooterText__623de, .embedFooterText_XyW1ZT), :is(.embedTitleLink__623de, .embedTitleLink_XyW1ZT)) {
     display: inline-block;
 }
 
@@ -1437,7 +1437,7 @@ svg {
  * ============================================================================================= */
 /* Shared dialog/popout shell, including Add Friends to DM.
    Target the surface across size/padding variants; retain native layout. */
-.container__8a031 {
+:is(.container__8a031, .container_dvN-MP) {
     background: var(--glass-surface) !important;
     background-image: var(--glass-sheen) !important;
     backdrop-filter: var(--glass-filter) !important;
@@ -1447,16 +1447,16 @@ svg {
 }
 
 /* Keep scrolling-edge fades translucent over the shared glass surface. */
-.container__8a031 > .bodyScrollingSpacerBottom__8a031:last-child::before {
+:is(.container__8a031, .container_dvN-MP) > :is(.bodyScrollingSpacerBottom__8a031, .bodyScrollingSpacerBottom_dvN-MP):last-child::before {
     background: linear-gradient(to top, var(--glass-surface), transparent) !important;
 }
 
-.container__8a031 .bodyControls__8a031::after {
+:is(.container__8a031, .container_dvN-MP) :is(.bodyControls__8a031, .bodyControls_dvN-MP)::after {
     background: linear-gradient(to bottom, var(--glass-surface), transparent) !important;
 }
 
 /* Pinned messages: one filtered backdrop for the entire popout. */
-.messagesPopoutWrap__432f4 {
+:is(.messagesPopoutWrap__432f4, .messagesPopoutWrap_6bgemo) {
     background: var(--glass-surface) !important;
     background-image: var(--glass-sheen) !important;
     backdrop-filter: var(--glass-filter) !important;
@@ -1466,8 +1466,8 @@ svg {
     box-shadow: var(--glass-shadow), var(--glass-edge-shadow) !important;
 }
 
-.messagesPopoutWrap__432f4 .header__432f4,
-.messagesPopoutWrap__432f4 .footer__432f4 {
+:is(.messagesPopoutWrap__432f4, .messagesPopoutWrap_6bgemo) :is(.header__432f4, .header_6bgemo),
+:is(.messagesPopoutWrap__432f4, .messagesPopoutWrap_6bgemo) :is(.footer__432f4, .footer_6bgemo) {
     background: var(--glass-background-subtle) !important;
     background-image: var(--glass-sheen) !important;
     box-shadow: var(--glass-edge-shadow) !important;
@@ -1478,12 +1478,12 @@ svg {
 
 /* Cards and nested message headers/embeds reuse the outer blur, including
    pseudo-elements, so scrolling pins never adds a filter per item. */
-.messagesPopoutWrap__432f4 .messageGroupWrapper__432f4,
-.messagesPopoutWrap__432f4 .messageGroupWrapper__432f4 *,
-.messagesPopoutWrap__432f4 .messageGroupWrapper__432f4::before,
-.messagesPopoutWrap__432f4 .messageGroupWrapper__432f4::after,
-.messagesPopoutWrap__432f4 .messageGroupWrapper__432f4 *::before,
-.messagesPopoutWrap__432f4 .messageGroupWrapper__432f4 *::after {
+:is(.messagesPopoutWrap__432f4, .messagesPopoutWrap_6bgemo) :is(.messageGroupWrapper__432f4, .messageGroupWrapper_6bgemo),
+:is(.messagesPopoutWrap__432f4, .messagesPopoutWrap_6bgemo) :is(.messageGroupWrapper__432f4, .messageGroupWrapper_6bgemo) *,
+:is(.messagesPopoutWrap__432f4, .messagesPopoutWrap_6bgemo) :is(.messageGroupWrapper__432f4, .messageGroupWrapper_6bgemo)::before,
+:is(.messagesPopoutWrap__432f4, .messagesPopoutWrap_6bgemo) :is(.messageGroupWrapper__432f4, .messageGroupWrapper_6bgemo)::after,
+:is(.messagesPopoutWrap__432f4, .messagesPopoutWrap_6bgemo) :is(.messageGroupWrapper__432f4, .messageGroupWrapper_6bgemo) *::before,
+:is(.messagesPopoutWrap__432f4, .messagesPopoutWrap_6bgemo) :is(.messageGroupWrapper__432f4, .messageGroupWrapper_6bgemo) *::after {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
 }
@@ -1494,17 +1494,17 @@ svg {
  * |                                                                                            |
  * ============================================================================================= */
 /* Extend one continuous title surface behind the preceding channel icon. */
-.children__9293f:has(> .channelIcon__9293f) {
+:is(.children__9293f, .children_ybUK7Z):has(> :is(.channelIcon__9293f, .channelIcon_ybUK7Z)) {
     isolation: isolate;
     padding-inline-start: 8px;
     overflow: visible;
 }
 
-.children__9293f:has(> .channelIcon__9293f) .titleWrapper__9293f {
+:is(.children__9293f, .children_ybUK7Z):has(> :is(.channelIcon__9293f, .channelIcon_ybUK7Z)) :is(.titleWrapper__9293f, .titleWrapper_ybUK7Z) {
     position: relative;
 }
 
-.children__9293f:has(> .channelIcon__9293f) .title__9293f {
+:is(.children__9293f, .children_ybUK7Z):has(> :is(.channelIcon__9293f, .channelIcon_ybUK7Z)) :is(.title__9293f, .title_ybUK7Z) {
     background: transparent !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
@@ -1512,7 +1512,7 @@ svg {
     border-color: transparent !important;
 }
 
-.children__9293f:has(> .channelIcon__9293f) .titleWrapper__9293f::before {
+:is(.children__9293f, .children_ybUK7Z):has(> :is(.channelIcon__9293f, .channelIcon_ybUK7Z)) :is(.titleWrapper__9293f, .titleWrapper_ybUK7Z)::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -1533,48 +1533,48 @@ svg {
  * | 23 | ALIGNMENT & SPACING ADJUSTMENTS                                                       |
  * |                                                                                            |
  * ============================================================================================= */
-.subtitleContainer_f75fb0 {
+:is(.subtitleContainer_f75fb0, .subtitleContainer_z_gUBg) {
     margin-right: 1rem !important;
 }
 
 /* Fit the title pill naturally, with a clear gap before the scroll viewport. */
-.subtitleContainer_f75fb0 .container__9293f {
+:is(.subtitleContainer_f75fb0, .subtitleContainer_z_gUBg) :is(.container__9293f, .container_ybUK7Z) {
     height: auto !important;
     min-height: var(--custom-channel-header-height);
     padding-bottom: 12px !important;
 }
 
-.wrapper_cb9592.minimum_cb9592 {
+:is(.wrapper_cb9592, .wrapper_hbKzX7):is(.minimum_cb9592, .minimum_hbKzX7) {
     margin-right: 0.5rem !important;
 }
 
-.title_edbb22 {
+:is(.title_edbb22, .title_LnjVAX) {
     padding: 5px !important;
 }
 
-.trailing_c38106 {
+:is(.trailing_c38106, .trailing_3zSH5d) {
     padding-left: 10px !important;
 }
 
-.searchHeader_ae7890 {
+:is(.searchHeader_ae7890, .searchHeader_DAJqRF) {
     border: none;
 }
 
-.brand_aa8da2.item_aa8da2,
-.themed_aa8da2.item_aa8da2,
-.icon_c1e9c4 {
+:is(.brand_aa8da2, .brand_6zZYhF):is(.item_aa8da2, .item_6zZYhF),
+:is(.themed_aa8da2, .themed_6zZYhF):is(.item_aa8da2, .item_6zZYhF),
+:is(.icon_c1e9c4, .icon_M3qk4j) {
     color: #FFF !important;
 }
 
-.reactionCount__23977 {
+:is(.reactionCount__23977, .reactionCount_UNkajC, .reactionCount_MmKct8) {
     color: #ffffff;
     font-weight: 800 !important;
 }
 
-.fixedContent__409aa:after {
+:is(.fixedContent__409aa, .fixedContent_cR4ic2):after {
     display: none;
 }
-.sidebar__5e434:after {
+:is(.sidebar__5e434, .sidebar_pog62O):after {
     display: none;
 }
 
@@ -1584,57 +1584,57 @@ svg {
  * |                                                                                            |
  * ============================================================================================= */
 /* Avatar shape. Keep decoration art and rectangular stream tiles separate. */
-.avatar_c19a55,
-.avatar__07f91,
-.avatar_adebba,
-.wrapper__44b0c,
-.avatar__44b0c,
-.avatarBorder__44b0c,
+:is(.avatar_c19a55, .avatar_2i8Bfm),
+:is(.avatar__07f91, .avatar_YUoOxm),
+:is(.avatar_adebba, .avatar_ieJ4Sq),
+:is(.wrapper__44b0c, .wrapper_XpIUHy),
+:is(.avatar__44b0c, .avatar_XpIUHy),
+:is(.avatarBorder__44b0c, .avatarBorder_XpIUHy),
 img[class*="avatar_"],
 [class*="avatarSpeaking_"],
-.avatarSpeakingOutline_adebba {
+:is(.avatarSpeakingOutline_adebba, .avatarSpeakingOutline_ieJ4Sq) {
     border-radius: var(--avatar-radius) !important;
 }
 
 /* Discord's SVG avatar mask otherwise forces a circle. Shape only the avatar
    image region; status badges and decoration layers retain their own shapes. */
-.wrapper__44b0c .mask__44b0c foreignObject {
+:is(.wrapper__44b0c, .wrapper_XpIUHy) :is(.mask__44b0c, .mask_XpIUHy) foreignObject {
     mask: none !important;
     border-radius: var(--avatar-radius) !important;
     overflow: hidden;
 }
 
 /* Status backing only; no added blur or SVG masking changes. */
-.status__44b0c,
-.mask_a423bd {
+:is(.status__44b0c, .status_XpIUHy),
+:is(.mask_a423bd, .mask_PlwcO5) {
     background: rgba(0, 0, 0, 0.25) !important;
     border-radius: 50% !important;
 }
 
-.status__44b0c .mask_a423bd {
+:is(.status__44b0c, .status_XpIUHy) :is(.mask_a423bd, .mask_PlwcO5) {
     background: transparent !important;
 }
 
 /* Resize cozy-message avatars together with their text gutter/decorations. */
-.cozy_c19a55.wrapper_c19a55 {
+:is(.cozy_c19a55, .cozy_2i8Bfm):is(.wrapper_c19a55, .wrapper_2i8Bfm) {
     --chat-avatar-size: var(--message-avatar-size);
     --custom-message-avatar-size: var(--message-avatar-size);
     --custom-message-avatar-decoration-size: calc(var(--message-avatar-size) * var(--decoration-to-avatar-ratio, 1.2));
     --custom-message-margin-left-content-cozy: calc(var(--message-avatar-size) + 2 * var(--custom-message-margin-horizontal));
 }
 
-.cozy_c19a55 .avatar_c19a55 {
+:is(.cozy_c19a55, .cozy_2i8Bfm) :is(.avatar_c19a55, .avatar_2i8Bfm) {
     width: var(--message-avatar-size) !important;
     height: var(--message-avatar-size) !important;
 }
 
-.cozy_c19a55 .avatarDecoration_c19a55 {
+:is(.cozy_c19a55, .cozy_2i8Bfm) :is(.avatarDecoration_c19a55, .avatarDecoration_2i8Bfm) {
     width: var(--custom-message-avatar-decoration-size) !important;
     height: var(--custom-message-avatar-decoration-size) !important;
 }
 
 /* Only avatar-bearing messages need extra height; grouped follow-ups stay compact. */
-.cozy_c19a55 .contents_c19a55:has(> .avatar_c19a55) {
+:is(.cozy_c19a55, .cozy_2i8Bfm) :is(.contents_c19a55, .contents_2i8Bfm):has(> :is(.avatar_c19a55, .avatar_2i8Bfm)) {
     min-height: calc(var(--message-avatar-size) + 8px);
 }
 
@@ -1644,12 +1644,12 @@ img[class*="avatar_"],
  * |                                                                                            |
  * ============================================================================================= */
 /* Voice Connected legibility: keep the shared tint and existing status colors. */
-.container_e131a9 {
+:is(.container_e131a9, .container_9U6LUN) {
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85), 0 2px 5px rgba(0, 0, 0, 0.45) !important;
 }
 
-.container_e131a9 svg,
-.container_e131a9 .krispLogo_e131a9 {
+:is(.container_e131a9, .container_9U6LUN) svg,
+:is(.container_e131a9, .container_9U6LUN) :is(.krispLogo_e131a9, .krispLogo_9U6LUN) {
     filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8));
 }
 
@@ -1659,15 +1659,15 @@ img[class*="avatar_"],
  * |                                                                                            |
  * ============================================================================================= */
 /* Clear the typing strip in channels and DMs. Keep the text and dots intact. */
-.typing_f75fb0,
-.base_b88801,
-.typing_b88801,
-.typingIndicator_fb64c9,
-.chatGradientBase__36d07,
-.chatGradient__36d07,
-.chatTypingGradientAtBottom__36d07,
-.chatTypingGradientNotAtBottom__36d07,
-.formWithLoadedChatInput_f75fb0::before {
+:is(.typing_f75fb0, .typing_z_gUBg),
+:is(.base_b88801, .base_U9Tvvz),
+:is(.typing_b88801, .typing_U9Tvvz),
+:is(.typingIndicator_fb64c9, .typingIndicator_UU236g),
+:is(.chatGradientBase__36d07, .chatGradientBase_8AE1Qq),
+:is(.chatGradient__36d07, .chatGradient_8AE1Qq),
+:is(.chatTypingGradientAtBottom__36d07, .chatTypingGradientAtBottom_8AE1Qq),
+:is(.chatTypingGradientNotAtBottom__36d07, .chatTypingGradientNotAtBottom_8AE1Qq),
+:is(.formWithLoadedChatInput_f75fb0, .formWithLoadedChatInput_z_gUBg)::before {
     background: transparent !important;
     box-shadow: none !important;
     backdrop-filter: none !important;
@@ -1675,38 +1675,38 @@ img[class*="avatar_"],
 }
 
 /* Add the typing lane to Discord's existing -16px form offset. */
-.chatContent_f75fb0:has(.typing_b88801 .text_b88801 strong) .form_f75fb0 {
+:is(.chatContent_f75fb0, .chatContent_z_gUBg):has(:is(.typing_b88801, .typing_U9Tvvz) :is(.text_b88801, .text_U9Tvvz) strong) :is(.form_f75fb0, .form_z_gUBg) {
     margin-top: calc(8px + var(--chat-input-gap)) !important;
 }
 
 /* Share the form's gutters and the input's existing 4px glass margins. */
-.form_f75fb0 {
+:is(.form_f75fb0, .form_z_gUBg) {
     --hotori-input-gutter: var(--space-xs);
 }
 
-.refresh-fast-follow-avatars .form_f75fb0 {
+.refresh-fast-follow-avatars :is(.form_f75fb0, .form_z_gUBg) {
     --hotori-input-gutter: min(var(--space-xs), var(--space-8));
 }
 
-.form_f75fb0 .channelTextArea__74017 {
+:is(.form_f75fb0, .form_z_gUBg) :is(.channelTextArea__74017, .channelTextArea_2x8-Qn) {
     box-sizing: border-box;
     width: calc(100% - 8px);
 }
 
 /* The message-list edge must never draw the typing indicator's glass. */
-.chatGradientBase__36d07::before {
+:is(.chatGradientBase__36d07, .chatGradientBase_8AE1Qq)::before {
     content: none;
 }
 
 /* Blur the actual typing row's backdrop; its text and dots stay sharp.
    Matching a populated row also avoids creating a glass strip while idle. */
-.base_b88801.typing_b88801:has(.text_b88801 strong) {
+:is(.base_b88801, .base_U9Tvvz):is(.typing_b88801, .typing_U9Tvvz):has(:is(.text_b88801, .text_U9Tvvz) strong) {
     backdrop-filter: var(--glass-filter) !important;
     -webkit-backdrop-filter: var(--glass-filter) !important;
     border-radius: 8px 8px 0 0;
 }
 
-.inTextChannel_b88801.base_b88801.typing_b88801:has(.text_b88801 strong) {
+:is(.inTextChannel_b88801, .inTextChannel_U9Tvvz):is(.base_b88801, .base_U9Tvvz):is(.typing_b88801, .typing_U9Tvvz):has(:is(.text_b88801, .text_U9Tvvz) strong) {
     /* The input has a 4px top margin from the shared glass rule. */
     top: calc(-20px - var(--chat-input-gap));
     inset-inline: calc(var(--hotori-input-gutter, var(--space-xs)) + 4px);
@@ -1715,7 +1715,7 @@ img[class*="avatar_"],
 }
 
 /* Join the input's top edge to the typing strip only while it is populated. */
-.form_f75fb0:has(.typing_b88801 .text_b88801 strong) .channelTextArea__74017 {
+:is(.form_f75fb0, .form_z_gUBg):has(:is(.typing_b88801, .typing_U9Tvvz) :is(.text_b88801, .text_U9Tvvz) strong) :is(.channelTextArea__74017, .channelTextArea_2x8-Qn) {
     border-top-left-radius: 0 !important;
     border-top-right-radius: 0 !important;
 }
@@ -1760,7 +1760,7 @@ img[class*="avatar_"],
  * ============================================================================================= */
 /* Keep the call's glass surface inside its available space. The shared 4px
    margins must be deducted from the original 100% dimensions. */
-.callContainer_cb9592 .root_bfe55a {
+:is(.callContainer_cb9592, .callContainer_hbKzX7) :is(.root_bfe55a, .root_rTsZa_) {
     box-sizing: border-box !important;
     width: calc(100% - 8px) !important;
     height: calc(100% - 8px) !important;
@@ -1771,7 +1771,7 @@ img[class*="avatar_"],
 }
 
 /* Clip scrolling video content without changing its scroll behavior. */
-.callContainer_cb9592 .scroller_affa7e.videoGrid_a21736 {
+:is(.callContainer_cb9592, .callContainer_hbKzX7) :is(.scroller_affa7e, .scroller_EwKtHG):is(.videoGrid_a21736, .videoGrid_QKgWuD) {
     border-radius: 16px !important;
     background-clip: padding-box;
 }
@@ -1779,14 +1779,14 @@ img[class*="avatar_"],
 /* Account row: preserve Discord's profile/nameplate background. Blur the
    backdrop behind the row and paint reflections separately from its artwork.
    Keep all four corners rounded, including while the voice panel is open. */
-.panels__5e434 .container__37e49 {
+:is(.panels__5e434, .panels_pog62O) :is(.container__37e49, .container_g6VwXp) {
     border-radius: 16px !important;
     backdrop-filter: var(--glass-filter) !important;
     -webkit-backdrop-filter: var(--glass-filter) !important;
     box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
 }
 
-.panels__5e434 .container__37e49::after {
+:is(.panels__5e434, .panels_pog62O) :is(.container__37e49, .container_g6VwXp)::after {
     content: "";
     position: absolute;
     inset: 0;
@@ -1797,14 +1797,14 @@ img[class*="avatar_"],
     background-image: var(--glass-sheen);
 }
 
-.panels__5e434 .container__37e49 :is(.accountPopoutButtonWrapper__37e49, .buttons__37e49) {
+:is(.panels__5e434, .panels_pog62O) :is(.container__37e49, .container_g6VwXp) :is(:is(.accountPopoutButtonWrapper__37e49, .accountPopoutButtonWrapper_g6VwXp), :is(.buttons__37e49, .buttons_g6VwXp)) {
     position: relative;
     z-index: 1;
 }
 
 /* Account mute/deafen controls: white icons over transparent nested glass.
    The slash still indicates mute/deafen; remove the red plate and red glyphs. */
-:is(.buttons__37e49, .container__37e49) [class*="splitButton_"] {
+:is(:is(.buttons__37e49, .buttons_g6VwXp), :is(.container__37e49, .container_g6VwXp)) [class*="splitButton_"] {
     background: var(--glass-surface) !important;
     background-image: var(--glass-sheen) !important;
     backdrop-filter: var(--glass-filter) !important;
@@ -1824,7 +1824,7 @@ img[class*="avatar_"],
 
 /* These split-button halves have their own fills, separate from Mana buttons.
    Let the shared glass plate show through in muted, open, and hover states. */
-:is(.buttons__37e49, .container__37e49) [class*="splitButton_"] :is(button, [role="button"], [class*="splitButtonMain_"], [class*="splitButtonCaretHalf_"], [class*="soloMain_"]) {
+:is(:is(.buttons__37e49, .buttons_g6VwXp), :is(.container__37e49, .container_g6VwXp)) [class*="splitButton_"] :is(button, [role="button"], [class*="splitButtonMain_"], [class*="splitButtonCaretHalf_"], [class*="soloMain_"]) {
     background: transparent !important;
     border-color: transparent !important;
     box-shadow: none !important;
@@ -1833,11 +1833,11 @@ img[class*="avatar_"],
     -webkit-backdrop-filter: none !important;
 }
 
-:is(.buttons__37e49, .container__37e49) [class*="splitButton_"] :is(button, [role="button"], [class*="splitButtonMain_"], [class*="splitButtonCaretHalf_"], [class*="soloMain_"]):is(:hover, :active, [aria-expanded="true"]) {
+:is(:is(.buttons__37e49, .buttons_g6VwXp), :is(.container__37e49, .container_g6VwXp)) [class*="splitButton_"] :is(button, [role="button"], [class*="splitButtonMain_"], [class*="splitButtonCaretHalf_"], [class*="soloMain_"]):is(:hover, :active, [aria-expanded="true"]) {
     background: var(--glass-background-subtle) !important;
 }
 
-.buttons__37e49 :is(.button_a22cb0, .colorable_f1ceac):not(.disconnect_f1ceac) {
+:is(.buttons__37e49, .buttons_g6VwXp) :is(:is(.button_a22cb0, .button_F7qvhY), :is(.colorable_f1ceac, .colorable_K9Xq13)):not(:is(.disconnect_f1ceac, .disconnect_K9Xq13)) {
     color: #ffffff !important;
     background: var(--glass-background-subtle) !important;
     background-image: var(--glass-sheen) !important;
@@ -1847,21 +1847,21 @@ img[class*="avatar_"],
     -webkit-backdrop-filter: none !important;
 }
 
-.buttons__37e49 :is(.button_a22cb0, .colorable_f1ceac):not(.disconnect_f1ceac):hover {
+:is(.buttons__37e49, .buttons_g6VwXp) :is(:is(.button_a22cb0, .button_F7qvhY), :is(.colorable_f1ceac, .colorable_K9Xq13)):not(:is(.disconnect_f1ceac, .disconnect_K9Xq13)):hover {
     background-color: var(--glass-surface) !important;
 }
 
-.buttons__37e49 :is(.buttonChildrenWrapper_a22cb0, .buttonChildren_a22cb0) {
+:is(.buttons__37e49, .buttons_g6VwXp) :is(:is(.buttonChildrenWrapper_a22cb0, .buttonChildrenWrapper_F7qvhY), :is(.buttonChildren_a22cb0, .buttonChildren_F7qvhY)) {
     background: transparent !important;
     box-shadow: none !important;
     border: none !important;
 }
 
-.buttons__37e49 :is(svg, .redIcon__37e49, .centerIcon_f1ceac, .controlIcon_f1ceac, .icon_a22cb0) {
+:is(.buttons__37e49, .buttons_g6VwXp) :is(svg, :is(.redIcon__37e49, .redIcon_g6VwXp), :is(.centerIcon_f1ceac, .centerIcon_K9Xq13), :is(.controlIcon_f1ceac, .controlIcon_K9Xq13), :is(.icon_a22cb0, .icon_F7qvhY)) {
     color: #ffffff !important;
 }
 
-.buttons__37e49 svg path:not([fill="none"]) {
+:is(.buttons__37e49, .buttons_g6VwXp) svg path:not([fill="none"]) {
     fill: currentColor !important;
 }
 
@@ -1874,7 +1874,7 @@ img[class*="avatar_"],
 
 /* Calls paint their active ring inline rather than adding avatarSpeaking.
    Match the inset ring only, so idle tiles retain their normal border. */
-.border__2f4f7[style*="box-shadow"][style*="inset"]:not(.voiceChannelEffect__2f4f7, [style*="transparent"], [style*="0px 0px 0px 0px"], [style*="0, 0, 0, 0)"]),
+:is(.border__2f4f7, .border_7NOr2f)[style*="box-shadow"][style*="inset"]:not(:is(.voiceChannelEffect__2f4f7, .voiceChannelEffect_7NOr2f), [style*="transparent"], [style*="0px 0px 0px 0px"], [style*="0, 0, 0, 0)"]),
 [class*="avatar_"][style*="box-shadow"][style*="inset"],
 [class*="avatarBorder_"][style*="box-shadow"][style*="inset"],
 [class*="avatarSpeaking_"] {
@@ -1883,13 +1883,13 @@ img[class*="avatar_"],
                 0 0 14px color-mix(in srgb, var(--main-color) 35%, transparent) !important;
 }
 
-.povMediaActive__41e19 {
+:is(.povMediaActive__41e19, .povMediaActive_rBoB5H) {
     border-color: var(--main-color) !important;
     box-shadow: 0 0 6px color-mix(in srgb, var(--main-color) 65%, transparent),
                 0 0 14px color-mix(in srgb, var(--main-color) 35%, transparent) !important;
 }
 
-.speaking_adebba .avatarSpeakingOutline_adebba {
+:is(.speaking_adebba, .speaking_ieJ4Sq) :is(.avatarSpeakingOutline_adebba, .avatarSpeakingOutline_ieJ4Sq) {
     outline-color: var(--main-color) !important;
     box-shadow: 0 0 6px color-mix(in srgb, var(--main-color) 65%, transparent),
                 0 0 14px color-mix(in srgb, var(--main-color) 35%, transparent) !important;
@@ -1901,8 +1901,8 @@ img[class*="avatar_"],
  * |                                                                                            |
  * ============================================================================================= */
 /* Voice-panel actions: scope glass to this component, not every filled button. */
-.button_e131a9.buttonColor_e131a9,
-.button_e131a9 .buttonColor_e131a9 {
+:is(.button_e131a9, .button_9U6LUN):is(.buttonColor_e131a9, .buttonColor_9U6LUN),
+:is(.button_e131a9, .button_9U6LUN) :is(.buttonColor_e131a9, .buttonColor_9U6LUN) {
     --hotori-button-tint: var(--glass-background-subtle);
     background: var(--hotori-button-tint) !important;
     background-image: var(--glass-sheen) !important;
@@ -1915,22 +1915,22 @@ img[class*="avatar_"],
     transition: background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
 }
 
-.button_e131a9.buttonColor_e131a9.buttonActive_e131a9,
-.button_e131a9 .buttonColor_e131a9.buttonActive_e131a9 {
+:is(.button_e131a9, .button_9U6LUN):is(.buttonColor_e131a9, .buttonColor_9U6LUN):is(.buttonActive_e131a9, .buttonActive_9U6LUN),
+:is(.button_e131a9, .button_9U6LUN) :is(.buttonColor_e131a9, .buttonColor_9U6LUN):is(.buttonActive_e131a9, .buttonActive_9U6LUN) {
     --hotori-button-tint: color-mix(in srgb, var(--glass-background-subtle) 75%, rgba(45, 190, 115, 0.35));
 }
 
-.button_e131a9.buttonColor_e131a9.greyButtonActive_e131a9,
-.button_e131a9 .buttonColor_e131a9.greyButtonActive_e131a9 {
+:is(.button_e131a9, .button_9U6LUN):is(.buttonColor_e131a9, .buttonColor_9U6LUN):is(.greyButtonActive_e131a9, .greyButtonActive_9U6LUN),
+:is(.button_e131a9, .button_9U6LUN) :is(.buttonColor_e131a9, .buttonColor_9U6LUN):is(.greyButtonActive_e131a9, .greyButtonActive_9U6LUN) {
     --hotori-button-tint: color-mix(in srgb, var(--glass-background-subtle) 75%, rgba(255, 255, 255, 0.18));
 }
 
-:is(.button_e131a9.buttonColor_e131a9, .button_e131a9 .buttonColor_e131a9):not(:disabled, .disabled_e131a9, .fauxDisabled_e131a9, [aria-disabled="true"]):hover {
+:is(:is(.button_e131a9, .button_9U6LUN):is(.buttonColor_e131a9, .buttonColor_9U6LUN), :is(.button_e131a9, .button_9U6LUN) :is(.buttonColor_e131a9, .buttonColor_9U6LUN)):not(:disabled, :is(.disabled_e131a9, .disabled_9U6LUN), :is(.fauxDisabled_e131a9, .fauxDisabled_9U6LUN), [aria-disabled="true"]):hover {
     background-color: color-mix(in srgb, var(--hotori-button-tint) 80%, rgba(255, 255, 255, 0.16)) !important;
     border-color: rgba(255, 255, 255, 0.3) !important;
 }
 
-:is(.button_e131a9.buttonColor_e131a9, .button_e131a9 .buttonColor_e131a9):not(:disabled, .disabled_e131a9, .fauxDisabled_e131a9, [aria-disabled="true"]):active {
+:is(:is(.button_e131a9, .button_9U6LUN):is(.buttonColor_e131a9, .buttonColor_9U6LUN), :is(.button_e131a9, .button_9U6LUN) :is(.buttonColor_e131a9, .buttonColor_9U6LUN)):not(:disabled, :is(.disabled_e131a9, .disabled_9U6LUN), :is(.fauxDisabled_e131a9, .fauxDisabled_9U6LUN), [aria-disabled="true"]):active {
     background-color: color-mix(in srgb, var(--hotori-button-tint) 80%, rgba(255, 255, 255, 0.24)) !important;
     box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.2), var(--glass-edge-shadow) !important;
 }
@@ -1941,36 +1941,36 @@ img[class*="avatar_"],
  * |                                                                                            |
  * ============================================================================================= */
 /* Compact surfaces keep their glass highlight with a smaller outer shadow. */
-.member_c8ffbb,
-.sm_a22cb0.hasText_a22cb0 .buttonChildrenWrapper_a22cb0,
-.reaction__23977,
-.modeSelected__2ea32,
-.footerButton__272c7,
-.role_af3987,
-.checkmark_ce03f4,
-.icon_d8f25b,
-.closeButton__6088c,
-.actionMenuButton__8dc78,
+:is(.member_c8ffbb, .member_86es0b),
+:is(.sm_a22cb0, .sm_F7qvhY):is(.hasText_a22cb0, .hasText_F7qvhY) :is(.buttonChildrenWrapper_a22cb0, .buttonChildrenWrapper_F7qvhY),
+:is(.reaction__23977, .reaction_UNkajC, .reaction_MmKct8),
+:is(.modeSelected__2ea32, .modeSelected_TNyK-N),
+:is(.footerButton__272c7, .footerButton_YBm90d),
+:is(.role_af3987, .role_xL50-d),
+:is(.checkmark_ce03f4, .checkmark_wQgDYn),
+:is(.icon_d8f25b, .icon_Ax3P1g),
+:is(.closeButton__6088c, .closeButton_QGyCSa),
+:is(.actionMenuButton__8dc78, .actionMenuButton_pGckHv),
 [class*="embedTitleLink_"],
-.cozy_c19a55 .header_c19a55 {
+:is(.cozy_c19a55, .cozy_2i8Bfm) :is(.header_c19a55, .header_2i8Bfm) {
     box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
 }
 
 /* Reuse an ancestor's frosted backdrop only when that ancestor is present.
    Standalone instances retain their selected profile blur; tint and borders stay. */
-.sidebarList__5e434 .modeSelected__2ea32,
-.searchResultsWrap_a98f3b .searchResult__80bf8,
-.channelTextArea__74017 .stackedBars__74017,
-.tier_a36dee .tierHeaderUnlocked_a36dee,
-.tier_a36dee .tierBody_a36dee,
-.container_d8f25b .icon_d8f25b,
-.outer_c0bea0:not(.custom-user-profile-theme) .innerContainer_c2a763,
-.outer_c0bea0:not(.custom-user-profile-theme) .footerButton__272c7,
-.innerContainer_c2a763 .role_af3987,
-.embed__623de [class*="embedTitleLink_"],
-.embedFull__623de [class*="embedTitleLink_"],
-.embed__623de .markup__75297 code,
-.embedFull__623de .markup__75297 code {
+:is(.sidebarList__5e434, .sidebarList_pog62O) :is(.modeSelected__2ea32, .modeSelected_TNyK-N),
+:is(.searchResultsWrap_a98f3b, .searchResultsWrap_QHVbp3) :is(.searchResult__80bf8, .searchResult_N3Anbl),
+:is(.channelTextArea__74017, .channelTextArea_2x8-Qn) :is(.stackedBars__74017, .stackedBars_2x8-Qn),
+:is(.tier_a36dee, .tier_no-mtA) :is(.tierHeaderUnlocked_a36dee, .tierHeaderUnlocked_no-mtA),
+:is(.tier_a36dee, .tier_no-mtA) :is(.tierBody_a36dee, .tierBody_no-mtA),
+:is(.container_d8f25b, .container_Ax3P1g) :is(.icon_d8f25b, .icon_Ax3P1g),
+:is(.outer_c0bea0, .outer_P1YEjQ):not(.custom-user-profile-theme) :is(.innerContainer_c2a763, .innerContainer_s6-upr),
+:is(.outer_c0bea0, .outer_P1YEjQ):not(.custom-user-profile-theme) :is(.footerButton__272c7, .footerButton_YBm90d),
+:is(.innerContainer_c2a763, .innerContainer_s6-upr) :is(.role_af3987, .role_xL50-d),
+:is(.embed__623de, .embed_XyW1ZT) [class*="embedTitleLink_"],
+:is(.embedFull__623de, .embedFull_XyW1ZT) [class*="embedTitleLink_"],
+:is(.embed__623de, .embed_XyW1ZT) :is(.markup__75297, .markup_ku1OHH) code,
+:is(.embedFull__623de, .embedFull_XyW1ZT) :is(.markup__75297, .markup_ku1OHH) code {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
 }
@@ -2007,36 +2007,36 @@ img[class*="avatar_"],
     }
 
     /* Smaller rounded lens and gentler displacement for short surfaces. */
-    .member_c8ffbb,
-    .sm_a22cb0.hasText_a22cb0 .buttonChildrenWrapper_a22cb0,
-    .reaction__23977,
-    .modeSelected__2ea32,
-    .footerButton__272c7,
-    .role_af3987,
-    .closeButton__6088c,
-    .actionMenuButton__8dc78,
-    .content__908e2,
-    .unreadPill__908e2,
-    .root_e373d2,
-    .title__9293f,
-    .titleName_aae012,
-    .titleWrapper__9293f::before,
-    .subtitleContainer_f75fb0 .toolbar__9293f,
-    .cozy_c19a55 .header_c19a55 {
+    :is(.member_c8ffbb, .member_86es0b),
+    :is(.sm_a22cb0, .sm_F7qvhY):is(.hasText_a22cb0, .hasText_F7qvhY) :is(.buttonChildrenWrapper_a22cb0, .buttonChildrenWrapper_F7qvhY),
+    :is(.reaction__23977, .reaction_UNkajC, .reaction_MmKct8),
+    :is(.modeSelected__2ea32, .modeSelected_TNyK-N),
+    :is(.footerButton__272c7, .footerButton_YBm90d),
+    :is(.role_af3987, .role_xL50-d),
+    :is(.closeButton__6088c, .closeButton_QGyCSa),
+    :is(.actionMenuButton__8dc78, .actionMenuButton_pGckHv),
+    :is(.content__908e2, .content_4TfzT5),
+    :is(.unreadPill__908e2, .unreadPill_4TfzT5),
+    :is(.root_e373d2, .root_buf7nK),
+    :is(.title__9293f, .title_ybUK7Z),
+    :is(.titleName_aae012, .titleName_rh88Fa),
+    :is(.titleWrapper__9293f, .titleWrapper_ybUK7Z)::before,
+    :is(.subtitleContainer_f75fb0, .subtitleContainer_z_gUBg) :is(.toolbar__9293f, .toolbar_ybUK7Z),
+    :is(.cozy_c19a55, .cozy_2i8Bfm) :is(.header_c19a55, .header_2i8Bfm) {
         --liquid-refraction: var(--liquid-refraction-compact);
     }
 
     /* Avoid building up several cloudy layers inside an existing glass panel. */
-    .sidebarList__5e434 .modeSelected__2ea32,
-    .searchResultsWrap_a98f3b .searchResult__80bf8,
-    .channelTextArea__74017 .stackedBars__74017,
-    .tier_a36dee .tierHeaderUnlocked_a36dee,
-    .tier_a36dee .tierBody_a36dee,
-    .outer_c0bea0:not(.custom-user-profile-theme) .innerContainer_c2a763,
-    .outer_c0bea0:not(.custom-user-profile-theme) .footerButton__272c7,
-    .innerContainer_c2a763 .role_af3987,
-    .embed__623de .markup__75297 code,
-    .embedFull__623de .markup__75297 code {
+    :is(.sidebarList__5e434, .sidebarList_pog62O) :is(.modeSelected__2ea32, .modeSelected_TNyK-N),
+    :is(.searchResultsWrap_a98f3b, .searchResultsWrap_QHVbp3) :is(.searchResult__80bf8, .searchResult_N3Anbl),
+    :is(.channelTextArea__74017, .channelTextArea_2x8-Qn) :is(.stackedBars__74017, .stackedBars_2x8-Qn),
+    :is(.tier_a36dee, .tier_no-mtA) :is(.tierHeaderUnlocked_a36dee, .tierHeaderUnlocked_no-mtA),
+    :is(.tier_a36dee, .tier_no-mtA) :is(.tierBody_a36dee, .tierBody_no-mtA),
+    :is(.outer_c0bea0, .outer_P1YEjQ):not(.custom-user-profile-theme) :is(.innerContainer_c2a763, .innerContainer_s6-upr),
+    :is(.outer_c0bea0, .outer_P1YEjQ):not(.custom-user-profile-theme) :is(.footerButton__272c7, .footerButton_YBm90d),
+    :is(.innerContainer_c2a763, .innerContainer_s6-upr) :is(.role_af3987, .role_xL50-d),
+    :is(.embed__623de, .embed_XyW1ZT) :is(.markup__75297, .markup_ku1OHH) code,
+    :is(.embedFull__623de, .embedFull_XyW1ZT) :is(.markup__75297, .markup_ku1OHH) code {
         background-color: var(--glass-background-subtle) !important;
         background-image: none !important;
     }
@@ -2064,29 +2064,29 @@ img[class*="avatar_"],
     }
 
     /* These surfaces also have fixed shadows outside the shared variables. */
-    .theme-dark .children__9293f::after,
-    .containerWithMargin__0d0f9::after,
-    .sectionDivider__629e4,
-    .separator_aa8da2,
-    .divider_dbba93,
-    .divider__44f7f,
-    .divider__864b0,
-    .unreadPill__908e2,
-    .message__5126c.mentioned__5126c,
-    .menu_c1e9c4,
-    .submenu_c1e9c4,
+    .theme-dark :is(.children__9293f, .children_ybUK7Z)::after,
+    :is(.containerWithMargin__0d0f9, .containerWithMargin_BFMMcK)::after,
+    :is(.sectionDivider__629e4, .sectionDivider_ysO7Gy),
+    :is(.separator_aa8da2, .separator_6zZYhF),
+    :is(.divider_dbba93, .divider_mL61Cw),
+    :is(.divider__44f7f, .divider_6vIioY),
+    :is(.divider__864b0, .divider_md_YFn),
+    :is(.unreadPill__908e2, .unreadPill_4TfzT5),
+    :is(.message__5126c, .message_SY_P2T):is(.mentioned__5126c, .mentioned_SY_P2T),
+    :is(.menu_c1e9c4, .menu_M3qk4j),
+    :is(.submenu_c1e9c4, .submenu_M3qk4j),
     [class*="autocomplete_"],
-    .colorable_f1ceac.disconnect_f1ceac,
-    .title__9293f,
-    .titleName_aae012,
-    .button_e131a9.buttonColor_e131a9,
-    .button_e131a9 .buttonColor_e131a9 {
+    :is(.colorable_f1ceac, .colorable_K9Xq13):is(.disconnect_f1ceac, .disconnect_K9Xq13),
+    :is(.title__9293f, .title_ybUK7Z),
+    :is(.titleName_aae012, .titleName_rh88Fa),
+    :is(.button_e131a9, .button_9U6LUN):is(.buttonColor_e131a9, .buttonColor_9U6LUN),
+    :is(.button_e131a9, .button_9U6LUN) :is(.buttonColor_e131a9, .buttonColor_9U6LUN) {
         box-shadow: none !important;
     }
 
-    .colorable_f1ceac.disconnect_f1ceac,
-    .button_e131a9.buttonColor_e131a9:not(.buttonActive_e131a9),
-    .button_e131a9 .buttonColor_e131a9:not(.buttonActive_e131a9) {
+    :is(.colorable_f1ceac, .colorable_K9Xq13):is(.disconnect_f1ceac, .disconnect_K9Xq13),
+    :is(.button_e131a9, .button_9U6LUN):is(.buttonColor_e131a9, .buttonColor_9U6LUN):not(:is(.buttonActive_e131a9, .buttonActive_9U6LUN)),
+    :is(.button_e131a9, .button_9U6LUN) :is(.buttonColor_e131a9, .buttonColor_9U6LUN):not(:is(.buttonActive_e131a9, .buttonActive_9U6LUN)) {
         background: transparent !important;
         border-color: transparent !important;
     }
@@ -2098,13 +2098,13 @@ img[class*="avatar_"],
  * |                                                                                            |
  * ============================================================================================= */
 
-.wrapper_ef3116 .scroller_ef3116 {
+:is(.wrapper_ef3116, .wrapper_5dqHTG) :is(.scroller_ef3116, .scroller_5dqHTG) {
     padding-top: var(--server-list-top-padding) !important;
 }
 
 @container style(--server-list-layout: 1) {
     /* Preserve the existing app grid lines used by the sidebar and chat. */
-    .base__5e434 {
+    :is(.base__5e434, .base_pog62O) {
         grid-template-areas: "titleBar titleBar"
                              "guildsList guildsList"
                              "notice notice"
@@ -2113,17 +2113,17 @@ img[class*="avatar_"],
         grid-template-rows: [top] var(--custom-app-top-bar-height) [titleBarEnd] var(--server-list-horizontal-height) [guildsRowEnd] min-content [noticeEnd] minmax(0, 1fr) [end] !important;
     }
 
-    .base__5e434[data-fullscreen="true"] {
+    :is(.base__5e434, .base_pog62O)[data-fullscreen="true"] {
         grid-template-rows: [top titleBarEnd] var(--server-list-horizontal-height) [guildsRowEnd] min-content [noticeEnd] minmax(0, 1fr) [end] !important;
     }
 
-    .sidebar__5e434 {
+    :is(.sidebar__5e434, .sidebar_pog62O) {
         grid-column: start / end !important;
         width: auto !important;
         min-width: 0 !important;
     }
 
-    .wrapper_ef3116:not(.hidden_ef3116) {
+    :is(.wrapper_ef3116, .wrapper_5dqHTG):not(:is(.hidden_ef3116, .hidden_5dqHTG)) {
         grid-column: start / end !important;
         grid-row: titleBarEnd / guildsRowEnd !important;
         width: auto !important;
@@ -2141,7 +2141,7 @@ img[class*="avatar_"],
 
     /* Keep native vertical wheel scrolling, then rotate its viewport into
        the horizontal rail. Counter-rotate the tiles to keep icons upright. */
-    .tree_ef3116 {
+    :is(.tree_ef3116, .tree_5dqHTG) {
         position: absolute;
         top: 50%;
         left: 50%;
@@ -2154,7 +2154,7 @@ img[class*="avatar_"],
         height: 100cqw;
     }
 
-    .wrapper_ef3116 .scroller_ef3116 {
+    :is(.wrapper_ef3116, .wrapper_5dqHTG) :is(.scroller_ef3116, .scroller_5dqHTG) {
         display: flex !important;
         /* The scroller can itself be a vertical Stack, not just contain one. */
         flex-direction: column !important;
@@ -2177,16 +2177,16 @@ img[class*="avatar_"],
         overscroll-behavior-y: contain;
     }
 
-    .wrapper_ef3116 .scroller_ef3116::-webkit-scrollbar {
+    :is(.wrapper_ef3116, .wrapper_5dqHTG) :is(.scroller_ef3116, .scroller_5dqHTG)::-webkit-scrollbar {
         width: 0 !important;
         height: 0 !important;
     }
 
     /* Keep native column flow inside the rotated scroll viewport. */
-    .scroller_ef3116 > div:not(.listItem__650eb):not([hidden]),
-    .scroller_ef3116 [data-list-id="guildsnav"],
-    .scroller_ef3116 .stack_dbd263[data-direction="vertical"],
-    .folderGuildsList__48112 {
+    :is(.scroller_ef3116, .scroller_5dqHTG) > div:not(:is(.listItem__650eb, .listItem_rwEpIL)):not([hidden]),
+    :is(.scroller_ef3116, .scroller_5dqHTG) [data-list-id="guildsnav"],
+    :is(.scroller_ef3116, .scroller_5dqHTG) :is(.stack_dbd263, .stack_TWWX0S)[data-direction="vertical"],
+    :is(.folderGuildsList__48112, .folderGuildsList_RTMSuZ) {
         display: flex !important;
         flex-direction: column !important;
         flex-wrap: nowrap !important;
@@ -2198,7 +2198,7 @@ img[class*="avatar_"],
         gap: var(--space-xs, 8px) !important;
     }
 
-    .scroller_ef3116 .listItem__650eb {
+    :is(.scroller_ef3116, .scroller_5dqHTG) :is(.listItem__650eb, .listItem_rwEpIL) {
         /* Folder tiles are larger than avatars; reserve room for either. */
         flex: 0 0 var(--guildbar-folder-size);
         width: var(--guildbar-folder-size) !important;
@@ -2208,7 +2208,7 @@ img[class*="avatar_"],
     }
 
     /* The divider must not reserve an entire server-sized slot after DM. */
-    .scroller_ef3116 .listItem__650eb:has(.guildSeparator__252b6) {
+    :is(.scroller_ef3116, .scroller_5dqHTG) :is(.listItem__650eb, .listItem_rwEpIL):has(:is(.guildSeparator__252b6, .guildSeparator_3WHVfy)) {
         flex: 0 0 1px;
         width: 1px !important;
         min-width: 0;
@@ -2216,7 +2216,7 @@ img[class*="avatar_"],
     }
 
     /* Rotate the native pill above its icon, preserving unread/hover animations. */
-    .scroller_ef3116 .listItem__650eb .wrapper__58105 {
+    :is(.scroller_ef3116, .scroller_5dqHTG) :is(.listItem__650eb, .listItem_rwEpIL) :is(.wrapper__58105, .wrapper__o8_Xq) {
         position: absolute !important;
         top: -4px !important;
         bottom: auto !important;
@@ -2231,11 +2231,11 @@ img[class*="avatar_"],
     }
 
     /* Discord's hidden measurement/spacer elements must not consume a slot. */
-    .scroller_ef3116 > [hidden] {
+    :is(.scroller_ef3116, .scroller_5dqHTG) > [hidden] {
         display: none !important;
     }
 
-    .folderGroup__48112 {
+    :is(.folderGroup__48112, .folderGroup_RTMSuZ) {
         display: flex;
         flex-direction: column !important;
         align-items: center;
@@ -2244,58 +2244,58 @@ img[class*="avatar_"],
         width: auto;
     }
 
-    .isExpanded__48112 .folderGuildsList__48112 {
+    :is(.isExpanded__48112, .isExpanded_RTMSuZ) :is(.folderGuildsList__48112, .folderGuildsList_RTMSuZ) {
         height: auto !important;
         overflow: visible;
     }
 
-    .folderGuildsList__48112 > :first-child {
+    :is(.folderGuildsList__48112, .folderGuildsList_RTMSuZ) > :first-child {
         margin-top: 0 !important;
     }
 
-    .folderGroupBackground__48112 {
+    :is(.folderGroupBackground__48112, .folderGroupBackground_RTMSuZ) {
         inset: 0 !important;
         width: auto !important;
     }
 
-    .guildSeparator__252b6 {
+    :is(.guildSeparator__252b6, .guildSeparator_3WHVfy) {
         width: 1px;
         height: 32px;
     }
 
-    .panels__5e434 {
+    :is(.panels__5e434, .panels_pog62O) {
         width: calc(var(--custom-guild-sidebar-width) - var(--custom-guild-list-width) - 8px) !important;
     }
 
-    .sidebarResizeHandle__5e434 {
+    :is(.sidebarResizeHandle__5e434, .sidebarResizeHandle_pog62O) {
         inset-inline-start: calc(var(--custom-guild-sidebar-width) - var(--custom-guild-list-width) - 4px);
         inset-inline-end: auto;
         top: var(--server-list-horizontal-height);
     }
 
-    .unreadMentionsIndicatorTop_ef3116,
-    .unreadMentionsIndicatorBottom_ef3116 {
+    :is(.unreadMentionsIndicatorTop_ef3116, .unreadMentionsIndicatorTop_5dqHTG),
+    :is(.unreadMentionsIndicatorBottom_ef3116, .unreadMentionsIndicatorBottom_5dqHTG) {
         top: 0;
         bottom: auto;
         width: var(--custom-guild-list-width);
         padding: 4px !important;
     }
 
-    .unreadMentionsIndicatorTop_ef3116 {
+    :is(.unreadMentionsIndicatorTop_ef3116, .unreadMentionsIndicatorTop_5dqHTG) {
         inset-inline: 0 auto;
     }
 
-    .unreadMentionsIndicatorBottom_ef3116 {
+    :is(.unreadMentionsIndicatorBottom_ef3116, .unreadMentionsIndicatorBottom_5dqHTG) {
         inset-inline: auto 0;
     }
 
-    .bottomRailNotifCenterButton_ef3116 {
+    :is(.bottomRailNotifCenterButton_ef3116, .bottomRailNotifCenterButton_5dqHTG) {
         transform: rotate(90deg);
         flex: 0 0 auto;
         padding: 8px;
     }
 
-    .bottomRailNotifCenterButton_ef3116::before {
+    :is(.bottomRailNotifCenterButton_ef3116, .bottomRailNotifCenterButton_5dqHTG)::before {
         display: none;
     }
 }
@@ -2312,11 +2312,11 @@ img[class*="avatar_"],
  * |                                                                                            |
  * ============================================================================================= */
 /* Page backdrop */
-.sidebar__409aa {
+:is(.sidebar__409aa, .sidebar_cR4ic2) {
     background: transparent !important;
 }
 
-.container_abd9a8 {
+:is(.container_abd9a8, .container_NdjzJd) {
     background-image: linear-gradient(to bottom, var(--settings-bg-overlay-top), var(--settings-bg-overlay-bottom)), var(--settings-bg) !important;
     background-size: cover !important;
     background-position: center top !important;
@@ -2342,27 +2342,27 @@ img[class*="avatar_"],
 /* Account mute/deafen controls also expose checked switch semantics.
    Keep their glass treatment instead of painting them as solid toggles. */
 :is([class*="container_"][class*="checked_"]:has(input[type="checkbox"]),
-    [role="switch"][aria-checked="true"]):not(:where(.container__37e49, .container__37e49 *, .buttons__37e49, .buttons__37e49 *, .container__841c8, .container__841c8 *, :has(.mentionButton__841c8))) {
+    [role="switch"][aria-checked="true"]):not(:where(:is(.container__37e49, .container_g6VwXp), :is(.container__37e49, .container_g6VwXp) *, :is(.buttons__37e49, .buttons_g6VwXp), :is(.buttons__37e49, .buttons_g6VwXp) *, :is(.container__841c8, .container_rE8-46), :is(.container__841c8, .container_rE8-46) *, :has(:is(.mentionButton__841c8, .mentionButton_rE8-46)))) {
     background-color: var(--main-color) !important;
 }
 
 /* The checked glyph can also be painted with an inline SVG fill. */
-[class*="container_"][class*="checked_"]:has(input[type="checkbox"]):not(:where(.container__37e49, .container__37e49 *, .buttons__37e49, .buttons__37e49 *)) svg path {
+[class*="container_"][class*="checked_"]:has(input[type="checkbox"]):not(:where(:is(.container__37e49, .container_g6VwXp), :is(.container__37e49, .container_g6VwXp) *, :is(.buttons__37e49, .buttons_g6VwXp), :is(.buttons__37e49, .buttons_g6VwXp) *)) svg path {
     fill: var(--main-color) !important;
 }
 
 /* Discord's custom switch indicator receives its track color inline. */
-.container_a28278:is([aria-checked="true"], [data-checked="true"], [data-state="checked"]) .switchIndicator_a28278,
-.container_a28278:has(input:checked) .switchIndicator_a28278,
-.switchIndicator_a28278:is([aria-checked="true"], [data-checked="true"], [data-state="checked"]),
-.switchIndicator_a28278[style*="88, 101, 242"],
-.switchIndicator_a28278[style*="5865f2" i],
-.switchIndicator_a28278[style*="blurple"],
-.switchIndicator_a28278[style*="switch-background-selected"] {
+:is(.container_a28278, .container_9AraPt):is([aria-checked="true"], [data-checked="true"], [data-state="checked"]) :is(.switchIndicator_a28278, .switchIndicator_9AraPt),
+:is(.container_a28278, .container_9AraPt):has(input:checked) :is(.switchIndicator_a28278, .switchIndicator_9AraPt),
+:is(.switchIndicator_a28278, .switchIndicator_9AraPt):is([aria-checked="true"], [data-checked="true"], [data-state="checked"]),
+:is(.switchIndicator_a28278, .switchIndicator_9AraPt)[style*="88, 101, 242"],
+:is(.switchIndicator_a28278, .switchIndicator_9AraPt)[style*="5865f2" i],
+:is(.switchIndicator_a28278, .switchIndicator_9AraPt)[style*="blurple"],
+:is(.switchIndicator_a28278, .switchIndicator_9AraPt)[style*="switch-background-selected"] {
     background-color: var(--main-color) !important;
 }
 
-.switchIndicator_a28278 svg path:is([fill="#5865f2" i], [fill="rgb(88, 101, 242)"], [fill*="blurple"], [fill*="switch-thumb-icon-active"]) {
+:is(.switchIndicator_a28278, .switchIndicator_9AraPt) svg path:is([fill="#5865f2" i], [fill="rgb(88, 101, 242)"], [fill*="blurple"], [fill*="switch-thumb-icon-active"]) {
     fill: var(--main-color) !important;
 }
 
@@ -2373,10 +2373,10 @@ img[class*="avatar_"],
  * ============================================================================================= */
 /* Grouped settings panels: one backdrop per group, with consistent gutters.
    Style the parent class directly: setting anchors do not always use IDs. */
-:is(.standardSidebarView__23e6b, .container_abd9a8, .settingsPage__9cd63)
-:is([id="voice_input_profile_setting"], .container__75920,
-    .group__0624f, .groupContainer_ef8d95, .panelGroup_ef5082,
-    .defaultKeybindGroup_f82450, .keybindGroup_f061f6) {
+:is(:is(.standardSidebarView__23e6b, .standardSidebarView_jnk11m), :is(.container_abd9a8, .container_NdjzJd), :is(.settingsPage__9cd63, .settingsPage_SmOc0s))
+:is([id="voice_input_profile_setting"], :is(.container__75920, .container_Gl6U0S),
+    :is(.group__0624f, .group_qUlUyR), :is(.groupContainer_ef8d95, .groupContainer_DKMuWq), :is(.panelGroup_ef5082, .panelGroup_wdXn-x),
+    :is(.defaultKeybindGroup_f82450, .defaultKeybindGroup_-wlZx4), :is(.keybindGroup_f061f6, .keybindGroup_jCEr5v)) {
     box-sizing: border-box;
     min-width: 0;
     padding: 20px !important;
@@ -2389,17 +2389,17 @@ img[class*="avatar_"],
     box-shadow: var(--glass-shadow), var(--glass-edge-shadow) !important;
 }
 
-:is(.standardSidebarView__23e6b, .container_abd9a8, .settingsPage__9cd63)
-:is([id="voice_input_profile_setting"], .container__75920) {
+:is(:is(.standardSidebarView__23e6b, .standardSidebarView_jnk11m), :is(.container_abd9a8, .container_NdjzJd), :is(.settingsPage__9cd63, .settingsPage_SmOc0s))
+:is([id="voice_input_profile_setting"], :is(.container__75920, .container_Gl6U0S)) {
     margin-inline: 0 !important;
     /* Discord's anchor wrapper has negative margins on both axes. */
     margin-block: 10px !important;
 }
 
 /* Nested settings sit directly on the outer group's glass surface. */
-:is(.standardSidebarView__23e6b, .container_abd9a8, .settingsPage__9cd63)
-:is(.container__75920, [id="voice_input_profile_setting"], .group__0624f, .groupContainer_ef8d95)
-.container__75920 {
+:is(:is(.standardSidebarView__23e6b, .standardSidebarView_jnk11m), :is(.container_abd9a8, .container_NdjzJd), :is(.settingsPage__9cd63, .settingsPage_SmOc0s))
+:is(:is(.container__75920, .container_Gl6U0S), [id="voice_input_profile_setting"], :is(.group__0624f, .group_qUlUyR), :is(.groupContainer_ef8d95, .groupContainer_DKMuWq))
+:is(.container__75920, .container_Gl6U0S) {
     background: transparent !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
@@ -2412,8 +2412,8 @@ img[class*="avatar_"],
 
 /* Some setting anchors wrap a single group container. Avoid a double frame
    and double padding there; the outer group supplies both. */
-:is(.standardSidebarView__23e6b, .container_abd9a8, .settingsPage__9cd63)
-:is(.container__75920, [id="voice_input_profile_setting"]) > .container__75920:only-child {
+:is(:is(.standardSidebarView__23e6b, .standardSidebarView_jnk11m), :is(.container_abd9a8, .container_NdjzJd), :is(.settingsPage__9cd63, .settingsPage_SmOc0s))
+:is(:is(.container__75920, .container_Gl6U0S), [id="voice_input_profile_setting"]) > :is(.container__75920, .container_Gl6U0S):only-child {
     background: transparent !important;
     border: 0 !important;
     box-shadow: none !important;
@@ -2422,20 +2422,20 @@ img[class*="avatar_"],
 }
 
 /* Compact row spacing inside the more generously padded parent panel. */
-:is(.standardSidebarView__23e6b, .container_abd9a8, .settingsPage__9cd63) .group__64e61 {
+:is(:is(.standardSidebarView__23e6b, .standardSidebarView_jnk11m), :is(.container_abd9a8, .container_NdjzJd), :is(.settingsPage__9cd63, .settingsPage_SmOc0s)) :is(.group__64e61, .group_oJuRbG) {
     gap: 2px !important;
     padding-block: 4px !important;
 }
 
 /* Header/body wrappers share their group's backdrop rather than hiding it. */
-:is(.standardSidebarView__23e6b, .container_abd9a8, .settingsPage__9cd63)
-:is(.groupCollapsedContainer_ef8d95, .groupHeader_ef8d95) {
+:is(:is(.standardSidebarView__23e6b, .standardSidebarView_jnk11m), :is(.container_abd9a8, .container_NdjzJd), :is(.settingsPage__9cd63, .settingsPage_SmOc0s))
+:is(:is(.groupCollapsedContainer_ef8d95, .groupCollapsedContainer_DKMuWq), :is(.groupHeader_ef8d95, .groupHeader_DKMuWq)) {
     background: transparent !important;
 }
 
 /* A group nested inside a setting panel uses the outer panel's backdrop. */
-:is(.standardSidebarView__23e6b, .container_abd9a8, .settingsPage__9cd63)
-.container__75920 :is(.group__0624f, .groupContainer_ef8d95, .panelGroup_ef5082) {
+:is(:is(.standardSidebarView__23e6b, .standardSidebarView_jnk11m), :is(.container_abd9a8, .container_NdjzJd), :is(.settingsPage__9cd63, .settingsPage_SmOc0s))
+:is(.container__75920, .container_Gl6U0S) :is(:is(.group__0624f, .group_qUlUyR), :is(.groupContainer_ef8d95, .groupContainer_DKMuWq), :is(.panelGroup_ef5082, .panelGroup_wdXn-x)) {
     padding: 0 !important;
     background: transparent !important;
     backdrop-filter: none !important;
@@ -2451,9 +2451,9 @@ img[class*="avatar_"],
  * ============================================================================================= */
 /* Child rows have no separate glass card; the parent supplies the surface.
    Keep layout, spacing, and semantic colors on their contents. */
-:is(.standardSidebarView__23e6b, .container_abd9a8, .settingsPage__9cd63)
-:is(.radioGroupOption__64e61, .soundButtonSettingContainer__84bad,
-    .notificationItem_ef8d95, .settingsRowSubsection_f11d9e) {
+:is(:is(.standardSidebarView__23e6b, .standardSidebarView_jnk11m), :is(.container_abd9a8, .container_NdjzJd), :is(.settingsPage__9cd63, .settingsPage_SmOc0s))
+:is(:is(.radioGroupOption__64e61, .radioGroupOption_oJuRbG), :is(.soundButtonSettingContainer__84bad, .soundButtonSettingContainer_VACzzt),
+    :is(.notificationItem_ef8d95, .notificationItem_DKMuWq), :is(.settingsRowSubsection_f11d9e, .settingsRowSubsection_VtZJ9m)) {
     box-sizing: border-box;
     min-width: 0;
     background: transparent !important;
@@ -2468,9 +2468,9 @@ img[class*="avatar_"],
 }
 
 /* Settings headings stay distinct from descriptions and control values. */
-:is(.standardSidebarView__23e6b, .container_abd9a8, .settingsPage__9cd63)
-:is(h1, h2, h3, h4, h5, h6, [role="heading"], .groupTitle__0624f,
-    .groupTitle_ef8d95, .formItemTitle_ef8d95) {
+:is(:is(.standardSidebarView__23e6b, .standardSidebarView_jnk11m), :is(.container_abd9a8, .container_NdjzJd), :is(.settingsPage__9cd63, .settingsPage_SmOc0s))
+:is(h1, h2, h3, h4, h5, h6, [role="heading"], :is(.groupTitle__0624f, .groupTitle_qUlUyR),
+    :is(.groupTitle_ef8d95, .groupTitle_DKMuWq), :is(.formItemTitle_ef8d95, .formItemTitle_DKMuWq)) {
     font-weight: 900 !important;
 }
 
@@ -2481,30 +2481,30 @@ img[class*="avatar_"],
  * ============================================================================================= */
 /* Radio alignment: reserve the indicator gutter and center it in the row.
    Leading icons retain a separate gutter; descriptions can wrap normally. */
-.radioGroupOption__64e61 {
+:is(.radioGroupOption__64e61, .radioGroupOption_oJuRbG) {
     position: relative;
     padding: 12px 16px !important;
     padding-inline-start: calc(16px + var(--custom-radio-text-start)) !important;
     margin-inline: 0 !important;
 }
 
-.radioGroupOption__64e61.withLeadingIcon__64e61 {
+:is(.radioGroupOption__64e61, .radioGroupOption_oJuRbG):is(.withLeadingIcon__64e61, .withLeadingIcon_oJuRbG) {
     padding-inline-start: calc(16px + var(--custom-radio-text-start) + var(--custom-radio-icon-offset)) !important;
 }
 
-.radioGroupOption__64e61 > .radioIndicator__64e61 {
+:is(.radioGroupOption__64e61, .radioGroupOption_oJuRbG) > :is(.radioIndicator__64e61, .radioIndicator_oJuRbG) {
     inset-inline-start: 16px !important;
     inset-block-start: calc(50% - var(--custom-radio-size) / 2) !important;
     flex-shrink: 0;
 }
 
-.radioGroupOption__64e61 > .radioItemIcon__64e61 {
+:is(.radioGroupOption__64e61, .radioGroupOption_oJuRbG) > :is(.radioItemIcon__64e61, .radioItemIcon_oJuRbG) {
     inset-inline-start: calc(16px + var(--custom-radio-text-start)) !important;
     inset-block-start: calc(50% - var(--custom-radio-icon-size) / 2) !important;
 }
 
 /* Restore the radio's own SVG paints after the global svg color override. */
-.radioIndicator__64e61 {
+:is(.radioIndicator__64e61, .radioIndicator_oJuRbG) {
     fill: none !important;
 }
 
@@ -2516,12 +2516,12 @@ img[class*="avatar_"],
 /* OFF switches: glass track only. Preserve 48x24 size, pill radius, thumb,
    transitions, disabled opacity, and the enabled main-color states above.
    Using a background image leaves inline ON colors visible beneath the sheen. */
-:is(.standardSidebarView__23e6b, .container_abd9a8, .settingsPage__9cd63) {
+:is(:is(.standardSidebarView__23e6b, .standardSidebarView_jnk11m), :is(.container_abd9a8, .container_NdjzJd), :is(.settingsPage__9cd63, .settingsPage_SmOc0s)) {
     --switch-background-default: var(--glass-background-subtle) !important;
     --switch-background-hover: var(--glass-background-subtle) !important;
 }
 
-:is(.standardSidebarView__23e6b, .container_abd9a8, .settingsPage__9cd63) .switchIndicator_a28278 {
+:is(:is(.standardSidebarView__23e6b, .standardSidebarView_jnk11m), :is(.container_abd9a8, .container_NdjzJd), :is(.settingsPage__9cd63, .settingsPage_SmOc0s)) :is(.switchIndicator_a28278, .switchIndicator_9AraPt) {
     background-image: var(--glass-sheen) !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
@@ -2531,12 +2531,12 @@ img[class*="avatar_"],
     --switch-background-hover: var(--glass-background-subtle) !important;
 }
 
-:is(.standardSidebarView__23e6b, .container_abd9a8, .settingsPage__9cd63)
-.container_a28278:is([aria-checked="false"], [data-checked="false"], [data-state="unchecked"]) .switchIndicator_a28278,
-:is(.standardSidebarView__23e6b, .container_abd9a8, .settingsPage__9cd63)
-.container_a28278:has(input[type="checkbox"]:not(:checked)) .switchIndicator_a28278,
-:is(.standardSidebarView__23e6b, .container_abd9a8, .settingsPage__9cd63)
-.switchIndicator_a28278:is([aria-checked="false"], [data-checked="false"], [data-state="unchecked"]) {
+:is(:is(.standardSidebarView__23e6b, .standardSidebarView_jnk11m), :is(.container_abd9a8, .container_NdjzJd), :is(.settingsPage__9cd63, .settingsPage_SmOc0s))
+:is(.container_a28278, .container_9AraPt):is([aria-checked="false"], [data-checked="false"], [data-state="unchecked"]) :is(.switchIndicator_a28278, .switchIndicator_9AraPt),
+:is(:is(.standardSidebarView__23e6b, .standardSidebarView_jnk11m), :is(.container_abd9a8, .container_NdjzJd), :is(.settingsPage__9cd63, .settingsPage_SmOc0s))
+:is(.container_a28278, .container_9AraPt):has(input[type="checkbox"]:not(:checked)) :is(.switchIndicator_a28278, .switchIndicator_9AraPt),
+:is(:is(.standardSidebarView__23e6b, .standardSidebarView_jnk11m), :is(.container_abd9a8, .container_NdjzJd), :is(.settingsPage__9cd63, .settingsPage_SmOc0s))
+:is(.switchIndicator_a28278, .switchIndicator_9AraPt):is([aria-checked="false"], [data-checked="false"], [data-state="unchecked"]) {
     background-color: var(--glass-background-subtle) !important;
 }
 
@@ -2545,7 +2545,7 @@ img[class*="avatar_"],
  * | SHOP PRODUCT CARDS                                                                        |
  * |                                                                                            |
  * ============================================================================================= */
-.productCardContainer_fcbddd {
+:is(.productCardContainer_fcbddd, .productCardContainer_UGbKo5) {
     background: rgba(0, 0, 0, 0.25) !important;
     background-image: none !important;
     backdrop-filter: none !important;
@@ -2557,19 +2557,19 @@ img[class*="avatar_"],
 }
 
 /* Discord paints a separate footer gradient over the card's flat background. */
-.productCardContainer_fcbddd :is(.footerGradient_fcbddd, .staticBundleFooterGradient_fcbddd),
-.productCardContainer_fcbddd .staticBundleFooterGradient_fcbddd::after {
+:is(.productCardContainer_fcbddd, .productCardContainer_UGbKo5) :is(:is(.footerGradient_fcbddd, .footerGradient_UGbKo5), :is(.staticBundleFooterGradient_fcbddd, .staticBundleFooterGradient_UGbKo5)),
+:is(.productCardContainer_fcbddd, .productCardContainer_UGbKo5) :is(.staticBundleFooterGradient_fcbddd, .staticBundleFooterGradient_UGbKo5)::after {
     background: transparent !important;
     background-image: none !important;
 }
 
-.productCardContainer_fcbddd :is(.productName_fcbddd, .footerInfoContainer_fcbddd) {
+:is(.productCardContainer_fcbddd, .productCardContainer_UGbKo5) :is(:is(.productName_fcbddd, .productName_UGbKo5), :is(.footerInfoContainer_fcbddd, .footerInfoContainer_UGbKo5)) {
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important;
 }
 
 /* Modal/image-viewer backdrop: edge-to-edge blur with a subtle black tint. */
-.scrim__40128,
-.backdrop_bc663c {
+:is(.scrim__40128, .scrim_od1dl1),
+:is(.backdrop_bc663c, .backdrop_C_WHpX) {
     margin: 0 !important;
     padding: 0 !important;
     border: none !important;
@@ -2584,21 +2584,21 @@ img[class*="avatar_"],
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .scrim__40128,
-    .backdrop_bc663c {
+    :is(.scrim__40128, .scrim_od1dl1),
+    :is(.backdrop_bc663c, .backdrop_C_WHpX) {
         transition: none !important;
     }
 }
 
-.reduce-motion :is(.scrim__40128, .backdrop_bc663c) {
+.reduce-motion :is(:is(.scrim__40128, .scrim_od1dl1), :is(.backdrop_bc663c, .backdrop_C_WHpX)) {
     transition: none !important;
 }
 
 /* Opened content floats above the blurred backdrop with a deep glass shadow.
    Use static box shadows, leaving Discord's native zoom/fade transforms intact. */
-.layer_bc663c [role="dialog"]:not(.user-profile-modal, .user-profile-modal-v2):not(:has(.imageWrapper, [class*="imageWrapper_"], .user-profile-modal, .user-profile-modal-v2)),
-.layer_bc663c .imageWrapper,
-.layer_bc663c [class*="imageWrapper_"] {
+:is(.layer_bc663c, .layer_C_WHpX) [role="dialog"]:not(.user-profile-modal, .user-profile-modal-v2):not(:has(.imageWrapper, [class*="imageWrapper_"], .user-profile-modal, .user-profile-modal-v2)),
+:is(.layer_bc663c, .layer_C_WHpX) .imageWrapper,
+:is(.layer_bc663c, .layer_C_WHpX) [class*="imageWrapper_"] {
     border-radius: 16px !important;
     box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18),
                 0 8px 20px rgba(0, 0, 0, 0.45),
@@ -2608,7 +2608,7 @@ img[class*="avatar_"],
 
 /* Full profiles animate inside their dialog wrapper. Keep that stationary
    wrapper unframed; the profile card retains its own moving glass edges. */
-.layer_bc663c [role="dialog"]:has(.user-profile-modal, .user-profile-modal-v2):not(.outer_c0bea0) {
+:is(.layer_bc663c, .layer_C_WHpX) [role="dialog"]:has(.user-profile-modal, .user-profile-modal-v2):not(:is(.outer_c0bea0, .outer_P1YEjQ)) {
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
@@ -2623,17 +2623,17 @@ img[class*="avatar_"],
 
 /* Discord's light profile palette gives status bubbles a pale background.
    Override the popout-wide shadow only within those light status bubbles. */
-.user-profile-popout.theme-light .container_ab8609,
-.user-profile-popout.theme-light .container_ab8609 *,
-.user-profile-popout .theme-light .container_ab8609,
-.user-profile-popout .theme-light .container_ab8609 * {
+.user-profile-popout.theme-light :is(.container_ab8609, .container_rmCN9_),
+.user-profile-popout.theme-light :is(.container_ab8609, .container_rmCN9_) *,
+.user-profile-popout .theme-light :is(.container_ab8609, .container_rmCN9_),
+.user-profile-popout .theme-light :is(.container_ab8609, .container_rmCN9_) * {
     color: #111111 !important;
     text-shadow: none !important;
 }
 
 /* GIF picker: one glass backdrop, with transparent inner surfaces so the
    native opaque body/header cannot hide it. Keep the grid and GIFs intact. */
-.contentWrapper__08434:has(.container_fed6d3) {
+:is(.contentWrapper__08434, .contentWrapper_58b0l2):has(:is(.container_fed6d3, .container_rfDq2B)) {
     background: var(--glass-surface) !important;
     background-image: var(--glass-sheen) !important;
     backdrop-filter: var(--glass-filter) !important;
@@ -2643,18 +2643,18 @@ img[class*="avatar_"],
     box-shadow: var(--glass-shadow), var(--glass-edge-shadow) !important;
 }
 
-.contentWrapper__08434 .container_fed6d3,
-.contentWrapper__08434 .header_fed6d3 {
+:is(.contentWrapper__08434, .contentWrapper_58b0l2) :is(.container_fed6d3, .container_rfDq2B),
+:is(.contentWrapper__08434, .contentWrapper_58b0l2) :is(.header_fed6d3, .header_rfDq2B) {
     background: transparent !important;
 }
 
-.contentWrapper__08434 .container_fed6d3 {
+:is(.contentWrapper__08434, .contentWrapper_58b0l2) :is(.container_fed6d3, .container_rfDq2B) {
     border-radius: 0 0 16px 16px;
 }
 
 /* Composer media button: use the selected light/dark glass tint and sheen,
    without adding another blur layer inside the already frosted composer. */
-.channelTextArea__74017 :is(.attachButtonInner__0923f, .attachButton__36c1b) {
+:is(.channelTextArea__74017, .channelTextArea_2x8-Qn) :is(:is(.attachButtonInner__0923f, .attachButtonInner_7TM4SO), :is(.attachButton__36c1b, .attachButton_omcAqa)) {
     background: var(--glass-surface) !important;
     background-image: var(--glass-sheen) !important;
     backdrop-filter: none !important;
@@ -2663,18 +2663,18 @@ img[class*="avatar_"],
     box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
 }
 
-.channelTextArea__74017 :is(.attachButtonInner__0923f, .attachButton__36c1b):hover {
+:is(.channelTextArea__74017, .channelTextArea_2x8-Qn) :is(:is(.attachButtonInner__0923f, .attachButtonInner_7TM4SO), :is(.attachButton__36c1b, .attachButton_omcAqa)):hover {
     background-color: color-mix(in srgb, var(--glass-surface) 85%, rgba(255, 255, 255, 0.15)) !important;
 }
 
 /* Tighten only the gaps; preserve the buttons' native click targets. */
-.channelTextArea__74017 .buttons__74017 {
+:is(.channelTextArea__74017, .channelTextArea_2x8-Qn) :is(.buttons__74017, .buttons_2x8-Qn) {
     gap: 2px !important;
 }
 
 /* Media-viewer-style depth, scaled down to chat avatar dimensions.
    Box shadows follow the configured avatar rounding without altering artwork. */
-.message__5126c .avatar_c19a55 {
+:is(.message__5126c, .message_SY_P2T) :is(.avatar_c19a55, .avatar_2i8Bfm) {
     box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18),
                 0 4px 10px rgba(0, 0, 0, 0.38),
                 0 10px 24px rgba(0, 0, 0, 0.42) !important;
@@ -2683,36 +2683,36 @@ img[class*="avatar_"],
 /* Posted image attachments: the imageContent node lives inside clipped
    single-image grids and visual-media containers. Filter the outer container
    AFTER its contents are clipped, preserving rounded corners and spoilers. */
-.visualMediaItemContainer_f4758a:has(.imageContent__0f481.itemContentContainer_f4758a.mosaicItemContent__6c706) {
+:is(.visualMediaItemContainer_f4758a, .visualMediaItemContainer_idVBIj):has(:is(.imageContent__0f481, .imageContent_j9Vvzj):is(.itemContentContainer_f4758a, .itemContentContainer_idVBIj):is(.mosaicItemContent__6c706, .mosaicItemContent_BwHv05)) {
     filter: drop-shadow(0 4px 5px rgba(0, 0, 0, 0.38))
             drop-shadow(0 10px 12px rgba(0, 0, 0, 0.42)) !important;
 }
 
 /* Fallback for attachment layouts without the outer visual-media container. */
-.imageContent__0f481.itemContentContainer_f4758a.mosaicItemContent__6c706:not(.visualMediaItemContainer_f4758a *) {
+:is(.imageContent__0f481, .imageContent_j9Vvzj):is(.itemContentContainer_f4758a, .itemContentContainer_idVBIj):is(.mosaicItemContent__6c706, .mosaicItemContent_BwHv05):not(:is(.visualMediaItemContainer_f4758a, .visualMediaItemContainer_idVBIj) *) {
     filter: drop-shadow(0 4px 5px rgba(0, 0, 0, 0.38))
             drop-shadow(0 10px 12px rgba(0, 0, 0, 0.42)) !important;
 }
 
 /* Reply @ notification toggle: accent-tinted glass with legible white text.
    Discord retains its native toggle label/icon and notification behavior. */
-.channelTextArea__74017 .stackedBars__74017:has(.replyBar__841c8) {
+:is(.channelTextArea__74017, .channelTextArea_2x8-Qn) :is(.stackedBars__74017, .stackedBars_2x8-Qn):has(:is(.replyBar__841c8, .replyBar_rE8-46)) {
     background: var(--glass-background-subtle) !important;
     background-image: var(--glass-sheen) !important;
 }
 
-.channelTextArea__74017 .clipContainer__841c8,
-.channelTextArea__74017 .container__841c8,
-.replyBar__841c8 {
+:is(.channelTextArea__74017, .channelTextArea_2x8-Qn) :is(.clipContainer__841c8, .clipContainer_rE8-46),
+:is(.channelTextArea__74017, .channelTextArea_2x8-Qn) :is(.container__841c8, .container_rE8-46),
+:is(.replyBar__841c8, .replyBar_rE8-46) {
     background: transparent !important;
 }
 
-.replyBar__841c8 .actions__841c8,
-.replyBar__841c8 .mentionButton__841c8 :is([class*="container_"][class*="checked_"], [role="switch"], [class*="switchIndicator_"]) {
+:is(.replyBar__841c8, .replyBar_rE8-46) :is(.actions__841c8, .actions_rE8-46),
+:is(.replyBar__841c8, .replyBar_rE8-46) :is(.mentionButton__841c8, .mentionButton_rE8-46) :is([class*="container_"][class*="checked_"], [role="switch"], [class*="switchIndicator_"]) {
     background: transparent !important;
 }
 
-.replyBar__841c8 .mentionButton__841c8 {
+:is(.replyBar__841c8, .replyBar_rE8-46) :is(.mentionButton__841c8, .mentionButton_rE8-46) {
     background: var(--glass-surface) !important;
     background-image: var(--glass-sheen) !important;
     backdrop-filter: var(--glass-filter) !important;
@@ -2725,35 +2725,35 @@ img[class*="avatar_"],
     transition: background-color 180ms ease;
 }
 
-.replyBar__841c8 .mentionButton__841c8,
-.replyBar__841c8 .mentionButton__841c8 * {
+:is(.replyBar__841c8, .replyBar_rE8-46) :is(.mentionButton__841c8, .mentionButton_rE8-46),
+:is(.replyBar__841c8, .replyBar_rE8-46) :is(.mentionButton__841c8, .mentionButton_rE8-46) * {
     color: #ffffff !important;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.65),
                  0 2px 5px rgba(0, 0, 0, 0.3) !important;
 }
 
-.replyBar__841c8 .mentionButton__841c8:is(:hover, :focus-visible) {
+:is(.replyBar__841c8, .replyBar_rE8-46) :is(.mentionButton__841c8, .mentionButton_rE8-46):is(:hover, :focus-visible) {
     background-color: var(--glass-background-subtle) !important;
 }
 
 /* Follow the notification control's actual checked state, including builds
    that put its accessible switch/checkbox state on a surrounding element. */
-.replyBar__841c8 .mentionButton__841c8:is([aria-checked="true"], [aria-pressed="true"], :has(input:checked), :has([aria-checked="true"])),
-.replyBar__841c8 [role="switch"][aria-checked="true"] .mentionButton__841c8 {
+:is(.replyBar__841c8, .replyBar_rE8-46) :is(.mentionButton__841c8, .mentionButton_rE8-46):is([aria-checked="true"], [aria-pressed="true"], :has(input:checked), :has([aria-checked="true"])),
+:is(.replyBar__841c8, .replyBar_rE8-46) [role="switch"][aria-checked="true"] :is(.mentionButton__841c8, .mentionButton_rE8-46) {
     background-color: color-mix(in srgb, var(--main-color) 24%, var(--glass-surface)) !important;
 }
 
-.replyBar__841c8 .mentionButton__841c8:is([aria-checked="true"], [aria-pressed="true"], :has(input:checked), :has([aria-checked="true"])):is(:hover, :focus-visible),
-.replyBar__841c8 [role="switch"][aria-checked="true"] .mentionButton__841c8:is(:hover, :focus-visible) {
+:is(.replyBar__841c8, .replyBar_rE8-46) :is(.mentionButton__841c8, .mentionButton_rE8-46):is([aria-checked="true"], [aria-pressed="true"], :has(input:checked), :has([aria-checked="true"])):is(:hover, :focus-visible),
+:is(.replyBar__841c8, .replyBar_rE8-46) [role="switch"][aria-checked="true"] :is(.mentionButton__841c8, .mentionButton_rE8-46):is(:hover, :focus-visible) {
     background-color: color-mix(in srgb, var(--main-color) 34%, var(--glass-surface)) !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .replyBar__841c8 .mentionButton__841c8 { transition: none; }
+    :is(.replyBar__841c8, .replyBar_rE8-46) :is(.mentionButton__841c8, .mentionButton_rE8-46) { transition: none; }
 }
 
 /* Put the glass on the whole card's parent, spanning both grid columns. */
-.root__1042d {
+:is(.root__1042d, .root_CPqUlz) {
     background: var(--glass-surface) !important;
     background-image: var(--glass-sheen) !important;
     backdrop-filter: var(--glass-filter) !important;
@@ -2764,24 +2764,24 @@ img[class*="avatar_"],
     box-sizing: border-box;
 }
 
-.root__1042d .body__1042d {
+:is(.root__1042d, .root_CPqUlz) :is(.body__1042d, .body_CPqUlz) {
     background: transparent !important;
 }
 
 /* Server state rings live outside Discord's masked SVG, so their glow can
    extend beyond the image. An absolute transparent border reserves the same
    visual footprint in every state without resizing the icon or its slot. */
-.wrapper_ef3116 .listItem__650eb:has(.blobContainer_e5445c .wrapper__6e9f8) .wrapper__58105 {
+:is(.wrapper_ef3116, .wrapper_5dqHTG) :is(.listItem__650eb, .listItem_rwEpIL):has(:is(.blobContainer_e5445c, .blobContainer_IaPwK5) :is(.wrapper__6e9f8, .wrapper_JJ-hgR)) :is(.wrapper__58105, .wrapper__o8_Xq) {
     visibility: hidden !important;
 }
 
-.wrapper_ef3116 .blobContainer_e5445c:has(.wrapper__6e9f8) {
+:is(.wrapper_ef3116, .wrapper_5dqHTG) :is(.blobContainer_e5445c, .blobContainer_IaPwK5):has(:is(.wrapper__6e9f8, .wrapper_JJ-hgR)) {
     position: relative;
     --hotori-server-ring: transparent;
     --hotori-server-glow: 0 0 0 transparent;
 }
 
-.wrapper_ef3116 .blobContainer_e5445c:has(.wrapper__6e9f8)::after {
+:is(.wrapper_ef3116, .wrapper_5dqHTG) :is(.blobContainer_e5445c, .blobContainer_IaPwK5):has(:is(.wrapper__6e9f8, .wrapper_JJ-hgR))::after {
     content: "";
     position: absolute;
     inset: -2px;
@@ -2796,7 +2796,7 @@ img[class*="avatar_"],
 
 /* Prefer explicit unread semantics; the native unread pill is a fallback.
    A hover-only pill must not mark an otherwise read server as unread. */
-.wrapper_ef3116 .listItem__650eb:is(:has([data-unread="true"]), :has([aria-label*="unread" i]), :has(.item__58105.visible__58105:not(.hovered__58105):not(.selected__58105))) .blobContainer_e5445c:has(.wrapper__6e9f8) {
+:is(.wrapper_ef3116, .wrapper_5dqHTG) :is(.listItem__650eb, .listItem_rwEpIL):is(:has([data-unread="true"]), :has([aria-label*="unread" i]), :has(:is(.item__58105, .item__o8_Xq):is(.visible__58105, .visible__o8_Xq):not(:is(.hovered__58105, .hovered__o8_Xq)):not(:is(.selected__58105, .selected__o8_Xq)))) :is(.blobContainer_e5445c, .blobContainer_IaPwK5):has(:is(.wrapper__6e9f8, .wrapper_JJ-hgR)) {
     --hotori-server-ring: #ffffff;
     --hotori-server-glow: 0 0 6px 1px rgba(255, 255, 255, 0.55),
                           0 0 14px 2px rgba(255, 255, 255, 0.32),
@@ -2804,8 +2804,8 @@ img[class*="avatar_"],
 }
 
 /* Selected takes precedence over unread, including while hovered. */
-.wrapper_ef3116 .listItem__650eb:has(.item__58105.selected__58105) .blobContainer_e5445c:has(.wrapper__6e9f8),
-.wrapper_ef3116 .blobContainer_e5445c:is(.selected_e5445c, :has(.wrapper__6e9f8.selected__6e9f8), :has([aria-selected="true"])) {
+:is(.wrapper_ef3116, .wrapper_5dqHTG) :is(.listItem__650eb, .listItem_rwEpIL):has(:is(.item__58105, .item__o8_Xq):is(.selected__58105, .selected__o8_Xq)) :is(.blobContainer_e5445c, .blobContainer_IaPwK5):has(:is(.wrapper__6e9f8, .wrapper_JJ-hgR)),
+:is(.wrapper_ef3116, .wrapper_5dqHTG) :is(.blobContainer_e5445c, .blobContainer_IaPwK5):is(:is(.selected_e5445c, .selected_IaPwK5), :has(:is(.wrapper__6e9f8, .wrapper_JJ-hgR):is(.selected__6e9f8, .selected_JJ-hgR)), :has([aria-selected="true"])) {
     --hotori-server-ring: var(--main-color) !important;
     --hotori-server-glow: 0 0 6px 2px color-mix(in srgb, var(--main-color) 85%, transparent),
                           0 0 16px 4px color-mix(in srgb, var(--main-color) 60%, transparent),
@@ -2813,25 +2813,25 @@ img[class*="avatar_"],
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .wrapper_ef3116 .blobContainer_e5445c::after { transition: none; }
+    :is(.wrapper_ef3116, .wrapper_5dqHTG) :is(.blobContainer_e5445c, .blobContainer_IaPwK5)::after { transition: none; }
 }
 
 /* Clear selected-channel surface: the sidebar supplies the glass behind it.
    Keep the existing outline and edge highlights without a cloudy extra coat. */
-.sidebarList__5e434 .modeSelected__2ea32 {
+:is(.sidebarList__5e434, .sidebarList_pog62O) :is(.modeSelected__2ea32, .modeSelected_TNyK-N) {
     background: transparent !important;
     background-image: none !important;
 }
 
 /* Discord's selected-link fill must not cover the channel's glass surface. */
-.modeSelected__2ea32 .link__2ea32,
-.modeSelected__2ea32:hover .link__2ea32 {
+:is(.modeSelected__2ea32, .modeSelected_TNyK-N) :is(.link__2ea32, .link_TNyK-N),
+:is(.modeSelected__2ea32, .modeSelected_TNyK-N):hover :is(.link__2ea32, .link_TNyK-N) {
     background: transparent !important;
 }
 
 /* Reserve the selected-channel geometry in every row so hovering never shifts
    icons or text. Animate only paint properties, reusing the selected edges. */
-.sidebarList__5e434 .wrapper__2ea32 {
+:is(.sidebarList__5e434, .sidebarList_pog62O) :is(.wrapper__2ea32, .wrapper_TNyK-N) {
     box-sizing: border-box;
     border: 1px solid transparent !important;
     border-radius: 16px !important;
@@ -2839,27 +2839,27 @@ img[class*="avatar_"],
     transition: border-color 180ms ease, box-shadow 180ms ease;
 }
 
-.sidebarList__5e434 .wrapper__2ea32:not(.modeSelected__2ea32) {
+:is(.sidebarList__5e434, .sidebarList_pog62O) :is(.wrapper__2ea32, .wrapper_TNyK-N):not(:is(.modeSelected__2ea32, .modeSelected_TNyK-N)) {
     box-shadow: inset 0 1px 1px transparent, 0 2px 8px transparent,
                 inset 1px 1px 0 transparent, inset -1px -1px 0 transparent !important;
 }
 
-.sidebarList__5e434 .wrapper__2ea32:is(:hover, :focus-within, .modeSelected__2ea32) {
+:is(.sidebarList__5e434, .sidebarList_pog62O) :is(.wrapper__2ea32, .wrapper_TNyK-N):is(:hover, :focus-within, :is(.modeSelected__2ea32, .modeSelected_TNyK-N)) {
     border-color: var(--glass-border) !important;
     box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
 }
 
-.sidebarList__5e434 .wrapper__2ea32:is(:hover, :focus-within, :active) .link__2ea32 {
+:is(.sidebarList__5e434, .sidebarList_pog62O) :is(.wrapper__2ea32, .wrapper_TNyK-N):is(:hover, :focus-within, :active) :is(.link__2ea32, .link_TNyK-N) {
     background: transparent !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .sidebarList__5e434 .wrapper__2ea32 { transition: none; }
+    :is(.sidebarList__5e434, .sidebarList_pog62O) :is(.wrapper__2ea32, .wrapper_TNyK-N) { transition: none; }
 }
 
 /* Server Boost cards: cover the shared card container across card variants,
    preserving the native progress colors and layout. */
-.container__5573a {
+:is(.container__5573a, .container_POHM-Y) {
     background: var(--glass-surface) !important;
     background-image: var(--glass-sheen) !important;
     backdrop-filter: var(--glass-filter) !important;
@@ -2872,7 +2872,7 @@ img[class*="avatar_"],
 
 /* Shared Events-list and creation-dialog shell. Creation has no medium class;
    retain Discord's native sizing while applying the same glass surface. */
-.root__49fc1.fullscreenOnMobile__49fc1.rootWithShadow__49fc1 {
+:is(.root__49fc1, .root__KoJTP):is(.fullscreenOnMobile__49fc1, .fullscreenOnMobile__KoJTP):is(.rootWithShadow__49fc1, .rootWithShadow__KoJTP) {
     background: var(--glass-surface) !important;
     background-image: var(--glass-sheen) !important;
     backdrop-filter: var(--glass-filter) !important;
@@ -2883,36 +2883,36 @@ img[class*="avatar_"],
     --modal-footer-background: transparent;
 }
 
-.root__49fc1.fullscreenOnMobile__49fc1.rootWithShadow__49fc1 > :is(.header__49fc1, .content__49fc1, .footer__49fc1) {
+:is(.root__49fc1, .root__KoJTP):is(.fullscreenOnMobile__49fc1, .fullscreenOnMobile__KoJTP):is(.rootWithShadow__49fc1, .rootWithShadow__KoJTP) > :is(:is(.header__49fc1, .header__KoJTP), :is(.content__49fc1, .content__KoJTP), :is(.footer__49fc1, .footer__KoJTP)) {
     background: transparent !important;
 }
 
 /* Event location options can contain a leading icon without the optional
    withLeadingIcon class. Reserve its gutter based on the actual child. */
-.root__49fc1 .radioGroupOption__64e61:has(> .radioItemIcon__64e61) {
+:is(.root__49fc1, .root__KoJTP) :is(.radioGroupOption__64e61, .radioGroupOption_oJuRbG):has(> :is(.radioItemIcon__64e61, .radioItemIcon_oJuRbG)) {
     padding-inline-start: calc(16px + var(--custom-radio-text-start) + var(--custom-radio-icon-offset)) !important;
 }
 
-.root__49fc1 .radioGroupOption__64e61 > .radioItemIcon__64e61 {
+:is(.root__49fc1, .root__KoJTP) :is(.radioGroupOption__64e61, .radioGroupOption_oJuRbG) > :is(.radioItemIcon__64e61, .radioItemIcon_oJuRbG) {
     inset-block-start: 12px !important;
 }
 
 /* Information panels: a quiet inset surface per row separates the setting
    from the wallpaper. Reuse the panel backdrop without filtering every row. */
-:is(.standardSidebarView__23e6b, .container_abd9a8, .settingsPage__9cd63)
-.container__75920:has(.baseControlItem_dbfbe0) {
+:is(:is(.standardSidebarView__23e6b, .standardSidebarView_jnk11m), :is(.container_abd9a8, .container_NdjzJd), :is(.settingsPage__9cd63, .settingsPage_SmOc0s))
+:is(.container__75920, .container_Gl6U0S):has(:is(.baseControlItem_dbfbe0, .baseControlItem_FiiQ6I)) {
     padding: 18px !important;
     gap: 8px !important;
 }
 
-:is(.standardSidebarView__23e6b, .container_abd9a8, .settingsPage__9cd63)
-.container__75920 .container__75920:has(.baseControlItem_dbfbe0) {
+:is(:is(.standardSidebarView__23e6b, .standardSidebarView_jnk11m), :is(.container_abd9a8, .container_NdjzJd), :is(.settingsPage__9cd63, .settingsPage_SmOc0s))
+:is(.container__75920, .container_Gl6U0S) :is(.container__75920, .container_Gl6U0S):has(:is(.baseControlItem_dbfbe0, .baseControlItem_FiiQ6I)) {
     padding: 0 !important;
     margin: 0 !important;
 }
 
-:is(.standardSidebarView__23e6b, .container_abd9a8, .settingsPage__9cd63)
-.container__75920 .baseControlItem_dbfbe0 {
+:is(:is(.standardSidebarView__23e6b, .standardSidebarView_jnk11m), :is(.container_abd9a8, .container_NdjzJd), :is(.settingsPage__9cd63, .settingsPage_SmOc0s))
+:is(.container__75920, .container_Gl6U0S) :is(.baseControlItem_dbfbe0, .baseControlItem_FiiQ6I) {
     box-sizing: border-box;
     min-height: 60px;
     padding: 12px 14px !important;
@@ -2925,14 +2925,14 @@ img[class*="avatar_"],
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
-:is(.standardSidebarView__23e6b, .container_abd9a8, .settingsPage__9cd63)
-.container__75920 .baseControlItemContent_dbfbe0 {
+:is(:is(.standardSidebarView__23e6b, .standardSidebarView_jnk11m), :is(.container_abd9a8, .container_NdjzJd), :is(.settingsPage__9cd63, .settingsPage_SmOc0s))
+:is(.container__75920, .container_Gl6U0S) :is(.baseControlItemContent_dbfbe0, .baseControlItemContent_FiiQ6I) {
     min-width: 0;
     gap: 4px;
 }
 
-:is(.standardSidebarView__23e6b, .container_abd9a8, .settingsPage__9cd63)
-.container__75920 .baseControlItemTrailingElement_dbfbe0 {
+:is(:is(.standardSidebarView__23e6b, .standardSidebarView_jnk11m), :is(.container_abd9a8, .container_NdjzJd), :is(.settingsPage__9cd63, .settingsPage_SmOc0s))
+:is(.container__75920, .container_Gl6U0S) :is(.baseControlItemTrailingElement_dbfbe0, .baseControlItemTrailingElement_FiiQ6I) {
     flex-shrink: 0;
     gap: 12px;
     flex-wrap: wrap;
@@ -2940,22 +2940,22 @@ img[class*="avatar_"],
     max-width: 70%;
 }
 
-:is(.standardSidebarView__23e6b, .container_abd9a8, .settingsPage__9cd63)
-.container__75920:has(.baseControlItem_dbfbe0) :is(h1, h2, h3, [role="heading"]) {
+:is(:is(.standardSidebarView__23e6b, .standardSidebarView_jnk11m), :is(.container_abd9a8, .container_NdjzJd), :is(.settingsPage__9cd63, .settingsPage_SmOc0s))
+:is(.container__75920, .container_Gl6U0S):has(:is(.baseControlItem_dbfbe0, .baseControlItem_FiiQ6I)) :is(h1, h2, h3, [role="heading"]) {
     font-size: 20px;
     font-weight: 700 !important;
     line-height: 1.3;
     margin-block: 0 10px;
 }
 
-:is(.standardSidebarView__23e6b, .container_abd9a8, .settingsPage__9cd63)
-.container__75920 .baseControlItemTitle_dbfbe0 {
+:is(:is(.standardSidebarView__23e6b, .standardSidebarView_jnk11m), :is(.container_abd9a8, .container_NdjzJd), :is(.settingsPage__9cd63, .settingsPage_SmOc0s))
+:is(.container__75920, .container_Gl6U0S) :is(.baseControlItemTitle_dbfbe0, .baseControlItemTitle_FiiQ6I) {
     font-weight: 600;
     line-height: 1.4;
 }
 
 /* Reaction hover details: one glass shell around the emoji and reactor text. */
-.reactionTooltip_bbcccb {
+:is(.reactionTooltip_bbcccb, .reactionTooltip_5l5ajC) {
     background: var(--glass-surface) !important;
     background-image: var(--glass-sheen) !important;
     backdrop-filter: var(--glass-filter) !important;
@@ -2967,8 +2967,8 @@ img[class*="avatar_"],
 }
 
 /* Attachment actions: support the hover-button group and composer previews. */
-.hoverButtonGroup__06ab4,
-.upload_aa605f .miniPopover_aa605f {
+:is(.hoverButtonGroup__06ab4, .hoverButtonGroup_n2rO26),
+:is(.upload_aa605f, .upload_JyxBSo) :is(.miniPopover_aa605f, .miniPopover_JyxBSo) {
     background: var(--glass-surface) !important;
     background-image: var(--glass-sheen) !important;
     backdrop-filter: var(--glass-filter) !important;
@@ -2978,19 +2978,19 @@ img[class*="avatar_"],
     box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
 }
 
-.hoverButtonGroup__06ab4 .hoverButton__06ab4 {
+:is(.hoverButtonGroup__06ab4, .hoverButtonGroup_n2rO26) :is(.hoverButton__06ab4, .hoverButton_n2rO26) {
     background: transparent !important;
     transition: background-color 150ms ease;
 }
 
-.hoverButtonGroup__06ab4 .hoverButton__06ab4:is(:hover, :focus-visible),
-.upload_aa605f .miniPopover_aa605f :is(button, [role="button"]):hover {
+:is(.hoverButtonGroup__06ab4, .hoverButtonGroup_n2rO26) :is(.hoverButton__06ab4, .hoverButton_n2rO26):is(:hover, :focus-visible),
+:is(.upload_aa605f, .upload_JyxBSo) :is(.miniPopover_aa605f, .miniPopover_JyxBSo) :is(button, [role="button"]):hover {
     background-color: var(--glass-background-subtle) !important;
 }
 
 /* Tooltips render in a portal outside the upload. Match only while its action
    group is hovered/focused, leaving other tooltip types unchanged. */
-body:has(.hoverButton__06ab4:is(:hover, :focus-visible), .upload_aa605f .actionBar_aa605f:is(:hover, :focus-within)) :is(.tooltip_fa450a, .tooltip_c36707) {
+body:has(:is(.hoverButton__06ab4, .hoverButton_n2rO26):is(:hover, :focus-visible), :is(.upload_aa605f, .upload_JyxBSo) :is(.actionBar_aa605f, .actionBar_JyxBSo):is(:hover, :focus-within)) :is(:is(.tooltip_fa450a, .tooltip_ZDdyhE), :is(.tooltip_c36707, .tooltip_3_v8qp)) {
     background: var(--glass-surface) !important;
     background-image: var(--glass-sheen) !important;
     backdrop-filter: var(--glass-filter) !important;
@@ -3002,34 +3002,34 @@ body:has(.hoverButton__06ab4:is(:hover, :focus-visible), .upload_aa605f .actionB
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
-body:has(.hoverButton__06ab4:is(:hover, :focus-visible), .upload_aa605f .actionBar_aa605f:is(:hover, :focus-within)) .tooltip_fa450a .tooltipContent_fa450a {
+body:has(:is(.hoverButton__06ab4, .hoverButton_n2rO26):is(:hover, :focus-visible), :is(.upload_aa605f, .upload_JyxBSo) :is(.actionBar_aa605f, .actionBar_JyxBSo):is(:hover, :focus-within)) :is(.tooltip_fa450a, .tooltip_ZDdyhE) :is(.tooltipContent_fa450a, .tooltipContent_ZDdyhE) {
     background: transparent !important;
     border-radius: inherit;
 }
 
-body:has(.hoverButton__06ab4:is(:hover, :focus-visible), .upload_aa605f .actionBar_aa605f:is(:hover, :focus-within)) .tooltip_fa450a .tooltipContent_fa450a,
-body:has(.hoverButton__06ab4:is(:hover, :focus-visible), .upload_aa605f .actionBar_aa605f:is(:hover, :focus-within)) .tooltip_fa450a .tooltipContent_fa450a * {
+body:has(:is(.hoverButton__06ab4, .hoverButton_n2rO26):is(:hover, :focus-visible), :is(.upload_aa605f, .upload_JyxBSo) :is(.actionBar_aa605f, .actionBar_JyxBSo):is(:hover, :focus-within)) :is(.tooltip_fa450a, .tooltip_ZDdyhE) :is(.tooltipContent_fa450a, .tooltipContent_ZDdyhE),
+body:has(:is(.hoverButton__06ab4, .hoverButton_n2rO26):is(:hover, :focus-visible), :is(.upload_aa605f, .upload_JyxBSo) :is(.actionBar_aa605f, .actionBar_JyxBSo):is(:hover, :focus-within)) :is(.tooltip_fa450a, .tooltip_ZDdyhE) :is(.tooltipContent_fa450a, .tooltipContent_ZDdyhE) * {
     color: #ffffff !important;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
 }
 
-body:has(.hoverButton__06ab4:is(:hover, :focus-visible), .upload_aa605f .actionBar_aa605f:is(:hover, :focus-within)) .tooltip_c36707 .tooltipPointer_c36707 {
+body:has(:is(.hoverButton__06ab4, .hoverButton_n2rO26):is(:hover, :focus-visible), :is(.upload_aa605f, .upload_JyxBSo) :is(.actionBar_aa605f, .actionBar_JyxBSo):is(:hover, :focus-within)) :is(.tooltip_c36707, .tooltip_3_v8qp) :is(.tooltipPointer_c36707, .tooltipPointer_3_v8qp) {
     display: none;
 }
 
 /* Embed typography: one outer glass card with a clear reading hierarchy.
    Keep Discord's thumbnail grid, fields and playback controls intact. */
-.embedFull__623de > .grid__623de {
+:is(.embedFull__623de, .embedFull_XyW1ZT) > :is(.grid__623de, .grid_XyW1ZT) {
     padding: 14px 16px 16px !important;
 }
 
-:is(.embed__623de, .embedFull__623de) :is(a, .embedProvider__623de, .embedAuthorName__623de, .embedTitle__623de, .embedDescription__623de, .embedFooterText__623de) {
+:is(:is(.embed__623de, .embed_XyW1ZT), :is(.embedFull__623de, .embedFull_XyW1ZT)) :is(a, :is(.embedProvider__623de, .embedProvider_XyW1ZT), :is(.embedAuthorName__623de, .embedAuthorName_XyW1ZT), :is(.embedTitle__623de, .embedTitle_XyW1ZT), :is(.embedDescription__623de, .embedDescription_XyW1ZT), :is(.embedFooterText__623de, .embedFooterText_XyW1ZT)) {
     -webkit-text-stroke: 0 !important;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.65),
                  0 2px 5px rgba(0, 0, 0, 0.3) !important;
 }
 
-:is(.embed__623de, .embedFull__623de) :is(.embedProvider__623de, .embedAuthorNameLink__623de, .embedTitleLink__623de, .embedDescription__623de, .embedFooterText__623de) {
+:is(:is(.embed__623de, .embed_XyW1ZT), :is(.embedFull__623de, .embedFull_XyW1ZT)) :is(:is(.embedProvider__623de, .embedProvider_XyW1ZT), :is(.embedAuthorNameLink__623de, .embedAuthorNameLink_XyW1ZT), :is(.embedTitleLink__623de, .embedTitleLink_XyW1ZT), :is(.embedDescription__623de, .embedDescription_XyW1ZT), :is(.embedFooterText__623de, .embedFooterText_XyW1ZT)) {
     background: transparent !important;
     background-image: none !important;
     backdrop-filter: none !important;
@@ -3041,21 +3041,21 @@ body:has(.hoverButton__06ab4:is(:hover, :focus-visible), .upload_aa605f .actionB
     margin-inline: 0 !important;
 }
 
-:is(.embed__623de, .embedFull__623de) :is(.embedProvider__623de, .embedProvider__623de a) {
+:is(:is(.embed__623de, .embed_XyW1ZT), :is(.embedFull__623de, .embedFull_XyW1ZT)) :is(:is(.embedProvider__623de, .embedProvider_XyW1ZT), :is(.embedProvider__623de, .embedProvider_XyW1ZT) a) {
     color: rgba(255, 255, 255, 0.8) !important;
     font-size: 13px !important;
     line-height: 1.4;
     font-weight: 500 !important;
 }
 
-:is(.embed__623de, .embedFull__623de) :is(.embedAuthorName__623de, .embedAuthorNameLink__623de) {
+:is(:is(.embed__623de, .embed_XyW1ZT), :is(.embedFull__623de, .embedFull_XyW1ZT)) :is(:is(.embedAuthorName__623de, .embedAuthorName_XyW1ZT), :is(.embedAuthorNameLink__623de, .embedAuthorNameLink_XyW1ZT)) {
     color: rgba(255, 255, 255, 0.9) !important;
     font-size: 14px !important;
     line-height: 1.4;
     font-weight: 600 !important;
 }
 
-:is(.embed__623de, .embedFull__623de) :is(.embedTitle__623de, .embedTitleLink__623de) {
+:is(:is(.embed__623de, .embed_XyW1ZT), :is(.embedFull__623de, .embedFull_XyW1ZT)) :is(:is(.embedTitle__623de, .embedTitle_XyW1ZT), :is(.embedTitleLink__623de, .embedTitleLink_XyW1ZT)) {
     color: #ffffff !important;
     font-size: 20px !important;
     line-height: 1.35 !important;
@@ -3063,18 +3063,18 @@ body:has(.hoverButton__06ab4:is(:hover, :focus-visible), .upload_aa605f .actionB
     overflow-wrap: anywhere;
 }
 
-:is(.embed__623de, .embedFull__623de) .embedDescription__623de {
+:is(:is(.embed__623de, .embed_XyW1ZT), :is(.embedFull__623de, .embedFull_XyW1ZT)) :is(.embedDescription__623de, .embedDescription_XyW1ZT) {
     color: rgba(255, 255, 255, 0.92) !important;
     font-size: 14px;
     line-height: 1.55;
 }
 
-.embedFull__623de .embedMedia__623de {
+:is(.embedFull__623de, .embedFull_XyW1ZT) :is(.embedMedia__623de, .embedMedia_XyW1ZT) {
     margin-top: 14px;
     border-radius: 10px;
 }
 
-:is(.embed__623de, .embedFull__623de) :is(.embedProvider__623de a, .embedAuthorNameLink__623de, .embedTitleLink__623de):is(:hover, :focus-visible) {
+:is(:is(.embed__623de, .embed_XyW1ZT), :is(.embedFull__623de, .embedFull_XyW1ZT)) :is(:is(.embedProvider__623de, .embedProvider_XyW1ZT) a, :is(.embedAuthorNameLink__623de, .embedAuthorNameLink_XyW1ZT), :is(.embedTitleLink__623de, .embedTitleLink_XyW1ZT)):is(:hover, :focus-visible) {
     text-decoration: underline !important;
     text-underline-offset: 3px;
 }
@@ -3082,11 +3082,11 @@ body:has(.hoverButton__06ab4:is(:hover, :focus-visible), .upload_aa605f .actionB
 /* Channel unread marker: keep the full circle inside the row/scroll viewport
    instead of Discord's half-pill at a negative inline offset. Reserve the
    same gutter in read/unread rows so channel icons never shift on updates. */
-.sidebarList__5e434 .wrapper__2ea32 .link__2ea32 {
+:is(.sidebarList__5e434, .sidebarList_pog62O) :is(.wrapper__2ea32, .wrapper_TNyK-N) :is(.link__2ea32, .link_TNyK-N) {
     padding-inline-start: 24px !important;
 }
 
-.sidebarList__5e434 .wrapper__2ea32 .unread__2ea32 {
+:is(.sidebarList__5e434, .sidebarList_pog62O) :is(.wrapper__2ea32, .wrapper_TNyK-N) :is(.unread__2ea32, .unread_TNyK-N) {
     position: absolute;
     inset-inline-start: 8px !important;
     inset-inline-end: auto;
@@ -3120,13 +3120,13 @@ body:has(.hoverButton__06ab4:is(:hover, :focus-visible), .upload_aa605f .actionB
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .sidebarList__5e434 .wrapper__2ea32 .unread__2ea32 {
+    :is(.sidebarList__5e434, .sidebarList_pog62O) :is(.wrapper__2ea32, .wrapper_TNyK-N) :is(.unread__2ea32, .unread_TNyK-N) {
         animation: none;
         opacity: 1;
     }
 }
 
-.reduce-motion .sidebarList__5e434 .wrapper__2ea32 .unread__2ea32 {
+.reduce-motion :is(.sidebarList__5e434, .sidebarList_pog62O) :is(.wrapper__2ea32, .wrapper_TNyK-N) :is(.unread__2ea32, .unread_TNyK-N) {
     animation: none;
     opacity: 1;
 }
@@ -3134,18 +3134,18 @@ body:has(.hoverButton__06ab4:is(:hover, :focus-visible), .upload_aa605f .actionB
 /* Channel-list separators use one neutral line regardless of glass color.
    The Boost container's native bottom border otherwise paints a second rule
    under our pseudo-element. Normalize its box so both rules share gutters. */
-.sidebarList__5e434 .container__0d0f9 {
+:is(.sidebarList__5e434, .sidebarList_pog62O) :is(.container__0d0f9, .container_BFMMcK) {
     margin-inline: 0 !important;
     padding-inline: 0 !important;
     border-bottom: none !important;
 }
 
-.sidebarList__5e434 .container__0d0f9 > .contentContainer__0d0f9 {
+:is(.sidebarList__5e434, .sidebarList_pog62O) :is(.container__0d0f9, .container_BFMMcK) > :is(.contentContainer__0d0f9, .contentContainer_BFMMcK) {
     margin-inline: 8px;
 }
 
-.sidebarList__5e434 .container__0d0f9::after,
-.sidebarList__5e434 .sectionDivider__629e4 {
+:is(.sidebarList__5e434, .sidebarList_pog62O) :is(.container__0d0f9, .container_BFMMcK)::after,
+:is(.sidebarList__5e434, .sidebarList_pog62O) :is(.sectionDivider__629e4, .sectionDivider_ysO7Gy) {
     content: "" !important;
     display: block !important;
     position: static !important;
@@ -3166,7 +3166,7 @@ body:has(.hoverButton__06ab4:is(:hover, :focus-visible), .upload_aa605f .actionB
     pointer-events: none;
 }
 
-.sidebarList__5e434 .sectionDividerWithBottom__629e4 {
+:is(.sidebarList__5e434, .sidebarList_pog62O) :is(.sectionDividerWithBottom__629e4, .sectionDividerWithBottom_ysO7Gy) {
     margin-bottom: 8px !important;
 }
 

@@ -1,6 +1,9 @@
 {
   "schemaVersion": 1,
   "versions": {
+    "0.8.17": [
+      {"title": "Discord compatibility", "description": "Restored wallpaper, glass panels, chat, channels, and settings styling after Discord renamed its internal CSS classes. Updated 371 class mappings while retaining compatibility with the previous client."}
+    ],
     "0.8.16": [
       {"title": "Friends sidebar", "description": "Added an option to hide the persistent right-side friends sidebar and reclaim its space. Hidden by default; set --show-friends-sidebar to 1 to show it again. Server member lists remain available."}
     ],

@@ -1,0 +1,1123 @@
+{
+  "aliases": {
+    "brandShine_d723f6": [
+      "brandShine_EHx6SK"
+    ],
+    "newUpsellBackground__65c15": [
+      "newUpsellBackground_qIotUB"
+    ],
+    "buttonShine_b807c8": [
+      "buttonShine_1nVkKR"
+    ],
+    "addCard__28d4e": [
+      "addCard_uUFOpe"
+    ],
+    "addIconWrapper__28d4e": [
+      "addIconWrapper_uUFOpe"
+    ],
+    "clickBackground__29c87": [
+      "clickBackground_BDrUP9"
+    ],
+    "tivNavItemIconContainerSelected__4ccc5": [
+      "tivNavItemIconContainerSelected_zP0tg_"
+    ],
+    "brandShineLight__7eea4": [
+      "brandShineLight_02LA0a"
+    ],
+    "shopCardSelected_bab2bc": [
+      "shopCardSelected_lmQhFf"
+    ],
+    "cardFlairGlow_abfd90": [
+      "cardFlairGlow_RGwqSL"
+    ],
+    "card__892b9": [
+      "card_3emZAO"
+    ],
+    "highlighted__892b9": [
+      "highlighted_3emZAO"
+    ],
+    "app_a3002d": [
+      "app_YRXZu0"
+    ],
+    "app__160d8": [
+      "app_QbT-Jy"
+    ],
+    "bg__960e4": [
+      "bg_Fd0FEH"
+    ],
+    "layer__960e4": [
+      "layer_Fd0FEH"
+    ],
+    "container_b17982": [
+      "container_P8Fhjj"
+    ],
+    "container_f369db": [
+      "container_BkGrJJ"
+    ],
+    "container_faa96b": [
+      "container_SOY5H6"
+    ],
+    "container__9a337": [
+      "container_x1LvFB"
+    ],
+    "container_a2d698": [
+      "container_tqg020"
+    ],
+    "name__5d473": [
+      "name_Iy0c7A"
+    ],
+    "member__5d473": [
+      "member_Iy0c7A"
+    ],
+    "offline__5d473": [
+      "offline_Iy0c7A"
+    ],
+    "memberInner__5d473": [
+      "memberInner_Iy0c7A"
+    ],
+    "modeUnreadImportant__2ea32": [
+      "modeUnreadImportant_TNyK-N"
+    ],
+    "name__2ea32": [
+      "name_TNyK-N"
+    ],
+    "modeSelected__2ea32": [
+      "modeSelected_TNyK-N"
+    ],
+    "icon__2ea32": [
+      "icon_TNyK-N"
+    ],
+    "link__2ea32": [
+      "link_TNyK-N"
+    ],
+    "wrapper__2ea32": [
+      "wrapper_TNyK-N"
+    ],
+    "unread__2ea32": [
+      "unread_TNyK-N"
+    ],
+    "clickable__81391": [
+      "clickable_fErCLM"
+    ],
+    "wrapper_ef3116": [
+      "wrapper_5dqHTG"
+    ],
+    "scroller_ef3116": [
+      "scroller_5dqHTG"
+    ],
+    "hidden_ef3116": [
+      "hidden_5dqHTG"
+    ],
+    "tree_ef3116": [
+      "tree_5dqHTG"
+    ],
+    "unreadMentionsIndicatorTop_ef3116": [
+      "unreadMentionsIndicatorTop_5dqHTG"
+    ],
+    "unreadMentionsIndicatorBottom_ef3116": [
+      "unreadMentionsIndicatorBottom_5dqHTG"
+    ],
+    "bottomRailNotifCenterButton_ef3116": [
+      "bottomRailNotifCenterButton_5dqHTG"
+    ],
+    "sidebarList__5e434": [
+      "sidebarList_pog62O"
+    ],
+    "panels__5e434": [
+      "panels_pog62O"
+    ],
+    "sidebar__5e434": [
+      "sidebar_pog62O"
+    ],
+    "activityPanel__5e434": [
+      "activityPanel_pog62O"
+    ],
+    "page__5e434": [
+      "page_pog62O"
+    ],
+    "base__5e434": [
+      "base_pog62O"
+    ],
+    "sidebarResizeHandle__5e434": [
+      "sidebarResizeHandle_pog62O"
+    ],
+    "member_c8ffbb": [
+      "member_86es0b"
+    ],
+    "members_c8ffbb": [
+      "members_86es0b"
+    ],
+    "container_c8ffbb": [
+      "container_86es0b"
+    ],
+    "sm_a22cb0": [
+      "sm_F7qvhY"
+    ],
+    "hasText_a22cb0": [
+      "hasText_F7qvhY"
+    ],
+    "buttonChildrenWrapper_a22cb0": [
+      "buttonChildrenWrapper_F7qvhY"
+    ],
+    "secondary_a22cb0": [
+      "secondary_F7qvhY"
+    ],
+    "button_a22cb0": [
+      "button_F7qvhY"
+    ],
+    "buttonChildren_a22cb0": [
+      "buttonChildren_F7qvhY"
+    ],
+    "icon_a22cb0": [
+      "icon_F7qvhY"
+    ],
+    "searchBar_c322aa": [
+      "searchBar_i16Ad0"
+    ],
+    "overlay_b32ca4": [
+      "overlay_A7qlid"
+    ],
+    "channelTextArea__74017": [
+      "channelTextArea_2x8-Qn"
+    ],
+    "stackedBars__74017": [
+      "stackedBars_2x8-Qn"
+    ],
+    "themedBackground__74017": [
+      "themedBackground_2x8-Qn"
+    ],
+    "buttons__74017": [
+      "buttons_2x8-Qn"
+    ],
+    "jumpToPresentBar__0f481": [
+      "jumpToPresentBar_j9Vvzj"
+    ],
+    "newMessagesBar__0f481": [
+      "newMessagesBar_j9Vvzj"
+    ],
+    "imageContainer__0f481": [
+      "imageContainer_j9Vvzj"
+    ],
+    "imageContent__0f481": [
+      "imageContent_j9Vvzj"
+    ],
+    "divider__908e2": [
+      "divider_4TfzT5"
+    ],
+    "unreadPill__908e2": [
+      "unreadPill_4TfzT5"
+    ],
+    "content__908e2": [
+      "content_4TfzT5"
+    ],
+    "unreadPillCap__908e2": [
+      "unreadPillCap_4TfzT5"
+    ],
+    "isUnread__908e2": [
+      "isUnread_4TfzT5"
+    ],
+    "hasContent__908e2": [
+      "hasContent_4TfzT5"
+    ],
+    "container__06b03": [
+      "container_78NJ3W"
+    ],
+    "footerButton__272c7": [
+      "footerButton_YBm90d"
+    ],
+    "container__62dd3": [
+      "container_FNEkcu"
+    ],
+    "root_bfe55a": [
+      "root_rTsZa_"
+    ],
+    "buttonSection__1405b": [
+      "buttonSection_9bvEB0"
+    ],
+    "reaction__23977": [
+      "reaction_UNkajC",
+      "reaction_MmKct8"
+    ],
+    "reactionCount__23977": [
+      "reactionCount_UNkajC",
+      "reactionCount_MmKct8"
+    ],
+    "tabBody__133bf": [
+      "tabBody_zrUwGA"
+    ],
+    "nowPlayingColumn__133bf": [
+      "nowPlayingColumn_zrUwGA"
+    ],
+    "container__133bf": [
+      "container_zrUwGA"
+    ],
+    "header__00943": [
+      "header_o3hXTo"
+    ],
+    "itemCard__7e549": [
+      "itemCard_-7KzVR"
+    ],
+    "upload_aa605f": [
+      "upload_JyxBSo"
+    ],
+    "miniPopover_aa605f": [
+      "miniPopover_JyxBSo"
+    ],
+    "actionBar_aa605f": [
+      "actionBar_JyxBSo"
+    ],
+    "title_edbb22": [
+      "title_LnjVAX"
+    ],
+    "trailing_c38106": [
+      "trailing_3zSH5d"
+    ],
+    "winButton_c38106": [
+      "winButton_3zSH5d"
+    ],
+    "backForwardButtons__63abb": [
+      "backForwardButtons_nS9Yqn"
+    ],
+    "card__39ec2": [
+      "card_Bu4Al8"
+    ],
+    "wrapper__926d7": [
+      "wrapper_lj7V-K"
+    ],
+    "sidebarRegion__23e6b": [
+      "sidebarRegion_jnk11m"
+    ],
+    "standardSidebarView__23e6b": [
+      "standardSidebarView_jnk11m"
+    ],
+    "sidebarRegionScroller__23e6b": [
+      "sidebarRegionScroller_jnk11m"
+    ],
+    "contentRegion__23e6b": [
+      "contentRegion_jnk11m"
+    ],
+    "contentRegionScroller__23e6b": [
+      "contentRegionScroller_jnk11m"
+    ],
+    "container__72c38": [
+      "container_UcGqzv"
+    ],
+    "modal_e44912": [
+      "modal__F9ieB"
+    ],
+    "searchResultsWrap_a98f3b": [
+      "searchResultsWrap_QHVbp3"
+    ],
+    "searchResult__80bf8": [
+      "searchResult_N3Anbl"
+    ],
+    "container__16eb0": [
+      "container_cbVzxY"
+    ],
+    "sidebarContainer__89463": [
+      "sidebarContainer_rhYbEd"
+    ],
+    "container__89463": [
+      "container_rhYbEd"
+    ],
+    "contentContainer__89463": [
+      "contentContainer_rhYbEd"
+    ],
+    "container__1dc40": [
+      "container_DV7fsY"
+    ],
+    "container_e928f4": [
+      "container_vg4rr1"
+    ],
+    "table_e7d73e": [
+      "table_XTvD56"
+    ],
+    "tier_a36dee": [
+      "tier_no-mtA"
+    ],
+    "tierHeaderUnlocked_a36dee": [
+      "tierHeaderUnlocked_no-mtA"
+    ],
+    "tierBody_a36dee": [
+      "tierBody_no-mtA"
+    ],
+    "wrapper__83b1d": [
+      "wrapper_wc8r43"
+    ],
+    "soundTable__93d4a": [
+      "soundTable_doBhuY"
+    ],
+    "mainTableContainer__09a38": [
+      "mainTableContainer_-blG2T"
+    ],
+    "checkmark_ce03f4": [
+      "checkmark_wQgDYn"
+    ],
+    "roleRow__5f97b": [
+      "roleRow_YEKbw3"
+    ],
+    "container_d8f25b": [
+      "container_Ax3P1g"
+    ],
+    "icon_d8f25b": [
+      "icon_Ax3P1g"
+    ],
+    "card_b846e5": [
+      "card_5Yn7E3"
+    ],
+    "joinOptions__959cb": [
+      "joinOptions_i0EgQh"
+    ],
+    "compactContainer_eaaeee": [
+      "compactContainer_k0R3Tk"
+    ],
+    "card_dc2e44": [
+      "card_ZjaEbs"
+    ],
+    "iconWrapper__4a3a5": [
+      "iconWrapper__wphjE"
+    ],
+    "icon__4a3a5": [
+      "icon__wphjE"
+    ],
+    "clickableContainer_d96a9c": [
+      "clickableContainer_zYsR7a"
+    ],
+    "backgroundModifierContainer_d96a9c": [
+      "backgroundModifierContainer_zYsR7a"
+    ],
+    "auditLog__43dab": [
+      "auditLog_LajYMK"
+    ],
+    "scrollerContainer__4b8d8": [
+      "scrollerContainer_zS9TPG"
+    ],
+    "editCard_a25a68": [
+      "editCard_xX0l5K"
+    ],
+    "addAnotherRuleCardContainer__0c1e8": [
+      "addAnotherRuleCardContainer_Qt34kd"
+    ],
+    "role_af3987": [
+      "role_xL50-d"
+    ],
+    "innerContainer_c2a763": [
+      "innerContainer_s6-upr"
+    ],
+    "container_dca174": [
+      "container_Xweo-z"
+    ],
+    "contentHeader_e9e3ed": [
+      "contentHeader_3Rvb29"
+    ],
+    "content_e9e3ed": [
+      "content_3Rvb29"
+    ],
+    "actionButtons_cc1819": [
+      "actionButtons_Q2cxvN"
+    ],
+    "closeButton__6088c": [
+      "closeButton_QGyCSa"
+    ],
+    "authedAppV2__92059": [
+      "authedAppV2_-8GDCL"
+    ],
+    "actionMenuButton__8dc78": [
+      "actionMenuButton_pGckHv"
+    ],
+    "container__122e4": [
+      "container_4dy_KE"
+    ],
+    "quote__122e4": [
+      "quote_4dy_KE"
+    ],
+    "file__0ccae": [
+      "file_-9z-XO"
+    ],
+    "shop__6db1d": [
+      "shop_Mqg79R"
+    ],
+    "markup__75297": [
+      "markup_ku1OHH"
+    ],
+    "blockquoteContainer__75297": [
+      "blockquoteContainer_ku1OHH"
+    ],
+    "blockquoteDivider__75297": [
+      "blockquoteDivider_ku1OHH"
+    ],
+    "outer_c0bea0": [
+      "outer_P1YEjQ"
+    ],
+    "inner_c0bea0": [
+      "inner_P1YEjQ"
+    ],
+    "contentContainer__0d0f9": [
+      "contentContainer_BFMMcK"
+    ],
+    "progressContainer__0d0f9": [
+      "progressContainer_BFMMcK"
+    ],
+    "containerWithMargin__0d0f9": [
+      "containerWithMargin_BFMMcK"
+    ],
+    "container__0d0f9": [
+      "container_BFMMcK"
+    ],
+    "item_caf372": [
+      "item_xyJHva"
+    ],
+    "overlay__3b260": [
+      "overlay_-tj9SA"
+    ],
+    "buttonInner_aec7ab": [
+      "buttonInner_zpnerZ"
+    ],
+    "icon__0c4c4": [
+      "icon_v966Ys"
+    ],
+    "banner__68edb": [
+      "banner_s9bWOi"
+    ],
+    "banner__7f9c0": [
+      "banner_S_xUx6"
+    ],
+    "container__2637a": [
+      "container_H5ozaj"
+    ],
+    "scroller__99e7c": [
+      "scroller_Bce46W"
+    ],
+    "chat_f75fb0": [
+      "chat_z_gUBg"
+    ],
+    "chatContent_f75fb0": [
+      "chatContent_z_gUBg"
+    ],
+    "subtitleContainer_f75fb0": [
+      "subtitleContainer_z_gUBg"
+    ],
+    "typing_f75fb0": [
+      "typing_z_gUBg"
+    ],
+    "formWithLoadedChatInput_f75fb0": [
+      "formWithLoadedChatInput_z_gUBg"
+    ],
+    "form_f75fb0": [
+      "form_z_gUBg"
+    ],
+    "privateChannels_e6b769": [
+      "privateChannels_u88IQl"
+    ],
+    "sectionDivider_e6b769": [
+      "sectionDivider_u88IQl"
+    ],
+    "searchBar_e6b769": [
+      "searchBar_u88IQl"
+    ],
+    "wrapper_cb9592": [
+      "wrapper_hbKzX7"
+    ],
+    "minimum_cb9592": [
+      "minimum_hbKzX7"
+    ],
+    "callContainer_cb9592": [
+      "callContainer_hbKzX7"
+    ],
+    "channelChatWrapper_cb9592": [
+      "channelChatWrapper_hbKzX7"
+    ],
+    "messagesPopoutWrap__432f4": [
+      "messagesPopoutWrap_6bgemo"
+    ],
+    "messageGroupWrapper__432f4": [
+      "messageGroupWrapper_6bgemo"
+    ],
+    "header__432f4": [
+      "header_6bgemo"
+    ],
+    "footer__432f4": [
+      "footer_6bgemo"
+    ],
+    "channelHeader__9f71b": [
+      "channelHeader_3qIpbl"
+    ],
+    "chatTypingGradientAtBottom__36d07": [
+      "chatTypingGradientAtBottom_8AE1Qq"
+    ],
+    "chatGradient__36d07": [
+      "chatGradient_8AE1Qq"
+    ],
+    "messages__36d07": [
+      "messages_8AE1Qq"
+    ],
+    "scrollerSpacer__36d07": [
+      "scrollerSpacer_8AE1Qq"
+    ],
+    "scrollerContent__36d07": [
+      "scrollerContent_8AE1Qq"
+    ],
+    "chatGradientBase__36d07": [
+      "chatGradientBase_8AE1Qq"
+    ],
+    "chatTypingGradientNotAtBottom__36d07": [
+      "chatTypingGradientNotAtBottom_8AE1Qq"
+    ],
+    "themed__9293f": [
+      "themed_ybUK7Z"
+    ],
+    "children__9293f": [
+      "children_ybUK7Z"
+    ],
+    "icon__9293f": [
+      "icon_ybUK7Z"
+    ],
+    "title__9293f": [
+      "title_ybUK7Z"
+    ],
+    "toolbar__9293f": [
+      "toolbar_ybUK7Z"
+    ],
+    "channelIcon__9293f": [
+      "channelIcon_ybUK7Z"
+    ],
+    "titleWrapper__9293f": [
+      "titleWrapper_ybUK7Z"
+    ],
+    "container__9293f": [
+      "container_ybUK7Z"
+    ],
+    "aside_f58343": [
+      "aside_HbUF2J"
+    ],
+    "shop__08415": [
+      "shop_XBXDcd"
+    ],
+    "page__1feb0": [
+      "page_4Qm5zV"
+    ],
+    "shopScroll__1feb0": [
+      "shopScroll_4Qm5zV"
+    ],
+    "filterBar__11877": [
+      "filterBar_sO1rm5"
+    ],
+    "sectionDivider__629e4": [
+      "sectionDivider_ysO7Gy"
+    ],
+    "sectionDividerWithBottom__629e4": [
+      "sectionDividerWithBottom_ysO7Gy"
+    ],
+    "separator_aa8da2": [
+      "separator_6zZYhF"
+    ],
+    "brand_aa8da2": [
+      "brand_6zZYhF"
+    ],
+    "item_aa8da2": [
+      "item_6zZYhF"
+    ],
+    "themed_aa8da2": [
+      "themed_6zZYhF"
+    ],
+    "divider_dbba93": [
+      "divider_mL61Cw"
+    ],
+    "divider__44f7f": [
+      "divider_6vIioY"
+    ],
+    "divider__864b0": [
+      "divider_md_YFn"
+    ],
+    "embed__623de": [
+      "embed_XyW1ZT"
+    ],
+    "embedFull__623de": [
+      "embedFull_XyW1ZT"
+    ],
+    "grid__623de": [
+      "grid_XyW1ZT"
+    ],
+    "embedDescription__623de": [
+      "embedDescription_XyW1ZT"
+    ],
+    "embedFieldValue__623de": [
+      "embedFieldValue_XyW1ZT"
+    ],
+    "embedFooterText__623de": [
+      "embedFooterText_XyW1ZT"
+    ],
+    "embedTitleLink__623de": [
+      "embedTitleLink_XyW1ZT"
+    ],
+    "embedProvider__623de": [
+      "embedProvider_XyW1ZT"
+    ],
+    "embedAuthorName__623de": [
+      "embedAuthorName_XyW1ZT"
+    ],
+    "embedTitle__623de": [
+      "embedTitle_XyW1ZT"
+    ],
+    "embedAuthorNameLink__623de": [
+      "embedAuthorNameLink_XyW1ZT"
+    ],
+    "embedMedia__623de": [
+      "embedMedia_XyW1ZT"
+    ],
+    "messageContent_c19a55": [
+      "messageContent_2i8Bfm"
+    ],
+    "cozy_c19a55": [
+      "cozy_2i8Bfm"
+    ],
+    "header_c19a55": [
+      "header_2i8Bfm"
+    ],
+    "headerText_c19a55": [
+      "headerText_2i8Bfm"
+    ],
+    "timestamp_c19a55": [
+      "timestamp_2i8Bfm"
+    ],
+    "avatar_c19a55": [
+      "avatar_2i8Bfm"
+    ],
+    "wrapper_c19a55": [
+      "wrapper_2i8Bfm"
+    ],
+    "avatarDecoration_c19a55": [
+      "avatarDecoration_2i8Bfm"
+    ],
+    "contents_c19a55": [
+      "contents_2i8Bfm"
+    ],
+    "cozy_fc8177": [
+      "cozy_oITdBA"
+    ],
+    "wrapper_fc8177": [
+      "wrapper_oITdBA"
+    ],
+    "message__5126c": [
+      "message_SY_P2T"
+    ],
+    "buttonsInner__5126c": [
+      "buttonsInner_SY_P2T"
+    ],
+    "mentioned__5126c": [
+      "mentioned_SY_P2T"
+    ],
+    "selected__5126c": [
+      "selected_SY_P2T"
+    ],
+    "wrapper_f61d60": [
+      "wrapper_NDaLCQ"
+    ],
+    "container_a2f514": [
+      "container_oDjP9R"
+    ],
+    "wrapper_d852db": [
+      "wrapper_gFyPwI"
+    ],
+    "editor__1b31f": [
+      "editor_SHcSVi"
+    ],
+    "menu_c1e9c4": [
+      "menu_M3qk4j"
+    ],
+    "submenu_c1e9c4": [
+      "submenu_M3qk4j"
+    ],
+    "icon_c1e9c4": [
+      "icon_M3qk4j"
+    ],
+    "root_e373d2": [
+      "root_buf7nK"
+    ],
+    "connecting_e373d2": [
+      "connecting_buf7nK"
+    ],
+    "connected_e373d2": [
+      "connected_buf7nK"
+    ],
+    "icon_e373d2": [
+      "icon_buf7nK"
+    ],
+    "colorable_f1ceac": [
+      "colorable_K9Xq13"
+    ],
+    "disconnect_f1ceac": [
+      "disconnect_K9Xq13"
+    ],
+    "centerIcon_f1ceac": [
+      "centerIcon_K9Xq13"
+    ],
+    "controlIcon_f1ceac": [
+      "controlIcon_K9Xq13"
+    ],
+    "titleName_aae012": [
+      "titleName_rh88Fa"
+    ],
+    "container__8a031": [
+      "container_dvN-MP"
+    ],
+    "bodyScrollingSpacerBottom__8a031": [
+      "bodyScrollingSpacerBottom_dvN-MP"
+    ],
+    "bodyControls__8a031": [
+      "bodyControls_dvN-MP"
+    ],
+    "searchHeader_ae7890": [
+      "searchHeader_DAJqRF"
+    ],
+    "fixedContent__409aa": [
+      "fixedContent_cR4ic2"
+    ],
+    "sidebar__409aa": [
+      "sidebar_cR4ic2"
+    ],
+    "avatar__07f91": [
+      "avatar_YUoOxm"
+    ],
+    "avatar_adebba": [
+      "avatar_ieJ4Sq"
+    ],
+    "avatarSpeakingOutline_adebba": [
+      "avatarSpeakingOutline_ieJ4Sq"
+    ],
+    "speaking_adebba": [
+      "speaking_ieJ4Sq"
+    ],
+    "wrapper__44b0c": [
+      "wrapper_XpIUHy"
+    ],
+    "avatar__44b0c": [
+      "avatar_XpIUHy"
+    ],
+    "avatarBorder__44b0c": [
+      "avatarBorder_XpIUHy"
+    ],
+    "mask__44b0c": [
+      "mask_XpIUHy"
+    ],
+    "status__44b0c": [
+      "status_XpIUHy"
+    ],
+    "mask_a423bd": [
+      "mask_PlwcO5"
+    ],
+    "container_e131a9": [
+      "container_9U6LUN"
+    ],
+    "krispLogo_e131a9": [
+      "krispLogo_9U6LUN"
+    ],
+    "button_e131a9": [
+      "button_9U6LUN"
+    ],
+    "buttonColor_e131a9": [
+      "buttonColor_9U6LUN"
+    ],
+    "buttonActive_e131a9": [
+      "buttonActive_9U6LUN"
+    ],
+    "greyButtonActive_e131a9": [
+      "greyButtonActive_9U6LUN"
+    ],
+    "disabled_e131a9": [
+      "disabled_9U6LUN"
+    ],
+    "fauxDisabled_e131a9": [
+      "fauxDisabled_9U6LUN"
+    ],
+    "base_b88801": [
+      "base_U9Tvvz"
+    ],
+    "typing_b88801": [
+      "typing_U9Tvvz"
+    ],
+    "text_b88801": [
+      "text_U9Tvvz"
+    ],
+    "inTextChannel_b88801": [
+      "inTextChannel_U9Tvvz"
+    ],
+    "typingIndicator_fb64c9": [
+      "typingIndicator_UU236g"
+    ],
+    "scroller_affa7e": [
+      "scroller_EwKtHG"
+    ],
+    "videoGrid_a21736": [
+      "videoGrid_QKgWuD"
+    ],
+    "container__37e49": [
+      "container_g6VwXp"
+    ],
+    "accountPopoutButtonWrapper__37e49": [
+      "accountPopoutButtonWrapper_g6VwXp"
+    ],
+    "buttons__37e49": [
+      "buttons_g6VwXp"
+    ],
+    "redIcon__37e49": [
+      "redIcon_g6VwXp"
+    ],
+    "border__2f4f7": [
+      "border_7NOr2f"
+    ],
+    "voiceChannelEffect__2f4f7": [
+      "voiceChannelEffect_7NOr2f"
+    ],
+    "povMediaActive__41e19": [
+      "povMediaActive_rBoB5H"
+    ],
+    "listItem__650eb": [
+      "listItem_rwEpIL"
+    ],
+    "stack_dbd263": [
+      "stack_TWWX0S"
+    ],
+    "folderGuildsList__48112": [
+      "folderGuildsList_RTMSuZ"
+    ],
+    "folderGroup__48112": [
+      "folderGroup_RTMSuZ"
+    ],
+    "isExpanded__48112": [
+      "isExpanded_RTMSuZ"
+    ],
+    "folderGroupBackground__48112": [
+      "folderGroupBackground_RTMSuZ"
+    ],
+    "guildSeparator__252b6": [
+      "guildSeparator_3WHVfy"
+    ],
+    "wrapper__58105": [
+      "wrapper__o8_Xq"
+    ],
+    "item__58105": [
+      "item__o8_Xq"
+    ],
+    "visible__58105": [
+      "visible__o8_Xq"
+    ],
+    "hovered__58105": [
+      "hovered__o8_Xq"
+    ],
+    "selected__58105": [
+      "selected__o8_Xq"
+    ],
+    "container_abd9a8": [
+      "container_NdjzJd"
+    ],
+    "container__841c8": [
+      "container_rE8-46"
+    ],
+    "mentionButton__841c8": [
+      "mentionButton_rE8-46"
+    ],
+    "replyBar__841c8": [
+      "replyBar_rE8-46"
+    ],
+    "clipContainer__841c8": [
+      "clipContainer_rE8-46"
+    ],
+    "actions__841c8": [
+      "actions_rE8-46"
+    ],
+    "container_a28278": [
+      "container_9AraPt"
+    ],
+    "switchIndicator_a28278": [
+      "switchIndicator_9AraPt"
+    ],
+    "settingsPage__9cd63": [
+      "settingsPage_SmOc0s"
+    ],
+    "container__75920": [
+      "container_Gl6U0S"
+    ],
+    "group__0624f": [
+      "group_qUlUyR"
+    ],
+    "groupTitle__0624f": [
+      "groupTitle_qUlUyR"
+    ],
+    "groupContainer_ef8d95": [
+      "groupContainer_DKMuWq"
+    ],
+    "groupCollapsedContainer_ef8d95": [
+      "groupCollapsedContainer_DKMuWq"
+    ],
+    "groupHeader_ef8d95": [
+      "groupHeader_DKMuWq"
+    ],
+    "notificationItem_ef8d95": [
+      "notificationItem_DKMuWq"
+    ],
+    "groupTitle_ef8d95": [
+      "groupTitle_DKMuWq"
+    ],
+    "formItemTitle_ef8d95": [
+      "formItemTitle_DKMuWq"
+    ],
+    "panelGroup_ef5082": [
+      "panelGroup_wdXn-x"
+    ],
+    "defaultKeybindGroup_f82450": [
+      "defaultKeybindGroup_-wlZx4"
+    ],
+    "keybindGroup_f061f6": [
+      "keybindGroup_jCEr5v"
+    ],
+    "group__64e61": [
+      "group_oJuRbG"
+    ],
+    "radioGroupOption__64e61": [
+      "radioGroupOption_oJuRbG"
+    ],
+    "withLeadingIcon__64e61": [
+      "withLeadingIcon_oJuRbG"
+    ],
+    "radioIndicator__64e61": [
+      "radioIndicator_oJuRbG"
+    ],
+    "radioItemIcon__64e61": [
+      "radioItemIcon_oJuRbG"
+    ],
+    "soundButtonSettingContainer__84bad": [
+      "soundButtonSettingContainer_VACzzt"
+    ],
+    "settingsRowSubsection_f11d9e": [
+      "settingsRowSubsection_VtZJ9m"
+    ],
+    "productCardContainer_fcbddd": [
+      "productCardContainer_UGbKo5"
+    ],
+    "footerGradient_fcbddd": [
+      "footerGradient_UGbKo5"
+    ],
+    "staticBundleFooterGradient_fcbddd": [
+      "staticBundleFooterGradient_UGbKo5"
+    ],
+    "productName_fcbddd": [
+      "productName_UGbKo5"
+    ],
+    "footerInfoContainer_fcbddd": [
+      "footerInfoContainer_UGbKo5"
+    ],
+    "scrim__40128": [
+      "scrim_od1dl1"
+    ],
+    "backdrop_bc663c": [
+      "backdrop_C_WHpX"
+    ],
+    "layer_bc663c": [
+      "layer_C_WHpX"
+    ],
+    "container_ab8609": [
+      "container_rmCN9_"
+    ],
+    "contentWrapper__08434": [
+      "contentWrapper_58b0l2"
+    ],
+    "container_fed6d3": [
+      "container_rfDq2B"
+    ],
+    "header_fed6d3": [
+      "header_rfDq2B"
+    ],
+    "attachButtonInner__0923f": [
+      "attachButtonInner_7TM4SO"
+    ],
+    "attachButton__36c1b": [
+      "attachButton_omcAqa"
+    ],
+    "visualMediaItemContainer_f4758a": [
+      "visualMediaItemContainer_idVBIj"
+    ],
+    "itemContentContainer_f4758a": [
+      "itemContentContainer_idVBIj"
+    ],
+    "mosaicItemContent__6c706": [
+      "mosaicItemContent_BwHv05"
+    ],
+    "root__1042d": [
+      "root_CPqUlz"
+    ],
+    "body__1042d": [
+      "body_CPqUlz"
+    ],
+    "blobContainer_e5445c": [
+      "blobContainer_IaPwK5"
+    ],
+    "selected_e5445c": [
+      "selected_IaPwK5"
+    ],
+    "wrapper__6e9f8": [
+      "wrapper_JJ-hgR"
+    ],
+    "selected__6e9f8": [
+      "selected_JJ-hgR"
+    ],
+    "container__5573a": [
+      "container_POHM-Y"
+    ],
+    "root__49fc1": [
+      "root__KoJTP"
+    ],
+    "fullscreenOnMobile__49fc1": [
+      "fullscreenOnMobile__KoJTP"
+    ],
+    "rootWithShadow__49fc1": [
+      "rootWithShadow__KoJTP"
+    ],
+    "header__49fc1": [
+      "header__KoJTP"
+    ],
+    "content__49fc1": [
+      "content__KoJTP"
+    ],
+    "footer__49fc1": [
+      "footer__KoJTP"
+    ],
+    "baseControlItem_dbfbe0": [
+      "baseControlItem_FiiQ6I"
+    ],
+    "baseControlItemContent_dbfbe0": [
+      "baseControlItemContent_FiiQ6I"
+    ],
+    "baseControlItemTrailingElement_dbfbe0": [
+      "baseControlItemTrailingElement_FiiQ6I"
+    ],
+    "baseControlItemTitle_dbfbe0": [
+      "baseControlItemTitle_FiiQ6I"
+    ],
+    "reactionTooltip_bbcccb": [
+      "reactionTooltip_5l5ajC"
+    ],
+    "hoverButtonGroup__06ab4": [
+      "hoverButtonGroup_n2rO26"
+    ],
+    "hoverButton__06ab4": [
+      "hoverButton_n2rO26"
+    ],
+    "tooltip_fa450a": [
+      "tooltip_ZDdyhE"
+    ],
+    "tooltipContent_fa450a": [
+      "tooltipContent_ZDdyhE"
+    ],
+    "tooltip_c36707": [
+      "tooltip_3_v8qp"
+    ],
+    "tooltipPointer_c36707": [
+      "tooltipPointer_3_v8qp"
+    ]
+  },
+  "unresolved": [
+    "shopScroll__08415"
+  ],
+  "edits": 1012
+}

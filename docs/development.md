@@ -22,6 +22,8 @@ Fully quit Discord (including its tray process) before running native installati
 
 ## Publishing theme updates
 
+For Discord updates that rename generated CSS classes, follow [the theme compatibility recovery workflow](theme-compatibility.md). It includes snapshot capture, a read-only mapping report tool, review requirements and the November 6, 2026 migration record.
+
 Every theme release must update **both** `assets/hotori.theme.css` and `assets/theme-changelog.json` in the same push. Add short, user-facing notes under the exact new theme version. Run `cargo test --release --locked theme_changelog::tests` before publishing theme changes. The app reads this catalog from the default branch independently of app releases; do not substitute app release notes for theme notes.
 
 Run `python scripts/check-theme-changelog.py` before pushing theme changes. The **Theme release notes** GitHub Actions check runs the same validation on pushes and pull requests, reporting a failure if the current theme version has no notes. This check reports problems; preventing direct pushes requires branch protection configured separately.
