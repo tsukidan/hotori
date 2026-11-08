@@ -1,6 +1,10 @@
 {
   "schemaVersion": 1,
   "versions": {
+    "0.9.2": [
+      {"title": "Theme cleanup", "description": "Consolidated scattered component styles and removed redundant declarations while preserving the existing appearance, customization options, live blur, and member-list scrolling fix."},
+      {"title": "Visual consistency", "description": "Reorganized embed, separator, settings, popup, attachment, and media styles. All 24 fixture comparisons matched the previous version in computed styles and rendered pixels."}
+    ],
     "0.9.1": [
       {"title": "Member-list scrolling", "description": "Removed page-wide attachment-tooltip selectors that caused recurring long main-thread stalls while browsing server members. Member styling and live blur are preserved."},
       {"title": "Attachment hover labels", "description": "Attachment hover labels now use Discord's native tooltip appearance. Attachment action buttons and reaction hover details retain their glass styling."}

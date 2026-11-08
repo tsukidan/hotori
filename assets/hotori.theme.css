@@ -3,7 +3,7 @@
  * @author tsuki
  * @authorId 109679787630399488
  * @authorLink https://plusinsta.xyz
- * @version 0.9.1
+ * @version 0.9.2
  * @description A Discord theme inspired by Liquid Glass.
  */
 
@@ -169,42 +169,41 @@
  * | 04  BASE APPLICATION & BACKGROUND                                                          |
  * | 05  GLOBAL TEXT & ICON OVERRIDES                                                           |
  * | 06  LIQUID GLASS STRUCTURAL PANELS                                                         |
- * | 07  BOOST GOAL TRACK                                                                       |
+ * | 07  BOOST GOAL & SERVER BOOST CARDS                                                        |
  * | 08  SMALL GLASS SURFACES & PANEL DETAILS                                                   |
  * | 09  BACKGROUND STRIPPING & CLEANUP                                                         |
  * | 10  DECORATIVE BORDERS & DIVIDERS                                                          |
- * | 11  MEMBER ROWS & CHAT DATE DIVIDERS                                                       |
+ * | 11  MEMBER ROWS, DATE DIVIDERS & UNREAD MARKERS                                            |
  * | 12  MISCELLANEOUS CHAT ELEMENTS & EMBEDS                                                   |
  * | 13  MESSAGE ACTIONS & MENTIONS                                                             |
  * | 14  STARTUP / LOADING SCREEN TRANSPARENCY                                                  |
- * | 15  CHAT INPUT FONT COLOR FIX                                                              |
- * | 16  LIQUID GLASS CONTEXT MENU & AUTOCOMPLETE                                               |
+ * | 15  CHAT INPUT TEXT & MEDIA CONTROLS                                                       |
+ * | 16  CONTEXT MENUS, AUTOCOMPLETE & GIF PICKER                                               |
  * | 17  HEADER, TITLES & TEXT TYPOGRAPHY                                                       |
  * | 18  VOICE CONNECTION BANNERS & LINK LEGIBILITY                                             |
  * | 19  CHANNEL TITLES & TOOLBAR                                                               |
- * | 20  NESTED GLASS & EMBED CONTENT                                                           |
- * | 21  DIALOGS & PINNED MESSAGE POPOUTS                                                       |
+ * | 20  REUSABLE NESTED GLASS                                                                  |
+ * | 21  DIALOGS, PROFILES & EVENT POPOUTS                                                      |
  * | 22  CHANNEL TITLE ICON ALIGNMENT                                                           |
  * | 23  ALIGNMENT & SPACING ADJUSTMENTS                                                        |
- * | 24  AVATAR SHAPE & MESSAGE SIZING                                                          |
+ * | 24  AVATAR SHAPE, SIZING & CHAT MEDIA SHADOWS                                              |
  * | 25  VOICE STATUS TEXT                                                                      |
- * | 26  TYPING INDICATOR & MESSAGE INPUT SPACING                                               |
+ * | 26  TYPING INDICATOR, INPUT & REPLY CONTROLS                                               |
  * | 27  SCROLLBARS                                                                             |
  * | 28  CALL LAYOUT & SPEAKING INDICATORS                                                      |
  * | 29  VOICE PANEL BUTTONS                                                                    |
  * | 30  COMPACT GLASS & NESTED BACKDROP OPTIMIZATION                                           |
  * | 31  LIQUID GLASS PROFILE                                                                   |
  * | 32  NO-GLASS PROFILE                                                                       |
- * | 33  SERVER LIST LAYOUT                                                                     |
+ * | 33  SERVER LIST LAYOUT & CHANNEL STATES                                                    |
  * | 34  SETTINGS PAGE                                                                          |
+ * | 35  SHOP PRODUCT CARDS                                                                     |
+ * | 36  ATTACHMENT ACTIONS & REACTION TOOLTIPS                                                 |
  * |                                                                                            |
  * ============================================================================================= */
 
-/* =============================================================================================
- * |                                                                                            |
- * | 01 | INTERNAL TOKENS & GLASS CALCULATIONS                                                  |
- * |                                                                                            |
- * ============================================================================================= */
+/* 01 | INTERNAL TOKENS & GLASS CALCULATIONS */
+
 /* Profile IDs, embedded lens maps, and calculated surfaces. */
 :root,
 .theme-dark {
@@ -252,11 +251,8 @@
                            0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-/* =============================================================================================
- * |                                                                                            |
- * | 02 | ACCENT PALETTE & LEGACY COLORS                                                        |
- * |                                                                                            |
- * ============================================================================================= */
+/* 02 | ACCENT PALETTE & LEGACY COLORS */
+
 /* Discord accent palette: all shades derive from the user's --main-color.
    Keep light/dark and alpha variants for hover states and subtle surfaces.
    Palette names and legacy mappings follow discord-current-full.css. */
@@ -457,11 +453,8 @@
     animation-name: hotori-owned-card-glow !important;
 }
 
-/* =============================================================================================
- * |                                                                                            |
- * | 03 | SECONDARY TEXT & ICON TOKENS                                                          |
- * |                                                                                            |
- * ============================================================================================= */
+/* 03 | SECONDARY TEXT & ICON TOKENS */
+
 /* Neutral labels/buttons use the user setting; semantic status colors stay separate. */
 :root,
 .theme-dark,
@@ -490,11 +483,8 @@
     --input-placeholder-text-default: var(--secondary-ui-color) !important;
 }
 
-/* =============================================================================================
- * |                                                                                            |
- * | 04 | BASE APPLICATION & BACKGROUND                                                         |
- * |                                                                                            |
- * ============================================================================================= */
+/* 04 | BASE APPLICATION & BACKGROUND */
+
 .app_YRXZu0,
 .app_QbT-Jy {
     background: transparent !important;
@@ -532,11 +522,8 @@
     border-radius: 16px !important;
 }
 
-/* =============================================================================================
- * |                                                                                            |
- * | 05 | GLOBAL TEXT & ICON OVERRIDES                                                          |
- * |                                                                                            |
- * ============================================================================================= */
+/* 05 | GLOBAL TEXT & ICON OVERRIDES */
+
 .name_Iy0c7A,
 .modeUnreadImportant_TNyK-N .name_TNyK-N,
 .clickable_fErCLM {
@@ -551,11 +538,8 @@ svg {
     fill: currentColor !important;
 }
 
-/* =============================================================================================
- * |                                                                                            |
- * | 06 | LIQUID GLASS STRUCTURAL PANELS                                                        |
- * |                                                                                            |
- * ============================================================================================= */
+/* 06 | LIQUID GLASS STRUCTURAL PANELS */
+
 .wrapper_5dqHTG,
 .sidebarList_pog62O,
 .panels_pog62O,
@@ -619,7 +603,7 @@ svg {
 .scrollerContainer_zS9TPG,
 .editCard_xX0l5K,
 .addAnotherRuleCardContainer_Qt34kd,
-.embedTitleLink_XyW1ZT,
+.embedTitleLink_XyW1ZT:not(:where(.embed_XyW1ZT *, .embedFull_XyW1ZT *)),
 .role_xL50-d,
 .innerContainer_s6-upr,
 .container_Xweo-z,
@@ -650,11 +634,8 @@ svg {
     box-sizing: border-box;
 }
 
-/* =============================================================================================
- * |                                                                                            |
- * | 07 | BOOST GOAL TRACK                                                                      |
- * |                                                                                            |
- * ============================================================================================= */
+/* 07 | BOOST GOAL & SERVER BOOST CARDS */
+
 /* Boost goal: glass belongs to the whole track, behind the native purple fill
    and labels. Avoid panel margins that offset the absolutely positioned fill. */
 .contentContainer_BFMMcK {
@@ -673,11 +654,21 @@ svg {
     border-radius: inherit;
 }
 
-/* =============================================================================================
- * |                                                                                            |
- * | 08 | SMALL GLASS SURFACES & PANEL DETAILS                                                  |
- * |                                                                                            |
- * ============================================================================================= */
+/* Server Boost cards: cover the shared card container across card variants,
+   preserving the native progress colors and layout. */
+.container_POHM-Y {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 16px !important;
+    box-shadow: var(--glass-shadow), var(--glass-edge-shadow) !important;
+    box-sizing: border-box;
+}
+
+/* 08 | SMALL GLASS SURFACES & PANEL DETAILS */
+
 .item_xyJHva,
 .overlay_-tj9SA {
         background: var(--glass-surface) !important;
@@ -695,7 +686,7 @@ svg {
     color: #FFFFFF !important;
     fill: #FFFFFF !important;
 }
-.embedTitleLink_XyW1ZT {
+.embedTitleLink_XyW1ZT:not(:where(.embed_XyW1ZT *, .embedFull_XyW1ZT *)) {
     padding: 5px !important;
     margin-left: -5px !important;
 }
@@ -725,11 +716,8 @@ svg {
     background: transparent !important;
 }
 
-/* =============================================================================================
- * |                                                                                            |
- * | 09 | BACKGROUND STRIPPING & CLEANUP                                                        |
- * |                                                                                            |
- * ============================================================================================= */
+/* 09 | BACKGROUND STRIPPING & CLEANUP */
+
 .sidebar_pog62O,
 .container_rhYbEd,
 .contentContainer_rhYbEd,
@@ -781,11 +769,8 @@ svg {
     margin: 4px !important;
 }
 
-/* =============================================================================================
- * |                                                                                            |
- * | 10 | DECORATIVE BORDERS & DIVIDERS                                                         |
- * |                                                                                            |
- * ============================================================================================= */
+/* 10 | DECORATIVE BORDERS & DIVIDERS */
+
 .theme-dark .children_ybUK7Z:after {
     content: "" !important;
     position: relative !important;
@@ -803,8 +788,8 @@ svg {
     margin: 0 12px !important;
 }
 
-.containerWithMargin_BFMMcK::after,
-.sectionDivider_ysO7Gy,
+.containerWithMargin_BFMMcK:not(:where(.sidebarList_pog62O .container_BFMMcK))::after,
+.sectionDivider_ysO7Gy:not(:where(.sidebarList_pog62O *)),
 .separator_6zZYhF,
 .divider_mL61Cw,
 .divider_6vIioY,
@@ -812,7 +797,6 @@ svg {
     content: "" !important;
     display: block !important;
     width: calc(100% - 16px) !important;
-    height: 3px !important;
     margin: 12px auto 0 !important;
     background: var(--glass-surface) !important;
     background-image: var(--glass-sheen) !important;
@@ -824,11 +808,59 @@ svg {
     border-radius: 12px !important;
 }
 
-/* =============================================================================================
- * |                                                                                            |
- * | 11 | MEMBER ROWS & CHAT DATE DIVIDERS                                                      |
- * |                                                                                            |
- * ============================================================================================= */
+/* Channel-list separators use one neutral line regardless of glass color.
+   The Boost container's native bottom border otherwise paints a second rule
+   under our pseudo-element. Normalize its box so both rules share gutters. */
+.sidebarList_pog62O .container_BFMMcK {
+    margin-inline: 0 !important;
+    padding-inline: 0 !important;
+    border-bottom: none !important;
+}
+
+.sidebarList_pog62O .container_BFMMcK > .contentContainer_BFMMcK {
+    margin-inline: 8px;
+}
+
+.sidebarList_pog62O .container_BFMMcK::after,
+.sidebarList_pog62O .sectionDivider_ysO7Gy {
+    content: "" !important;
+    display: block !important;
+    position: static !important;
+    inset: auto !important;
+    box-sizing: border-box;
+    flex: 0 0 auto;
+    width: calc(100% - 16px) !important;
+    height: 2px !important;
+    margin: 12px 8px 0 !important;
+    border: none !important;
+    border-radius: 999px !important;
+    background: rgba(255, 255, 255, 0.28) !important;
+    background-image: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+    opacity: 1 !important;
+    pointer-events: none;
+}
+
+.sidebarList_pog62O .sectionDividerWithBottom_ysO7Gy {
+    margin-bottom: 8px !important;
+}
+
+.containerWithMargin_BFMMcK:not(:where(.sidebarList_pog62O .container_BFMMcK))::after,
+.sectionDivider_ysO7Gy:not(:where(.sidebarList_pog62O *)),
+.divider_6vIioY,
+.divider_md_YFn {
+    height: 3px !important;
+}
+
+.separator_6zZYhF,
+.divider_mL61Cw {
+    height: 5px !important;
+}
+
+/* 11 | MEMBER ROWS, DATE DIVIDERS & UNREAD MARKERS */
+
 /* Offline row opacity creates a backdrop boundary that breaks the glass.
    Dim only the inner member content, leaving the blur surface opaque. */
 .member_Iy0c7A.offline_Iy0c7A {
@@ -864,7 +896,8 @@ svg {
     margin: 4px !important;
 }
 
-/* The line and date label each blur the backdrop, without nesting filters. */
+/* Unlabelled dividers use the fallback line; labelled dates/unread markers
+   use the single glass bar defined below. */
 .divider_4TfzT5::before {
     content: "";
     position: absolute;
@@ -872,11 +905,6 @@ svg {
     z-index: -1;
     margin: 0 !important;
     pointer-events: none;
-}
-
-.separator_6zZYhF,
-.divider_mL61Cw {
-    height: 5px !important;
 }
 
 .unreadPillCap_4TfzT5 {
@@ -924,11 +952,94 @@ svg {
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55) !important;
 }
 
-/* =============================================================================================
- * |                                                                                            |
- * | 12 | MISCELLANEOUS CHAT ELEMENTS & EMBEDS                                                  |
- * |                                                                                            |
- * ============================================================================================= */
+/* Channel unread marker: keep the full circle inside the row/scroll viewport
+   instead of Discord's half-pill at a negative inline offset. Reserve the
+   same gutter in read/unread rows so channel icons never shift on updates. */
+.sidebarList_pog62O .wrapper_TNyK-N .link_TNyK-N {
+    padding-inline-start: 24px !important;
+}
+
+.sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N {
+    position: absolute;
+    inset-inline-start: 8px !important;
+    inset-inline-end: auto;
+    top: 50%;
+    margin-top: 0 !important;
+    transform: translateY(-50%);
+    width: 5px !important;
+    height: 5px !important;
+    border: none !important;
+    border-radius: 50% !important;
+    background: #ffffff !important;
+    opacity: 1;
+    box-shadow: none;
+    animation: hotori-channel-unread-pulse 1.8s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Fixed halos crossfade instead of repainting an interpolated shadow every
+   frame. The core still fades on the original 1.8-second timing curve. */
+.sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N::before,
+.sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    box-shadow: 0 0 5px 2px #ffffffbb, 0 0 12px #ffffff99;
+    animation: hotori-channel-unread-halo 1.8s ease-in-out infinite;
+}
+
+.sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N::after {
+    box-shadow: 0 0 3px 1px #ffffff66, 0 0 8px #ffffff55;
+    animation-name: hotori-channel-unread-halo-soft;
+    opacity: 0;
+}
+
+@keyframes hotori-channel-unread-pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.35;
+    }
+}
+
+@keyframes hotori-channel-unread-halo {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+@keyframes hotori-channel-unread-halo-soft {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N,
+    .sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N::before,
+    .sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N::after {
+        animation: none;
+        opacity: 1;
+    }
+}
+
+.reduce-motion .sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N,
+.reduce-motion .sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N::before,
+.reduce-motion .sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N::after {
+    animation: none;
+    opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N::after { opacity: 0; }
+}
+
+.reduce-motion .sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N::after { opacity: 0; }
+
+/* 12 | MISCELLANEOUS CHAT ELEMENTS & EMBEDS */
+
 .full-motion .searchBar_i16Ad0,
 .container_cbVzxY {
     color: #FFF !important;
@@ -1020,11 +1131,93 @@ svg {
     background-image: none !important;
 }
 
-/* =============================================================================================
- * |                                                                                            |
- * | 13 | MESSAGE ACTIONS & MENTIONS                                                            |
- * |                                                                                            |
- * ============================================================================================= */
+/* Embed text wraps within the card. Fields retain the inset glass treatment;
+   descriptions, footers and linked titles use the clear typography below. */
+:is(.embed_XyW1ZT, .embedFull_XyW1ZT) :is(.embedDescription_XyW1ZT, .embedFieldValue_XyW1ZT, .embedFooterText_XyW1ZT, .embedTitleLink_XyW1ZT) {
+    box-sizing: border-box;
+    width: fit-content;
+    max-width: 100%;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+:is(.embed_XyW1ZT, .embedFull_XyW1ZT) :is(.embedFooterText_XyW1ZT, .embedTitleLink_XyW1ZT) {
+    display: inline-block;
+}
+
+:is(.embed_XyW1ZT, .embedFull_XyW1ZT) .embedFieldValue_XyW1ZT {
+    padding: 6px 10px !important;
+    margin-inline: 0 !important;
+}
+
+:is(.embed_XyW1ZT, .embedFull_XyW1ZT) .embedTitleLink_XyW1ZT {
+    margin-block: 4px !important;
+}
+
+/* Embed typography: one outer glass card with a clear reading hierarchy.
+   Keep Discord's thumbnail grid, fields and playback controls intact. */
+.embedFull_XyW1ZT > .grid_XyW1ZT {
+    padding: 14px 16px 16px !important;
+}
+
+:is(.embed_XyW1ZT, .embedFull_XyW1ZT) :is(a, .embedProvider_XyW1ZT, .embedAuthorName_XyW1ZT, .embedTitle_XyW1ZT, .embedDescription_XyW1ZT, .embedFooterText_XyW1ZT) {
+    -webkit-text-stroke: 0 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.65),
+                 0 2px 5px rgba(0, 0, 0, 0.3) !important;
+}
+
+:is(.embed_XyW1ZT, .embedFull_XyW1ZT) :is(.embedProvider_XyW1ZT, .embedAuthorNameLink_XyW1ZT, .embedTitleLink_XyW1ZT, .embedDescription_XyW1ZT, .embedFooterText_XyW1ZT) {
+    background: transparent !important;
+    background-image: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    margin-inline: 0 !important;
+}
+
+:is(.embed_XyW1ZT, .embedFull_XyW1ZT) :is(.embedProvider_XyW1ZT, .embedProvider_XyW1ZT a) {
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-size: 13px !important;
+    line-height: 1.4;
+    font-weight: 500 !important;
+}
+
+:is(.embed_XyW1ZT, .embedFull_XyW1ZT) :is(.embedAuthorName_XyW1ZT, .embedAuthorNameLink_XyW1ZT) {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-size: 14px !important;
+    line-height: 1.4;
+    font-weight: 600 !important;
+}
+
+:is(.embed_XyW1ZT, .embedFull_XyW1ZT) :is(.embedTitle_XyW1ZT, .embedTitleLink_XyW1ZT) {
+    color: #ffffff !important;
+    font-size: 20px !important;
+    line-height: 1.35 !important;
+    font-weight: 700 !important;
+    overflow-wrap: anywhere;
+}
+
+:is(.embed_XyW1ZT, .embedFull_XyW1ZT) .embedDescription_XyW1ZT {
+    color: rgba(255, 255, 255, 0.92) !important;
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+.embedFull_XyW1ZT .embedMedia_XyW1ZT {
+    margin-top: 14px;
+    border-radius: 10px;
+}
+
+:is(.embed_XyW1ZT, .embedFull_XyW1ZT) :is(.embedProvider_XyW1ZT a, .embedAuthorNameLink_XyW1ZT, .embedTitleLink_XyW1ZT):is(:hover, :focus-visible) {
+    text-decoration: underline !important;
+    text-underline-offset: 3px;
+}
+
+/* 13 | MESSAGE ACTIONS & MENTIONS */
+
 /* Message hover actions: one glass surface for reactions, reply, and more. */
 .buttonsInner_SY_P2T {
     background: var(--glass-surface) !important;
@@ -1106,11 +1299,8 @@ svg {
     content: none !important;
 }
 
-/* =============================================================================================
- * |                                                                                            |
- * | 14 | STARTUP / LOADING SCREEN TRANSPARENCY                                                 |
- * |                                                                                            |
- * ============================================================================================= */
+/* 14 | STARTUP / LOADING SCREEN TRANSPARENCY */
+
 .container_oDjP9R,
 [class*="ready_"] {
     background: transparent !important;
@@ -1133,11 +1323,8 @@ svg {
     color: #ffffff !important;
 }
 
-/* =============================================================================================
- * |                                                                                            |
- * | 15 | CHAT INPUT FONT COLOR FIX                                                             |
- * |                                                                                            |
- * ============================================================================================= */
+/* 15 | CHAT INPUT TEXT & MEDIA CONTROLS */
+
 [class*="placeholder_"] {
     color: var(--secondary-ui-color) !important;
 }
@@ -1156,11 +1343,28 @@ svg {
     color: var(--main-color) !important;
 }
 
-/* =============================================================================================
- * |                                                                                            |
- * | 16 | LIQUID GLASS CONTEXT MENU & AUTOCOMPLETE                                              |
- * |                                                                                            |
- * ============================================================================================= */
+/* Composer media button: use the selected light/dark glass tint and sheen,
+   without adding another blur layer inside the already frosted composer. */
+.channelTextArea_2x8-Qn :is(.attachButtonInner_7TM4SO, .attachButton_omcAqa) {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border-radius: 8px;
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
+}
+
+.channelTextArea_2x8-Qn :is(.attachButtonInner_7TM4SO, .attachButton_omcAqa):hover {
+    background-color: color-mix(in srgb, var(--glass-surface) 85%, rgba(255, 255, 255, 0.15)) !important;
+}
+
+/* Tighten only the gaps; preserve the buttons' native click targets. */
+.channelTextArea_2x8-Qn .buttons_2x8-Qn {
+    gap: 2px !important;
+}
+
+/* 16 | CONTEXT MENUS, AUTOCOMPLETE & GIF PICKER */
+
 .menu_M3qk4j,
 .submenu_M3qk4j {
     background: var(--glass-background-subtle) !important;
@@ -1233,11 +1437,29 @@ svg {
     pointer-events: none;
 }
 
-/* =============================================================================================
- * |                                                                                            |
- * | 17 | HEADER, TITLES & TEXT TYPOGRAPHY                                                      |
- * |                                                                                            |
- * ============================================================================================= */
+/* GIF picker: one glass backdrop, with transparent inner surfaces so the
+   native opaque body/header cannot hide it. Keep the grid and GIFs intact. */
+.contentWrapper_58b0l2:has(.container_rfDq2B) {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 16px !important;
+    box-shadow: var(--glass-shadow), var(--glass-edge-shadow) !important;
+}
+
+.contentWrapper_58b0l2 .container_rfDq2B,
+.contentWrapper_58b0l2 .header_rfDq2B {
+    background: transparent !important;
+}
+
+.contentWrapper_58b0l2 .container_rfDq2B {
+    border-radius: 0 0 16px 16px;
+}
+
+/* 17 | HEADER, TITLES & TEXT TYPOGRAPHY */
+
 /* Header Text Liquid Glass Fix */
 .cozy_2i8Bfm .header_2i8Bfm {
     background: var(--glass-surface) !important;
@@ -1264,11 +1486,8 @@ svg {
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
 }
 
-/* =============================================================================================
- * |                                                                                            |
- * | 18 | VOICE CONNECTION BANNERS & LINK LEGIBILITY                                            |
- * |                                                                                            |
- * ============================================================================================= */
+/* 18 | VOICE CONNECTION BANNERS & LINK LEGIBILITY */
+
 /* Voice reconnect banner: shared Acrylic/Liquid surface for both states.
    Keep Discord's 32px layout and attached top corners. */
 .root_buf7nK.connecting_buf7nK,
@@ -1340,11 +1559,8 @@ svg {
     border-radius: 14px;
 }
 
-/* =============================================================================================
- * |                                                                                            |
- * | 19 | CHANNEL TITLES & TOOLBAR                                                              |
- * |                                                                                            |
- * ============================================================================================= */
+/* 19 | CHANNEL TITLES & TOOLBAR */
+
 /* Channel titles sit inside a glass pill; the lettering stays solid. */
 .title_ybUK7Z,
 .titleName_rh88Fa {
@@ -1386,11 +1602,8 @@ svg {
     align-items: center;
 }
 
-/* =============================================================================================
- * |                                                                                            |
- * | 20 | NESTED GLASS & EMBED CONTENT                                                          |
- * |                                                                                            |
- * ============================================================================================= */
+/* 20 | REUSABLE NESTED GLASS */
+
 /* Reusable nested glass: tint, sheen, and edges without another blur pass.
    Add .hotori-glass-child beneath an already blurred toolbar/popout, or mark
    another already blurred ancestor .hotori-glass-parent (marker only).
@@ -1399,7 +1612,7 @@ svg {
 :is(.hotori-glass-parent, .subtitleContainer_z_gUBg .toolbar_ybUK7Z, .messagesPopoutWrap_6bgemo, .embed_XyW1ZT, .embedFull_XyW1ZT) .hotori-glass-child,
 .subtitleContainer_z_gUBg .toolbar_ybUK7Z .searchBar_i16Ad0,
 .messagesPopoutWrap_6bgemo .messageGroupWrapper_6bgemo,
-:is(.embed_XyW1ZT, .embedFull_XyW1ZT) :is(.embedDescription_XyW1ZT, .embedFieldValue_XyW1ZT, .embedFooterText_XyW1ZT, .embedTitleLink_XyW1ZT) {
+:is(.embed_XyW1ZT, .embedFull_XyW1ZT) .embedFieldValue_XyW1ZT {
     background: var(--glass-background-subtle) !important;
     background-image: var(--glass-sheen) !important;
     backdrop-filter: none !important;
@@ -1414,26 +1627,8 @@ svg {
     --glass-child-radius: 999px;
 }
 
-/* Embed descriptions, field subtext, footers, and linked titles share the
-   embed's existing blur. Let long text wrap inside its own glass surface. */
-:is(.embed_XyW1ZT, .embedFull_XyW1ZT) :is(.embedDescription_XyW1ZT, .embedFieldValue_XyW1ZT, .embedFooterText_XyW1ZT, .embedTitleLink_XyW1ZT) {
-    padding: 6px 10px !important;
-    margin-inline: 0 !important;
-    width: fit-content;
-    max-width: 100%;
-    min-width: 0;
-    overflow-wrap: anywhere;
-}
+/* 21 | DIALOGS, PROFILES & EVENT POPOUTS */
 
-:is(.embed_XyW1ZT, .embedFull_XyW1ZT) :is(.embedFooterText_XyW1ZT, .embedTitleLink_XyW1ZT) {
-    display: inline-block;
-}
-
-/* =============================================================================================
- * |                                                                                            |
- * | 21 | DIALOGS & PINNED MESSAGE POPOUTS                                                      |
- * |                                                                                            |
- * ============================================================================================= */
 /* Shared dialog/popout shell, including Add Friends to DM.
    Target the surface across size/padding variants; retain native layout. */
 .container_dvN-MP {
@@ -1487,11 +1682,115 @@ svg {
     -webkit-backdrop-filter: none !important;
 }
 
-/* =============================================================================================
- * |                                                                                            |
- * | 22 | CHANNEL TITLE ICON ALIGNMENT                                                          |
- * |                                                                                            |
- * ============================================================================================= */
+/* Modal/image-viewer backdrop: edge-to-edge blur with a subtle black tint. */
+.scrim_od1dl1,
+.backdrop_C_WHpX {
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(var(--glass-blur)) !important;
+    -webkit-backdrop-filter: blur(var(--glass-blur)) !important;
+    /* Keep the full-window blur constant during Discord's native fade/zoom.
+       Interpolating its radius forces costly filtering on every frame. */
+    transition: opacity 200ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .scrim_od1dl1,
+    .backdrop_C_WHpX {
+        transition: none !important;
+    }
+}
+
+.reduce-motion :is(.scrim_od1dl1, .backdrop_C_WHpX) {
+    transition: none !important;
+}
+
+/* Opened content floats above the blurred backdrop with a deep glass shadow.
+   Use static box shadows, leaving Discord's native zoom/fade transforms intact. */
+.layer_C_WHpX [role="dialog"]:not(.user-profile-modal, .user-profile-modal-v2):not(:has(.imageWrapper, [class*="imageWrapper_"], .user-profile-modal, .user-profile-modal-v2)),
+.layer_C_WHpX .imageWrapper,
+.layer_C_WHpX [class*="imageWrapper_"] {
+    border-radius: 16px !important;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18),
+                0 8px 20px rgba(0, 0, 0, 0.45),
+                0 24px 64px rgba(0, 0, 0, 0.65),
+                0 48px 100px rgba(0, 0, 0, 0.35) !important;
+}
+
+/* Full profiles animate inside their dialog wrapper. Keep that stationary
+   wrapper unframed; the profile card retains its own moving glass edges. */
+.layer_C_WHpX [role="dialog"]:has(.user-profile-modal, .user-profile-modal-v2):not(.outer_P1YEjQ) {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* A small, soft shadow keeps all popout text readable over profile artwork.
+   Apply to descendants too so text components with their own shadow rules match. */
+.user-profile-popout,
+.user-profile-popout * {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55) !important;
+}
+
+/* Discord's light profile palette gives status bubbles a pale background.
+   Override the popout-wide shadow only within those light status bubbles. */
+.user-profile-popout.theme-light .container_rmCN9_,
+.user-profile-popout.theme-light .container_rmCN9_ *,
+.user-profile-popout .theme-light .container_rmCN9_,
+.user-profile-popout .theme-light .container_rmCN9_ * {
+    color: #111111 !important;
+    text-shadow: none !important;
+}
+
+/* Put the glass on the whole card's parent, spanning both grid columns. */
+.root_CPqUlz {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 12px;
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
+    box-sizing: border-box;
+}
+
+.root_CPqUlz .body_CPqUlz {
+    background: transparent !important;
+}
+
+/* Shared Events-list and creation-dialog shell. Creation has no medium class;
+   retain Discord's native sizing while applying the same glass surface. */
+.root__KoJTP.fullscreenOnMobile__KoJTP.rootWithShadow__KoJTP {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 16px !important;
+    box-shadow: var(--glass-shadow), var(--glass-edge-shadow) !important;
+    --modal-footer-background: transparent;
+}
+
+.root__KoJTP.fullscreenOnMobile__KoJTP.rootWithShadow__KoJTP > :is(.header__KoJTP, .content__KoJTP, .footer__KoJTP) {
+    background: transparent !important;
+}
+
+/* Event location options can contain a leading icon without the optional
+   withLeadingIcon class. Reserve its gutter based on the actual child. */
+.root__KoJTP .radioGroupOption_oJuRbG:has(> .radioItemIcon_oJuRbG) {
+    padding-inline-start: calc(16px + var(--custom-radio-text-start) + var(--custom-radio-icon-offset)) !important;
+}
+
+.root__KoJTP .radioGroupOption_oJuRbG > .radioItemIcon_oJuRbG {
+    inset-block-start: 12px !important;
+}
+
+/* 22 | CHANNEL TITLE ICON ALIGNMENT */
+
 /* Extend one continuous title surface behind the preceding channel icon. */
 .children_ybUK7Z:has(> .channelIcon_ybUK7Z) {
     isolation: isolate;
@@ -1527,11 +1826,8 @@ svg {
     border-radius: 999px;
 }
 
-/* =============================================================================================
- * |                                                                                            |
- * | 23 | ALIGNMENT & SPACING ADJUSTMENTS                                                       |
- * |                                                                                            |
- * ============================================================================================= */
+/* 23 | ALIGNMENT & SPACING ADJUSTMENTS */
+
 .subtitleContainer_z_gUBg {
     margin-right: 1rem !important;
 }
@@ -1577,11 +1873,8 @@ svg {
     display: none;
 }
 
-/* =============================================================================================
- * |                                                                                            |
- * | 24 | AVATAR SHAPE & MESSAGE SIZING                                                         |
- * |                                                                                            |
- * ============================================================================================= */
+/* 24 | AVATAR SHAPE, SIZING & CHAT MEDIA SHADOWS */
+
 /* Avatar shape. Keep decoration art and rectangular stream tiles separate. */
 .avatar_2i8Bfm,
 .avatar_YUoOxm,
@@ -1637,11 +1930,25 @@ img[class*="avatar_"],
     min-height: calc(var(--message-avatar-size) + 8px);
 }
 
-/* =============================================================================================
- * |                                                                                            |
- * | 25 | VOICE STATUS TEXT                                                                     |
- * |                                                                                            |
- * ============================================================================================= */
+/* Media-viewer-style depth, scaled down to chat avatar dimensions.
+   Box shadows follow the configured avatar rounding without altering artwork. */
+.message_SY_P2T .avatar_2i8Bfm {
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18),
+                0 4px 10px rgba(0, 0, 0, 0.38),
+                0 10px 24px rgba(0, 0, 0, 0.42) !important;
+}
+
+/* Posted image attachments: the imageContent node lives inside clipped
+   single-image grids and visual-media containers. Filter the outer container
+   AFTER its contents are clipped, preserving rounded corners and spoilers. The second selector supports layouts without that container. */
+.visualMediaItemContainer_idVBIj:has(.imageContent_j9Vvzj.itemContentContainer_idVBIj.mosaicItemContent_BwHv05),
+.imageContent_j9Vvzj.itemContentContainer_idVBIj.mosaicItemContent_BwHv05:not(.visualMediaItemContainer_idVBIj *) {
+    filter: drop-shadow(0 4px 5px rgba(0, 0, 0, 0.38))
+            drop-shadow(0 10px 12px rgba(0, 0, 0, 0.42)) !important;
+}
+
+/* 25 | VOICE STATUS TEXT */
+
 /* Voice Connected legibility: keep the shared tint and existing status colors. */
 .container_9U6LUN {
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85), 0 2px 5px rgba(0, 0, 0, 0.45) !important;
@@ -1652,11 +1959,8 @@ img[class*="avatar_"],
     filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8));
 }
 
-/* =============================================================================================
- * |                                                                                            |
- * | 26 | TYPING INDICATOR & MESSAGE INPUT SPACING                                              |
- * |                                                                                            |
- * ============================================================================================= */
+/* 26 | TYPING INDICATOR, INPUT & REPLY CONTROLS */
+
 /* Clear the typing strip in channels and DMs. Keep the text and dots intact. */
 .typing_z_gUBg,
 .base_U9Tvvz,
@@ -1719,11 +2023,66 @@ img[class*="avatar_"],
     border-top-right-radius: 0 !important;
 }
 
-/* =============================================================================================
- * |                                                                                            |
- * | 27 | SCROLLBARS                                                                            |
- * |                                                                                            |
- * ============================================================================================= */
+/* Reply @ notification toggle: accent-tinted glass with legible white text.
+   Discord retains its native toggle label/icon and notification behavior. */
+.channelTextArea_2x8-Qn .stackedBars_2x8-Qn:has(.replyBar_rE8-46) {
+    background: var(--glass-background-subtle) !important;
+    background-image: var(--glass-sheen) !important;
+}
+
+.channelTextArea_2x8-Qn .clipContainer_rE8-46,
+.channelTextArea_2x8-Qn .container_rE8-46,
+.replyBar_rE8-46 {
+    background: transparent !important;
+}
+
+.replyBar_rE8-46 .actions_rE8-46,
+.replyBar_rE8-46 .mentionButton_rE8-46 :is([class*="container_"][class*="checked_"], [role="switch"], [class*="switchIndicator_"]) {
+    background: transparent !important;
+}
+
+.replyBar_rE8-46 .mentionButton_rE8-46 {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 8px;
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
+    margin: 3px 4px;
+    padding: 4px 8px;
+    transition: background-color 180ms ease;
+}
+
+.replyBar_rE8-46 .mentionButton_rE8-46,
+.replyBar_rE8-46 .mentionButton_rE8-46 * {
+    color: #ffffff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.65),
+                 0 2px 5px rgba(0, 0, 0, 0.3) !important;
+}
+
+.replyBar_rE8-46 .mentionButton_rE8-46:is(:hover, :focus-visible) {
+    background-color: var(--glass-background-subtle) !important;
+}
+
+/* Follow the notification control's actual checked state, including builds
+   that put its accessible switch/checkbox state on a surrounding element. */
+.replyBar_rE8-46 .mentionButton_rE8-46:is([aria-checked="true"], [aria-pressed="true"], :has(input:checked), :has([aria-checked="true"])),
+.replyBar_rE8-46 [role="switch"][aria-checked="true"] .mentionButton_rE8-46 {
+    background-color: color-mix(in srgb, var(--main-color) 24%, var(--glass-surface)) !important;
+}
+
+.replyBar_rE8-46 .mentionButton_rE8-46:is([aria-checked="true"], [aria-pressed="true"], :has(input:checked), :has([aria-checked="true"])):is(:hover, :focus-visible),
+.replyBar_rE8-46 [role="switch"][aria-checked="true"] .mentionButton_rE8-46:is(:hover, :focus-visible) {
+    background-color: color-mix(in srgb, var(--main-color) 34%, var(--glass-surface)) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .replyBar_rE8-46 .mentionButton_rE8-46 { transition: none; }
+}
+
+/* 27 | SCROLLBARS */
+
 /* Glass scrollbars. Native scrollbar parts use tint and reflections rather
    than SVG backdrop refraction. Preserve Discord's sizes and auto-hide rules. */
 ::-webkit-scrollbar-track,
@@ -1752,11 +2111,8 @@ img[class*="avatar_"],
     background-color: color-mix(in srgb, var(--glass-background) 55%, rgba(255, 255, 255, 0.65)) !important;
 }
 
-/* =============================================================================================
- * |                                                                                            |
- * | 28 | CALL LAYOUT & SPEAKING INDICATORS                                                     |
- * |                                                                                            |
- * ============================================================================================= */
+/* 28 | CALL LAYOUT & SPEAKING INDICATORS */
+
 /* Keep the call's glass surface inside its available space. The shared 4px
    margins must be deducted from the original 100% dimensions. */
 .callContainer_hbKzX7 .root_rTsZa_ {
@@ -1894,11 +2250,8 @@ img[class*="avatar_"],
                 0 0 14px color-mix(in srgb, var(--main-color) 35%, transparent) !important;
 }
 
-/* =============================================================================================
- * |                                                                                            |
- * | 29 | VOICE PANEL BUTTONS                                                                   |
- * |                                                                                            |
- * ============================================================================================= */
+/* 29 | VOICE PANEL BUTTONS */
+
 /* Voice-panel actions: scope glass to this component, not every filled button. */
 .button_9U6LUN.buttonColor_9U6LUN,
 .button_9U6LUN .buttonColor_9U6LUN {
@@ -1934,11 +2287,8 @@ img[class*="avatar_"],
     box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.2), var(--glass-edge-shadow) !important;
 }
 
-/* =============================================================================================
- * |                                                                                            |
- * | 30 | COMPACT GLASS & NESTED BACKDROP OPTIMIZATION                                          |
- * |                                                                                            |
- * ============================================================================================= */
+/* 30 | COMPACT GLASS & NESTED BACKDROP OPTIMIZATION */
+
 /* Compact surfaces keep their glass highlight with a smaller outer shadow. */
 .member_86es0b,
 .sm_F7qvhY.hasText_F7qvhY .buttonChildrenWrapper_F7qvhY,
@@ -1950,7 +2300,7 @@ img[class*="avatar_"],
 .icon_Ax3P1g,
 .closeButton_QGyCSa,
 .actionMenuButton_pGckHv,
-.embedTitleLink_XyW1ZT,
+.embedTitleLink_XyW1ZT:not(:where(.embed_XyW1ZT *, .embedFull_XyW1ZT *)),
 .cozy_2i8Bfm .header_2i8Bfm {
     box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
 }
@@ -1966,19 +2316,14 @@ img[class*="avatar_"],
 .outer_P1YEjQ:not(.custom-user-profile-theme) .innerContainer_s6-upr,
 .outer_P1YEjQ:not(.custom-user-profile-theme) .footerButton_YBm90d,
 .innerContainer_s6-upr .role_xL50-d,
-.embed_XyW1ZT .embedTitleLink_XyW1ZT,
-.embedFull_XyW1ZT .embedTitleLink_XyW1ZT,
 .embed_XyW1ZT .markup_ku1OHH code,
 .embedFull_XyW1ZT .markup_ku1OHH code {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
 }
 
-/* =============================================================================================
- * |                                                                                            |
- * | 31 | LIQUID GLASS PROFILE                                                                  |
- * |                                                                                            |
- * ============================================================================================= */
+/* 31 | LIQUID GLASS PROFILE */
+
 /* Select the SVG filter only for Liquid. Style queries use the inherited
    numeric profile ID. Elements without container-style support retain blur.
    Custom properties alone do not add a filter to otherwise unstyled elements;
@@ -2050,11 +2395,8 @@ img[class*="avatar_"],
     }
 }
 
-/* =============================================================================================
- * |                                                                                            |
- * | 32 | NO-GLASS PROFILE                                                                      |
- * |                                                                                            |
- * ============================================================================================= */
+/* 32 | NO-GLASS PROFILE */
+
 /* None removes the glass decoration entirely. Keep transparent zero shadows
    rather than 'none' so existing comma-separated shadow lists remain valid. */
 @container style(--blur-profile: 2) {
@@ -2100,11 +2442,7 @@ img[class*="avatar_"],
     }
 }
 
-/* =============================================================================================
- * |                                                                                            |
- * | 33 | SERVER LIST LAYOUT                                                                    |
- * |                                                                                            |
- * ============================================================================================= */
+/* 33 | SERVER LIST LAYOUT & CHANNEL STATES */
 
 .wrapper_5dqHTG .scroller_5dqHTG {
     padding-top: var(--server-list-top-padding) !important;
@@ -2308,11 +2646,96 @@ img[class*="avatar_"],
     }
 }
 
-/* =============================================================================================
- * |                                                                                            |
- * | 34 | SETTINGS PAGE                                                                         |
- * |                                                                                            |
- * ============================================================================================= */
+/* Server state rings live outside Discord's masked SVG, so their glow can
+   extend beyond the image. An absolute transparent border reserves the same
+   visual footprint in every state without resizing the icon or its slot. */
+.wrapper_5dqHTG .listItem_rwEpIL:has(.blobContainer_IaPwK5 .wrapper_JJ-hgR) .wrapper__o8_Xq {
+    visibility: hidden !important;
+}
+
+.wrapper_5dqHTG .blobContainer_IaPwK5:has(.wrapper_JJ-hgR) {
+    position: relative;
+    --hotori-server-ring: transparent;
+    --hotori-server-glow: 0 0 0 transparent;
+}
+
+.wrapper_5dqHTG .blobContainer_IaPwK5:has(.wrapper_JJ-hgR)::after {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border: 2px solid var(--hotori-server-ring);
+    border-radius: calc(var(--radius-md, 12px) + 2px);
+    box-sizing: border-box;
+    box-shadow: var(--hotori-server-glow);
+    pointer-events: none;
+    z-index: 3;
+    transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+/* Prefer explicit unread semantics; the native unread pill is a fallback.
+   A hover-only pill must not mark an otherwise read server as unread. */
+.wrapper_5dqHTG .listItem_rwEpIL:is(:has([data-unread="true"]), :has([aria-label*="unread" i]), :has(.item__o8_Xq.visible__o8_Xq:not(.hovered__o8_Xq):not(.selected__o8_Xq))) .blobContainer_IaPwK5:has(.wrapper_JJ-hgR) {
+    --hotori-server-ring: #ffffff;
+    --hotori-server-glow: 0 0 6px 1px rgba(255, 255, 255, 0.55),
+                          0 0 14px 2px rgba(255, 255, 255, 0.32),
+                          0 0 24px 3px rgba(255, 255, 255, 0.16);
+}
+
+/* Selected takes precedence over unread, including while hovered. */
+.wrapper_5dqHTG .listItem_rwEpIL:has(.item__o8_Xq.selected__o8_Xq) .blobContainer_IaPwK5:has(.wrapper_JJ-hgR),
+.wrapper_5dqHTG .blobContainer_IaPwK5:is(.selected_IaPwK5, :has(.wrapper_JJ-hgR.selected_JJ-hgR), :has([aria-selected="true"])) {
+    --hotori-server-ring: var(--main-color) !important;
+    --hotori-server-glow: 0 0 6px 2px color-mix(in srgb, var(--main-color) 85%, transparent),
+                          0 0 16px 4px color-mix(in srgb, var(--main-color) 60%, transparent),
+                          0 0 30px 6px color-mix(in srgb, var(--main-color) 32%, transparent) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .wrapper_5dqHTG .blobContainer_IaPwK5::after { transition: none; }
+}
+
+/* Clear selected-channel surface: the sidebar supplies the glass behind it.
+   Keep the existing outline and edge highlights without a cloudy extra coat. */
+.sidebarList_pog62O .modeSelected_TNyK-N {
+    background: transparent !important;
+    background-image: none !important;
+}
+
+/* Discord's selected-link fill must not cover the channel's glass surface. */
+.modeSelected_TNyK-N .link_TNyK-N,
+.modeSelected_TNyK-N:hover .link_TNyK-N {
+    background: transparent !important;
+}
+
+/* Reserve the selected-channel geometry in every row so hovering never shifts
+   icons or text. Animate only paint properties, reusing the selected edges. */
+.sidebarList_pog62O .wrapper_TNyK-N {
+    box-sizing: border-box;
+    border: 1px solid transparent !important;
+    border-radius: 16px !important;
+    margin: 4px !important;
+    transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.sidebarList_pog62O .wrapper_TNyK-N:not(.modeSelected_TNyK-N) {
+    box-shadow: inset 0 1px 1px transparent, 0 2px 8px transparent,
+                inset 1px 1px 0 transparent, inset -1px -1px 0 transparent !important;
+}
+
+.sidebarList_pog62O .wrapper_TNyK-N:is(:hover, :focus-within, .modeSelected_TNyK-N) {
+    border-color: var(--glass-border) !important;
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
+}
+
+.sidebarList_pog62O .wrapper_TNyK-N:is(:hover, :focus-within, :active) .link_TNyK-N {
+    background: transparent !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sidebarList_pog62O .wrapper_TNyK-N { transition: none; }
+}
+
+/* 34 | SETTINGS PAGE */
 
 /* =============================================================================================
  * |                                                                                            |
@@ -2548,363 +2971,6 @@ img[class*="avatar_"],
     background-color: var(--glass-background-subtle) !important;
 }
 
-/* =============================================================================================
- * |                                                                                            |
- * | SHOP PRODUCT CARDS                                                                        |
- * |                                                                                            |
- * ============================================================================================= */
-.productCardContainer_UGbKo5 {
-    background: rgba(0, 0, 0, 0.25) !important;
-    background-image: none !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 16px !important;
-    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important;
-}
-
-/* Discord paints a separate footer gradient over the card's flat background. */
-.productCardContainer_UGbKo5 :is(.footerGradient_UGbKo5, .staticBundleFooterGradient_UGbKo5),
-.productCardContainer_UGbKo5 .staticBundleFooterGradient_UGbKo5::after {
-    background: transparent !important;
-    background-image: none !important;
-}
-
-.productCardContainer_UGbKo5 :is(.productName_UGbKo5, .footerInfoContainer_UGbKo5) {
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important;
-}
-
-/* Modal/image-viewer backdrop: edge-to-edge blur with a subtle black tint. */
-.scrim_od1dl1,
-.backdrop_C_WHpX {
-    margin: 0 !important;
-    padding: 0 !important;
-    border: none !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    background: rgba(0, 0, 0, 0.5) !important;
-    backdrop-filter: blur(var(--glass-blur)) !important;
-    -webkit-backdrop-filter: blur(var(--glass-blur)) !important;
-    /* Keep the full-window blur constant during Discord's native fade/zoom.
-       Interpolating its radius forces costly filtering on every frame. */
-    transition: opacity 200ms ease;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .scrim_od1dl1,
-    .backdrop_C_WHpX {
-        transition: none !important;
-    }
-}
-
-.reduce-motion :is(.scrim_od1dl1, .backdrop_C_WHpX) {
-    transition: none !important;
-}
-
-/* Opened content floats above the blurred backdrop with a deep glass shadow.
-   Use static box shadows, leaving Discord's native zoom/fade transforms intact. */
-.layer_C_WHpX [role="dialog"]:not(.user-profile-modal, .user-profile-modal-v2):not(:has(.imageWrapper, [class*="imageWrapper_"], .user-profile-modal, .user-profile-modal-v2)),
-.layer_C_WHpX .imageWrapper,
-.layer_C_WHpX [class*="imageWrapper_"] {
-    border-radius: 16px !important;
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18),
-                0 8px 20px rgba(0, 0, 0, 0.45),
-                0 24px 64px rgba(0, 0, 0, 0.65),
-                0 48px 100px rgba(0, 0, 0, 0.35) !important;
-}
-
-/* Full profiles animate inside their dialog wrapper. Keep that stationary
-   wrapper unframed; the profile card retains its own moving glass edges. */
-.layer_C_WHpX [role="dialog"]:has(.user-profile-modal, .user-profile-modal-v2):not(.outer_P1YEjQ) {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-}
-
-/* A small, soft shadow keeps all popout text readable over profile artwork.
-   Apply to descendants too so text components with their own shadow rules match. */
-.user-profile-popout,
-.user-profile-popout * {
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55) !important;
-}
-
-/* Discord's light profile palette gives status bubbles a pale background.
-   Override the popout-wide shadow only within those light status bubbles. */
-.user-profile-popout.theme-light .container_rmCN9_,
-.user-profile-popout.theme-light .container_rmCN9_ *,
-.user-profile-popout .theme-light .container_rmCN9_,
-.user-profile-popout .theme-light .container_rmCN9_ * {
-    color: #111111 !important;
-    text-shadow: none !important;
-}
-
-/* GIF picker: one glass backdrop, with transparent inner surfaces so the
-   native opaque body/header cannot hide it. Keep the grid and GIFs intact. */
-.contentWrapper_58b0l2:has(.container_rfDq2B) {
-    background: var(--glass-surface) !important;
-    background-image: var(--glass-sheen) !important;
-    backdrop-filter: var(--glass-filter) !important;
-    -webkit-backdrop-filter: var(--glass-filter) !important;
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 16px !important;
-    box-shadow: var(--glass-shadow), var(--glass-edge-shadow) !important;
-}
-
-.contentWrapper_58b0l2 .container_rfDq2B,
-.contentWrapper_58b0l2 .header_rfDq2B {
-    background: transparent !important;
-}
-
-.contentWrapper_58b0l2 .container_rfDq2B {
-    border-radius: 0 0 16px 16px;
-}
-
-/* Composer media button: use the selected light/dark glass tint and sheen,
-   without adding another blur layer inside the already frosted composer. */
-.channelTextArea_2x8-Qn :is(.attachButtonInner_7TM4SO, .attachButton_omcAqa) {
-    background: var(--glass-surface) !important;
-    background-image: var(--glass-sheen) !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    border-radius: 8px;
-    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
-}
-
-.channelTextArea_2x8-Qn :is(.attachButtonInner_7TM4SO, .attachButton_omcAqa):hover {
-    background-color: color-mix(in srgb, var(--glass-surface) 85%, rgba(255, 255, 255, 0.15)) !important;
-}
-
-/* Tighten only the gaps; preserve the buttons' native click targets. */
-.channelTextArea_2x8-Qn .buttons_2x8-Qn {
-    gap: 2px !important;
-}
-
-/* Media-viewer-style depth, scaled down to chat avatar dimensions.
-   Box shadows follow the configured avatar rounding without altering artwork. */
-.message_SY_P2T .avatar_2i8Bfm {
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18),
-                0 4px 10px rgba(0, 0, 0, 0.38),
-                0 10px 24px rgba(0, 0, 0, 0.42) !important;
-}
-
-/* Posted image attachments: the imageContent node lives inside clipped
-   single-image grids and visual-media containers. Filter the outer container
-   AFTER its contents are clipped, preserving rounded corners and spoilers. */
-.visualMediaItemContainer_idVBIj:has(.imageContent_j9Vvzj.itemContentContainer_idVBIj.mosaicItemContent_BwHv05) {
-    filter: drop-shadow(0 4px 5px rgba(0, 0, 0, 0.38))
-            drop-shadow(0 10px 12px rgba(0, 0, 0, 0.42)) !important;
-}
-
-/* Fallback for attachment layouts without the outer visual-media container. */
-.imageContent_j9Vvzj.itemContentContainer_idVBIj.mosaicItemContent_BwHv05:not(.visualMediaItemContainer_idVBIj *) {
-    filter: drop-shadow(0 4px 5px rgba(0, 0, 0, 0.38))
-            drop-shadow(0 10px 12px rgba(0, 0, 0, 0.42)) !important;
-}
-
-/* Reply @ notification toggle: accent-tinted glass with legible white text.
-   Discord retains its native toggle label/icon and notification behavior. */
-.channelTextArea_2x8-Qn .stackedBars_2x8-Qn:has(.replyBar_rE8-46) {
-    background: var(--glass-background-subtle) !important;
-    background-image: var(--glass-sheen) !important;
-}
-
-.channelTextArea_2x8-Qn .clipContainer_rE8-46,
-.channelTextArea_2x8-Qn .container_rE8-46,
-.replyBar_rE8-46 {
-    background: transparent !important;
-}
-
-.replyBar_rE8-46 .actions_rE8-46,
-.replyBar_rE8-46 .mentionButton_rE8-46 :is([class*="container_"][class*="checked_"], [role="switch"], [class*="switchIndicator_"]) {
-    background: transparent !important;
-}
-
-.replyBar_rE8-46 .mentionButton_rE8-46 {
-    background: var(--glass-surface) !important;
-    background-image: var(--glass-sheen) !important;
-    backdrop-filter: var(--glass-filter) !important;
-    -webkit-backdrop-filter: var(--glass-filter) !important;
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 8px;
-    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
-    margin: 3px 4px;
-    padding: 4px 8px;
-    transition: background-color 180ms ease;
-}
-
-.replyBar_rE8-46 .mentionButton_rE8-46,
-.replyBar_rE8-46 .mentionButton_rE8-46 * {
-    color: #ffffff !important;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.65),
-                 0 2px 5px rgba(0, 0, 0, 0.3) !important;
-}
-
-.replyBar_rE8-46 .mentionButton_rE8-46:is(:hover, :focus-visible) {
-    background-color: var(--glass-background-subtle) !important;
-}
-
-/* Follow the notification control's actual checked state, including builds
-   that put its accessible switch/checkbox state on a surrounding element. */
-.replyBar_rE8-46 .mentionButton_rE8-46:is([aria-checked="true"], [aria-pressed="true"], :has(input:checked), :has([aria-checked="true"])),
-.replyBar_rE8-46 [role="switch"][aria-checked="true"] .mentionButton_rE8-46 {
-    background-color: color-mix(in srgb, var(--main-color) 24%, var(--glass-surface)) !important;
-}
-
-.replyBar_rE8-46 .mentionButton_rE8-46:is([aria-checked="true"], [aria-pressed="true"], :has(input:checked), :has([aria-checked="true"])):is(:hover, :focus-visible),
-.replyBar_rE8-46 [role="switch"][aria-checked="true"] .mentionButton_rE8-46:is(:hover, :focus-visible) {
-    background-color: color-mix(in srgb, var(--main-color) 34%, var(--glass-surface)) !important;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .replyBar_rE8-46 .mentionButton_rE8-46 { transition: none; }
-}
-
-/* Put the glass on the whole card's parent, spanning both grid columns. */
-.root_CPqUlz {
-    background: var(--glass-surface) !important;
-    background-image: var(--glass-sheen) !important;
-    backdrop-filter: var(--glass-filter) !important;
-    -webkit-backdrop-filter: var(--glass-filter) !important;
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 12px;
-    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
-    box-sizing: border-box;
-}
-
-.root_CPqUlz .body_CPqUlz {
-    background: transparent !important;
-}
-
-/* Server state rings live outside Discord's masked SVG, so their glow can
-   extend beyond the image. An absolute transparent border reserves the same
-   visual footprint in every state without resizing the icon or its slot. */
-.wrapper_5dqHTG .listItem_rwEpIL:has(.blobContainer_IaPwK5 .wrapper_JJ-hgR) .wrapper__o8_Xq {
-    visibility: hidden !important;
-}
-
-.wrapper_5dqHTG .blobContainer_IaPwK5:has(.wrapper_JJ-hgR) {
-    position: relative;
-    --hotori-server-ring: transparent;
-    --hotori-server-glow: 0 0 0 transparent;
-}
-
-.wrapper_5dqHTG .blobContainer_IaPwK5:has(.wrapper_JJ-hgR)::after {
-    content: "";
-    position: absolute;
-    inset: -2px;
-    border: 2px solid var(--hotori-server-ring);
-    border-radius: calc(var(--radius-md, 12px) + 2px);
-    box-sizing: border-box;
-    box-shadow: var(--hotori-server-glow);
-    pointer-events: none;
-    z-index: 3;
-    transition: border-color 180ms ease, box-shadow 180ms ease;
-}
-
-/* Prefer explicit unread semantics; the native unread pill is a fallback.
-   A hover-only pill must not mark an otherwise read server as unread. */
-.wrapper_5dqHTG .listItem_rwEpIL:is(:has([data-unread="true"]), :has([aria-label*="unread" i]), :has(.item__o8_Xq.visible__o8_Xq:not(.hovered__o8_Xq):not(.selected__o8_Xq))) .blobContainer_IaPwK5:has(.wrapper_JJ-hgR) {
-    --hotori-server-ring: #ffffff;
-    --hotori-server-glow: 0 0 6px 1px rgba(255, 255, 255, 0.55),
-                          0 0 14px 2px rgba(255, 255, 255, 0.32),
-                          0 0 24px 3px rgba(255, 255, 255, 0.16);
-}
-
-/* Selected takes precedence over unread, including while hovered. */
-.wrapper_5dqHTG .listItem_rwEpIL:has(.item__o8_Xq.selected__o8_Xq) .blobContainer_IaPwK5:has(.wrapper_JJ-hgR),
-.wrapper_5dqHTG .blobContainer_IaPwK5:is(.selected_IaPwK5, :has(.wrapper_JJ-hgR.selected_JJ-hgR), :has([aria-selected="true"])) {
-    --hotori-server-ring: var(--main-color) !important;
-    --hotori-server-glow: 0 0 6px 2px color-mix(in srgb, var(--main-color) 85%, transparent),
-                          0 0 16px 4px color-mix(in srgb, var(--main-color) 60%, transparent),
-                          0 0 30px 6px color-mix(in srgb, var(--main-color) 32%, transparent) !important;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .wrapper_5dqHTG .blobContainer_IaPwK5::after { transition: none; }
-}
-
-/* Clear selected-channel surface: the sidebar supplies the glass behind it.
-   Keep the existing outline and edge highlights without a cloudy extra coat. */
-.sidebarList_pog62O .modeSelected_TNyK-N {
-    background: transparent !important;
-    background-image: none !important;
-}
-
-/* Discord's selected-link fill must not cover the channel's glass surface. */
-.modeSelected_TNyK-N .link_TNyK-N,
-.modeSelected_TNyK-N:hover .link_TNyK-N {
-    background: transparent !important;
-}
-
-/* Reserve the selected-channel geometry in every row so hovering never shifts
-   icons or text. Animate only paint properties, reusing the selected edges. */
-.sidebarList_pog62O .wrapper_TNyK-N {
-    box-sizing: border-box;
-    border: 1px solid transparent !important;
-    border-radius: 16px !important;
-    margin: 4px !important;
-    transition: border-color 180ms ease, box-shadow 180ms ease;
-}
-
-.sidebarList_pog62O .wrapper_TNyK-N:not(.modeSelected_TNyK-N) {
-    box-shadow: inset 0 1px 1px transparent, 0 2px 8px transparent,
-                inset 1px 1px 0 transparent, inset -1px -1px 0 transparent !important;
-}
-
-.sidebarList_pog62O .wrapper_TNyK-N:is(:hover, :focus-within, .modeSelected_TNyK-N) {
-    border-color: var(--glass-border) !important;
-    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
-}
-
-.sidebarList_pog62O .wrapper_TNyK-N:is(:hover, :focus-within, :active) .link_TNyK-N {
-    background: transparent !important;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .sidebarList_pog62O .wrapper_TNyK-N { transition: none; }
-}
-
-/* Server Boost cards: cover the shared card container across card variants,
-   preserving the native progress colors and layout. */
-.container_POHM-Y {
-    background: var(--glass-surface) !important;
-    background-image: var(--glass-sheen) !important;
-    backdrop-filter: var(--glass-filter) !important;
-    -webkit-backdrop-filter: var(--glass-filter) !important;
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 16px !important;
-    box-shadow: var(--glass-shadow), var(--glass-edge-shadow) !important;
-    box-sizing: border-box;
-}
-
-/* Shared Events-list and creation-dialog shell. Creation has no medium class;
-   retain Discord's native sizing while applying the same glass surface. */
-.root__KoJTP.fullscreenOnMobile__KoJTP.rootWithShadow__KoJTP {
-    background: var(--glass-surface) !important;
-    background-image: var(--glass-sheen) !important;
-    backdrop-filter: var(--glass-filter) !important;
-    -webkit-backdrop-filter: var(--glass-filter) !important;
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 16px !important;
-    box-shadow: var(--glass-shadow), var(--glass-edge-shadow) !important;
-    --modal-footer-background: transparent;
-}
-
-.root__KoJTP.fullscreenOnMobile__KoJTP.rootWithShadow__KoJTP > :is(.header__KoJTP, .content__KoJTP, .footer__KoJTP) {
-    background: transparent !important;
-}
-
-/* Event location options can contain a leading icon without the optional
-   withLeadingIcon class. Reserve its gutter based on the actual child. */
-.root__KoJTP .radioGroupOption_oJuRbG:has(> .radioItemIcon_oJuRbG) {
-    padding-inline-start: calc(16px + var(--custom-radio-text-start) + var(--custom-radio-icon-offset)) !important;
-}
-
-.root__KoJTP .radioGroupOption_oJuRbG > .radioItemIcon_oJuRbG {
-    inset-block-start: 12px !important;
-}
-
 /* Information panels: a quiet inset surface per row separates the setting
    from the wallpaper. Reuse the panel backdrop without filtering every row. */
 :is(.standardSidebarView_jnk11m, .container_NdjzJd, .settingsPage_SmOc0s)
@@ -2962,19 +3028,34 @@ img[class*="avatar_"],
     line-height: 1.4;
 }
 
-/* Reaction hover details: one glass shell around the emoji and reactor text. */
-.reactionTooltip_5l5ajC {
-    background: var(--glass-surface) !important;
-    background-image: var(--glass-sheen) !important;
-    backdrop-filter: var(--glass-filter) !important;
-    -webkit-backdrop-filter: var(--glass-filter) !important;
+/* 35 | SHOP PRODUCT CARDS */
+
+.productCardContainer_UGbKo5 {
+    background: rgba(0, 0, 0, 0.25) !important;
+    background-image: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
     border: 1px solid var(--glass-border) !important;
-    border-radius: 12px !important;
+    border-radius: 16px !important;
     box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important;
 }
 
-/* Attachment actions: support the hover-button group and composer previews. */
+/* Discord paints a separate footer gradient over the card's flat background. */
+.productCardContainer_UGbKo5 :is(.footerGradient_UGbKo5, .staticBundleFooterGradient_UGbKo5),
+.productCardContainer_UGbKo5 .staticBundleFooterGradient_UGbKo5::after {
+    background: transparent !important;
+    background-image: none !important;
+}
+
+.productCardContainer_UGbKo5 :is(.productName_UGbKo5, .footerInfoContainer_UGbKo5) {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important;
+}
+
+/* 36 | ATTACHMENT ACTIONS & REACTION TOOLTIPS */
+
+/* Shared small glass for reaction details and attachment action groups. */
+.reactionTooltip_5l5ajC,
 .hoverButtonGroup_n2rO26,
 .upload_JyxBSo .miniPopover_JyxBSo {
     background: var(--glass-surface) !important;
@@ -2982,8 +3063,17 @@ img[class*="avatar_"],
     backdrop-filter: var(--glass-filter) !important;
     -webkit-backdrop-filter: var(--glass-filter) !important;
     border: 1px solid var(--glass-border) !important;
-    border-radius: 8px !important;
     box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
+}
+
+.reactionTooltip_5l5ajC {
+    border-radius: 12px !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.hoverButtonGroup_n2rO26,
+.upload_JyxBSo .miniPopover_JyxBSo {
+    border-radius: 8px !important;
 }
 
 .hoverButtonGroup_n2rO26 .hoverButton_n2rO26 {
@@ -3000,192 +3090,5 @@ img[class*="avatar_"],
    hover/focus :has() queries: member-list virtualization repeatedly invalidates
    their ancestor state and causes long main-thread stalls in the live client.
    Attachment action buttons and reaction hover details keep their glass. */
-
-/* Embed typography: one outer glass card with a clear reading hierarchy.
-   Keep Discord's thumbnail grid, fields and playback controls intact. */
-.embedFull_XyW1ZT > .grid_XyW1ZT {
-    padding: 14px 16px 16px !important;
-}
-
-:is(.embed_XyW1ZT, .embedFull_XyW1ZT) :is(a, .embedProvider_XyW1ZT, .embedAuthorName_XyW1ZT, .embedTitle_XyW1ZT, .embedDescription_XyW1ZT, .embedFooterText_XyW1ZT) {
-    -webkit-text-stroke: 0 !important;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.65),
-                 0 2px 5px rgba(0, 0, 0, 0.3) !important;
-}
-
-:is(.embed_XyW1ZT, .embedFull_XyW1ZT) :is(.embedProvider_XyW1ZT, .embedAuthorNameLink_XyW1ZT, .embedTitleLink_XyW1ZT, .embedDescription_XyW1ZT, .embedFooterText_XyW1ZT) {
-    background: transparent !important;
-    background-image: none !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    box-shadow: none !important;
-    border: none !important;
-    border-radius: 0 !important;
-    padding: 0 !important;
-    margin-inline: 0 !important;
-}
-
-:is(.embed_XyW1ZT, .embedFull_XyW1ZT) :is(.embedProvider_XyW1ZT, .embedProvider_XyW1ZT a) {
-    color: rgba(255, 255, 255, 0.8) !important;
-    font-size: 13px !important;
-    line-height: 1.4;
-    font-weight: 500 !important;
-}
-
-:is(.embed_XyW1ZT, .embedFull_XyW1ZT) :is(.embedAuthorName_XyW1ZT, .embedAuthorNameLink_XyW1ZT) {
-    color: rgba(255, 255, 255, 0.9) !important;
-    font-size: 14px !important;
-    line-height: 1.4;
-    font-weight: 600 !important;
-}
-
-:is(.embed_XyW1ZT, .embedFull_XyW1ZT) :is(.embedTitle_XyW1ZT, .embedTitleLink_XyW1ZT) {
-    color: #ffffff !important;
-    font-size: 20px !important;
-    line-height: 1.35 !important;
-    font-weight: 700 !important;
-    overflow-wrap: anywhere;
-}
-
-:is(.embed_XyW1ZT, .embedFull_XyW1ZT) .embedDescription_XyW1ZT {
-    color: rgba(255, 255, 255, 0.92) !important;
-    font-size: 14px;
-    line-height: 1.55;
-}
-
-.embedFull_XyW1ZT .embedMedia_XyW1ZT {
-    margin-top: 14px;
-    border-radius: 10px;
-}
-
-:is(.embed_XyW1ZT, .embedFull_XyW1ZT) :is(.embedProvider_XyW1ZT a, .embedAuthorNameLink_XyW1ZT, .embedTitleLink_XyW1ZT):is(:hover, :focus-visible) {
-    text-decoration: underline !important;
-    text-underline-offset: 3px;
-}
-
-/* Channel unread marker: keep the full circle inside the row/scroll viewport
-   instead of Discord's half-pill at a negative inline offset. Reserve the
-   same gutter in read/unread rows so channel icons never shift on updates. */
-.sidebarList_pog62O .wrapper_TNyK-N .link_TNyK-N {
-    padding-inline-start: 24px !important;
-}
-
-.sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N {
-    position: absolute;
-    inset-inline-start: 8px !important;
-    inset-inline-end: auto;
-    top: 50%;
-    margin-top: 0 !important;
-    transform: translateY(-50%);
-    width: 5px !important;
-    height: 5px !important;
-    border: none !important;
-    border-radius: 50% !important;
-    background: #ffffff !important;
-    opacity: 1;
-    box-shadow: none;
-    animation: hotori-channel-unread-pulse 1.8s ease-in-out infinite;
-    pointer-events: none;
-    z-index: 1;
-}
-
-/* Fixed halos crossfade instead of repainting an interpolated shadow every
-   frame. The core still fades on the original 1.8-second timing curve. */
-.sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N::before,
-.sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    pointer-events: none;
-    box-shadow: 0 0 5px 2px #ffffffbb, 0 0 12px #ffffff99;
-    animation: hotori-channel-unread-halo 1.8s ease-in-out infinite;
-}
-
-.sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N::after {
-    box-shadow: 0 0 3px 1px #ffffff66, 0 0 8px #ffffff55;
-    animation-name: hotori-channel-unread-halo-soft;
-    opacity: 0;
-}
-
-@keyframes hotori-channel-unread-pulse {
-    0%, 100% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0.35;
-    }
-}
-
-@keyframes hotori-channel-unread-halo {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
-}
-
-@keyframes hotori-channel-unread-halo-soft {
-    0%, 100% { opacity: 0; }
-    50% { opacity: 1; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N,
-    .sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N::before,
-    .sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N::after {
-        animation: none;
-        opacity: 1;
-    }
-}
-
-.reduce-motion .sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N,
-.reduce-motion .sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N::before,
-.reduce-motion .sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N::after {
-    animation: none;
-    opacity: 1;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N::after { opacity: 0; }
-}
-
-.reduce-motion .sidebarList_pog62O .wrapper_TNyK-N .unread_TNyK-N::after { opacity: 0; }
-
-/* Channel-list separators use one neutral line regardless of glass color.
-   The Boost container's native bottom border otherwise paints a second rule
-   under our pseudo-element. Normalize its box so both rules share gutters. */
-.sidebarList_pog62O .container_BFMMcK {
-    margin-inline: 0 !important;
-    padding-inline: 0 !important;
-    border-bottom: none !important;
-}
-
-.sidebarList_pog62O .container_BFMMcK > .contentContainer_BFMMcK {
-    margin-inline: 8px;
-}
-
-.sidebarList_pog62O .container_BFMMcK::after,
-.sidebarList_pog62O .sectionDivider_ysO7Gy {
-    content: "" !important;
-    display: block !important;
-    position: static !important;
-    inset: auto !important;
-    box-sizing: border-box;
-    flex: 0 0 auto;
-    width: calc(100% - 16px) !important;
-    height: 2px !important;
-    margin: 12px 8px 0 !important;
-    border: none !important;
-    border-radius: 999px !important;
-    background: rgba(255, 255, 255, 0.28) !important;
-    background-image: none !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08) !important;
-    opacity: 1 !important;
-    pointer-events: none;
-}
-
-.sidebarList_pog62O .sectionDividerWithBottom_ysO7Gy {
-    margin-bottom: 8px !important;
-}
 
 /* END OF HOTORI THEME */

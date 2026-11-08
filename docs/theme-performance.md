@@ -57,3 +57,14 @@ The user reported severe server-member scrolling stalls in every material profil
 The published fix removes only these four rule blocks. The user explicitly approved native Discord attachment hover labels as the small visual exception; attachment action buttons, reaction hover details, member styling, and live blur retain their existing CSS. Narrowing the anchor to the app root or adding a tooltip-presence guard did not remove the stalls; do not reintroduce the page-wide queries as a tooltip styling shortcut. Avatar clipping, separate row backdrop, wallpaper, palette and other selector-group experiments were restored and are not included.
 
 Vencord imports the theme into a parent stylesheet. Disabling the imported sheet alone did not disable its computed styles in this client; disabling the containing sheet provided the verified native baseline. Future performance comparisons must verify computed styles before treating a run as unthemed. Live inspection found no obsolete native class names among the 399 literal selector classes: 397 appeared in the native CSS snapshots and two were Hotori helper hooks. No installer code or installed-theme changes are included.
+
+
+## 0.9.2: CSS consolidation
+
+Grouped embed layout/typography, neutral sidebar separators, account panels, dialog/profile/event surfaces, composer/reply controls, avatar/media shadows, and server/channel states beside their owning components. Shop cards and attachment/reaction hover UI now have explicit sections instead of falling beneath Settings. Compact implementation headings retain the complete section index and unchanged user-settings box.
+
+Embed text no longer receives an inset glass card only to have it cleared later; fields retain that treatment, and standalone title-link fallback styling remains available. Neutral sidebar dividers are excluded from the generic glass-divider rule. Identical posted-image shadows and small attachment/reaction glass declarations are shared. The page-wide attachment-tooltip queries removed in 0.9.1 remain absent.
+
+Offline headless comparison against the exact 0.9.1 DEV baseline: all 24 profile/tint/view combinations passed with zero computed-style or screenshot pixel differences. Coverage includes 1280px and 760px widths, customized values, RTL, horizontal server layout, hover/focus/active states, normal and standalone embed text, opt-in helper hooks, fields, separators, settings, media, popouts and tooltip controls. This is a maintainability change; no frame-rate improvement is claimed.
+
+Parsed CSS style declarations decreased from 3365 to 3339. Style-rule count increased from 308 to 311 because fallback geometry is expressed explicitly rather than relying on overridden shared rules. Total lines decreased from 3192 to 3095, largely due to compact implementation headings. All 34 user-setting names and values are unchanged, as are published defaults. Theme version 0.9.2 ships with matching in-app notes.
