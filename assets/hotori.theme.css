@@ -3,7 +3,7 @@
  * @author tsuki
  * @authorId 109679787630399488
  * @authorLink https://plusinsta.xyz
- * @version 0.9.0
+ * @version 0.9.1
  * @description A Discord theme inspired by Liquid Glass.
  */
 
@@ -2996,34 +2996,10 @@ img[class*="avatar_"],
     background-color: var(--glass-background-subtle) !important;
 }
 
-/* Tooltips render in a portal outside the upload. Match only while its action
-   group is hovered/focused, leaving other tooltip types unchanged. */
-body:has(.hoverButton_n2rO26:is(:hover, :focus-visible), .upload_JyxBSo .actionBar_JyxBSo:is(:hover, :focus-within)) :is(.tooltip_ZDdyhE, .tooltip_3_v8qp) {
-    background: var(--glass-surface) !important;
-    background-image: var(--glass-sheen) !important;
-    backdrop-filter: var(--glass-filter) !important;
-    -webkit-backdrop-filter: var(--glass-filter) !important;
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 8px !important;
-    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
-    color: #ffffff !important;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-}
-
-body:has(.hoverButton_n2rO26:is(:hover, :focus-visible), .upload_JyxBSo .actionBar_JyxBSo:is(:hover, :focus-within)) .tooltip_ZDdyhE .tooltipContent_ZDdyhE {
-    background: transparent !important;
-    border-radius: inherit;
-}
-
-body:has(.hoverButton_n2rO26:is(:hover, :focus-visible), .upload_JyxBSo .actionBar_JyxBSo:is(:hover, :focus-within)) .tooltip_ZDdyhE .tooltipContent_ZDdyhE,
-body:has(.hoverButton_n2rO26:is(:hover, :focus-visible), .upload_JyxBSo .actionBar_JyxBSo:is(:hover, :focus-within)) .tooltip_ZDdyhE .tooltipContent_ZDdyhE * {
-    color: #ffffff !important;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
-}
-
-body:has(.hoverButton_n2rO26:is(:hover, :focus-visible), .upload_JyxBSo .actionBar_JyxBSo:is(:hover, :focus-within)) .tooltip_3_v8qp .tooltipPointer_3_v8qp {
-    display: none;
-}
+/* Attachment hover labels retain Discord's native tooltip. Avoid page-wide
+   hover/focus :has() queries: member-list virtualization repeatedly invalidates
+   their ancestor state and causes long main-thread stalls in the live client.
+   Attachment action buttons and reaction hover details keep their glass. */
 
 /* Embed typography: one outer glass card with a clear reading hierarchy.
    Keep Discord's thumbnail grid, fields and playback controls intact. */

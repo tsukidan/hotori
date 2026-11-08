@@ -1,6 +1,10 @@
 {
   "schemaVersion": 1,
   "versions": {
+    "0.9.1": [
+      {"title": "Member-list scrolling", "description": "Removed page-wide attachment-tooltip selectors that caused recurring long main-thread stalls while browsing server members. Member styling and live blur are preserved."},
+      {"title": "Attachment hover labels", "description": "Attachment hover labels now use Discord's native tooltip appearance. Attachment action buttons and reaction hover details retain their glass styling."}
+    ],
     "0.9.0": [
       {"title": "The Great Optimization Update", "description": "Reduced repeated glass-material calculations when Discord mounts chat rows and settings. Live blur, glass profiles, colors, and layout are preserved."},
       {"title": "Lighter unread glow", "description": "Unread dots retain their smooth white pulse using fixed halos and opacity animation, avoiding continuous shadow repainting. Reduced motion remains supported."},
