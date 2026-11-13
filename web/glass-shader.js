@@ -135,6 +135,16 @@
       if (isWordmark && wordmark) wordmark.render(element, width, height, dpr, pad * dpr);
       else { renderer.clear(); renderer.renderGlassPanel(config, box.width, box.height, dpr); }
       layer.context.drawImage(renderer.canvas, 0, 0, width, height, 0, 0, width, height);
+      if (!isWordmark) {
+        // Tint only the glass interior, preserving the transparent outer shadow.
+        layer.context.save();
+        layer.context.beginPath();
+        layer.context.roundRect(pad * dpr, pad * dpr, box.width * dpr, box.height * dpr, config.cornerRadius * dpr);
+        layer.context.clip();
+        layer.context.fillStyle = 'rgba(0, 0, 0, 0.10)';
+        layer.context.fillRect(0, 0, width, height);
+        layer.context.restore();
+      }
     }
     if (layer.image) {
       // Replaced controls cannot host a canvas; use its exact interior as paint.

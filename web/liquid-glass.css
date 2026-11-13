@@ -74,6 +74,10 @@ input[type="color"]::-webkit-color-swatch { border: 0; border-radius: 9px; }
   -webkit-backdrop-filter: blur(var(--glass-surface-blur)) saturate(var(--glass-surface-saturation)) var(--glass-refraction);
 }
 .settings-header, .settings-footer { border-color: #ffffff1a; }
+/* Add a subtle readability tint to liquid glass when the shader is unavailable. */
+.optical-glass:not(.shader-glass):not(.guide-step):not(.settings-page .optical-glass:not(.settings-card):not(.settings-sidebar):not(.settings-glass-action)) {
+  background-image: linear-gradient(#0000001a, #0000001a), radial-gradient(ellipse at var(--glass-light-x, 22%) var(--glass-light-y, 0%), #ffffff04, transparent 65%);
+}
 .settings-header { border-radius: 60px 60px 0 0; }
 .settings-footer { border-radius: 0 0 60px 60px; background: #11141810; }
 .wallpaper-preview { border-radius: 24px; border-color: #ffffff29; }

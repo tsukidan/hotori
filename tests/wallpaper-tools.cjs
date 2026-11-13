@@ -148,7 +148,66 @@ const path = require('node:path');
     const box = await page.locator('#wallpaper-crop-dialog').boundingBox();
     assert(box.x >= 0 && box.x + box.width <= 560 && box.y >= 0 && box.y + box.height <= 560);
     await page.getByRole('button', { name: 'Cancel', exact: true }).click();
+    // Exercise real canvas encoding with source dimensions above the old caps,
+    // fractional crops, zoom, and crops smaller than the old 16px minimum.
+    await page.setViewportSize({ width: 1600, height: 1000 });
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    for (const fixture of [
+      { width: 2559, height: 1439, type: 'image/webp', zoom: 1, expected: [2558, 1439] },
+      { width: 3840, height: 2160, type: 'image/png', zoom: 1, expected: [3840, 2160] },
+      { width: 3840, height: 2160, type: 'image/png', zoom: 2, expected: [1920, 1080] },
+      { width: 17, height: 10, type: 'image/png', zoom: 4, expected: [4, 2] },
+      { width: 600, height: 800, type: 'image/png', zoom: 1, settings: true, expected: [600, 554] },
+    ]) {
+      const source = await page.evaluate(({ width, height, type }) => {
+        const c = document.createElement('canvas'); c.width = width; c.height = height;
+        const ctx = c.getContext('2d'); ctx.fillStyle = '#3264ab'; ctx.fillRect(0, 0, width, height);
+        return c.toDataURL(type);
+      }, fixture);
+      const row = fixture.settings ? settings : main;
+      await row.locator('input[type="file"]').setInputFiles({ name: 'resolution-source', mimeType: fixture.type, buffer: Buffer.from(source.split(',')[1], 'base64') });
+      await page.locator('#wallpaper-crop-dialog').waitFor({ state: 'visible' });
+      await page.getByLabel('Crop zoom', { exact: true }).fill(String(fixture.zoom));
+      await page.getByRole('button', { name: 'Use crop', exact: true }).click();
+      await page.waitForFunction(() => [...document.querySelectorAll('.wallpaper-feedback')].every(el => !el.textContent.includes('Saving')) && !document.querySelector('#wallpaper-crop-dialog'));
+      await page.waitForFunction(() => !document.querySelector('[data-wallpaper="main"] input[type="file"]').disabled);
+      const actual = await page.evaluate(async name => {
+        const uri = fields.find(field => field.name === name).value;
+        const image = new Image(); image.src = window.importedImages[uri]; await image.decode();
+        return [image.naturalWidth, image.naturalHeight];
+      }, fixture.settings ? '--settings-bg' : '--main-bg');
+      assert.deepEqual(actual, fixture.expected, `Original crop resolution: ${JSON.stringify(fixture)}`);
+    }
+    const boundaryFile = Buffer.alloc(10 * 1024 * 1024);
+    file.buffer.copy(boundaryFile);
+    await main.locator('input[type="file"]').setInputFiles({ name: 'exact-limit.png', mimeType: 'image/png', buffer: boundaryFile });
+    await page.locator('#wallpaper-crop-dialog').waitFor({ state: 'visible' });
+    await page.getByRole('button', { name: 'Cancel', exact: true }).click();
+    await page.waitForFunction(() => !document.querySelector('[data-wallpaper="main"] input[type="file"]').disabled);
+    const previous = await page.evaluate(() => ({ uri: fields.find(field => field.name === '--main-bg').value, imports: window.importCount }));
+    await main.locator('input[type="file"]').setInputFiles({ name: 'too-large.png', mimeType: 'image/png', buffer: Buffer.alloc(10 * 1024 * 1024 + 1) });
+    await page.waitForFunction(() => document.querySelector('[data-wallpaper="main"] .wallpaper-feedback').textContent.includes('no larger than 10 MB'));
+    assert.equal(await page.locator('#wallpaper-crop-dialog').count(), 0, 'Oversized source rejected before decoding');
+    // A compressed WebP can fit the source limit while its full-resolution PNG
+    // exceeds it. Fail clearly without importing either image or resizing it.
+    const noisy = await page.evaluate(() => {
+      const c = document.createElement('canvas'); c.width = 3200; c.height = 1800;
+      const ctx = c.getContext('2d'), pixels = ctx.createImageData(c.width, c.height);
+      let state = 12345;
+      for (let i = 0; i < pixels.data.length; i += 4) {
+        for (let channel = 0; channel < 3; channel++) { state = (Math.imul(state, 1664525) + 1013904223) >>> 0; pixels.data[i + channel] = state >>> 24; }
+        pixels.data[i + 3] = 255;
+      }
+      ctx.putImageData(pixels, 0, 0); return c.toDataURL('image/webp', .9);
+    });
+    const noiseBytes = Buffer.from(noisy.split(',')[1], 'base64');
+    assert(noiseBytes.length < 10 * 1024 * 1024);
+    await main.locator('input[type="file"]').setInputFiles({ name: 'detailed.webp', mimeType: 'image/webp', buffer: noiseBytes });
+    await page.locator('#wallpaper-crop-dialog').waitFor({ state: 'visible' });
+    await page.getByRole('button', { name: 'Use crop', exact: true }).click();
+    await page.waitForFunction(() => document.querySelector('[data-wallpaper="main"] .wallpaper-feedback').textContent.includes('full-resolution PNG crop exceeds 10 MB'));
+    assert.deepEqual(await page.evaluate(() => ({ uri: fields.find(field => field.name === '--main-bg').value, imports: window.importCount })), previous, 'Oversized crop preserves the previous wallpaper and imports no files');
     assert.deepEqual(errors, []);
-    console.log('PASS: crop/cancel/zoom, fixed 16:9 main, settings ratio and clipboard paste, Discord-only-main preview, grouped dimming, recommendations, notifications, isolated color autosave, preserved drafts/alpha/originals, and 560px crop layout.');
+    console.log('PASS: source-resolution WebP/4K/zoom/tiny/settings crops, 10 MB source boundary and oversized PNG rejection, crop/cancel/clipboard, previews, recommendations, isolated saves, preserved originals, and 560px layout.');
   } finally { await browser.close(); await new Promise(resolve => server.close(resolve)); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

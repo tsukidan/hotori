@@ -3,6 +3,7 @@
 (() => {
   // Full settings panel in the supplied reference: 1398 x 1293 pixels.
   const settingsAspect = 1398 / 1293;
+  const maxImageBytes = 10 * 1024 * 1024;
   const localPrefix = 'vencord:///themes/hotori-assets/';
   let api, colors = [], paletteSource = '', paletteGeneration = 0;
   let seen = new Set(), views = [], previews = [], cropDialog;
@@ -20,7 +21,7 @@
     return image;
   };
   const readFile = file => new Promise((resolve, reject) => {
-    if (file.size > 10 * 1024 * 1024) return reject(Error('Choose an image smaller than 10 MB.'));
+    if (file.size > maxImageBytes) return reject(Error('Choose an image no larger than 10 MB.'));
     const reader = new FileReader(); reader.onload = () => resolve(reader.result);
     reader.onerror = () => reject(Error('Could not read this image.')); reader.readAsDataURL(file);
   });
@@ -169,10 +170,11 @@
       const cancel = button('Cancel', () => dialog.close()); cancel.autofocus = true;
       const apply = button('Use crop', () => {
         const g = geometry();
-        const scale = Math.min(1, 1920 / g.width, 1920 / g.height, Math.sqrt(2073600 / (g.width * g.height)));
         const output = document.createElement('canvas');
-        output.width = main ? Math.max(16, Math.floor(g.width * scale / 16) * 16) : Math.max(1, Math.round(g.width * scale));
-        output.height = main ? output.width / 16 * 9 : Math.max(1, Math.round(output.width / g.aspect));
+        // Keep the selected source pixels; fractional crop edges round down.
+        // Do not resize to the preview, impose a resolution cap, or upscale.
+        output.width = Math.max(1, Math.floor(g.width));
+        output.height = Math.max(1, Math.floor(g.height));
         output.getContext('2d').drawImage(image, g.sx, g.sy, g.width, g.height, 0, 0, output.width, output.height);
         result = { data: output.toDataURL('image/png'), ratio: g.aspect, zoom: Number(range.value), x, y }; dialog.close();
       }, 'button primary');
@@ -279,6 +281,11 @@
         feedback.textContent = '';
         const result = await crop(decoded, main, meta);
         if (!result) { sync(); return; }
+        // The native importer limits decoded file bytes, not base64 characters.
+        // A full-resolution PNG can be larger than its compressed WebP source.
+        const encoded = result.data.slice(result.data.indexOf(',') + 1);
+        const bytes = encoded.length / 4 * 3 - (encoded.endsWith('==') ? 2 : encoded.endsWith('=') ? 1 : 0);
+        if (bytes > maxImageBytes) throw Error('The full-resolution PNG crop exceeds 10 MB. Choose a smaller crop or a different image.');
         api.setBusy(true); feedback.textContent = 'Saving your crop locally…';
         sourceUri ||= await api.invoke('import_wallpaper', { data: source });
         const uri = await api.invoke('import_wallpaper', { data: result.data });

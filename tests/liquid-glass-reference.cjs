@@ -66,7 +66,21 @@ const { createHash } = require('node:crypto');
           if(name==='layers'){
             const prior=doc.createElement('div');prior.style.cssText='position:absolute;left:160px;top:140px;width:320px;height:180px;z-index:15';prior.dataset.config=JSON.stringify({...HotoriLiquidGlass.DEFAULTS,blurAmount:.25,cornerRadius:40});root.insertBefore(prior,glass);glasses.unshift(prior);
           }
-          const instance=await iframe.contentWindow.HotoriLiquidGlass.LiquidGlass.init({root,glassElements:glasses});
+          // Compare the unchanged reference optics with the same readability
+          // coat, including its contribution behind a subsequent glass panel.
+          const reference = iframe.contentWindow.HotoriLiquidGlass;
+          const prototype = reference.LiquidGlass.prototype;
+          const renderElement = prototype._renderGlassElement;
+          prototype._renderGlassElement = function(child, rootRect, density, dragging, dirty, rendered) {
+            const count = rendered.length;
+            renderElement.call(this, child, rootRect, density, dragging, dirty, rendered);
+            if (rendered.length === count) return;
+            const canvas = this.glassCanvases.get(child), context = canvas.getContext('2d');
+            context.save(); context.beginPath();
+            context.roundRect(reference.SHADOW_PAD * density, reference.SHADOW_PAD * density, child.offsetWidth * density, child.offsetHeight * density, this._getConfig(child).cornerRadius * density);
+            context.clip(); context.fillStyle = 'rgba(0, 0, 0, 0.10)'; context.fillRect(0, 0, canvas.width, canvas.height); context.restore();
+          };
+          const instance=await reference.LiquidGlass.init({root,glassElements:glasses});
           await new Promise(resolve=>setTimeout(resolve,700));
           const actual=probe.querySelector('canvas'),expected=instance.glassCanvases.get(glass);
           const a=actual.getContext('2d').getImageData(0,0,actual.width,actual.height).data,b=expected.getContext('2d').getImageData(0,0,expected.width,expected.height).data;

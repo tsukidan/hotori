@@ -51,7 +51,7 @@ const assert = require('node:assert/strict');
     const uri = match[1], imagePath = path.join(folder, uri.split('vencord:///themes/')[1]);
     assert((await fs.stat(imagePath)).size > 0);
     const dimensions = await page.locator('[data-name="--main-bg"] .wallpaper-preview').evaluate(image => [image.naturalWidth, image.naturalHeight]);
-    assert.equal(dimensions[0] * 9, dimensions[1] * 16);
+    assert.deepEqual(dimensions, [615, 346], 'The 800 × 450 source crop at 1.3× zoom retains whole source pixels without upscaling');
     await page.waitForFunction(() => document.querySelectorAll('.palette-quick .recommended-swatch').length === 2);
     await page.getByRole('tab', { name: 'Messages', exact: true }).click();
     const spacing = page.getByLabel('Message Spacing', { exact: true });
@@ -72,6 +72,6 @@ const assert = require('node:assert/strict');
     assert.equal(await page.getByLabel('Crop zoom', { exact: true }).inputValue(), '1.3');
     await page.getByRole('button', { name: 'Cancel', exact: true }).click();
     assert.deepEqual(errors, []);
-    console.log('PASS: native WebView2 glass crop editor, exact 16:9 PNG import/save, main preview, palette recommendations, actual isolated color save and original-source recropping.');
+    console.log('PASS: native WebView2 glass crop editor, source-resolution PNG import/save, main preview, palette recommendations, actual isolated color save and original-source recropping.');
   } finally { if (browser) await browser.close(); child.kill(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });
