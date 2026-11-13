@@ -161,7 +161,8 @@ const path = require('node:path');
     ]) {
       const source = await page.evaluate(({ width, height, type }) => {
         const c = document.createElement('canvas'); c.width = width; c.height = height;
-        const ctx = c.getContext('2d'); ctx.fillStyle = '#3264ab'; ctx.fillRect(0, 0, width, height);
+        const ctx = c.getContext('2d');
+        for (let x = 0; x < width; x++) { ctx.fillStyle = x % 2 ? '#123456' : '#fedcba'; ctx.fillRect(x, 0, 1, height); }
         return c.toDataURL(type);
       }, fixture);
       const row = fixture.settings ? settings : main;
@@ -177,6 +178,23 @@ const path = require('node:path');
         return [image.naturalWidth, image.naturalHeight];
       }, fixture.settings ? '--settings-bg' : '--main-bg');
       assert.deepEqual(actual, fixture.expected, `Original crop resolution: ${JSON.stringify(fixture)}`);
+      const mismatch = await page.evaluate(async ({ source, fixture }) => {
+        const original = new Image(); original.src = source; await original.decode();
+        const cropped = new Image();
+        cropped.src = window.importedImages[fields.find(field => field.name === (fixture.settings ? '--settings-bg' : '--main-bg')).value];
+        await cropped.decode();
+        const aspect = fixture.settings ? 1398 / 1293 : 16 / 9;
+        const width = Math.min(original.naturalWidth, original.naturalHeight * aspect) / fixture.zoom;
+        const sx = Math.round((original.naturalWidth - width) / 2), sy = Math.round((original.naturalHeight - width / aspect) / 2);
+        const canvas = document.createElement('canvas'); canvas.width = original.naturalWidth; canvas.height = original.naturalHeight;
+        const ctx = canvas.getContext('2d'); ctx.drawImage(original, 0, 0);
+        const expected = ctx.getImageData(sx, sy, cropped.naturalWidth, cropped.naturalHeight).data;
+        canvas.width = cropped.naturalWidth; canvas.height = cropped.naturalHeight;
+        ctx.drawImage(cropped, 0, 0);
+        const actual = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+        return actual.findIndex((value, index) => value !== expected[index]);
+      }, { source, fixture });
+      assert.equal(mismatch, -1, 'Every exported pixel must equal the decoded source pixel, without interpolation');
     }
     const boundaryFile = Buffer.alloc(10 * 1024 * 1024);
     file.buffer.copy(boundaryFile);

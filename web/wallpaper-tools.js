@@ -175,7 +175,12 @@
         // Do not resize to the preview, impose a resolution cap, or upscale.
         output.width = Math.max(1, Math.floor(g.width));
         output.height = Math.max(1, Math.floor(g.height));
-        output.getContext('2d').drawImage(image, g.sx, g.sy, g.width, g.height, 0, 0, output.width, output.height);
+        // Snap to source-pixel boundaries and copy 1:1. Fractional source
+        // rectangles would blend adjacent pixels even with lossless PNG output.
+        const sx = Math.max(0, Math.min(image.naturalWidth - output.width, Math.round(g.sx)));
+        const sy = Math.max(0, Math.min(image.naturalHeight - output.height, Math.round(g.sy)));
+        const context = output.getContext('2d'); context.imageSmoothingEnabled = false;
+        context.drawImage(image, sx, sy, output.width, output.height, 0, 0, output.width, output.height);
         result = { data: output.toDataURL('image/png'), ratio: g.aspect, zoom: Number(range.value), x, y }; dialog.close();
       }, 'button primary');
       const actions = node('div', 'app-update-actions'); actions.append(cancel, apply);
