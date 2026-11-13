@@ -28,13 +28,13 @@
 
 <h2>Get started</h2>
 
-<p><strong>Windows antivirus notice — November 12, 2026:</strong> Windows antivirus flagged a locally compiled Hotori executable as a Trojan or potentially unwanted software. A false positive is suspected, but has not been confirmed by Microsoft; this report does not establish that published release files are affected. If your copy is flagged, keep it quarantined and report the exact detection name, app version, and file SHA-256 in a <a href="https://github.com/tsukidan/hotori/issues">GitHub issue</a>. Please do not disable antivirus protection or add exclusions. Suspected false positives can be <a href="https://www.microsoft.com/en-us/wdsi/filesubmission/?persona=HomeUser">submitted to Microsoft for analysis</a>.</p>
-
 <p><strong>1.</strong> Install <a href="https://vencord.dev/download/">Vencord</a> for Discord.</p>
 <p><strong>2.</strong> Download <code>hotori.exe</code> from <a href="https://github.com/tsukidan/hotori/releases">Releases</a> and click <strong>Install</strong>.</p>
 <p><strong>3.</strong> Enable Hotori in <strong>Vencord → Themes</strong>, then open <strong>Customize</strong>.</p>
 
 <p><sub>Windows · Vencord required · Only the EXE is needed</sub></p>
+
+<p><a href="docs/installation-guide.md">Installation guide and Windows antivirus recovery</a></p>
 
 <img src="assets/readme-divider.svg" alt="" width="560">
 

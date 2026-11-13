@@ -4,7 +4,7 @@
     {
       "version": "1.7.10",
       "publishedAt": null,
-      "body": "## Fixed\n\n- Corrected the dock button and Installation Guide label to **App Changelog**."
+      "body": "## Windows antivirus warning\n\nWindows may flag Hotori as a Trojan and quarantine or remove hotori.exe. We believe this is a false positive; Microsoft has not confirmed that assessment. A local build has been affected; we have not established which published releases are affected.\n\nIf Hotori disappears, open **Windows Security → Virus & threat protection → Protection history** and check whether the affected file is your Hotori download. Only if you have verified its source and are satisfied it is safe, expand that specific detection and choose **Actions → Restore** or **Allow on device**, whichever Windows offers. Download hotori.exe again from this repository's Releases page if the file was removed. Do not disable antivirus protection or exclude an entire folder.\n\nIf you are unsure, leave the file quarantined and report the detection name and app version in a GitHub issue. Recovery instructions are also available in [the online guide](https://github.com/tsukidan/hotori/blob/main/docs/installation-guide.md), even when the app cannot open.\n\n## Fixed\n\n- Corrected the dock button and Installation Guide label to **App Changelog**."
     },
     {
       "version": "1.7.9",
