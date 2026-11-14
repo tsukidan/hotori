@@ -135,16 +135,22 @@
       const width = Math.min(image.naturalWidth, image.naturalHeight * aspect) / zoom, height = width / aspect;
       return { sx: (image.naturalWidth - width) * x, sy: (image.naturalHeight - height) * y, width, height, aspect };
     };
-    const draw = () => {
-      const g = geometry(); stage.width = Math.round(Math.min(960, 540 * g.aspect)); stage.height = Math.round(stage.width / g.aspect);
+    let drawFrame = 0;
+    const drawPreview = () => {
+      const g = geometry(), width = Math.round(Math.min(960, 540 * g.aspect)), height = Math.round(width / g.aspect);
+      if (stage.width !== width || stage.height !== height) { stage.width = width; stage.height = height; }
       stage.style.aspectRatio = String(g.aspect);
-      const context = stage.getContext('2d'); context.drawImage(image, g.sx, g.sy, g.width, g.height, 0, 0, stage.width, stage.height);
+      const context = stage.getContext('2d'); context.clearRect(0, 0, stage.width, stage.height);
+      context.drawImage(image, g.sx, g.sy, g.width, g.height, 0, 0, stage.width, stage.height);
       context.strokeStyle = '#ffffff55'; context.lineWidth = 1;
       for (const third of [1 / 3, 2 / 3]) { context.beginPath(); context.moveTo(stage.width * third, 0); context.lineTo(stage.width * third, stage.height); context.moveTo(0, stage.height * third); context.lineTo(stage.width, stage.height * third); context.stroke(); }
-      range.setAttribute('aria-valuetext', `${Math.round(Number(range.value) * 100)}%`);
-      zoomValue.textContent = `${Math.round(Number(range.value) * 100)}%`;
-      zoomSurface.style.setProperty('--range-progress', `${(Number(range.value) - 1) / 3 * 100}%`);
+      const value = `${Math.round(Number(range.value) * 100)}%`, progress = `${(Number(range.value) - 1) / 3 * 100}%`;
+      if (range.getAttribute('aria-valuetext') !== value) range.setAttribute('aria-valuetext', value);
+      if (zoomValue.textContent !== value) zoomValue.textContent = value;
+      if (zoomSurface.style.getPropertyValue('--range-progress') !== progress) zoomSurface.style.setProperty('--range-progress', progress);
+      document.dispatchEvent(new Event('hotori:canvas-change'));
     };
+    const draw = () => { if (!drawFrame) drawFrame = requestAnimationFrame(() => { drawFrame = 0; if (dialog.open) drawPreview(); }); };
     stage.addEventListener('pointerdown', event => { drag = { x: event.clientX, y: event.clientY }; stage.setPointerCapture(event.pointerId); });
     stage.addEventListener('pointermove', event => {
       if (!drag) return;
@@ -155,7 +161,7 @@
       drag = { x: event.clientX, y: event.clientY }; draw();
     });
     for (const event of ['pointerup', 'pointercancel', 'lostpointercapture']) stage.addEventListener(event, () => { drag = null; });
-    stage.addEventListener('wheel', event => { event.preventDefault(); range.value = String(Math.max(1, Math.min(4, Number(range.value) - Math.sign(event.deltaY) * .1))); draw(); }, { passive: false });
+    stage.addEventListener('wheel', event => { if (event.ctrlKey) return; event.preventDefault(); range.value = String(Math.max(1, Math.min(4, Number(range.value) - Math.sign(event.deltaY) * .1))); draw(); }, { passive: false });
     stage.addEventListener('keydown', event => {
       const delta = event.shiftKey ? .05 : .01;
       if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) return;
@@ -183,8 +189,8 @@
       }, 'button primary');
       const actions = node('div', 'app-update-actions'); actions.append(cancel, apply);
       dialog.append(title, stage, instructions, controls, actions);
-      dialog.addEventListener('close', () => { dialog.remove(); cropDialog = null; resolve(result); }, { once: true });
-      document.body.append(dialog); draw(); dialog.showModal();
+      dialog.addEventListener('close', () => { if (drawFrame) cancelAnimationFrame(drawFrame); dialog.remove(); cropDialog = null; resolve(result); }, { once: true });
+      document.body.append(dialog); drawPreview(); dialog.showModal();
     });
   }
 
@@ -284,18 +290,19 @@
     const tint = !background.includes('var(') && CSS.supports('color', background) ? background : get(preset, preset === '--glass-light' ? 'rgba(255,255,255,.10)' : 'rgba(12,16,24,.24)');
     const blur = Number.parseFloat(get('--blur-val', '24'));
     for (const preview of previews) {
-      preview.dataset.previewGlass = mode;
-      preview.style.setProperty('--preview-acrylic-blur', `${Number.isFinite(blur) && blur >= 0 ? blur : 24}px`);
-      preview.style.setProperty('--preview-glass-tint', tint);
-      preview.style.setProperty('--preview-glass-surface', mode === 'none' ? 'transparent' : mode === 'liquid' ? `color-mix(in srgb, ${tint} 65%, transparent)` : tint);
-      preview.style.setProperty('--preview-glass-subtle', mode === 'none' ? 'transparent' : `color-mix(in srgb, ${tint} ${mode === 'liquid' ? 30 : 50}%, transparent)`);
-      preview.style.setProperty('--preview-accent', get('--main-color', '#5865f2'));
-      preview.style.setProperty('--preview-mention', get('--mention-glass-tint', 'rgba(88,101,242,.2)'));
-      preview.style.setProperty('--preview-mention-hover', get('--mention-glass-hover', get('--mention-glass-tint', 'rgba(88,101,242,.3)')));
-      preview.style.setProperty('--preview-mention-accent', get('--mention-glass-accent', '#aab4ff'));
+      if (preview.dataset.previewGlass !== mode) preview.dataset.previewGlass = mode;
+      const set = (name, value) => { if (preview.style.getPropertyValue(name) !== value) preview.style.setProperty(name, value); };
+      set('--preview-acrylic-blur', `${Number.isFinite(blur) && blur >= 0 ? blur : 24}px`);
+      set('--preview-glass-tint', tint);
+      set('--preview-glass-surface', mode === 'none' ? 'transparent' : mode === 'liquid' ? `color-mix(in srgb, ${tint} 65%, transparent)` : tint);
+      set('--preview-glass-subtle', mode === 'none' ? 'transparent' : `color-mix(in srgb, ${tint} ${mode === 'liquid' ? 30 : 50}%, transparent)`);
+      set('--preview-accent', get('--main-color', '#5865f2'));
+      set('--preview-mention', get('--mention-glass-tint', 'rgba(88,101,242,.2)'));
+      set('--preview-mention-hover', get('--mention-glass-hover', get('--mention-glass-tint', 'rgba(88,101,242,.3)')));
+      set('--preview-mention-accent', get('--mention-glass-accent', '#aab4ff'));
       const settings = preview.classList.contains('settings-discord-preview');
-      preview.style.setProperty('--preview-dim-top', get(settings ? '--settings-bg-overlay-top' : '--bg-overlay-top', 'rgba(0,0,0,.25)'));
-      preview.style.setProperty('--preview-dim-bottom', get(settings ? '--settings-bg-overlay-bottom' : '--bg-overlay-bottom', 'rgba(0,0,0,.5)'));
+      set('--preview-dim-top', get(settings ? '--settings-bg-overlay-top' : '--bg-overlay-top', 'rgba(0,0,0,.25)'));
+      set('--preview-dim-bottom', get(settings ? '--settings-bg-overlay-bottom' : '--bg-overlay-bottom', 'rgba(0,0,0,.5)'));
     }
   }
 

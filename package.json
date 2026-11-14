@@ -2,6 +2,8 @@
   "name": "hotori-ui-tests",
   "private": true,
   "scripts": {
+    "test:performance": "node tests/performance.cjs --label current --assert-idle",
+    "test:ui-efficiency": "node tests/ui-efficiency.cjs",
     "test:window": "node tests/window-preferences.cjs",
     "test:native": "node tests/native-smoke.cjs",
     "test:dock": "node tests/dock-smoke.cjs",

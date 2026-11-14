@@ -118,8 +118,11 @@ input[type="color"]::-webkit-color-swatch { border: 0; border-radius: 9px; }
   border-radius: 0; z-index: -1; pointer-events: none;
 }
 input.shader-glass, select.shader-glass, textarea.shader-glass {
-  background: var(--shader-surface-image) center / 100% 100% no-repeat !important;
+  background: transparent !important;
 }
+.glass-image-host { position: relative; isolation: isolate; }
+.glass-image-host > .glass-image-surface { display: none; position: absolute; z-index: -1; pointer-events: none; }
+.glass-image-host:has(> .shader-glass) > .glass-image-surface { display: block; }
 .shader-glass.button:hover:not(:disabled), .shader-glass.category-tab:hover { border-color: transparent; }
 .settings-categories { padding: 12px; margin: -12px; }
 .settings-categories .category-tab {

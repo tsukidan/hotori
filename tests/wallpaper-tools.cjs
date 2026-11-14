@@ -82,6 +82,8 @@ const path = require('node:path');
     await main.locator('input[type="file"]').setInputFiles(file);
     await page.locator('#wallpaper-crop-dialog').waitFor({ state: 'visible' });
     assert.equal(await page.locator('#wallpaper-crop-dialog select').count(), 0, 'Main crop has no ratio menu');
+    await page.locator('.crop-stage').dispatchEvent('wheel', { deltaY: -100, ctrlKey: true });
+    assert.equal(await page.getByLabel('Crop zoom', { exact: true }).inputValue(), '1', 'Ctrl wheel is reserved for app zoom, not crop zoom');
     const mainCrop = await page.locator('.crop-stage').boundingBox();
     assert(Math.abs(mainCrop.width / mainCrop.height - 16 / 9) < .005);
     await page.locator('#wallpaper-crop-dialog').screenshot({ path: path.join(root, 'target/qa/crop-main-fixed.png') });

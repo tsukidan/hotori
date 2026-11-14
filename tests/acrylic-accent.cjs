@@ -73,15 +73,15 @@ const path = require('node:path');
     assert.equal(await page.evaluate(widths => window.materialCalls.filter(call => call.width > 150 && call.height < 400 && !widths.some(width => Math.abs(width - call.width) < 1)).length, actionWidths), 0, 'Only the three settings actions use glass among inner controls');
     await page.keyboard.press('Escape');
     for (const action of ['#back', '#reset-defaults', '#save-category']) {
-      assert(await page.locator(action).evaluate(el => el.style.getPropertyValue('--glass-refraction').startsWith('url(')), 'Settings actions retain compositor refraction');
+      assert(await page.locator(action).evaluate(el => el.classList.contains('shader-glass') && el.querySelector('.glass-render-layer')?.width > 0), 'Settings actions use the active GPU glass material');
     }
     await page.locator('#reset-defaults').click();
     await page.waitForFunction(() => document.querySelector('#reset-dialog').classList.contains('shader-glass'));
     await page.screenshot({ path: path.join(root, 'target/qa/reset-confirm-glass.png') });
     await page.locator('#reset-cancel').click();
     assert(await page.evaluate(() => window.acrylicFilters.length > 5 && window.acrylicFilters.every(value => value === 'blur(24px)')), 'Acrylic uses a real fixed 24px blur');
-    assert.equal(await page.locator('select').evaluate(el => el.style.getPropertyValue('--glass-refraction')), '', 'Fallback must not generate an SVG lens for acrylic');
-    assert(await page.locator('.settings-card').evaluate(el => el.style.getPropertyValue('--glass-refraction').startsWith('url(')), 'Outer panes retain compositor lens fallback');
+    assert.equal(await page.locator('#settings-page select').evaluate(el => el.style.getPropertyValue('--glass-refraction')), '', 'Fallback must not generate an SVG lens for acrylic');
+    assert(await page.locator('.settings-card').evaluate(el => el.classList.contains('shader-glass') && el.querySelector('.glass-render-layer')?.width > 0), 'Outer panes use the active GPU glass material');
     assert.equal(await page.locator('.category-tab').evaluate(el => getComputedStyle(el).getPropertyValue('--glass-surface-blur').trim()), '24px');
     assert.equal(await page.locator('html').evaluate(el => getComputedStyle(el).color), 'rgb(245, 246, 247)');
     await page.evaluate(async () => {
@@ -103,7 +103,12 @@ const path = require('node:path');
     await session.send('Emulation.setDeviceMetricsOverride', { width: 1600, height: 900, deviceScaleFactor: 2, mobile: false });
     await page.evaluate(() => window.dispatchEvent(new Event('resize')));
     await page.waitForFunction(() => devicePixelRatio === 2 && window.acrylicFilters.includes('blur(48px)'));
+    await page.evaluate(() => document.querySelector('canvas[data-glass-exclude]').getContext('webgl').getExtension('WEBGL_lose_context').loseContext());
+    await page.waitForFunction(() => !document.querySelector('.shader-glass') &&
+      ['#back', '#reset-defaults', '#save-category', '.settings-card', '.settings-sidebar'].every(selector =>
+        document.querySelector(selector).style.getPropertyValue('--glass-refraction').startsWith('url(')));
+    assert.equal(await page.locator('#settings-page select').evaluate(el => el.style.getPropertyValue('--glass-refraction')), '', 'Context-loss fallback keeps acrylic controls free of SVG refraction');
     assert.deepEqual(errors, []);
-    console.log('PASS: both outer panes retain liquid glass; inner controls, navigation options and dropdowns use real 24 CSS-pixel acrylic at DPR 1 and 2; wallpaper accents, neutral text and grayscale fallback remain correct.');
+    console.log('PASS: GPU glass panes/actions, real 24px acrylic at DPR 1/2, wallpaper accents, and deferred SVG fallback activation after context loss.');
   } finally { await browser.close(); await new Promise(resolve => server.close(resolve)); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

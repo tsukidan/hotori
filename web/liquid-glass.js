@@ -16,6 +16,8 @@
   const defs = document.createElementNS(ns, 'defs'); svg.append(defs);
   document.body.append(svg);
   let serial = 0, frame = 0, resizeTimer;
+  const shaderActive = () => document.documentElement.dataset.glassRenderer === 'reference-liquidglass';
+  const setStyle = (element, name, value) => { if (element.style.getPropertyValue(name) !== value) element.style.setProperty(name, value); };
 
   const smooth = value => value * value * (3 - 2 * value);
   function opticalMap(width, height, radius, panel) {
@@ -87,10 +89,15 @@
       surfaces.add(surface); surface.classList.add('optical-glass'); resize.observe(surface);
     }
     const used = new Set();
+    const compositorOnly = !shaderActive();
     for (const surface of surfaces) {
       if (!surface.isConnected) { resize.unobserve(surface); surfaces.delete(surface); continue; }
       const page = surface.closest('.page');
       if (page?.inert || !surface.checkVisibility({ checkVisibilityCSS: true })) continue;
+      // The GPU adapter owns these materials. Building SVG displacement maps
+      // at the same time duplicates work, especially during settings entry and
+      // window resizing. Context-loss state changes schedule the fallback below.
+      if (!compositorOnly || surface.classList.contains('shader-glass')) continue;
       if (surface.matches('.guide-step, .acrylic-select') || (surface.closest('#settings-page') && !surface.matches('.settings-card, .settings-sidebar, .settings-glass-action'))) {
         for (const property of ['--glass-refraction', '--glass-sheen-image', '--glass-picker-refraction', '--glass-picker-sheen-image']) surface.style.removeProperty(property);
         continue;
@@ -102,13 +109,13 @@
       const panel = surface.matches('.glass, .dock-surface, .submenu');
       const optics = opticalMap(width, height, radius, panel);
       used.add(optics.id);
-      surface.style.setProperty('--glass-refraction', `url("#${optics.id}")`);
-      surface.style.setProperty('--glass-sheen-image', `url("${optics.sheen}")`);
+      setStyle(surface, '--glass-refraction', `url("#${optics.id}")`);
+      setStyle(surface, '--glass-sheen-image', `url("${optics.sheen}")`);
       if (surface.tagName === 'SELECT' && CSS.supports('appearance', 'base-select')) {
         const picker = opticalMap(width, surface.options.length * 40 + 14, 30, true);
         used.add(picker.id);
-        surface.style.setProperty('--glass-picker-refraction', `url("#${picker.id}")`);
-        surface.style.setProperty('--glass-picker-sheen-image', `url("${picker.sheen}")`);
+        setStyle(surface, '--glass-picker-refraction', `url("#${picker.id}")`);
+        setStyle(surface, '--glass-picker-sheen-image', `url("${picker.sheen}")`);
       }
     }
     // Keep active maps, and bound cached maps left behind by resizing or rerenders.
@@ -117,32 +124,39 @@
       value.filter.remove(); cache.delete(key);
       if (cache.size <= 96) break;
     }
-    if (!document.querySelector('.shader-glass')) document.documentElement.dataset.glassRenderer = supported ? 'backdrop-refraction' : 'translucent-fallback';
+    if (!shaderActive() && !document.querySelector('.shader-glass')) {
+      const mode = supported ? 'backdrop-refraction' : 'translucent-fallback';
+      if (document.documentElement.dataset.glassRenderer !== mode) document.documentElement.dataset.glassRenderer = mode;
+    }
   }
   function schedule() { if (!frame) frame = requestAnimationFrame(update); }
   const resize = new ResizeObserver(() => {
     clearTimeout(resizeTimer); resizeTimer = setTimeout(schedule, 80);
   });
-  const mutations = new MutationObserver(schedule);
+  const mutations = new MutationObserver(records => {
+    if (records.some(record => record.type !== 'childList' ||
+      [...record.addedNodes, ...record.removedNodes].some(node => node.nodeType !== Node.ELEMENT_NODE || !node.matches('.glass-render-layer, .glass-optics-definitions')))) schedule();
+  });
   mutations.observe(document.getElementById('app'), {
     subtree: true, childList: true, attributes: true, attributeFilter: ['open', 'hidden', 'inert', 'data-page'],
   });
   document.querySelectorAll('dialog').forEach(dialog => mutations.observe(dialog, { attributes: true, attributeFilter: ['open'] }));
+  mutations.observe(document.documentElement, { attributes: true, attributeFilter: ['data-glass-renderer'] });
   document.addEventListener('transitionend', schedule, true);
   document.addEventListener('toggle', schedule, true);
   document.addEventListener('close', schedule, true);
   // The material responds to interaction without a perpetual render loop.
   let hoverFrame = 0, hoverTarget, pointer;
   document.addEventListener('pointermove', event => {
-    if (reduceMotion.matches || event.pointerType === 'touch') return;
+    if (shaderActive() || reduceMotion.matches || event.pointerType === 'touch') return;
     hoverTarget = event.target.closest('.optical-glass'); pointer = { x: event.clientX, y: event.clientY };
     if (hoverFrame || !hoverTarget) return;
     hoverFrame = requestAnimationFrame(() => {
       hoverFrame = 0;
       if (!hoverTarget) return;
       const box = hoverTarget.getBoundingClientRect();
-      hoverTarget.style.setProperty('--glass-light-x', `${((pointer.x - box.x) / box.width * 100).toFixed(1)}%`);
-      hoverTarget.style.setProperty('--glass-light-y', `${((pointer.y - box.y) / box.height * 100).toFixed(1)}%`);
+      setStyle(hoverTarget, '--glass-light-x', `${((pointer.x - box.x) / box.width * 100).toFixed(1)}%`);
+      setStyle(hoverTarget, '--glass-light-y', `${((pointer.y - box.y) / box.height * 100).toFixed(1)}%`);
     });
   }, { passive: true });
   schedule();

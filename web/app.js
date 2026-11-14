@@ -17,6 +17,11 @@ let categoryGroups = new Map();
 let selectedCategory = "Glass Appearance";
 let appBackgroundSelection, appBackgroundRequest = 0, appBackgroundLoaded = false, appBackgroundAttempt = 0;
 let appBackgroundObjectURL;
+let refreshInFlight, refreshQueued = false;
+const setValue = (node, property, value) => { if (node[property] !== value) node[property] = value; };
+const setText = (node, value) => setValue(node, 'textContent', value);
+const setData = (node, name, value) => { value = String(value); if (node.dataset[name] !== value) node.dataset[name] = value; };
+const setAttribute = (node, name, value) => { value = String(value); if (node.getAttribute(name) !== value) node.setAttribute(name, value); };
 const categoryDescriptions = {
   "Glass Appearance": "Choose your glass style, then fine-tune its blur, intensity, and tint.",
   "Wallpapers": "Set the scene with your own backgrounds and adjust their dimming.",
@@ -44,35 +49,45 @@ function message(id, text, error = false, symbol = "info", detailSymbol = "") {
 }
 
 function updateButtons() {
-  $("app").setAttribute("aria-busy", String(busy));
-  $("install").disabled = busy || !status.ready || status.installed;
-  $("install").querySelector(".button-label").textContent = busy ? "Working…" : status.installed ? "Installed" : "Install";
-  $("theme-update-notice").disabled = busy || !status.installed;
-  if (themeUpdate?.available) $("theme-update-label").textContent = updatingTheme ? "Updating…" : `v${themeUpdate.version} available`;
-  $("uninstall").disabled = busy || !status.installed;
-  $("customize").disabled = busy || !status.installed;
-  $("folder").disabled = busy || !invoke;
-  $("update-app").disabled = busy || checkingApp || !invoke;
-  $("update-app").querySelector(".button-label").textContent = checkingApp ? "Checking…" : "Update Hotori";
-  $("app-update-cancel").disabled = installingApp;
-  $("app-update-install").disabled = installingApp;
-  $("back").disabled = busy;
-  $("reset-defaults").disabled = busy || !invoke;
+  setAttribute($("app"), "aria-busy", busy);
+  setValue($("install"), 'disabled', busy || !status.ready || status.installed);
+  setText($("install").querySelector(".button-label"), busy ? "Working…" : status.installed ? "Installed" : "Install");
+  setValue($("theme-update-notice"), 'disabled', busy || !status.installed);
+  if (themeUpdate?.available) setText($("theme-update-label"), updatingTheme ? "Updating…" : `v${themeUpdate.version} available`);
+  setValue($("uninstall"), 'disabled', busy || !status.installed);
+  setValue($("customize"), 'disabled', busy || !status.installed);
+  setValue($("folder"), 'disabled', busy || !invoke);
+  setValue($("update-app"), 'disabled', busy || checkingApp || !invoke);
+  setText($("update-app").querySelector(".button-label"), checkingApp ? "Checking…" : "Update Hotori");
+  setValue($("app-update-cancel"), 'disabled', installingApp);
+  setValue($("app-update-install"), 'disabled', installingApp);
+  setValue($("back"), 'disabled', busy);
+  setValue($("reset-defaults"), 'disabled', busy || !invoke);
   updateCategoryButtons();
 }
 
 async function refresh() {
   if (!invoke || busy) return;
-  try {
-    status = await invoke("get_status");
-    await syncAppBackground(status.installed ? status.main_background : "");
-    renderThemeVersion();
-    document.querySelector(".vencord-notice").hidden = status.ready;
-    updateButtons();
-    if (status.installed && !checkingTheme && (themeCheckedFor !== status.theme_version || Date.now() - themeCheckedAt >= 300000)) {
-      checkForThemeUpdate();
-    }
-  } catch (error) { message("home-status", String(error), true); }
+  if (refreshInFlight) { refreshQueued = true; return refreshInFlight; }
+  refreshInFlight = (async () => {
+    do {
+      refreshQueued = false;
+      try {
+        const nextStatus = await invoke("get_status");
+        if (busy) continue;
+        status = nextStatus;
+        await syncAppBackground(status.installed ? status.main_background : "");
+        if (busy) continue;
+        renderThemeVersion();
+        setValue(document.querySelector(".vencord-notice"), 'hidden', status.ready);
+        updateButtons();
+        if (status.installed && !checkingTheme && (themeCheckedFor !== status.theme_version || Date.now() - themeCheckedAt >= 300000)) {
+          checkForThemeUpdate();
+        }
+      } catch (error) { message("home-status", String(error), true); }
+    } while (refreshQueued && !busy);
+  })().finally(() => { refreshInFlight = undefined; });
+  return refreshInFlight;
 }
 
 async function syncAppBackground(value) {
@@ -121,16 +136,16 @@ async function syncAppBackground(value) {
 }
 
 function renderThemeVersion() {
-  $("theme-version").hidden = !status.installed;
+  setValue($("theme-version"), 'hidden', !status.installed);
   const version = status.theme_version ? `v${status.theme_version}` : "Version unavailable";
   if ($("theme-version-value").textContent !== version) $("theme-version-value").textContent = version;
   renderThemeChangelog(status.theme_version);
   const available = status.installed && themeUpdate?.available && themeUpdate.installedVersion === status.theme_version;
-  $("theme-update-notice").hidden = !available;
+  setValue($("theme-update-notice"), 'hidden', !available);
   if (available) {
     const label = `v${themeUpdate.version} available`;
     if ($("theme-update-label").textContent !== label) $("theme-update-label").textContent = label;
-    $("theme-update-notice").title = `Update your theme to v${themeUpdate.version}. Your customization settings will be preserved.`;
+    setValue($("theme-update-notice"), 'title', `Update your theme to v${themeUpdate.version}. Your customization settings will be preserved.`);
   }
 }
 
@@ -261,6 +276,7 @@ function initializeDock() {
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   let pointerY = null;
   let frame = 0;
+  const write = (item, name, value) => { if (item.style.getPropertyValue(name) !== value) item.style.setProperty(name, value); };
   const reset = () => {
     items.forEach(item => {
       item.style.removeProperty("--dock-scale");
@@ -280,9 +296,9 @@ function initializeDock() {
       const distance = centers[index] - pointerY;
       const influence = Math.max(0, 1 - Math.abs(distance) / 115);
       const weight = influence * influence;
-      item.style.setProperty("--dock-scale", (1 + weight * .42).toFixed(3));
-      item.style.setProperty("--dock-shift", `${(-weight * 10).toFixed(2)}px`);
-      item.style.setProperty("--dock-spread", `${(Math.sign(distance) * influence * 8).toFixed(2)}px`);
+      write(item, "--dock-scale", (1 + weight * .42).toFixed(3));
+      write(item, "--dock-shift", `${(-weight * 10).toFixed(2)}px`);
+      write(item, "--dock-spread", `${(Math.sign(distance) * influence * 8).toFixed(2)}px`);
     });
   };
   const schedule = () => { if (!frame) frame = requestAnimationFrame(paint); };
@@ -335,17 +351,17 @@ function updateCategoryButtons() {
   for (const [category, group] of categoryGroups) {
     const dirty = fields.some(field => categoryFor(field) === category && field.value !== savedValues.get(field.name));
     group.dirty = dirty;
-    group.note.textContent = dirty ? "Unsaved changes" : group.saved ? "Changes saved" : "No changes";
-    group.tab.dataset.dirty = String(dirty);
+    setText(group.note, dirty ? "Unsaved changes" : group.saved ? "Changes saved" : "No changes");
+    setData(group.tab, 'dirty', dirty);
   }
   const group = categoryGroups.get(selectedCategory);
   const save = $("save-category");
-  save.disabled = busy || !invoke || !group?.dirty;
-  save.dataset.category = selectedCategory;
-  save.dataset.dirty = String(!!group?.dirty);
-  save.dataset.state = group?.saving ? "saving" : group?.dirty ? "dirty" : group?.saved ? "saved" : "unchanged";
-  save.setAttribute("aria-label", `Save ${selectedCategory}`);
-  save.querySelector(".button-label").textContent = group?.saving ? "Saving…" : group?.saved && !group?.dirty ? "Saved" : "Save changes";
+  setValue(save, 'disabled', busy || !invoke || !group?.dirty);
+  setData(save, 'category', selectedCategory);
+  setData(save, 'dirty', !!group?.dirty);
+  setData(save, 'state', group?.saving ? "saving" : group?.dirty ? "dirty" : group?.saved ? "saved" : "unchanged");
+  setAttribute(save, "aria-label", `Save ${selectedCategory}`);
+  setText(save.querySelector(".button-label"), group?.saving ? "Saving…" : group?.saved && !group?.dirty ? "Saved" : "Save changes");
 }
 function selectCategory(category) {
   const previous = categoryGroups.get(selectedCategory);
@@ -837,13 +853,14 @@ async function initialize() {
 // Delegation also covers tabs replaced after a save or reset.
 function initializeCategoryMotion() {
   const list = $("settings-categories");
-  let pointer = null, frame = 0;
+  let pointer = null, frame = 0, nearPointer = null;
   function update() {
     frame = 0;
     const target = pointer && document.elementFromPoint(pointer.x, pointer.y)?.closest('.category-tab');
-    for (const tab of list.querySelectorAll('.category-tab')) {
-      tab.classList.toggle('category-near-pointer', target === tab);
-    }
+    if (target === nearPointer) return;
+    nearPointer?.classList.remove('category-near-pointer');
+    nearPointer = target;
+    nearPointer?.classList.add('category-near-pointer');
   }
   const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
   list.addEventListener('pointermove', event => {
