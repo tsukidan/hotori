@@ -119,22 +119,19 @@
     const stage = node('canvas', 'crop-stage'); stage.tabIndex = 0;
     stage.setAttribute('aria-label', 'Crop preview. Drag to position; arrow keys also move the image.');
     const instructions = node('p', 'crop-hint', 'Drag to position. Use the slider or mouse wheel to zoom.');
-    const ratioLabel = node('label', 'crop-control', 'Aspect ratio');
-    const ratio = node('select'); ratio.setAttribute('aria-label', 'Crop aspect ratio');
     const aspect = main ? 16 / 9 : settingsAspect;
-    const option = node('option', '', main ? '16:9' : 'Settings panel · 466:431');
-    option.value = String(aspect); ratio.append(option);
-    ratio.disabled = true; ratio.value = String(aspect);
-    ratioLabel.append(ratio);
-    const zoomLabel = node('label', 'crop-control', 'Zoom');
+    const zoomLabel = node('label', 'crop-control');
+    const zoomHeading = node('span', 'crop-control-heading');
+    const zoomValue = node('output', 'crop-zoom-value', '100%');
+    zoomHeading.append(node('span', '', 'Zoom'), zoomValue); zoomLabel.append(zoomHeading);
     const range = node('input'); range.type = 'range'; range.min = '1'; range.max = '4'; range.step = '.01'; range.value = String(initial?.zoom || 1);
     range.setAttribute('aria-label', 'Crop zoom');
     const zoomSurface = node('div', 'range-surface'), zoomTrack = node('div', 'range-track'); zoomTrack.setAttribute('aria-hidden', 'true'); zoomTrack.append(node('div', 'range-fill')); zoomSurface.append(zoomTrack, range); zoomLabel.append(zoomSurface);
-    const controls = node('div', 'crop-controls'); controls.append(ratioLabel, zoomLabel);
+    const controls = node('div', 'crop-controls'); controls.append(zoomLabel);
     const position = value => Number.isFinite(Number(value)) ? Math.max(0, Math.min(1, Number(value))) : .5;
     let x = position(initial?.x ?? .5), y = position(initial?.y ?? .5), drag;
     const geometry = () => {
-      const aspect = Number(ratio.value), zoom = Number(range.value);
+      const zoom = Number(range.value);
       const width = Math.min(image.naturalWidth, image.naturalHeight * aspect) / zoom, height = width / aspect;
       return { sx: (image.naturalWidth - width) * x, sy: (image.naturalHeight - height) * y, width, height, aspect };
     };
@@ -145,6 +142,7 @@
       context.strokeStyle = '#ffffff55'; context.lineWidth = 1;
       for (const third of [1 / 3, 2 / 3]) { context.beginPath(); context.moveTo(stage.width * third, 0); context.lineTo(stage.width * third, stage.height); context.moveTo(0, stage.height * third); context.lineTo(stage.width, stage.height * third); context.stroke(); }
       range.setAttribute('aria-valuetext', `${Math.round(Number(range.value) * 100)}%`);
+      zoomValue.textContent = `${Math.round(Number(range.value) * 100)}%`;
       zoomSurface.style.setProperty('--range-progress', `${(Number(range.value) - 1) / 3 * 100}%`);
     };
     stage.addEventListener('pointerdown', event => { drag = { x: event.clientX, y: event.clientY }; stage.setPointerCapture(event.pointerId); });
@@ -164,7 +162,7 @@
       event.preventDefault(); x = Math.max(0, Math.min(1, x + (event.key === 'ArrowLeft' ? -delta : event.key === 'ArrowRight' ? delta : 0)));
       y = Math.max(0, Math.min(1, y + (event.key === 'ArrowUp' ? -delta : event.key === 'ArrowDown' ? delta : 0))); draw();
     });
-    range.addEventListener('input', draw); ratio.addEventListener('change', () => { x = y = .5; draw(); });
+    range.addEventListener('input', draw);
     return new Promise(resolve => {
       let result = null;
       const cancel = button('Cancel', () => dialog.close()); cancel.autofocus = true;
@@ -191,7 +189,7 @@
   }
 
   function discordPreview(root, image, main) {
-    if (!main) { root.append(image); return null; }
+    if (!main) return settingsPreview(root, image);
     const stage = node('div', 'wallpaper-discord-preview'); stage.hidden = true;
     stage.setAttribute('role', 'img'); stage.setAttribute('aria-label', 'Illustrative Discord preview with your cropped Main Background');
     image.alt = ''; stage.append(image, node('div', 'preview-dimming'));
@@ -231,16 +229,73 @@
     const userTools = node('span', 'preview-user-tools'); userTools.append(api.icon('mic'), api.icon('headphones'), api.icon('gear')); profile.append(userLabel, userTools);
     ui.append(topbar, servers, channels, chat, profile); stage.append(ui); root.append(stage); previews.push(stage); return stage;
   }
+
+  // A structural illustration only: no account details, avatars, or other
+  // content from the reference screenshot are copied into this preview.
+  function settingsPreview(root, image) {
+    const stage = node('div', 'settings-discord-preview'); stage.hidden = true;
+    stage.setAttribute('role', 'img'); stage.setAttribute('aria-label', 'Generic Discord Settings layout with your cropped Settings Background');
+    image.alt = ''; stage.append(image, node('div', 'preview-dimming'));
+    const ui = node('div', 'settings-preview-ui'); ui.setAttribute('aria-hidden', 'true');
+    const sidebar = node('aside', 'settings-preview-sidebar');
+    const profile = node('div', 'settings-preview-profile');
+    profile.append(node('span', 'settings-preview-avatar', 'G'), node('strong', '', 'Guest'));
+    sidebar.append(profile, node('div', 'settings-preview-search', 'Search'));
+    for (const [heading, entries] of [['Account', ['Overview', 'Security', 'Privacy']], ['App Settings', ['Appearance', 'Notifications', 'Accessibility']], ['Customization', ['Themes', 'Plugins']]]) {
+      sidebar.append(node('strong', 'settings-preview-nav-heading', heading));
+      entries.forEach((label, index) => sidebar.append(node('span', `settings-preview-nav${heading === 'Account' && index === 0 ? ' is-selected' : ''}`, label)));
+    }
+    const header = node('div', 'settings-preview-header'); header.append(node('strong', '', 'Account'), node('span', '', '×'));
+    const content = node('div', 'settings-preview-content');
+    for (const [heading, entries] of [['Account Info', ['Username', 'Email', 'Phone Number']], ['Password & Security', ['Password', 'Authentication', 'Devices']], ['Account Status', ['Preferences', 'Account Standing']]]) {
+      const card = node('section', 'settings-preview-card'); card.append(node('strong', 'settings-preview-card-heading', heading));
+      for (const label of entries) {
+        const row = node('div', 'settings-preview-row');
+        // Neutral bars communicate field positions without resembling anyone's
+        // username, contact information, authentication status, or device list.
+        const value = node('span', 'settings-preview-placeholder');
+        row.append(node('span', '', label), value, node('span', 'settings-preview-edit', 'Edit')); card.append(row);
+      }
+      content.append(card);
+    }
+    ui.append(sidebar, header, content); stage.append(ui); root.append(stage); previews.push(stage); return stage;
+  }
+
+  function previewLoader(stage) {
+    const loader = node('div', 'wallpaper-preview-loader'); loader.setAttribute('aria-hidden', 'true');
+    const sidebar = node('div', 'preview-loader-sidebar');
+    sidebar.append(node('span', 'preview-loader-avatar'));
+    for (let index = 0; index < 7; index++) sidebar.append(node('span', 'preview-loader-line'));
+    const content = node('div', 'preview-loader-content');
+    content.append(node('span', 'preview-loader-title'));
+    for (let index = 0; index < 3; index++) {
+      const card = node('div', 'preview-loader-card');
+      card.append(node('span', 'preview-loader-line'), node('span', 'preview-loader-line'), node('span', 'preview-loader-line')); content.append(card);
+    }
+    loader.append(sidebar, content); stage.append(loader);
+  }
   function updatePreviewColors() {
     previews = previews.filter(preview => preview.isConnected);
     const fields = api?.fields() || [], get = (name, fallback) => fields.find(field => field.name === name)?.value || fallback;
+    const profile = get('--blur-profile', 'Acrylic').toLowerCase();
+    const mode = profile.includes('none') || profile === 'no glass' || profile === '2' ? 'none' : profile.includes('liquid') || profile === '1' ? 'liquid' : 'acrylic';
+    const background = get('--glass-background', 'Dark Glass');
+    const preset = background.toLowerCase().includes('light') ? '--glass-light' : '--glass-dark';
+    const tint = !background.includes('var(') && CSS.supports('color', background) ? background : get(preset, preset === '--glass-light' ? 'rgba(255,255,255,.10)' : 'rgba(12,16,24,.24)');
+    const blur = Number.parseFloat(get('--blur-val', '24'));
     for (const preview of previews) {
+      preview.dataset.previewGlass = mode;
+      preview.style.setProperty('--preview-acrylic-blur', `${Number.isFinite(blur) && blur >= 0 ? blur : 24}px`);
+      preview.style.setProperty('--preview-glass-tint', tint);
+      preview.style.setProperty('--preview-glass-surface', mode === 'none' ? 'transparent' : mode === 'liquid' ? `color-mix(in srgb, ${tint} 65%, transparent)` : tint);
+      preview.style.setProperty('--preview-glass-subtle', mode === 'none' ? 'transparent' : `color-mix(in srgb, ${tint} ${mode === 'liquid' ? 30 : 50}%, transparent)`);
       preview.style.setProperty('--preview-accent', get('--main-color', '#5865f2'));
       preview.style.setProperty('--preview-mention', get('--mention-glass-tint', 'rgba(88,101,242,.2)'));
       preview.style.setProperty('--preview-mention-hover', get('--mention-glass-hover', get('--mention-glass-tint', 'rgba(88,101,242,.3)')));
       preview.style.setProperty('--preview-mention-accent', get('--mention-glass-accent', '#aab4ff'));
-      preview.style.setProperty('--preview-dim-top', get('--bg-overlay-top', 'rgba(0,0,0,.25)'));
-      preview.style.setProperty('--preview-dim-bottom', get('--bg-overlay-bottom', 'rgba(0,0,0,.5)'));
+      const settings = preview.classList.contains('settings-discord-preview');
+      preview.style.setProperty('--preview-dim-top', get(settings ? '--settings-bg-overlay-top' : '--bg-overlay-top', 'rgba(0,0,0,.25)'));
+      preview.style.setProperty('--preview-dim-bottom', get(settings ? '--settings-bg-overlay-bottom' : '--bg-overlay-bottom', 'rgba(0,0,0,.5)'));
     }
   }
 
@@ -250,36 +305,58 @@
     const input = node('input', 'input'); input.type = 'text'; input.spellcheck = false; input.placeholder = 'Paste an image link, then crop it';
     const image = node('img', 'wallpaper-preview'); image.alt = `${field.label} preview`; image.hidden = true;
     const stage = discordPreview(root, image, main);
+    previewLoader(stage);
     const actions = node('div', 'wallpaper-actions');
     const picker = node('input', 'wallpaper-picker'); picker.type = 'file'; picker.hidden = true; picker.accept = 'image/png,image/jpeg,image/webp,image/gif'; picker.setAttribute('aria-label', `${field.label} local image`);
     const feedback = node('p', 'wallpaper-feedback'); feedback.setAttribute('role', 'status');
     const notice = node('p', 'wallpaper-notice', 'Crops are saved locally as still PNG images. Save Wallpapers to apply the background to your theme.');
-    let previewRequest = 0, working = false;
+    let previewRequest = 0, working = false, hasPreview = false, sourceRequest = 0, displayedUri = '';
+    let finishPreviewLoad, finishSourceLoad;
+    const pendingLoads = new Set();
+    const updateLoading = () => {
+      stage.dataset.loading = String(pendingLoads.size > 0);
+      stage.setAttribute('aria-busy', String(pendingLoads.size > 0));
+      stage.hidden = !hasPreview && pendingLoads.size === 0;
+    };
+    const beginLoading = () => {
+      const token = {}; pendingLoads.add(token); updateLoading();
+      return () => { pendingLoads.delete(token); updateLoading(); };
+    };
     const sync = () => { input.readOnly = field.value.startsWith(localPrefix); input.value = input.readOnly ? 'Local image selected' : field.value; api.changed(); };
     const show = async source => {
       await Promise.resolve();
       const request = ++previewRequest, current = field.value;
+      finishPreviewLoad?.(); finishPreviewLoad = undefined;
       const paletteRequest = main ? ++paletteGeneration : 0;
-      image.hidden = true; if (stage) stage.hidden = true;
-      if (!current) { if (main) publishPalette(null, ''); return; }
+      if (!current) { hasPreview = false; image.hidden = true; updateLoading(); if (main) publishPalette(null, ''); return; }
+      const finishLoading = beginLoading();
+      finishPreviewLoad = finishLoading;
       if (main && current !== paletteSource) publishPalette(null, current);
       try {
         source ||= await api.invoke('app_wallpaper', { uri: current });
         const decoded = await imageFrom(source);
         if (request !== previewRequest || current !== field.value || !root.isConnected) return;
-        image.src = source; image.hidden = false;
-        if (stage) stage.hidden = false;
-        else image.style.aspectRatio = String(settingsAspect);
+        image.src = source; await image.decode();
+        if (request !== previewRequest || current !== field.value || !root.isConnected) return;
+        image.hidden = false; hasPreview = true; displayedUri = current;
+        stage.classList.remove('preview-ready');
+        requestAnimationFrame(() => { if (request === previewRequest) stage.classList.add('preview-ready'); });
         if (main && paletteRequest === paletteGeneration) publishPalette(decoded, current);
         updatePreviewColors();
       } catch (error) {
-        if (request === previewRequest) feedback.textContent = `Could not preview this image: ${error.message || error}`;
+        if (request === previewRequest) {
+          feedback.textContent = `Could not preview this image: ${error.message || error}`;
+          if (displayedUri !== current) { hasPreview = false; image.hidden = true; }
+        }
         if (main && paletteRequest === paletteGeneration) publishPalette(null, current);
-      }
+      } finally { finishLoading(); if (request === previewRequest) finishPreviewLoad = undefined; }
     };
     async function choose(source, meta, sourceUri) {
       if (working || api.busy()) return;
+      sourceRequest++;
+      finishSourceLoad?.(); finishSourceLoad = undefined;
       working = true; local.disabled = edit.disabled = clear.disabled = link.disabled = true;
+      const finishLoading = beginLoading();
       try {
         feedback.textContent = 'Loading image…';
         const decoded = await imageFrom(source);
@@ -298,15 +375,21 @@
         field.value = uri; sync(); await show(result.data);
         feedback.textContent = 'Crop ready. Save Wallpapers to apply it.';
       } catch (error) { feedback.textContent = `Could not crop this image: ${error.message || error}`; sync(); }
-      finally { working = false; api.setBusy(false); local.disabled = edit.disabled = clear.disabled = link.disabled = false; }
+      finally { finishLoading(); working = false; api.setBusy(false); local.disabled = edit.disabled = clear.disabled = link.disabled = false; }
     }
     async function cropUri(uri) {
       if (!uri || working || api.busy()) return;
+      const request = ++sourceRequest;
+      finishSourceLoad?.();
+      const finishLoading = beginLoading();
+      finishSourceLoad = finishLoading;
       try {
         const meta = readMeta(uri), sourceUri = meta?.sourceUri?.startsWith(localPrefix) ? meta.sourceUri : uri;
         const source = await api.invoke('app_wallpaper', { uri: sourceUri });
+        if (request !== sourceRequest || !root.isConnected) return;
         await choose(source, meta, sourceUri.startsWith(localPrefix) ? sourceUri : undefined);
       } catch (error) { feedback.textContent = `Could not load this image: ${error.message || error}`; sync(); }
+      finally { finishLoading(); if (request === sourceRequest) finishSourceLoad = undefined; }
     }
     const local = button('Choose local image', () => { notice.textContent = 'Local files are never uploaded. Crops are saved locally as still PNG images. Save Wallpapers to apply the background.'; picker.click(); }); local.prepend(bridge.icon('folder'));
     const link = button('Use image link', () => {

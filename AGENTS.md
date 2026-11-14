@@ -1,6 +1,12 @@
 # Hotori project instructions
 
+## Local testing
+
+Whenever implementing a new feature or changing app behavior or appearance, build the local executable before handing the result back to the user. Source changes alone are not ready for user testing. Keep the testable build at target/release/hotori.exe, verify that it exists after building, and provide its clickable absolute path. Clearly report any build blocker. A local build does not imply permission to publish; follow the publishing instructions below when requested.
+
 ## Publishing updates
+
+Use one app version per unpublished batch of changes. Bump the version when starting the first change after the previous batch was published, then keep that version for all further changes until the user says to push. Only after that batch is published should the next set of changes advance to another version. Keep the version synchronized in every local test build.
 
 For this project, when the user says **"push the update"**, they mean both pushing the source changes to GitHub and publishing a new stable GitHub Release. This preference applies to future chats working in this repository.
 

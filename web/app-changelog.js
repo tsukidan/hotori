@@ -34,6 +34,7 @@
       (bullet ? list : card).append(el);
     }
     $('app-changelog-content').replaceChildren(card);
+    window.HotoriMotion?.enter(card);
     $('app-changelog-content').scrollTop = 0;
     displayedCurrent = version === current;
     // Reading an older entry after the current one still acknowledges this version.
@@ -58,6 +59,8 @@
   window.HotoriAppChangelog = {
     async initialize(invoke, idle) {
       $('app-changelog').disabled = true;
+      $('app-changelog').setAttribute('aria-busy', 'true');
+      const finishLoading = window.HotoriMotion?.loading($('app-changelog-content'), { label: 'Loading app releases…', rows: 2 }) || (() => {});
       try {
         const result = await invoke('get_app_changelog');
         if (result.schemaVersion !== 1 || !Array.isArray(result.releases) || !result.releases.some(r => r.version === result.currentVersion)) throw Error('App release notes unavailable');
@@ -80,7 +83,7 @@
       } catch (error) {
         $('app-changelog').title = 'App release notes are unavailable.';
         console.warn('Could not load app changelog:', error);
-      }
+      } finally { finishLoading(); $('app-changelog').setAttribute('aria-busy', 'false'); }
     }
   };
 })();

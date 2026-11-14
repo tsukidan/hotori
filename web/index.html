@@ -9,10 +9,15 @@
   <link rel="preload" href="assets/fonts/Nunito-Variable.ttf" as="font" type="font/ttf" crossorigin>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="liquid-glass.css">
+  <link rel="stylesheet" href="settings-preview.css">
+  <link rel="stylesheet" href="app-motion.css">
+  <link rel="stylesheet" href="typography.css">
+  <script src="app-motion.js" defer></script>
   <script src="wallpaper-accent.js" defer></script>
   <script src="wallpaper-tools.js" defer></script>
   <script src="app-changelog.js" defer></script>
   <script src="app.js" defer></script>
+  <script src="ui-zoom.js" defer></script>
   <script src="liquid-glass.js" defer></script>
   <script src="vendor/liquidglass/liquidglass.js" defer></script>
   <script src="glass-wordmark.js" defer></script>
@@ -22,6 +27,7 @@
   <div class="wallpaper" aria-hidden="true"></div>
   <header class="titlebar" aria-label="Hotori window">
     <div class="titlebar-drag" data-tauri-drag-region></div>
+    <button id="zoom-pill" class="zoom-pill" type="button" aria-hidden="true" aria-label="Zoom 100%. Click to reset to 100%."><span id="zoom-value" aria-live="polite">100%</span></button>
     <div class="window-controls" aria-label="Window controls">
       <button id="window-minimize" class="window-button" type="button" aria-label="Minimize" title="Minimize"><span data-icon="minimize"></span></button>
       <button id="window-maximize" class="window-button" type="button" aria-label="Maximize" title="Maximize"><span data-icon="maximize"></span></button>
@@ -121,7 +127,7 @@
     <header class="guide-header">
       <h2 id="app-changelog-title">App changelog</h2>
       <p>What’s changed in Hotori. App releases only.</p>
-      <label class="app-changelog-select" for="app-changelog-version">Version <select id="app-changelog-version" aria-label="App release version"></select></label>
+      <label class="app-changelog-select" for="app-changelog-version"><span>Version</span><select id="app-changelog-version" class="acrylic-select" aria-label="App release version"></select></label>
     </header>
     <div id="app-changelog-content" class="guide-scroll" tabindex="0" role="region" aria-label="App release notes"></div>
     <footer class="guide-actions"><button id="app-changelog-close" class="button primary" type="button" autofocus>Done</button></footer>
@@ -144,7 +150,7 @@
         <li class="guide-step"><h3>Customize your appearance</h3><p>Choose <strong>Customize</strong> in Hotori’s dock, then pick a category on the left. In <strong>Glass Appearance</strong>, choose Acrylic, Liquid Glass, or No Glass and adjust the available blur, color intensity, and tint controls. <strong>Avatars</strong> controls avatar size and roundness; <strong>Messages</strong> includes mention highlights.</p><p>Use the save button at the bottom of the right panel after editing each category. Switching categories keeps your drafts; <strong>Back</strong> discards unsaved changes. If Discord does not reflect a saved change, restart Discord.</p></li>
         <li class="guide-step"><h3>Choose and crop your wallpapers</h3><p>In <strong>Wallpapers</strong>, choose a local image, use a direct image link, or paste an image into the wallpaper control. Drag the crop preview to position your image and use the zoom slider or mouse wheel to zoom. Main Background uses <strong>16:9</strong>; Settings Background uses the settings panel’s nearly square proportions.</p><p>Choose <strong>Use crop</strong>, check the preview, then <strong>Save Wallpapers</strong>. Main Background has an illustrative Discord layout preview; Settings Background has an image preview. Use <strong>Crop &amp; zoom</strong> to adjust an image again. Each wallpaper has its own top and bottom dimming controls.</p><p>Your saved Main Background also becomes Hotori’s app wallpaper. The brightness icon below the dock changes only the app’s background overlay; it does not change your Discord theme.</p></li>
         <li class="guide-step"><h3>Pick colors from your wallpaper</h3><p>Your Main Background supplies recommended colors. Try the two quick swatches beside <strong>Clear background</strong>, or open <strong>Colors → Main Color</strong> for more recommendations and color controls. Settings Background does not affect the recommendations.</p><p>Recommended mention colors stay under <strong>Messages → Mention Highlights</strong>. A pulsing white dot marks categories with new recommendations until you visit them. Clicking a recommended swatch <strong>applies and saves that color immediately</strong>; other unsaved edits stay in the editor.</p></li>
-        <li class="guide-step"><h3>Arrange servers and the Friends sidebar</h3><p>In <strong>Server List</strong>, choose a vertical or horizontal server layout. Under <strong>Friends Sidebar</strong>, choose <strong>Hidden</strong> or <strong>Shown</strong>, then save the category. Hidden removes the persistent right-side Friends sidebar and its reserved space; your main Friends page and server member list remain available.</p><p>The Friends Sidebar option requires <strong>theme 0.8.16 or newer</strong>. Update your theme first if the option is missing.</p></li>
+        <li class="guide-step"><h3>Arrange servers</h3><p>In <strong>Server List</strong>, choose a vertical or horizontal server layout, then save the category. You can switch layouts again whenever you want.</p></li>
         <li class="guide-step"><h3>Keep the theme and app current</h3><p>The <strong>Installed theme</strong> bubble shows your theme version and its release notes. When a theme update is available, choose the update notice beside the version. Theme updates preserve your supported customization settings.</p><p>Hotori checks for app updates when it opens. If a newer app version is available, a liquid-glass prompt offers <strong>Not now</strong> or <strong>Download &amp; restart</strong>. The separate <strong>Update Hotori</strong> dock button also opens the app update dialog. After an app update, its release notes appear once; choose <strong>App Changelog</strong> in the dock anytime to browse app release history. Download &amp; restart closes and reopens Hotori while keeping your theme settings and wallpapers.</p></li>
         <li class="guide-step"><h3>Reset or uninstall when needed</h3><p><strong>Reset to defaults</strong> restores and saves the default settings across all categories, including wallpapers. Review its confirmation prompt before continuing; Cancel keeps your current setup and drafts.</p><p><strong>Uninstall theme</strong> also asks for confirmation before removing the theme and its saved customizations. You can install Hotori again later.</p></li>
       </ul>
@@ -185,6 +191,6 @@
       <button id="app-update-install" class="button primary" type="button">Download &amp; restart</button>
     </div>
   </dialog>
-  <span class="version" aria-label="Version 1.7.12">v1.7.12</span>
+  <span class="version" aria-label="Version 1.8.0">v1.8.0</span>
 </body>
 </html>

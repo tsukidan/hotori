@@ -6,6 +6,7 @@ mod settings;
 mod updates;
 mod wallpapers;
 mod theme_changelog;
+mod window_preferences;
 
 use serde::Serialize;
 use tauri::Manager;
@@ -177,6 +178,7 @@ async fn install_app_update(
     })
     .await
     .map_err(|e| e.to_string())??;
+    window_preferences::save(&app);
     app.exit(0);
     Ok(())
 }
@@ -246,6 +248,14 @@ fn show_main_window(app: tauri::AppHandle) -> Result<(), String> {
 }
 
 #[tauri::command]
+fn set_app_zoom(window: tauri::WebviewWindow, percent: u16) -> Result<(), String> {
+    if window.label() != "main" || !(50..=200).contains(&percent) || percent % 10 != 0 {
+        return Err("Choose a zoom level from 50% to 200% in 10% steps.".into());
+    }
+    window.set_zoom(f64::from(percent) / 100.0).map_err(|error| error.to_string())
+}
+
+#[tauri::command]
 fn get_app_changelog() -> Result<serde_json::Value, String> {
     let mut catalog: serde_json::Value = serde_json::from_str(include_str!("../assets/app-changelog.json"))
         .map_err(|error| error.to_string())?;
@@ -265,9 +275,15 @@ fn main() {
     }
     tauri::Builder::default()
         .manage(app_updates::State::default())
-        .setup(|_| {
+        .setup(|app| {
+            window_preferences::restore(app.handle());
             app_updates::complete_startup().map_err(std::io::Error::other)?;
             Ok(())
+        })
+        .on_window_event(|window, event| {
+            if window.label() == "main" && matches!(event, tauri::WindowEvent::CloseRequested { .. }) {
+                window_preferences::save(window.app_handle());
+            }
         })
         .manage(AppState {
             folder: std::env::var_os("APPDATA")
@@ -291,6 +307,7 @@ fn main() {
             wallpaper_preview,
             app_wallpaper,
             show_main_window,
+            set_app_zoom,
             get_theme_changelog,
             get_app_changelog
         ])

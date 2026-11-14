@@ -66,20 +66,15 @@ const { pathToFileURL } = require('node:url');
     assert(surfaces.siblings && surfaces.gap > 0);
     await tab('Server List').click();
     const friends = page.getByLabel('Friends Sidebar', { exact: true });
-    assert.equal(await friends.inputValue(), 'Hidden');
-    await friends.selectOption('Shown');
-    assert.equal(await tab('Server List').getAttribute('data-dirty'), 'true');
-    await page.getByRole('button', { name: 'Save Server List', exact: true }).click();
-    await page.waitForFunction(() => window.savedSettings.find(f => f.name === '--show-friends-sidebar').value === 'Shown');
+    assert.equal(await friends.count(), 0, 'Retired Friends Sidebar option is not rendered');
+    assert.equal(await page.locator('[data-name="--show-friends-sidebar"]').count(), 0);
     await tab('Colors').click();
     await tab('Server List').click();
-    assert.equal(await friends.inputValue(), 'Shown');
-    await friends.selectOption('Hidden');
-    await page.getByRole('button', { name: 'Save Server List', exact: true }).click();
-    await page.waitForFunction(() => window.savedSettings.find(f => f.name === '--show-friends-sidebar').value === 'Hidden');
+    assert.equal(await friends.count(), 0);
     await tab('Glass Appearance').click();
     await page.getByLabel('Glass appearance 1', { exact: true }).fill('24');
     await tab('Wallpapers').click();
+    assert.equal(await page.locator('[role="tabpanel"]:visible').evaluate(el => el.classList.contains('material-fade')), true, 'Category switches fade the completed panel');
     assert.equal(await page.getByLabel('Glass appearance 1', { exact: true }).isVisible(), false);
     assert.equal(await tab('Glass Appearance').getAttribute('data-dirty'), 'true');
     await page.getByLabel('Wallpapers 1', { exact: true }).fill('32');
@@ -92,6 +87,7 @@ const { pathToFileURL } = require('node:url');
     const saved = await page.evaluate(() => window.savedSettings);
     assert.equal(saved.find(field => field.name === '--test-0-0').value, '24');
     assert.equal(saved.find(field => field.name === '--test-1-0').value, '12', 'Saving one category leaves other drafts unsaved');
+    assert.equal(saved.find(field => field.name === '--show-friends-sidebar').value, 'Hidden', 'Retired option keeps its existing saved value');
     await tab('Wallpapers').click();
     assert.equal(await page.locator('#settings-form').evaluate(el => el.scrollTop), scroll);
     assert.equal(await page.getByLabel('Wallpapers 1', { exact: true }).inputValue(), '32');
@@ -109,6 +105,7 @@ const { pathToFileURL } = require('node:url');
     assert.equal((await page.evaluate(() => window.savedSettings)).find(field => field.name === '--test-0-0').value, '24');
     await page.locator('#reset-defaults').click();
     await page.keyboard.press('Escape');
+    await page.locator('#reset-dialog').waitFor({ state: 'hidden' });
     assert.equal(await page.locator('#reset-dialog').isVisible(), false);
     assert.equal(await page.locator('#app').getAttribute('data-page'), 'settings');
     assert.equal(await page.locator('.settings-header #back').count(), 1);
@@ -119,7 +116,7 @@ const { pathToFileURL } = require('node:url');
     assert.equal(await tab('Messages').getAttribute('aria-selected'), 'true', 'Reset keeps the selected category');
     await tab('Wallpapers').click();
     assert.equal(await page.getByLabel('Wallpapers 1', { exact: true }).inputValue(), '12');
-    for (const [width, height] of [[1120, 780], [800, 600], [560, 560]]) {
+    for (const [width, height] of [[1920, 1080], [2560, 1440], [1120, 780], [800, 600], [560, 560]]) {
       await page.setViewportSize({ width, height });
       await page.waitForTimeout(100);
       for (const selector of ['.settings-sidebar', '.settings-card', '#settings-form', '.settings-footer']) {
@@ -127,11 +124,19 @@ const { pathToFileURL } = require('node:url');
         assert(rect.x >= 0 && rect.y >= 52 && rect.x + rect.width <= width && rect.y + rect.height <= height, JSON.stringify({ width, selector, rect }));
       }
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
+      const typography = await page.locator('.category-tab:visible, .setting-hint:visible, .settings-footer .status, .settings-card .settings-footer .button').evaluateAll(elements => elements.map(element => ({ text: element.textContent.trim().slice(0, 30), size: parseFloat(getComputedStyle(element).fontSize) })));
+      assert(typography.every(item => item.size >= 13), JSON.stringify({ width, typography }));
+      for (const selector of ['.settings-heading-row', '.settings-footer']) {
+        assert(await page.locator(selector).evaluate(element => element.scrollWidth <= element.clientWidth + 1), `${selector} must wrap without overflowing at ${width}px`);
+      }
+      const workspace = await page.locator('.settings-workspace').boundingBox();
+      if (width >= 1920) assert(workspace.width > width * .9, 'Settings use the maximized window width instead of a centered 1280px column');
+      if (height >= 1440) assert(workspace.height > 1200, 'Tall windows show more settings instead of capping panel height at 960px');
       await page.screenshot({ path: path.join(qa, `settings-sidebar-${width}.png`) });
     }
     await page.getByRole('button', { name: 'Back', exact: true }).click();
     assert.equal(await page.locator('#app').getAttribute('data-page'), 'installer');
     assert.deepEqual(errors, []);
-    console.log('PASS: separate glass panels, category isolation, preserved drafts/scroll, independent saves, reset, keyboard navigation, and 560–1600px layouts.');
+    console.log('PASS: category fades, separate glass panels, category isolation, preserved drafts/scroll, independent saves, reset, keyboard navigation, and 560–2560px layouts.');
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

@@ -70,7 +70,38 @@ const http = require('node:http');
     assert.equal(await page.locator('#guide-dialog').evaluate(el => el.classList.contains('shader-glass')), true);
     await page.locator('#guide-close').click();
     await page.locator('#customize').click();
+    const entryFrames = await page.evaluate(async () => {
+      const frames = [];
+      for (let index = 0; index < 12; index++) {
+        await new Promise(resolve => requestAnimationFrame(resolve));
+        const page = document.querySelector('#settings-page');
+        const panel = document.querySelector('.settings-card').getBoundingClientRect();
+        frames.push({ opacity: getComputedStyle(page).opacity, x: panel.x, y: panel.y,
+          sectionOpacity: getComputedStyle(document.querySelector('.settings-section:not([hidden])')).opacity });
+      }
+      return frames;
+    });
+    assert(entryFrames.every(frame => frame.sectionOpacity === '1'), 'Nested settings materials do not add a second fade');
+    assert(entryFrames.every(frame => Math.abs(frame.x - entryFrames[0].x) < .1 && Math.abs(frame.y - entryFrames[0].y) < .1), 'Glass sampling geometry stays fixed on settings entry');
     await page.waitForTimeout(450);
+    const samplePageOpacity = async (opacity, selector = '#settings-page') => {
+      await page.locator(selector).evaluate((element, opacity) => { element.style.transition = 'none'; element.style.opacity = String(opacity); document.dispatchEvent(new Event('hotori:glass-invalidate')); }, opacity);
+      await page.waitForTimeout(180);
+      return page.locator('.setting-row canvas.glass-render-layer').first().evaluate(canvas => {
+        const pixels = canvas.getContext('2d').getImageData(Math.floor(canvas.width / 2), Math.floor(canvas.height / 2), 8, 8).data;
+        return Array.from(pixels);
+      });
+    };
+    const fadedMaterial = await samplePageOpacity(.2), solidMaterial = await samplePageOpacity(1);
+    const materialError = fadedMaterial.reduce((sum, value, index) => sum + Math.abs(value - solidMaterial[index]), 0) / fadedMaterial.length;
+    assert(materialError < 1, `Page opacity must not change the nested acrylic material: ${materialError}`);
+    await page.locator('#settings-page').evaluate(element => { element.style.removeProperty('transition'); element.style.removeProperty('opacity'); });
+    const category = '.settings-section:not([hidden])';
+    await page.locator(category).evaluate(element => element.classList.add('material-fade'));
+    const fadedCategory = await samplePageOpacity(.2, category), solidCategory = await samplePageOpacity(1, category);
+    const categoryError = fadedCategory.reduce((sum, value, index) => sum + Math.abs(value - solidCategory[index]), 0) / fadedCategory.length;
+    assert(categoryError < 1, `Category opacity must not change its acrylic material: ${categoryError}`);
+    await page.locator(category).evaluate(element => { element.style.removeProperty('transition'); element.style.removeProperty('opacity'); });
     await page.waitForFunction(() => !document.getAnimations().some(animation => animation.effect?.target?.matches('.page') && animation.playState === 'running'));
     const geometry = () => page.evaluate(() => [...document.querySelectorAll('.settings-workspace, .settings-sidebar, .settings-card, .settings-header, #settings-form, .category-tab, .setting-row, .submenu, select, .settings-footer, .settings-actions .button')].filter(el => el.checkVisibility()).map(el => {
       const r = el.getBoundingClientRect(); return [el.id || el.className.replace(' optical-glass', ''), r.x, r.y, r.width, r.height];

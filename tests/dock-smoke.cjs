@@ -46,13 +46,14 @@ const { pathToFileURL } = require('node:url');
     await page.locator('#guide-dialog').waitFor({ state: 'visible' });
     assert.equal(await page.locator('#guide-close').evaluate(el => el === document.activeElement), true);
     assert.equal(await page.locator('ol.guide-steps > li').count(), 4);
-    assert.equal(await page.locator('ul.guide-additional > li').count(), 6);
+    assert.equal(await page.locator('ul.guide-additional > li').count(), 7);
     assert.equal(await page.locator('#guide-additional-title').textContent(), 'Additional info');
     assert.equal(await page.locator('ul.guide-additional li').first().evaluate(el => getComputedStyle(el, '::before').content), 'none');
     assert.equal(await page.locator('#guide-dialog .guide-scroll').evaluate(el => getComputedStyle(el).scrollbarWidth), 'none');
     await page.locator('#guide-download-vencord').click();
     assert((await page.evaluate(() => window.testCommands)).includes('open_vencord_download'));
     await page.keyboard.press('Escape');
+    await page.locator('#guide-dialog').waitFor({ state: 'hidden' });
     assert.equal(await page.locator('#guide-dialog').isVisible(), false);
     assert.equal(await page.locator('#installation-guide').evaluate(el => el === document.activeElement), true);
     await page.locator('#download-vencord').click();
@@ -111,12 +112,13 @@ const { pathToFileURL } = require('node:url');
     assert.equal(await page.locator('#install').isDisabled(), true);
     await page.locator('#uninstall').click();
     await page.keyboard.press('Escape');
+    await page.locator('#uninstall-dialog').waitFor({ state: 'hidden' });
     assert.equal(await page.locator('#uninstall-dialog').isVisible(), false);
     assert.equal(await page.locator('#install').isDisabled(), true);
     await page.locator('#uninstall').click();
     await page.locator('#uninstall-confirm').click();
     await page.waitForFunction(() => !document.querySelector('#install').disabled);
-    for (const [width, height] of [[1600, 900], [1120, 780], [800, 600], [560, 560]]) {
+    for (const [width, height] of [[2560, 1440], [2223, 1250], [1920, 1080], [1600, 900], [1120, 780], [800, 600], [560, 560]]) {
       await page.locator('#install').evaluate(el => el.blur());
       await page.mouse.move(5, 55);
       await page.setViewportSize({ width, height });
@@ -129,6 +131,15 @@ const { pathToFileURL } = require('node:url');
         });
       });
       for (const rect of bounds) assert(rect.x >= 0 && rect.y >= 52 && rect.right <= width && rect.bottom <= height, JSON.stringify({ width, height, rect }));
+      const inset = await page.locator('.installer-page').evaluate(el => parseFloat(getComputedStyle(el).paddingLeft) + el.clientLeft);
+      assert(Math.abs(bounds[0].x - inset) < 1, 'Home content follows the left window inset instead of a centered fixed-width block');
+      assert(Math.abs(bounds[1].x - bounds[0].x) < 1, 'Logo and information cards share a left edge');
+      if (width >= 2223) {
+        const card = await page.locator('.installer-card').boundingBox();
+        assert(card.width > 700, 'Home cards grow on large windows');
+        assert(bounds[1].right < bounds[2].x, 'The right dock remains clear of the growing content');
+        assert(width - bounds[2].right < 100, 'Dock remains pinned to the right');
+      }
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
       assert.equal(await page.locator('.wallpaper').evaluate(el => getComputedStyle(el).backgroundImage), bg);
       await page.screenshot({ path: path.join(qa, `dock-home-${width}.png`) });

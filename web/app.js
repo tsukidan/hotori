@@ -40,9 +40,11 @@ function message(id, text, error = false, symbol = "info", detailSymbol = "") {
     $(id).replaceChildren(icon(error ? "alert" : symbol), copy);
   } else $(id).textContent = text;
   $(id).dataset.error = String(error);
+  window.HotoriMotion?.enter($(id));
 }
 
 function updateButtons() {
+  $("app").setAttribute("aria-busy", String(busy));
   $("install").disabled = busy || !status.ready || status.installed;
   $("install").querySelector(".button-label").textContent = busy ? "Working…" : status.installed ? "Installed" : "Install";
   $("theme-update-notice").disabled = busy || !status.installed;
@@ -136,16 +138,19 @@ function renderThemeVersion() {
 let themeChangelog = null, changelogLoading = false, changelogAttempt = 0, changelogRequestedVersion;
 async function loadThemeChangelog() {
   changelogLoading = true; changelogAttempt = Date.now();
+  const finishLoading = !themeChangelog ? window.HotoriMotion?.loading($('theme-changelog'), { label: 'Loading theme changes…', rows: 1, overlay: true }) || (() => {}) : () => {};
   for (const refresh of [false, true]) {
     try {
       const catalog = await invoke('get_theme_changelog', { refresh });
       if (catalog?.schemaVersion === 1 && catalog.versions && typeof catalog.versions === 'object') {
         themeChangelog = catalog.versions;
         renderThemeChangelog(status.theme_version);
+        finishLoading();
       }
     } catch { /* Keep bundled/cached notes when offline. */ }
   }
   changelogLoading = false;
+  finishLoading();
   if (!themeChangelog) themeChangelog = {};
   renderThemeChangelog(status.theme_version);
 }
@@ -166,6 +171,7 @@ function renderThemeChangelog(version) {
     return item;
   }) : [element('li', '', themeChangelog ? 'Release notes are not available for this theme version.' : 'Loading theme changes…')];
   $('theme-changelog-items').replaceChildren(...items);
+  window.HotoriMotion?.enter($('theme-changelog-items'));
 }
 
 async function checkForThemeUpdate() {
@@ -343,16 +349,25 @@ function updateCategoryButtons() {
 }
 function selectCategory(category) {
   const previous = categoryGroups.get(selectedCategory);
+  const changed = previous && previous !== categoryGroups.get(category);
   if (previous) previous.scroll = $("settings-form").scrollTop;
   selectedCategory = category;
   for (const [name, group] of categoryGroups) {
     const active = name === category;
     group.panel.hidden = !active;
+    if (active) {
+      if (changed) window.HotoriMotion?.present(group.panel);
+      else window.HotoriMotion?.enter(group.panel);
+    }
     group.tab.setAttribute("aria-selected", String(active));
     group.tab.tabIndex = active ? 0 : -1;
   }
   $("settings-title").textContent = category;
   $("settings-description").textContent = categoryDescriptions[category];
+  if (changed) {
+    window.HotoriMotion?.enter($("settings-title"));
+    window.HotoriMotion?.enter($("settings-description"));
+  }
   window.HotoriWallpaperTools?.visit(category);
   $("settings-form").scrollTop = categoryGroups.get(category)?.scroll || 0;
   updateCategoryButtons();
@@ -363,6 +378,7 @@ async function saveCategory(category) {
   const submitted = new Map(fields.filter(field => categoryFor(field) === category).map(field => [field.name, field.value]));
   const edits = fields.map(field => ({ name: field.name, value: submitted.has(field.name) ? submitted.get(field.name) : savedValues.get(field.name) }));
   busy = true; group.saving = true; updateButtons();
+  const finishLoading = window.HotoriMotion?.loading($('settings-status'), { label: 'Saving settings…', rows: 1, overlay: true }) || (() => {});
   try {
     const updated = await invoke("save_settings", { edits });
     for (const field of fields) if (submitted.has(field.name)) {
@@ -374,7 +390,7 @@ async function saveCategory(category) {
     group.saved = true;
     message("settings-status", `${category} saved. Other unsaved changes stay in the editor.`);
   } catch (error) { message("settings-status", String(error), true); }
-  finally { busy = false; group.saving = false; await refresh(); updateButtons(); }
+  finally { finishLoading(); busy = false; group.saving = false; await refresh(); updateButtons(); }
 }
 
 function wallpaperBridge() {
@@ -446,11 +462,13 @@ function renderFields() {
       case "Message spacing": return target("Messages");
       case "Mention highlights": return target("Messages", "Mention Highlights", "message", true);
       case "Server list": return target("Server List");
-      case "Friends sidebar": return target("Server List", "Friends Sidebar", "user");
       default: return target("Colors", "Other Colors", "palette", true);
     }
   }
   fields.forEach((field, index) => {
+    // Keep the stored value in the save payload for compatibility, but no
+    // longer expose the retired Friends Sidebar customization.
+    if (field.name === "--show-friends-sidebar") return;
     const sharedText = fields.some(item => item.name === "--secondary-ui-color") ? "--secondary-ui-color" : "--text-normal";
     if (field.section === "Text & icon colors" && field.name !== sharedText) return;
     const row = element("div", `setting-row${field.kind === "color" ? " color-field" : ""}`);
@@ -510,11 +528,13 @@ function renderFields() {
     } else if (field.kind === "image") {
       input = wallpaperControl(field, control);
     } else if (field.kind === "color") {
+      control.classList.add("color-control");
+      const adjustments = element("div", "color-adjustments"); control.append(adjustments);
       const colorLine = element("div", "color-input");
       const hexAlpha = field.alphaEnabled && field.value.startsWith("#");
       input = element("input"); input.type = "color"; input.value = field.color;
       const value = element("span", "color-value", input.value.toUpperCase());
-      colorLine.append(input, value); control.append(colorLine);
+      colorLine.append(input, value); adjustments.append(colorLine);
       const colorChanged = () => {
         value.textContent = input.value.toUpperCase();
         field.color = input.value;
@@ -533,7 +553,7 @@ function renderFields() {
         slider.setAttribute("aria-label", `${field.label} opacity`);
         const output = element("output", "", `${Math.round(field.opacity * 100)}%`);
         slider.addEventListener("input", () => { field.opacity = Number(slider.value) / 100; output.textContent = `${slider.value}%`; colorChanged(); });
-        opacityLine.append(document.createTextNode("Opacity"), slider, output); control.append(opacityLine);
+        opacityLine.append(element("span", "opacity-label", "Opacity"), slider, output); adjustments.append(opacityLine);
       }
     } else {
       input = element("input", "input");
@@ -602,11 +622,13 @@ $("save-category").addEventListener("click", () => saveCategory(selectedCategory
 async function operation(command, success) {
   if (busy || !invoke) return;
   busy = true; updateButtons();
+  const finishLoading = window.HotoriMotion?.loading($("home-status"), { label: 'Working…', rows: 1, overlay: true }) || (() => {});
   try {
     await invoke(command);
+    finishLoading();
     message("home-status", success, false, command === "install_theme" ? "check" : "trash");
-  } catch (error) { message("home-status", String(error), true); }
-  finally { busy = false; await refresh(); updateButtons(); }
+  } catch (error) { finishLoading(); message("home-status", String(error), true); }
+  finally { finishLoading(); busy = false; await refresh(); updateButtons(); }
 }
 
 async function checkForAppUpdate() {
@@ -726,14 +748,20 @@ $("folder").addEventListener("click", async () => {
 $("customize").addEventListener("click", async () => {
   if (busy || !invoke) return;
   busy = true; updateButtons();
+  categoryGroups = new Map();
+  $("settings-list").replaceChildren(); $("settings-categories").replaceChildren();
+  $("settings-title").textContent = 'Loading settings…';
+  $("settings-description").textContent = 'Preparing your customization controls.';
+  $("settings-form").setAttribute('aria-busy', 'true');
+  const finishLoading = window.HotoriMotion?.loading($("settings-list"), { label: 'Loading settings…', rows: 4 }) || (() => {});
+  navigate("settings");
   try {
     fields = await invoke("load_settings");
     savedValues = new Map(fields.map(field => [field.name, field.value]));
     renderFields();
     message("settings-status", "Save changes in each category. Back discards only unsaved changes.");
-    navigate("settings");
-  } catch (error) { message("home-status", `Could not load settings: ${error}`, true); }
-  finally { busy = false; updateButtons(); }
+  } catch (error) { navigate("installer"); message("home-status", `Could not load settings: ${error}`, true); }
+  finally { finishLoading(); $("settings-form").setAttribute('aria-busy', 'false'); busy = false; updateButtons(); }
 });
 $("reset-defaults").addEventListener("click", () => {
   if (busy || !invoke) return;
@@ -745,6 +773,7 @@ $("reset-confirm").addEventListener("click", async () => {
   $("reset-dialog").close();
   busy = true; updateButtons();
   const scroll = $("settings-form").scrollTop;
+  const finishLoading = window.HotoriMotion?.loading($("settings-list"), { label: 'Restoring defaults…', rows: 3, overlay: true }) || (() => {});
   try {
     fields = await invoke("reset_settings");
     savedValues = new Map(fields.map(field => [field.name, field.value]));
@@ -752,7 +781,7 @@ $("reset-confirm").addEventListener("click", async () => {
     $("settings-form").scrollTop = scroll;
     message("settings-status", "All customization options reset and saved to defaults.");
   } catch (error) { message("settings-status", String(error), true); }
-  finally { busy = false; await refresh(); updateButtons(); }
+  finally { finishLoading(); busy = false; await refresh(); updateButtons(); }
 });
 $("back").addEventListener("click", () => { if (!busy) navigate("installer"); });
 document.addEventListener("keydown", (event) => {

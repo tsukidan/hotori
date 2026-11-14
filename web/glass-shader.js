@@ -5,11 +5,11 @@
 (() => {
   const vendor = window.HotoriLiquidGlass;
   if (!vendor) return;
-  const selector = '.glass, .glass-wordmark, .dock-surface, .dock-symbol, .window-controls, .window-button, #home-status, .theme-version, .button, .category-tab, .submenu, .setting-row, .guide-step, .input, select';
+  const selector = '.glass, .glass-wordmark, .dock-surface, .dock-symbol, .window-controls, .window-button, .zoom-pill, #home-status, .theme-version, .button, .category-tab, .submenu, .setting-row, .guide-step, .input, select';
   const excluded = '.glass-render-layer, .glass-optics-definitions, [data-glass-exclude], script, style, link, iframe';
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   const layers = new Map(), captures = new Map();
-  const isAcrylic = element => element.matches('.guide-step') || (!!element.closest('#settings-page') && !element.matches('.settings-card, .settings-sidebar, .settings-glass-action'));
+  const isAcrylic = element => element.matches('.guide-step, .acrylic-select') || (!!element.closest('#settings-page') && !element.matches('.settings-card, .settings-sidebar, .settings-glass-action'));
   const mediaAccess = new WeakMap();
   const mediaProbe = document.createElement('canvas'); mediaProbe.width = mediaProbe.height = 1;
   const scene = document.createElement('canvas'), sceneContext = scene.getContext('2d');
@@ -75,7 +75,10 @@
     let opacity = 1;
     for (let parent = element; parent && parent !== document.documentElement; parent = parent.parentElement) {
       const style = styleOf(parent);
-      opacity *= Number(style.opacity);
+      // Page/dialog fades are presentation effects applied once by Chromium
+      // to the completed layer. Their nested lenses must compose full-strength
+      // backdrops, otherwise fading also changes the material sampled inside.
+      if (!parent.matches('.page, dialog, .material-fade')) opacity *= Number(style.opacity);
       if (parent === element) continue;
       const clipX = /auto|scroll|hidden|clip/.test(style.overflowX);
       const clipY = /auto|scroll|hidden|clip/.test(style.overflowY);

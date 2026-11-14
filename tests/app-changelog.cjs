@@ -26,6 +26,15 @@ const {pathToFileURL}=require('node:url');
   assert.equal(await page.locator('.app-changelog-card h3').textContent(),'Hotori 1.7.10');
   assert.equal(await page.locator('#app-changelog-close').evaluate(el=>el===document.activeElement),true);
   assert.equal(await dialog.evaluate(el=>getComputedStyle(el).scrollbarWidth),'none');
+  const picker=page.getByLabel('App release version');
+  const layout=await picker.evaluate(el=>{
+   const box=el.getBoundingClientRect(),label=el.parentElement.querySelector('span').getBoundingClientRect();
+   const style=getComputedStyle(el);
+   return {width:box.width,center:box.x+box.width/2,labelCenter:label.x+label.width/2,labelBottom:label.bottom,top:box.top,weight:style.fontWeight,color:style.color,shadow:style.textShadow,blur:style.getPropertyValue('--glass-surface-blur').trim(),refraction:el.style.getPropertyValue('--glass-refraction')};
+  });
+  assert(layout.width<=280&&Math.abs(layout.center-layout.labelCenter)<1&&layout.labelBottom<layout.top,'Compact dropdown has its label centered above');
+  assert.equal(layout.weight,'700'); assert.equal(layout.color,'rgb(255, 255, 255)'); assert.notEqual(layout.shadow,'none');
+  assert.equal(layout.blur,'24px'); assert.equal(layout.refraction,'','Version selection must use acrylic without refraction');
   const body=catalog.releases.find(r=>r.version==='1.7.8').body;
   await page.getByLabel('App release version').selectOption('1.7.8');
   assert((await page.locator('.app-changelog-card').textContent()).includes('50%'));

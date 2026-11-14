@@ -21,7 +21,11 @@ const path = require('node:path');
     await page.addInitScript(() => {
       const make = (name, label, section, kind, value, extra = {}) => ({ name, label, section, kind, value, hint: 'Preview setting.', choices: [], choiceHints: [], ...extra });
       let saved = [
-        make('--blur-profile', 'Glass Profile', 'Glass appearance', 'choice', 'Acrylic', { choices: ['Acrylic', 'Liquid Glass'], choiceHints: ['', ''] }),
+        make('--blur-profile', 'Glass Profile', 'Glass appearance', 'choice', 'Acrylic', { choices: ['Acrylic', 'Liquid Glass', 'No Glass'], choiceHints: ['', '', ''] }),
+        make('--glass-background', 'Glass Background', 'Glass appearance', 'choice', 'Dark Glass', { choices: ['Dark Glass', 'Light Glass'], choiceHints: ['', ''] }),
+        make('--blur-val', 'Acrylic Blur', 'Blur & saturation', 'number', '24'),
+        make('--glass-dark', 'Dark Glass Tint', 'Glass tints', 'color', 'rgba(12, 16, 24, 0.24)', { color: '#0c1018', alphaEnabled: true, opacity: .24 }),
+        make('--glass-light', 'Light Glass Tint', 'Glass tints', 'color', 'rgba(255, 255, 255, 0.1)', { color: '#ffffff', alphaEnabled: true, opacity: .1 }),
         make('--main-bg', 'Main Background', 'Wallpapers', 'image', ''),
         make('--settings-bg', 'Settings Background', 'Wallpapers', 'image', ''),
         ...['--bg-overlay-top', '--bg-overlay-bottom', '--settings-bg-overlay-top', '--settings-bg-overlay-bottom'].map((name, i) => make(name, ['Main Top Dimming', 'Main Bottom Dimming', 'Settings Top Dimming', 'Settings Bottom Dimming'][i], 'Background dimming', 'color', 'rgba(0, 0, 0, 0.4)', { color: '#000000', alphaEnabled: true, opacity: .4 })),
@@ -43,7 +47,11 @@ const path = require('node:path');
         if (command === 'check_app_update' || command === 'check_theme_update') return { available: false };
         if (command === 'show_main_window') return;
         if (command === 'load_settings') return structuredClone(saved);
-        if (command === 'app_wallpaper' || command === 'wallpaper_preview') return window.importedImages[args.uri] || window.sourceData;
+        if (command === 'app_wallpaper' || command === 'wallpaper_preview') {
+          if (window.rejectWallpaper) throw Error('Test image unavailable');
+          if (window.holdWallpaper) return new Promise(resolve => { window.finishWallpaper = () => { window.holdWallpaper = false; resolve(window.importedImages[args.uri] || window.sourceData); }; });
+          return window.importedImages[args.uri] || window.sourceData;
+        }
         if (command === 'import_wallpaper') {
           const uri = `vencord:///themes/hotori-assets/${(++window.importCount).toString(16).padStart(16, '0')}.png`;
           window.importedImages[uri] = args.data; return uri;
@@ -73,14 +81,17 @@ const path = require('node:path');
     const file = { name: 'landscape.png', mimeType: 'image/png', buffer: Buffer.from(data.split(',')[1], 'base64') };
     await main.locator('input[type="file"]').setInputFiles(file);
     await page.locator('#wallpaper-crop-dialog').waitFor({ state: 'visible' });
-    assert.equal(await page.getByLabel('Crop aspect ratio').isDisabled(), true);
-    assert(Math.abs(Number(await page.getByLabel('Crop aspect ratio').inputValue()) - 16 / 9) < .001);
+    assert.equal(await page.locator('#wallpaper-crop-dialog select').count(), 0, 'Main crop has no ratio menu');
+    const mainCrop = await page.locator('.crop-stage').boundingBox();
+    assert(Math.abs(mainCrop.width / mainCrop.height - 16 / 9) < .005);
+    await page.locator('#wallpaper-crop-dialog').screenshot({ path: path.join(root, 'target/qa/crop-main-fixed.png') });
     await page.getByRole('button', { name: 'Cancel', exact: true }).click();
     assert.equal(await page.evaluate(() => window.importCount), 0, 'Cancel must not import or change the image');
     await main.locator('input[type="file"]').setInputFiles(file);
     await page.locator('#wallpaper-crop-dialog').waitFor({ state: 'visible' });
     await page.getByLabel('Crop zoom', { exact: true }).fill('1.5');
     await page.getByLabel('Crop zoom', { exact: true }).dispatchEvent('input');
+    assert.equal(await page.locator('.crop-zoom-value').textContent(), '150%');
     await page.locator('.crop-stage').focus(); await page.keyboard.press('ArrowRight');
     await page.getByRole('button', { name: 'Use crop', exact: true }).click();
     await page.waitForFunction(() => fields.find(field => field.name === '--main-bg').value.startsWith('vencord:'));
@@ -128,19 +139,64 @@ const path = require('node:path');
       row.dispatchEvent(new ClipboardEvent('paste', { bubbles: true, cancelable: true, clipboardData: transfer }));
     });
     await page.locator('#wallpaper-crop-dialog').waitFor({ state: 'visible' });
-    assert.equal(await page.getByLabel('Crop aspect ratio').isDisabled(), true);
-    assert(Math.abs(Number(await page.getByLabel('Crop aspect ratio').inputValue()) - 1398 / 1293) < .0001);
+    assert.equal(await page.locator('#wallpaper-crop-dialog select').count(), 0, 'Settings crop has no ratio menu');
     const settingsCrop = await page.locator('.crop-stage').boundingBox();
     assert(Math.abs(settingsCrop.width / settingsCrop.height - 1398 / 1293) < .005);
+    await page.locator('#wallpaper-crop-dialog').screenshot({ path: path.join(root, 'target/qa/crop-settings-fixed.png') });
     await page.getByRole('button', { name: 'Use crop', exact: true }).click();
     await page.waitForFunction(() => fields.find(field => field.name === '--settings-bg').value.startsWith('vencord:'));
+    await settings.locator('.wallpaper-preview').waitFor({ state: 'visible' });
     const settingsPreview = await settings.locator('.wallpaper-preview').boundingBox();
-    assert(Math.abs(settingsPreview.width / settingsPreview.height - 1398 / 1293) < .01);
+    assert(Math.abs(settingsPreview.width / settingsPreview.height - 1398 / 1293) < .01, JSON.stringify({ image: settingsPreview, stage: await settings.locator('.settings-discord-preview').boundingBox() }));
+    const settingsMockup = settings.locator('.settings-discord-preview');
+    await settingsMockup.waitFor({ state: 'visible' });
+    assert.equal(await settingsMockup.getAttribute('role'), 'img');
+    assert.equal(await settingsMockup.locator('.settings-preview-profile strong').textContent(), 'Guest');
+    assert.equal(await settingsMockup.locator('.settings-preview-placeholder').count(), 8);
+    assert.deepEqual(await settingsMockup.locator('.settings-preview-placeholder').allTextContents(), Array(8).fill(''), 'Account values are empty generic bars, with no personal information');
+    assert.equal(await settingsMockup.locator('img').count(), 1, 'The wallpaper is the only image; no reference avatar is copied');
+    await settingsMockup.scrollIntoViewIfNeeded();
+    const previewBox = await settingsMockup.boundingBox();
+    const previewParent = await settingsMockup.locator('..').boundingBox();
+    assert(Math.abs(previewBox.x + previewBox.width / 2 - previewParent.x - previewParent.width / 2) < 1, 'Settings preview is centered');
+    assert(previewBox.width <= 680);
+    await settingsMockup.screenshot({ path: path.join(root, 'target/qa/settings-generic-preview.png') });
+    assert.equal(await main.locator('.preview-servers').evaluate(el => getComputedStyle(el).backdropFilter), 'blur(24px)');
+    assert.equal(await settingsMockup.locator('.settings-preview-card').first().evaluate(el => getComputedStyle(el).backdropFilter), 'blur(24px)');
+    assert.equal(await settingsMockup.locator('.settings-preview-card').first().evaluate(el => getComputedStyle(el).backgroundColor), 'rgba(12, 16, 24, 0.24)');
+    await page.getByRole('tab', { name: 'Glass Appearance', exact: true }).click();
+    await page.getByLabel('Glass Profile', { exact: true }).selectOption('Liquid Glass');
+    assert.equal(await main.locator('.preview-servers').evaluate(el => getComputedStyle(el).backdropFilter), 'blur(3px)', 'Liquid preserves the existing preview blur');
+    assert.equal(await settingsMockup.locator('.settings-preview-card').first().evaluate(el => getComputedStyle(el).backdropFilter), 'blur(2px)');
+    await page.getByLabel('Glass Background', { exact: true }).selectOption('Light Glass');
+    await page.getByLabel('Light Glass Tint', { exact: true }).fill('#aaccff');
+    await page.getByLabel('Light Glass Tint opacity', { exact: true }).fill('35');
+    await page.getByLabel('Light Glass Tint opacity', { exact: true }).dispatchEvent('input');
+    assert.equal(await settingsMockup.evaluate(el => el.style.getPropertyValue('--preview-glass-tint')), 'rgba(170, 204, 255, 0.35)', 'Tint and opacity update from draft controls');
+    await page.getByLabel('Glass Profile', { exact: true }).selectOption('Acrylic');
+    await page.getByLabel('Acrylic Blur', { exact: true }).fill('30');
+    assert.equal(await main.locator('.preview-servers').evaluate(el => getComputedStyle(el).backdropFilter), 'blur(30px)');
+    assert.equal(await settingsMockup.locator('.settings-preview-card').first().evaluate(el => getComputedStyle(el).backgroundColor), 'rgba(170, 204, 255, 0.35)');
+    await page.getByLabel('Glass Profile', { exact: true }).selectOption('No Glass');
+    assert.equal(await main.locator('.preview-servers').evaluate(el => getComputedStyle(el).backdropFilter), 'none');
+    assert.equal(await settingsMockup.locator('.settings-preview-card').first().evaluate(el => getComputedStyle(el).backgroundColor), 'rgba(0, 0, 0, 0)');
+    await page.getByLabel('Glass Profile', { exact: true }).selectOption('Acrylic');
+    await page.getByRole('tab', { name: 'Wallpapers', exact: true }).click();
     assert.deepEqual(await main.locator('.recommended-swatch').evaluateAll(elements => elements.map(el => el.getAttribute('aria-label'))), before, 'Settings Background must never change the sampled palette');
+    await page.evaluate(() => { window.holdWallpaper = true; });
     await main.getByRole('button', { name: 'Crop & zoom', exact: true }).click();
+    await main.locator('.wallpaper-discord-preview[aria-busy="true"]').waitFor();
+    assert.equal(await main.locator('.wallpaper-preview-loader').isVisible(), true, 'Slow source load shows a preview skeleton');
+    await page.evaluate(() => window.finishWallpaper());
     await page.locator('#wallpaper-crop-dialog').waitFor({ state: 'visible' });
     assert.equal(await page.getByLabel('Crop zoom', { exact: true }).inputValue(), '1.5', 'Crop metadata retains the original image and zoom');
     await page.getByRole('button', { name: 'Cancel', exact: true }).click();
+    await page.waitForFunction(() => document.querySelector('[data-wallpaper="main"] .wallpaper-discord-preview').getAttribute('aria-busy') === 'false');
+    await page.evaluate(() => { window.rejectWallpaper = true; });
+    await main.getByRole('button', { name: 'Crop & zoom', exact: true }).click();
+    await page.waitForFunction(() => document.querySelector('[data-wallpaper="main"] .wallpaper-feedback').textContent.includes('Test image unavailable'));
+    assert.equal(await main.locator('.wallpaper-discord-preview').getAttribute('aria-busy'), 'false', 'Failed sources clear the preview loader');
+    await page.evaluate(() => { window.rejectWallpaper = false; });
     await page.screenshot({ path: path.join(root, 'target/qa/wallpaper-tools-main.png') });
     await page.setViewportSize({ width: 560, height: 560 });
     await main.getByRole('button', { name: 'Crop & zoom', exact: true }).click();
@@ -225,6 +281,24 @@ const path = require('node:path');
     await page.getByRole('button', { name: 'Use crop', exact: true }).click();
     await page.waitForFunction(() => document.querySelector('[data-wallpaper="main"] .wallpaper-feedback').textContent.includes('full-resolution PNG crop exceeds 10 MB'));
     assert.deepEqual(await page.evaluate(() => ({ uri: fields.find(field => field.name === '--main-bg').value, imports: window.importCount })), previous, 'Oversized crop preserves the previous wallpaper and imports no files');
+    for (const width of [1600, 800, 560]) {
+      await page.setViewportSize({ width, height: 1000 });
+      const adjustments = main.locator('[data-name="--bg-overlay-top"] .color-adjustments');
+      await adjustments.scrollIntoViewIfNeeded();
+      const box = await adjustments.boundingBox();
+      const swatch = await adjustments.locator('.color-input').boundingBox();
+      const opacity = await adjustments.locator('.opacity-input').boundingBox();
+      assert(swatch.x >= box.x && swatch.x + swatch.width <= box.x + box.width + 1);
+      assert(opacity.x >= box.x && opacity.x + opacity.width <= box.x + box.width + 1);
+      if (width === 1600) {
+        assert(swatch.x + swatch.width <= opacity.x + 1, 'Swatch sits left of opacity at full width');
+        assert.equal(await adjustments.locator('.opacity-input').evaluate(el => getComputedStyle(el).borderLeftWidth), '1px');
+      }
+      assert.equal(await main.locator('[data-name="--bg-overlay-top"] .setting-hint').evaluate(el => getComputedStyle(el).color), 'rgb(245, 246, 247)');
+      assert.equal(await adjustments.locator('.color-input').evaluate(el => getComputedStyle(el).justifyContent), 'center');
+      assert.equal(await main.locator('.recommended-swatches').first().evaluate(el => getComputedStyle(el).justifyContent), 'center');
+      await page.screenshot({ path: path.join(root, 'target/qa', `settings-contained-colors-${width}.png`) });
+    }
     assert.deepEqual(errors, []);
     console.log('PASS: source-resolution WebP/4K/zoom/tiny/settings crops, 10 MB source boundary and oversized PNG rejection, crop/cancel/clipboard, previews, recommendations, isolated saves, preserved originals, and 560px layout.');
   } finally { await browser.close(); await new Promise(resolve => server.close(resolve)); }

@@ -80,6 +80,8 @@
       float reflection = (normal.y * .5 + .5) * fresnel * .08;
       color += vec3(specular * .35 + rim + innerGlow + stroke * .18 * .55 + reflection);
       color = mix(color, vec3(1.), fresnel * .2);
+      // A light white coat lifts the lettering while retaining the glass scene.
+      color = mix(color, vec3(1.), .30);
       float alpha = mask + shadow * (1. - mask);
       gl_FragColor = vec4(color * mask / max(alpha, .001), alpha);
     }

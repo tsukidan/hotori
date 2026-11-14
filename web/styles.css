@@ -195,6 +195,18 @@ details[open] > summary > .icon { transform: rotate(180deg); }
   background: transparent; cursor: pointer;
 }
 .window-button .icon { width: 16px; height: 16px; stroke-width: 1.8; }
+.zoom-pill {
+  position: absolute; left: 50%; top: 10px; transform: translateX(-50%);
+  display: grid; place-items: center; min-width: 68px; height: 32px; padding: 0 14px;
+  border: 1px solid #ffffff30; border-radius: 999px; color: #f5f6f7;
+  background: #15181c40; backdrop-filter: blur(4px) saturate(140%);
+  font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; cursor: pointer;
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity 180ms ease, visibility 0s linear 180ms;
+}
+.zoom-pill.is-visible { opacity: 1; visibility: visible; pointer-events: auto; transition-delay: 0s; }
+.zoom-pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { .zoom-pill { transition: none; } }
 .window-button:hover { background-color: #ffffff24; border-color: #ffffff70; }
 .window-button:active { background-color: #ffffff38; }
 .window-close:hover { background-color: #c42b3266; border-color: #ff575780; }
@@ -301,7 +313,7 @@ details[open] > summary > .icon { transform: rotate(180deg); }
 
 /* Separate glass surfaces for category navigation and the active editor. */
 .settings-workspace {
-  width: min(100%, 1280px); height: 100%; max-height: 960px; min-height: 0;
+  width: 100%; height: 100%; min-height: 0;
   display: grid; grid-template-columns: 236px minmax(0, 1fr); gap: 22px;
 }
 .settings-sidebar, .settings-card {
@@ -430,13 +442,13 @@ details[open] > summary > .icon { transform: rotate(180deg); }
 /* The home composition leaves space for the dock's expanded glass window. */
 .installer-page { overflow-x: hidden; overflow-y: auto; padding: 48px clamp(28px, 4.5vw, 80px) 60px; }
 .home-content {
-  width: 100%; max-width: 1520px; padding-right: 260px;
+  width: 100%; max-width: none; margin: 0; min-width: 0; padding-right: 260px;
   display: grid; grid-template-columns: 1fr; align-items: start;
   gap: 32px; text-align: left;
 }
 .home-brand { min-width: 0; }
 /* Preserve the logo footprint and left alignment while rendering live glass text. */
-.home-brand h1 { position: relative; width: min(100%, 360px); aspect-ratio: 814 / 300; overflow: visible; container-type: inline-size; }
+.home-brand h1 { position: relative; width: min(100%, clamp(360px, 18vw, 440px)); aspect-ratio: 814 / 300; overflow: visible; container-type: inline-size; }
 .glass-wordmark { font-family: "Hotori Rounded", "Hotori Inter", sans-serif; font-weight: 900; }
 .wordmark-fallback {
   position: absolute; inset: 0; display: flex; align-items: center;
@@ -445,9 +457,9 @@ details[open] > summary > .icon { transform: rotate(180deg); }
 }
 .glass-wordmark.shader-glass .wordmark-fallback { visibility: hidden; }
 .home-brand .tagline { margin: 20px 0 0; font-size: clamp(13px, 1.2vw, 17px); }
-.installer-card { padding: 0; max-width: 600px; text-align: left; }
-.installer-card h2 { font-size: clamp(25px, 2vw, 30px); line-height: 1.25; font-weight: 500; text-wrap: balance; }
-.installer-card .description { margin: 18px 0 0; max-width: 550px; font-size: 14px; line-height: 1.85; }
+.installer-card { padding: 0; width: 100%; max-width: clamp(600px, 34vw, 760px); min-width: 0; text-align: left; }
+.installer-card h2 { font-size: clamp(25px, 2vw, 36px); line-height: 1.25; font-weight: 500; text-wrap: balance; }
+.installer-card .description { margin: 18px 0 0; max-width: 100%; font-size: clamp(14px, .75vw, 16px); line-height: 1.85; }
 .home-intro { padding: 22px; }
 .home-intro h2 { color: #fff; font-style: italic; text-shadow: 0 2px 14px #000; }
 .home-intro .description { color: #f5f6f7; font-weight: 500; text-shadow: 0 2px 14px #000; }
@@ -623,13 +635,14 @@ h2, .section-heading, .sidebar-brand strong { letter-spacing: -.025em; }
 .wallpaper-group .opacity-input .range-surface { min-width: 70px; }
 .wallpaper-actions { align-items: center; }
 .palette-quick { margin-left: 4px; padding-left: 14px; border-left: 1px solid #ffffff26; flex: 1 1 180px; min-width: 0; }
-.recommended-swatches { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.recommended-swatches { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center; }
 .recommended-swatch.button { width: 42px; min-width: 42px; height: 42px; min-height: 42px; padding: 6px; border-radius: 999px; }
 .recommended-color { display: block; width: 28px; height: 28px; border-radius: 999px; border: 1px solid #ffffff55; box-shadow: inset 0 1px 2px #ffffff44; }
 .palette-section { padding: 16px; margin-top: 14px; border-radius: 26px; }
-.palette-section h4 { margin: 0 0 12px; font-size: 13px; }
+.palette-section h4 { margin: 0 0 12px; font-size: 13px; text-align: center; }
 .palette-hint { margin: 7px 0 0; font-size: 11px; line-height: 1.5; color: var(--muted); }
 .palette-hint[hidden] { display: none; }
+.palette-quick .palette-hint, .palette-section .palette-hint { text-align: center; }
 .palette-link { border: 0; padding: 0; background: none; color: var(--accent); cursor: pointer; font: inherit; text-decoration: underline; }
 .category-tab .recommendation-dot { display: none; }
 .category-tab.has-recommendations .category-dirty { margin-right: 12px; }
@@ -685,7 +698,7 @@ h2, .section-heading, .sidebar-brand strong { letter-spacing: -.025em; }
 .preview-user-label { display: flex; flex-direction: column; min-width: 0; }
 .preview-user-label > span { font-size: .8em; }
 .preview-user-tools { display: flex; gap: .4em; margin-left: auto; }
-.wallpaper-row:not(:has(.wallpaper-discord-preview)) .wallpaper-preview { width: min(100%, 360px); object-fit: cover; object-position: center; max-height: none; aspect-ratio: 1398 / 1293; }
+.wallpaper-row:not(:has(.wallpaper-discord-preview, .settings-discord-preview)) .wallpaper-preview { width: min(100%, 360px); object-fit: cover; object-position: center; max-height: none; aspect-ratio: 1398 / 1293; }
 .crop-dialog { width: min(800px, calc(100vw - 32px)); max-height: calc(100dvh - 80px); overflow-y: auto; overflow-x: hidden; scrollbar-width: none; padding: 24px; }
 .crop-dialog::-webkit-scrollbar { display: none; }
 .crop-dialog h2 { margin-bottom: 18px; }
@@ -723,3 +736,34 @@ h2, .section-heading, .sidebar-brand strong { letter-spacing: -.025em; }
 .app-changelog-card ul { margin: 8px 0; padding-left: 20px; }
 .app-changelog-card li + li { margin-top: 7px; }
 .app-changelog-card strong { font-weight: 700; color: #f5f6f7; }
+
+/* Contained copy and color controls stay readable over detailed wallpapers. */
+.setting-info { min-width: 0; }
+.setting-label { color: #fff; font-weight: 700; text-shadow: 0 1px 3px #000c; }
+.setting-hint {
+  max-width: 65ch; padding: 10px 12px; border: 1px solid #ffffff10; border-radius: 12px;
+  background: #080b1238; color: #f5f6f7; font-weight: 500; line-height: 1.65;
+  text-shadow: 0 1px 3px #000d; overflow-wrap: anywhere;
+}
+.color-control { container-type: inline-size; }
+.color-adjustments {
+  display: grid; min-width: 0; border: 1px solid #ffffff1c; border-radius: 18px;
+  background: #080b1238; overflow: hidden;
+}
+.color-adjustments .color-input {
+  min-width: 0; justify-content: center; flex-wrap: wrap; gap: 10px; padding: 12px;
+}
+.color-adjustments input[type="color"] { flex: 0 0 54px; width: 54px; height: 36px; }
+.color-adjustments .color-value { color: #fff; font-size: 12px; font-weight: 600; text-shadow: 0 1px 3px #000c; }
+.color-adjustments .opacity-input {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 10px; min-width: 0;
+  margin: 0; padding: 10px 12px; border-top: 1px solid #ffffff24; color: #fff;
+  font-weight: 600; text-shadow: 0 1px 3px #000c;
+}
+.color-adjustments .opacity-label { grid-column: 1 / -1; font-size: 11px; }
+.color-adjustments .opacity-input .range-surface { min-width: 0; width: 100%; margin: 0; }
+.color-adjustments .opacity-input output { min-width: 36px; font-variant-numeric: tabular-nums; }
+@container (min-width: 360px) {
+  .color-adjustments:has(.opacity-input) { grid-template-columns: minmax(130px, .8fr) minmax(0, 1.2fr); }
+  .color-adjustments .opacity-input { border-top: 0; border-left: 1px solid #ffffff24; }
+}

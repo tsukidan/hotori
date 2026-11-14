@@ -1,0 +1,112 @@
+/* Generic structural illustration: all account values are neutral bars. */
+.settings-discord-preview {
+  position: relative; width: min(100%, 680px); margin-inline: auto; aspect-ratio: 466 / 431;
+  isolation: isolate; overflow: hidden; border: 1px solid #ffffff30; border-radius: 18px;
+  container-type: inline-size; background: #101216;
+}
+.settings-discord-preview[hidden] { display: none; }
+.settings-discord-preview > .wallpaper-preview {
+  position: absolute; inset: 0; width: 100%; height: 100%; border: 0; border-radius: 0;
+  object-fit: cover; object-position: center;
+}
+.settings-preview-ui {
+  position: absolute; inset: 1.3%; display: grid; grid-template-columns: 18% minmax(0, 1fr);
+  grid-template-rows: 4.5% minmax(0, 1fr); gap: 1%; color: #fff;
+  font-size: clamp(4px, 1.25cqw, 10px); line-height: 1.35; text-shadow: 0 1px 3px #000;
+  pointer-events: none;
+}
+.settings-preview-sidebar {
+  grid-row: 1 / -1; display: flex; flex-direction: column; gap: .5em; min-width: 0;
+  padding: .7em; border-right: 1px solid #ffffff24; background: #10121630;
+}
+.settings-preview-profile { display: flex; align-items: center; gap: .6em; padding: .5em; margin-bottom: .5em; }
+.settings-preview-avatar {
+  display: grid; place-items: center; width: 2.4em; height: 2.4em; flex-shrink: 0;
+  border-radius: .8em; background: #ffffff26; border: 1px solid #ffffff30; font-weight: 700;
+}
+.settings-preview-search, .settings-preview-nav {
+  padding: .65em .7em; border: 1px solid #ffffff28; border-radius: 999px; background: #10121648;
+  overflow: hidden; white-space: nowrap;
+}
+.settings-preview-search { margin-bottom: .5em; color: #ffffffd9; }
+.settings-preview-nav-heading { margin: .9em .5em .2em; font-size: .9em; }
+.settings-preview-nav.is-selected { background: #ffffff26; border-color: #ffffff50; }
+.settings-preview-header {
+  display: flex; align-items: center; justify-content: space-between; min-width: 0; padding: .5em 1em;
+  border: 1px solid #ffffff28; border-radius: .8em; background: #10121658;
+}
+.settings-preview-content {
+  width: 82%; margin-inline: auto; padding-top: 4%; display: flex; flex-direction: column;
+  gap: 2.8em; overflow: hidden; min-width: 0;
+}
+.settings-preview-card {
+  padding: 1.4em; border: 1px solid #ffffff38; border-radius: 1.2em; background: #10121660;
+  box-shadow: inset 0 1px 0 #ffffff17; backdrop-filter: blur(2px);
+}
+.settings-preview-card-heading { display: block; margin-bottom: 1.3em; font-size: 1.2em; }
+.settings-preview-row {
+  display: grid; grid-template-columns: minmax(0, 1fr) 5em 2em; align-items: center; gap: 1em;
+  min-height: 4.5em; padding: .9em 1em; border: 1px solid #ffffff22; border-radius: .9em; background: #080b1226;
+}
+.settings-preview-row + .settings-preview-row { margin-top: .9em; }
+.settings-preview-placeholder { display: block; height: .6em; border-radius: 999px; background: #ffffff3d; }
+.settings-preview-edit { color: #ffffffe6; font-size: .9em; }
+
+/* Stable, origin-clean skeletons avoid flashing empty previews during loading. */
+.wallpaper-discord-preview > .wallpaper-preview,
+.settings-discord-preview > .wallpaper-preview,
+.preview-discord-ui, .settings-preview-ui { transition: opacity 220ms ease; }
+.wallpaper-discord-preview:not(.preview-ready) > .wallpaper-preview,
+.settings-discord-preview:not(.preview-ready) > .wallpaper-preview { opacity: 0; }
+.wallpaper-discord-preview[data-loading="true"] > .preview-discord-ui,
+.settings-discord-preview[data-loading="true"] > .settings-preview-ui { opacity: .15; }
+.wallpaper-preview-loader {
+  position: absolute; inset: 0; z-index: 2; display: grid; grid-template-columns: 20% minmax(0, 1fr);
+  gap: 4%; padding: 4%; background: #101216dc; opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity 200ms ease, visibility 0s linear 200ms;
+}
+[data-loading="true"] > .wallpaper-preview-loader { opacity: 1; visibility: visible; transition-delay: 0s; }
+.preview-loader-sidebar { display: flex; flex-direction: column; gap: 5%; padding: 5%; border-right: 1px solid #ffffff16; }
+.preview-loader-content { display: flex; flex-direction: column; gap: 6%; padding-top: 2%; }
+.preview-loader-avatar { width: 36%; aspect-ratio: 1; border-radius: 28%; margin-bottom: 10%; }
+.preview-loader-title { width: 38%; height: 4%; border-radius: 999px; }
+.preview-loader-line { display: block; width: 85%; min-height: 5px; height: 4%; border-radius: 999px; }
+.preview-loader-card { display: flex; flex-direction: column; justify-content: space-evenly; min-height: 22%; padding: 5%; border: 1px solid #ffffff14; border-radius: 12px; background: #ffffff04; }
+.preview-loader-card .preview-loader-line { height: 8%; width: 90%; }
+.preview-loader-card .preview-loader-line:nth-child(2) { width: 70%; }
+.preview-loader-avatar, .preview-loader-title, .preview-loader-line {
+  background: linear-gradient(100deg, #ffffff0d 20%, #ffffff26 45%, #ffffff0d 70%);
+  background-size: 220% 100%; animation: wallpaper-skeleton-shimmer 1.5s ease-in-out infinite;
+}
+@keyframes wallpaper-skeleton-shimmer { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .wallpaper-preview-loader, .wallpaper-discord-preview > .wallpaper-preview,
+  .settings-discord-preview > .wallpaper-preview, .preview-discord-ui, .settings-preview-ui { transition: none; }
+  .preview-loader-avatar, .preview-loader-title, .preview-loader-line { animation: none; }
+}
+
+/* Preview materials follow the draft theme choices. Liquid keeps its existing
+   restrained 2–3px preview blur; acrylic uses the selected strong blur value. */
+:is(.wallpaper-discord-preview, .settings-discord-preview) :is(
+  .preview-servers, .preview-channels, .preview-history, .preview-window-controls,
+  .preview-window-name, .preview-channel-pill, .preview-toolbar, .preview-input,
+  .preview-user, .settings-preview-sidebar, .settings-preview-header, .settings-preview-card
+) { background: var(--preview-glass-surface); }
+.settings-discord-preview :is(.settings-preview-row, .settings-preview-search, .settings-preview-nav) {
+  background: var(--preview-glass-subtle);
+}
+:is(.wallpaper-discord-preview, .settings-discord-preview)[data-preview-glass="acrylic"] :is(
+  .preview-servers, .preview-channels, .preview-history, .preview-window-controls,
+  .preview-window-name, .preview-channel-pill, .preview-toolbar, .preview-input,
+  .preview-user, .preview-mention, .settings-preview-sidebar, .settings-preview-header, .settings-preview-card
+) {
+  backdrop-filter: blur(var(--preview-acrylic-blur, 24px));
+  -webkit-backdrop-filter: blur(var(--preview-acrylic-blur, 24px));
+}
+:is(.wallpaper-discord-preview, .settings-discord-preview)[data-preview-glass="none"] :is(
+  .preview-servers, .preview-channels, .preview-history, .preview-window-controls,
+  .preview-window-name, .preview-channel-pill, .preview-toolbar, .preview-input,
+  .preview-user, .settings-preview-sidebar, .settings-preview-header, .settings-preview-card,
+  .settings-preview-row, .settings-preview-search, .settings-preview-nav
+) { backdrop-filter: none; -webkit-backdrop-filter: none; border-color: transparent; box-shadow: none; }
+.wallpaper-discord-preview[data-preview-glass="none"] .preview-mention { backdrop-filter: none; -webkit-backdrop-filter: none; }

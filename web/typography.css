@@ -1,0 +1,86 @@
+/* Shared scale for real app content. Miniature Discord previews and the glass
+   wordmark retain their intentional relative sizing. */
+:root {
+  --type-body: 14px;
+  --type-help: 13px;
+  --type-meta: 12px;
+  --muted: #cbd0d7;
+}
+body { font-size: var(--type-body); line-height: 1.5; }
+.button, .settings-card .settings-footer .button, .input, select {
+  font-size: var(--type-body); font-weight: 600;
+}
+.settings-header h2 { font-size: clamp(24px, 1.75vw, 30px); line-height: 1.25; }
+.settings-heading-row { flex-wrap: wrap; gap: 10px 14px; }
+.settings-heading-row h2 { flex: 1 1 200px; overflow-wrap: anywhere; }
+.settings-header p, .setting-hint, .color-grid .setting-hint,
+.wallpaper-notice, .wallpaper-feedback, .palette-hint,
+.crop-dialog .crop-hint, .guide-header p, .status {
+  font-size: var(--type-help); line-height: 1.65;
+}
+.setting-label { font-size: var(--type-body); line-height: 1.5; }
+.setting-info, .setting-control { min-width: 0; }
+.setting-hint, .wallpaper-notice, .wallpaper-feedback, .palette-hint { overflow-wrap: anywhere; }
+.submenu-heading { font-size: 16px; line-height: 1.4; }
+.range-output { font-size: 18px; line-height: 1.4; }
+.range-endpoints, .unit-input span, .color-adjustments .opacity-label,
+.sidebar-label, .sidebar-brand div > span, .theme-changelog p > span,
+.app-changelog-card time { font-size: var(--type-meta); line-height: 1.5; }
+.color-adjustments .color-value, .color-adjustments .opacity-input output {
+  font-size: var(--type-help); line-height: 1.5; font-variant-numeric: tabular-nums;
+}
+.category-tab { font-size: var(--type-help); line-height: 1.4; min-height: 48px; }
+.category-tab > span:not(.icon):not(.category-dirty):not(.recommendation-dot) {
+  min-width: 0; white-space: normal; overflow-wrap: anywhere;
+}
+.category-tab .icon { flex-shrink: 0; }
+.sidebar-brand strong { font-size: 19px; line-height: 1.3; }
+.sidebar-label { letter-spacing: .05em; }
+.sidebar-note { font-size: var(--type-meta); line-height: 1.6; }
+.settings-footer { gap: 12px 18px; align-items: center; }
+.settings-footer .status { font-size: var(--type-help); line-height: 1.55; flex: 1 1 220px; }
+.settings-footer .settings-actions { gap: 10px; }
+.settings-card .settings-footer .button { padding: 10px 14px; min-height: 44px; }
+.guide-dialog { width: min(760px, calc(100vw - 40px)); }
+.guide-steps h3, .app-changelog-card h4 { font-size: 16px; line-height: 1.4; }
+.guide-steps p, .app-changelog-card p, .app-changelog-card li {
+  font-size: var(--type-body); line-height: 1.75; max-width: 65ch;
+}
+.guide-steps p, .app-changelog-card p { margin-block: 10px 0; }
+.guide-steps h3 { margin-bottom: 10px; }
+.app-changelog-card h3 { font-size: 20px; line-height: 1.35; }
+.app-changelog-select { font-size: var(--type-help); }
+.app-changelog-select select { font-size: var(--type-body); }
+.vencord-dialog p { font-size: var(--type-body); line-height: 1.7; overflow-wrap: anywhere; }
+.vencord-dialog:not(.crop-dialog):not(.guide-dialog) p { text-align: left; }
+.vencord-dialog h2 { font-size: clamp(24px, 2vw, 28px); line-height: 1.3; }
+.crop-dialog .crop-hint { margin: 12px auto 18px; max-width: 55ch; }
+.crop-controls { grid-template-columns: minmax(0, 1fr); max-width: 480px; width: 100%; margin: 0 auto 22px; }
+.crop-control { font-size: var(--type-help); font-weight: 600; gap: 10px; }
+.crop-control-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.crop-zoom-value { font-size: var(--type-body); font-weight: 700; font-variant-numeric: tabular-nums; }
+.crop-dialog .app-update-actions { gap: 12px; }
+.theme-changelog { font-size: var(--type-help); line-height: 1.65; }
+.theme-changelog p { gap: 8px 12px; }
+.dock-heading { font-size: 11px; letter-spacing: .05em; }
+.dock-button .button-label { font-size: var(--type-body); line-height: 1.4; }
+.zoom-pill { font-size: var(--type-help); }
+.version { font-size: var(--type-meta); }
+@media (max-width: 720px) {
+  .settings-heading-row { align-items: flex-start; }
+  .settings-heading-row h2 { flex-basis: 100%; }
+  .settings-header { padding: 18px 16px 14px; }
+  .settings-scroll { padding: 16px 12px; }
+  .settings-sidebar { padding-inline: 8px; }
+  .category-tab { padding: 10px 8px; gap: 7px; }
+  .sidebar-brand { flex-wrap: wrap; }
+  .sidebar-brand strong { font-size: 18px; }
+  .sidebar-label { margin-block: 16px 10px; }
+  .settings-footer .status { flex-basis: 100%; }
+  .settings-footer .settings-actions { width: 100%; justify-content: flex-end; }
+  .settings-actions #reset-defaults { min-width: 0; }
+  .settings-card .settings-footer .button { padding: 9px 12px; }
+  .guide-dialog { padding: 20px 16px; }
+  .guide-steps li, .app-changelog-card { padding: 18px; }
+  .guide-steps li::before { left: 18px; top: 18px; }
+}

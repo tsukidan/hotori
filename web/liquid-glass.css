@@ -75,7 +75,7 @@ input[type="color"]::-webkit-color-swatch { border: 0; border-radius: 9px; }
 }
 .settings-header, .settings-footer { border-color: #ffffff1a; }
 /* Add a subtle readability tint to liquid glass when the shader is unavailable. */
-.optical-glass:not(.shader-glass):not(.guide-step):not(.settings-page .optical-glass:not(.settings-card):not(.settings-sidebar):not(.settings-glass-action)) {
+.optical-glass:not(.shader-glass):not(.guide-step):not(.acrylic-select):not(.settings-page .optical-glass:not(.settings-card):not(.settings-sidebar):not(.settings-glass-action)) {
   background-image: linear-gradient(#0000001a, #0000001a), radial-gradient(ellipse at var(--glass-light-x, 22%) var(--glass-light-y, 0%), #ffffff04, transparent 65%);
 }
 .settings-header { border-radius: 60px 60px 0 0; }
@@ -153,26 +153,47 @@ input.shader-glass, select.shader-glass, textarea.shader-glass {
 /* The two outer panes remain liquid glass. Only their inner controls,
    submenus and category options use fixed 24px acrylic blur and tint. */
 .guide-step.optical-glass,
+.acrylic-select.optical-glass,
 .settings-page .optical-glass:not(.settings-card):not(.settings-sidebar):not(.settings-glass-action) {
   --glass-surface-blur: 24px; --glass-surface-saturation: 115%;
   --glass-tint: #10121660; --glass-sheen-image: none;
 }
 .guide-step.optical-glass::after,
+.acrylic-select.optical-glass::after,
 .settings-page .optical-glass:not(.settings-card):not(.settings-sidebar):not(.settings-glass-action)::after { display: none; }
 .guide-step.shader-glass,
+.acrylic-select.shader-glass,
 .settings-page .shader-glass:not(:where(.settings-card, .settings-sidebar, .settings-glass-action)) { border-color: #ffffff14; }
 .shader-glass.button.primary, .shader-glass.category-tab[aria-selected="true"],
 .wallpaper-actions .shader-glass.button[aria-pressed="true"] {
   border-color: color-mix(in srgb, var(--accent) 65%, transparent);
 }
 @supports (appearance: base-select) {
-  .settings-page select::picker(select) {
+  .settings-page select::picker(select), .acrylic-select::picker(select) {
     --glass-picker-sheen-image: none; --glass-picker-refraction: ;
     backdrop-filter: blur(24px) saturate(115%);
     background-color: #101216b3;
   }
-  .settings-page select.shader-glass::picker(select) { backdrop-filter: none; }
+  .settings-page select.shader-glass::picker(select), .acrylic-select.shader-glass::picker(select) { backdrop-filter: none; }
 }
 
 /* Guide steps get two successive 10% black tints (19% combined); the outer dialog stays unchanged. */
 .guide-step.optical-glass { --glass-tint: color-mix(in srgb, #10121660 81%, #000 19%); }
+
+/* Keep version selection compact, readable, and on the same acrylic material
+   as the inner settings controls; only the surrounding dialog is liquid glass. */
+.app-changelog-select {
+  display: grid; justify-items: center; gap: 9px;
+  width: min(100%, 280px); margin: 18px auto 0;
+  color: #fff; font-weight: 700; text-align: center;
+  text-shadow: 0 1px 3px #000, 0 2px 10px #0009;
+}
+.app-changelog-select select {
+  width: 100%; flex: none; color: #fff; font-weight: 700;
+  text-shadow: 0 1px 3px #000, 0 2px 10px #0009;
+}
+@supports (appearance: base-select) {
+  .acrylic-select::picker(select), .acrylic-select option {
+    color: #fff; font-weight: 700; text-shadow: 0 1px 3px #000, 0 2px 10px #0009;
+  }
+}

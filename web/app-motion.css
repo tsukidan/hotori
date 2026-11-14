@@ -1,0 +1,52 @@
+/* Loading placeholders contain no user content and keep the layout steady. */
+[data-loading="true"], .loading-host { position: relative; }
+.loading-skeleton { display: grid; gap: 14px; min-width: 0; width: 100%; pointer-events: none; }
+.skeleton-card {
+  display: grid; gap: 12px; min-height: 105px; padding: 20px;
+  border: 1px solid #ffffff16; border-radius: 28px; background: #10121665;
+}
+.skeleton-line {
+  display: block; height: 12px; border-radius: 999px; overflow: hidden;
+  background: linear-gradient(100deg, #ffffff09 20%, #ffffff25 45%, #ffffff09 70%);
+  background-size: 240% 100%; animation: hotori-skeleton 1.7s ease-in-out infinite;
+}
+.skeleton-wide { width: 78%; height: 16px; }
+.skeleton-medium { width: 94%; }
+.skeleton-short { width: 55%; }
+.loading-skeleton-overlay {
+  position: absolute; inset: 0; z-index: 2; min-height: 100%;
+  border-radius: inherit; background: #101216de; align-content: center;
+}
+.loading-skeleton-overlay .skeleton-card { border: 0; background: transparent; min-height: 0; height: 100%; padding: 0 12px; align-content: center; gap: 0; }
+.loading-skeleton-overlay .skeleton-line { height: 7px; }
+.loading-skeleton-overlay .skeleton-medium, .loading-skeleton-overlay .skeleton-short { display: none; }
+#settings-list > .loading-skeleton { padding: 4px 0 12px; }
+/* Fade the finished page once in the compositor, without moving its lenses. */
+#app[data-page] > .page { transform: none; }
+.page { transition: opacity 280ms ease, visibility 0s; }
+.settings-page, #app[data-page="settings"] .installer-page { opacity: 0; transition-delay: 0s, 280ms; }
+.installer-page, #app[data-page="settings"] .settings-page { opacity: 1; transition-delay: 0s; }
+.settings-section, .app-changelog-card { animation: none; }
+.status { transition: color 180ms ease, background-color 180ms ease; }
+@keyframes hotori-content-in { from { opacity: .25; } to { opacity: 1; } }
+@keyframes hotori-skeleton { from { background-position: 180% 0; } to { background-position: -60% 0; } }
+
+/* Chromium keeps the native top layer until the close fade finishes. The
+   actual close event and its focus-return behavior remain unchanged. */
+@supports (transition-behavior: allow-discrete) {
+  dialog {
+    opacity: 0;
+    transition: opacity 180ms ease, display 180ms allow-discrete, overlay 180ms allow-discrete;
+  }
+  dialog[open] { opacity: 1; animation: none !important; }
+  dialog::backdrop {
+    opacity: 0; animation: none !important;
+    transition: opacity 180ms ease, display 180ms allow-discrete, overlay 180ms allow-discrete;
+  }
+  dialog[open]::backdrop { opacity: 1; }
+  @starting-style { dialog[open], dialog[open]::backdrop { opacity: 0; } }
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-line, .settings-section:not([hidden]), .app-changelog-card { animation: none; }
+  .page, .status, dialog, dialog::backdrop { transition-duration: 0s !important; transition-delay: 0s !important; }
+}
