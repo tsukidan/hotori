@@ -2,6 +2,11 @@
   "schemaVersion": 1,
   "releases": [
     {
+      "version": "1.8.3",
+      "publishedAt": null,
+      "body": "## Appearance\n\n- Simplify the home introduction heading to “A theme inspired by Liquid Glass.” and use the same rounded font as the Hotori logo.\n- Reduce the glass logo’s white readability tint from 30% to 20%.\n- Fix dropdown popup blur and constrain long menus to a scrollable height.\n- Add softly animated cautions beneath experimental Liquid Glass and unfinished No Glass profile selections."
+    },
+    {
       "version": "1.8.2",
       "publishedAt": null,
       "body": "## Wallpapers\n\n- Raise the wallpaper limit from 10 MB to 50 MB for imports, source-quality PNG crops, previews, and cached backgrounds. Crops retain original pixels without resizing or lossy compression."

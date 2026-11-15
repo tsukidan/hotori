@@ -347,21 +347,6 @@
     });
     for (const child of children) walk(child);
   }
-  function paintPickers() {
-    if (!CSS.supports('appearance', 'base-select')) return;
-    for (const select of document.querySelectorAll('select:open')) {
-      const options = [...select.options].map(option => option.getBoundingClientRect()).filter(box => box.width > 0 && box.height > 0);
-      if (!options.length) continue;
-      const left = Math.min(...options.map(box => box.left)) - 7, top = Math.min(...options.map(box => box.top)) - 7;
-      const width = Math.max(...options.map(box => box.right)) - left + 7, height = Math.max(...options.map(box => box.bottom)) - top + 7;
-      const w = Math.round((width + pad * 2) * dpr), h = Math.round((height + pad * 2) * dpr);
-      const acrylic = document.createElement('canvas'); acrylic.width = w; acrylic.height = h;
-      paintAcrylic(acrylic.getContext('2d'), { left, top, width, height }, Math.min(30, width / 2, height / 2));
-      const interior = document.createElement('canvas'); interior.width = Math.round(width * dpr); interior.height = Math.round(height * dpr);
-      interior.getContext('2d').drawImage(acrylic, Math.round(pad * dpr), Math.round(pad * dpr), interior.width, interior.height, 0, 0, interior.width, interior.height);
-      select.style.setProperty('--shader-picker-image', `url("${interior.toDataURL()}")`);
-    }
-  }
   function render() {
     frame = 0; if (failed || renderer.contextLost) return;
     styles = new Map(); boxes = new Map(); contributions = [];
@@ -373,7 +358,6 @@
       }
       if (!background()) return;
       walk(document.body);
-      paintPickers();
       for (const [element, layer] of layers) if (!element.isConnected) { resize.unobserve(element); layer.interior?.remove(); layers.delete(element); }
       for (const [element] of captures) if (!element.isConnected) { resize.unobserve(element); captures.delete(element); }
       if (document.documentElement.dataset.glassRenderer !== 'reference-liquidglass') document.documentElement.dataset.glassRenderer = 'reference-liquidglass';

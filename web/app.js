@@ -512,6 +512,34 @@ function renderFields() {
         hint.textContent = field.choiceHints[field.choices.indexOf(input.value)] || field.hint;
       });
       control.append(input);
+      if (field.name === "--blur-profile") {
+        const warning = element("div", "profile-warning");
+        const message = element("p", "profile-warning-text");
+        warning.id = `profile-warning-${index}`;
+        warning.setAttribute("role", "status");
+        warning.append(message); control.append(warning);
+        let revision = 0;
+        const updateWarning = async (initial = false) => {
+          const current = ++revision;
+          const text = input.value === "Liquid Glass"
+            ? "Liquid Glass is very experimental and can greatly reduce performance."
+            : ["No Glass", "No Blur"].includes(input.value)
+              ? "This mode is a work in progress and is not prioritized. Please use another option if it is difficult to read."
+              : "";
+          const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+          if (!initial && message.textContent && text && message.textContent !== text && !reduced) {
+            await message.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 160 }).finished.catch(() => {});
+            if (current !== revision) return;
+          }
+          message.getAnimations().forEach(animation => animation.cancel());
+          if (text) message.textContent = text;
+          warning.classList.toggle("is-visible", !!text);
+          warning.setAttribute("aria-hidden", String(!text));
+          if (text && !initial && !reduced) message.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 240 });
+        };
+        input.addEventListener("change", () => updateWarning());
+        updateWarning(true);
+      }
     } else if (field.slider) {
       const spec = field.slider;
       const isRelative = spec.avatarPercent || ["--blur-val", "--liquid-blur-val", "--liquid-saturation"].includes(field.name);
@@ -583,7 +611,7 @@ function renderFields() {
     }
     input.id = `field-${index}`;
     input.title = field.hint;
-    input.setAttribute("aria-describedby", hint.id);
+    input.setAttribute("aria-describedby", hint.id + (field.name === "--blur-profile" ? ` profile-warning-${index}` : ""));
     row.append(info, control); destination(field).append(row);
   });
   categoryGroups = new Map();

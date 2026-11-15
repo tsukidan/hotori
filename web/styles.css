@@ -461,7 +461,7 @@ details[open] > summary > .icon { transform: rotate(180deg); }
 .installer-card h2 { font-size: clamp(25px, 2vw, 36px); line-height: 1.25; font-weight: 500; text-wrap: balance; }
 .installer-card .description { margin: 18px 0 0; max-width: 100%; font-size: clamp(14px, .75vw, 16px); line-height: 1.85; }
 .home-intro { padding: 22px; }
-.home-intro h2 { color: #fff; font-style: italic; text-shadow: 0 2px 14px #000; }
+.home-intro h2 { color: #fff; font-family: "Hotori Rounded", "Hotori Inter", sans-serif; font-weight: 900; font-style: normal; text-shadow: 0 2px 14px #000; }
 .home-intro .description { color: #f5f6f7; font-weight: 500; text-shadow: 0 2px 14px #000; }
 .installer-card .status { margin-top: 30px; }
 #home-status, .theme-version {
@@ -767,3 +767,11 @@ h2, .section-heading, .sidebar-brand strong { letter-spacing: -.025em; }
   .color-adjustments:has(.opacity-input) { grid-template-columns: minmax(130px, .8fr) minmax(0, 1.2fr); }
   .color-adjustments .opacity-input { border-top: 0; border-left: 1px solid #ffffff24; }
 }
+
+/* Profile cautions stay beneath the selector. */
+.setting-control:has(.profile-warning) { gap: 0; }
+.profile-warning { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows 240ms ease, opacity 240ms ease; }
+.profile-warning.is-visible { grid-template-rows: 1fr; opacity: 1; }
+.profile-warning-text { overflow: hidden; min-height: 0; margin: 0; color: #edaaaa; font-size: 13px; line-height: 1.6; text-align: center; text-shadow: 0 1px 4px #000; }
+.profile-warning.is-visible .profile-warning-text { padding-top: 10px; }
+@media (prefers-reduced-motion: reduce) { .profile-warning { transition: none; } }

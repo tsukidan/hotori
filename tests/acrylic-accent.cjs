@@ -65,7 +65,8 @@ const path = require('node:path');
     await page.evaluate(() => { window.materialCalls = []; window.acrylicFilters = []; document.dispatchEvent(new Event('hotori:glass-invalidate')); });
     await page.waitForTimeout(150);
     await page.getByLabel('Glass Profile', { exact: true }).click();
-    await page.waitForFunction(() => document.querySelector('select:open')?.style.getPropertyValue('--shader-picker-image'));
+    await page.waitForFunction(() => document.querySelector('select:open'));
+    assert.equal(await page.locator('select:open').evaluate(el => getComputedStyle(el, '::picker(select)').backdropFilter), 'blur(24px) saturate(1.15)');
     const calls = await page.evaluate(() => window.materialCalls.filter(call => call.height > 500));
     assert(calls.some(call => call.width < 300) && calls.some(call => call.width > 500), 'Both outer panes must use the glass renderer');
     assert(calls.every(({ config }) => config.refraction > 0 && config.fresnel > 0), 'The Hotori sidebar and Glass Appearance pane retain liquid glass');
@@ -75,6 +76,16 @@ const path = require('node:path');
     for (const action of ['#back', '#reset-defaults', '#save-category']) {
       assert(await page.locator(action).evaluate(el => el.classList.contains('shader-glass') && el.querySelector('.glass-render-layer')?.width > 0), 'Settings actions use the active GPU glass material');
     }
+    const profile = page.getByLabel('Glass Profile', { exact: true });
+    await profile.selectOption('Liquid Glass');
+    await page.waitForFunction(() => document.querySelector('.profile-warning').classList.contains('is-visible') && document.querySelector('.profile-warning').textContent.includes('greatly reduce performance'));
+    await profile.selectOption('No Glass');
+    await page.waitForFunction(() => document.querySelector('.profile-warning').textContent.includes('not prioritized'));
+    await profile.selectOption('Liquid Glass');
+    await profile.selectOption('Acrylic');
+    await page.waitForTimeout(300);
+    assert.equal(await page.locator('.profile-warning').getAttribute('aria-hidden'), 'true', 'Rapid profile changes leave no stale warning');
+    assert.equal(await page.locator('.profile-warning').evaluate(el => getComputedStyle(el).opacity), '0');
     await page.locator('#reset-defaults').click();
     await page.waitForFunction(() => document.querySelector('#reset-dialog').classList.contains('shader-glass'));
     await page.screenshot({ path: path.join(root, 'target/qa/reset-confirm-glass.png') });
