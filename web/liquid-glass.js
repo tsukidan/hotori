@@ -3,7 +3,7 @@
 // Refract the compositor's real backdrop, never a screenshot or a copy of the
 // wallpaper. Foreground text, icons, inputs and hit targets remain native DOM.
 (() => {
-  const selector = '.glass, .dock-surface, .dock-symbol, .window-controls, .window-button, .zoom-pill, #home-status, .theme-version, .button, .category-tab, .submenu, .setting-row, .guide-step, .input, select';
+  const selector = '.glass, .dock-surface, .dock-symbol, .window-controls, .window-button, .zoom-pill, #home-status, .theme-version, .theme-update-notice, .button, .category-tab, .submenu, .setting-row, .guide-step, .input, select';
   const ns = 'http://www.w3.org/2000/svg';
   const surfaces = new Set();
   const cache = new Map();

@@ -5,7 +5,7 @@
 (() => {
   const vendor = window.HotoriLiquidGlass;
   if (!vendor) return;
-  const selector = '.glass, .glass-wordmark, .dock-surface, .dock-symbol, .window-controls, .window-button, .zoom-pill, #home-status, .theme-version, .button, .category-tab, .submenu, .setting-row, .guide-step, .input, select';
+  const selector = '.glass, .glass-wordmark, .dock-surface, .dock-symbol, .window-controls, .window-button, .zoom-pill, #home-status, .theme-version, .theme-update-notice, .button, .category-tab, .submenu, .setting-row, .guide-step, .input, select';
   const excluded = '.glass-render-layer, .glass-optics-definitions, [data-glass-exclude], script, style, link, iframe';
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   const layers = new Map(), captures = new Map();
@@ -244,11 +244,13 @@
   }
   function requestCapture(element, ownOnly, box) {
     const width = element.offsetWidth || box.width, height = element.offsetHeight || box.height;
-    const signature = `${width}/${height}/${dpr}/${ownOnly}`;
+    // Preview foreground stays native and sharp. This bitmap is only the
+    // backdrop sampled by overlapping lenses, so display-scale capture is enough.
+    const pixelRatio = element.matches('.wallpaper-discord-preview, .settings-discord-preview') ? 1 : dpr;
+    const signature = `${width}/${height}/${pixelRatio}/${ownOnly}`;
     let entry = captures.get(element);
     if (!entry) { entry = { dirty: true, signature: '', generation: 0 }; captures.set(element, entry); resize.observe(element); }
     if (entry.pending || (!entry.dirty && entry.signature === signature)) return entry.canvas;
-    const pixelRatio = dpr;
     captureQueue.set(element, () => {
       entry.pending = true; entry.dirty = false; entry.signature = signature;
       const generation = entry.generation = ++captureGeneration;
@@ -308,6 +310,14 @@
     mediaAccess.set(element, { source, allowed }); return allowed;
   }
   function paintContent(element, ownOnly, box) {
+    // These illustrations remain native DOM. For lenses overlapping them,
+    // sample their image/dimming rather than serializing hundreds of mock UI
+    // nodes (and their backdrop filters) on the scrolling main thread.
+    if (!ownOnly && element.matches('.wallpaper-discord-preview, .settings-discord-preview')) {
+      const image = element.querySelector('.wallpaper-preview');
+      if (image && !image.hidden) paintContent(image, false, boxOf(image));
+      return;
+    }
     if (box.width <= 0 || box.height <= 0) return;
     if (element.matches('canvas.crop-stage')) {
       withClip(element, () => {
@@ -363,7 +373,7 @@
       if (document.documentElement.dataset.glassRenderer !== 'reference-liquidglass') document.documentElement.dataset.glassRenderer = 'reference-liquidglass';
       if (document.getAnimations().some(animation => {
         const target = animation.effect?.target;
-        return animation.playState === 'running' && !['palette-notification', 'hotori-skeleton', 'wallpaper-skeleton-shimmer'].includes(animation.animationName)
+        return animation.playState === 'running' && !['theme-update-glow', 'palette-notification', 'hotori-skeleton', 'wallpaper-skeleton-shimmer'].includes(animation.animationName)
           && target instanceof Element && !target.matches('.page, dialog, .material-fade') && visible(target);
       })) schedule();
     } catch (error) { console.warn('LiquidGlass fallback:', error); fallback(); }

@@ -16,14 +16,14 @@ const { pathToFileURL } = require('node:url');
       page.on('pageerror', error => errors.push(error.message));
       await page.addInitScript(({scenario, catalog}) => {
         let installed = scenario !== 'absent';
-        let version = scenario === 'future' ? '0.9.5' : scenario === 'normalized' ? 'v0.8.12+local' : scenario === 'latest-theme' ? '0.8.12' : scenario === 'previous-theme' ? '0.8.9' : scenario === 'unknown' ? null : scenario === 'newer' ? '0.9.0' : scenario === 'current' ? '0.8.3' : '0.8.2';
+        let version = scenario === 'future' ? '999.0.1' : scenario === 'normalized' ? 'v0.8.12+local' : scenario === 'latest-theme' ? '0.8.12' : scenario === 'previous-theme' ? '0.8.9' : scenario === 'unknown' ? null : scenario === 'newer' ? '999.0.0' : scenario === 'current' ? '0.8.3' : '0.8.2';
         window.setThemeVersion = next => { version = next; };
         window.themeChecks = 0; window.themeInstalls = 0;
         window.__TAURI__ = { core: { invoke: async (command, args) => {
           if (command === 'get_status') return { ready: true, installed, theme_version: version };
           if (command === 'get_theme_changelog') {
             if (args.refresh && scenario === 'offline') throw Error('Offline');
-            if (args.refresh && scenario === 'future') return {schemaVersion: 1, versions: {...catalog.versions, '0.9.5': [{title: 'Future theme', description: 'Fetched without an app rebuild.'}]}};
+            if (args.refresh && scenario === 'future') return {schemaVersion: 1, versions: {...catalog.versions, '999.0.1': [{title: 'Future theme', description: 'Fetched without an app rebuild.'}]}};
             return structuredClone(catalog);
           }
           if (command === 'check_app_update') return { available: false };
@@ -66,6 +66,12 @@ const { pathToFileURL } = require('node:url');
       assert.equal(await page.evaluate(() => window.themeChecks), expectedChecks, 'Local status polling must not repeat GitHub checks');
       if (scenario === 'outdated') {
         assert.equal(await page.locator('#theme-update-label').textContent(), 'v0.8.3 available');
+        assert(await notice.evaluate(el=>el.classList.contains('acrylic-select')));
+        assert.equal(await notice.evaluate(el=>getComputedStyle(el,'::before').animationName),'theme-update-glow');
+        assert.equal(await notice.evaluate(el=>getComputedStyle(el).borderRadius),'999px');
+        await page.emulateMedia({reducedMotion:'reduce'});
+        assert.equal(await notice.evaluate(el=>getComputedStyle(el,'::before').animationName),'none');
+        await page.emulateMedia({reducedMotion:'no-preference'});
         await page.waitForTimeout(850);
         const rect = await page.locator('#theme-version-value').boundingBox();
         const update = await notice.boundingBox();

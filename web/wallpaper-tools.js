@@ -7,6 +7,17 @@
   const localPrefix = 'vencord:///themes/hotori-assets/';
   let api, colors = [], paletteSource = '', paletteGeneration = 0;
   let seen = new Set(), views = [], previews = [], cropDialog;
+  const previewURLs = new Map();
+  async function previewSource(image, width) {
+    const scale = Math.min(1, Math.max(640, Math.min(2048, width)) / image.naturalWidth);
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
+    canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
+    canvas.getContext('2d').drawImage(image, 0, 0, canvas.width, canvas.height);
+    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+    if (!blob) throw Error('Could not prepare wallpaper preview.');
+    return URL.createObjectURL(blob);
+  }
   const node = (tag, cls = '', text) => {
     const el = document.createElement(tag); el.className = cls;
     if (text !== undefined) el.textContent = text;
@@ -343,7 +354,12 @@
         source ||= await api.invoke('app_wallpaper', { uri: current });
         const decoded = await imageFrom(source);
         if (request !== previewRequest || current !== field.value || !root.isConnected) return;
-        image.src = source; await image.decode();
+        const preview = await previewSource(decoded, (root.clientWidth || 1200) * devicePixelRatio);
+        if (request !== previewRequest || !root.isConnected) { URL.revokeObjectURL(preview); return; }
+        const oldPreview = previewURLs.get(image);
+        image.src = preview; previewURLs.set(image, preview);
+        if (oldPreview) URL.revokeObjectURL(oldPreview);
+        await image.decode();
         if (request !== previewRequest || current !== field.value || !root.isConnected) return;
         image.hidden = false; hasPreview = true; displayedUri = current;
         stage.classList.remove('preview-ready');
@@ -420,6 +436,7 @@
     root.append(input, actions, picker, notice, feedback); sync(); show(); return input;
   }
   function mount(bridge) {
+    for (const [image, url] of previewURLs) if (!image.isConnected) { URL.revokeObjectURL(url); previewURLs.delete(image); }
     api = bridge;
     for (const field of api.fields().filter(field => field.kind === 'color' && (field.name === '--main-color' || field.name.startsWith('--mention-')))) {
       const root = [...document.querySelectorAll('.setting-row')].find(row => row.dataset.name === field.name)?.querySelector('.setting-control');

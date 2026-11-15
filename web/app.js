@@ -14,7 +14,7 @@ let fields = [];
 let navigationTimer;
 let savedValues = new Map();
 let categoryGroups = new Map();
-let selectedCategory = "Glass Appearance";
+let selectedCategory = "Wallpapers";
 let appBackgroundSelection, appBackgroundRequest = 0, appBackgroundLoaded = false, appBackgroundAttempt = 0;
 let appBackgroundObjectURL;
 let refreshInFlight, refreshQueued = false;
@@ -345,7 +345,7 @@ function disclosure(title, symbol, open, submenu = false) {
 function categoryFor(field) {
   return ({ "Glass appearance": "Glass Appearance", "Blur & saturation": "Glass Appearance", "Glass tints": "Glass Appearance",
     "Wallpapers": "Wallpapers", "Background dimming": "Wallpapers", "Accent color": "Colors", "Text & icon colors": "Colors",
-    "Avatars": "Avatars", "Message spacing": "Messages", "Mention highlights": "Messages", "Server list": "Server List", "Friends sidebar": "Server List" })[field.section] || "Colors";
+    "Avatars": "Avatars", "Message spacing": "Messages", "Mention highlights": "Messages", "Message bubbles": "Messages", "Server list": "Server List", "Friends sidebar": "Server List" })[field.section] || "Colors";
 }
 function updateCategoryButtons() {
   for (const [category, group] of categoryGroups) {
@@ -440,9 +440,9 @@ async function saveRecommendedColor(name, hex) {
 function renderFields() {
   const fragment = document.createDocumentFragment();
   const layouts = [
-    ["Server List", "server", true], ["Glass Appearance", "glass", true],
     ["Wallpapers", "image", true], ["Colors", "palette", true],
     ["Avatars", "user", true], ["Messages", "message", true],
+    ["Glass Appearance", "glass", true], ["Server List", "server", true],
   ];
   const sections = new Map();
   for (const [title] of layouts) {
@@ -476,6 +476,7 @@ function renderFields() {
       case "Text & icon colors": return target("Colors");
       case "Avatars": return target("Avatars");
       case "Message spacing": return target("Messages");
+      case "Message bubbles": return target("Messages", "Message bubbles", "message");
       case "Mention highlights": return target("Messages", "Mention Highlights", "message", true);
       case "Server list": return target("Server List");
       default: return target("Colors", "Other Colors", "palette", true);
@@ -496,6 +497,16 @@ function renderFields() {
     label.htmlFor = `field-${index}`;
     const hint = element("p", "setting-hint", field.name === sharedText ? "Shared color for messages, input text, and neutral interface text." : field.hint);
     hint.id = `hint-${index}`;
+    if (field.name === "--message-bubbles") {
+      hint.classList.add("bubble-dependency-warning");
+      const end = () => {
+        const marker = element("span", "bubble-warning-marker", "!!");
+        marker.setAttribute("aria-hidden", "true");
+        marker.prepend(icon("alert"));
+        return marker;
+      };
+      hint.replaceChildren(end(), element("strong", "", field.hint), end());
+    }
     label.title = field.hint;
     info.append(label, hint);
     const control = element("div", "setting-control");
@@ -509,15 +520,22 @@ function renderFields() {
       input.value = field.value;
       input.addEventListener("change", () => {
         field.value = input.value;
-        hint.textContent = field.choiceHints[field.choices.indexOf(input.value)] || field.hint;
+        if (field.name !== "--message-bubbles") hint.textContent = field.choiceHints[field.choices.indexOf(input.value)] || field.hint;
       });
       control.append(input);
       if (field.name === "--blur-profile") {
         const warning = element("div", "profile-warning");
         const message = element("p", "profile-warning-text");
+        const clip = element("div", "profile-warning-clip");
+        const copy = element("strong");
+        const marker = () => {
+          const end = element("span", "bubble-warning-marker", "!!");
+          end.setAttribute("aria-hidden", "true"); end.prepend(icon("alert")); return end;
+        };
+        message.append(marker(), copy, marker()); clip.append(message);
         warning.id = `profile-warning-${index}`;
         warning.setAttribute("role", "status");
-        warning.append(message); control.append(warning);
+        warning.append(clip); control.append(warning);
         let revision = 0;
         const updateWarning = async (initial = false) => {
           const current = ++revision;
@@ -527,12 +545,12 @@ function renderFields() {
               ? "This mode is a work in progress and is not prioritized. Please use another option if it is difficult to read."
               : "";
           const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-          if (!initial && message.textContent && text && message.textContent !== text && !reduced) {
+          if (!initial && copy.textContent && text && copy.textContent !== text && !reduced) {
             await message.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 160 }).finished.catch(() => {});
             if (current !== revision) return;
           }
           message.getAnimations().forEach(animation => animation.cancel());
-          if (text) message.textContent = text;
+          if (text) copy.textContent = text;
           warning.classList.toggle("is-visible", !!text);
           warning.setAttribute("aria-hidden", String(!text));
           if (text && !initial && !reduced) message.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 240 });

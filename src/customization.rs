@@ -80,6 +80,7 @@ pub fn choices(name: &str) -> Vec<(&'static str, &'static str)> {
             ("Light Glass", "var(--glass-light)"),
         ],
         "--show-friends-sidebar" => vec![("Hidden", "0"), ("Shown", "1")],
+        "--message-bubbles" => vec![("Off", "0"), ("On", "1")],
         "--server-list-layout" => vec![
             ("Vertical", "var(--vertical)"),
             ("Horizontal", "var(--horizontal)"),
@@ -120,6 +121,9 @@ pub fn label(name: &str) -> String {
         "--mention-glass-tint" => "Mention Highlight",
         "--mention-glass-hover" => "Mention Hover Highlight",
         "--mention-glass-accent" => "Mention Accent Color",
+        "--message-bubbles" => "Message Bubbles",
+        "--message-bubble-self-tint" => "Your Messages",
+        "--message-bubble-other-tint" => "Other Messages",
         "--show-friends-sidebar" => "Friends Sidebar",
         "--server-list-layout" => "Server List Layout",
         _ => return name.trim_start_matches("--").replace('-', " "),
@@ -129,6 +133,15 @@ pub fn label(name: &str) -> String {
 
 pub fn explanation(name: &str, value: &str) -> &'static str {
     match name {
+        "--message-bubbles" => {
+            "Requires Vencord’s built-in ThemeAttributes plugin. Enable via Discord Settings → Vencord → Plugins → ThemeAttributes. Without it, bubbles do not render. Off restores the normal username glass pill."
+        }
+        "--message-bubble-self-tint" => {
+            "Color and opacity of your grouped message bubbles, using the selected glass profile."
+        }
+        "--message-bubble-other-tint" => {
+            "Color and opacity of other people’s grouped message bubbles, using the selected glass profile."
+        }
         "--show-friends-sidebar" => {
             if value == "Shown" {
                 "Shows Discord’s persistent right-side Friends sidebar. The main Friends page and server member list stay available."
@@ -152,7 +165,9 @@ pub fn explanation(name: &str, value: &str) -> &'static str {
         "--settings-bg" => "Wallpaper displayed on Discord’s settings pages.",
         n if n.contains("overlay") => "Controls wallpaper darkening. Higher opacity means darker.",
         "--blur-val" => "100% is the theme default. Adjust acrylic blur between 50% and 150%.",
-        "--liquid-blur-val" => "100% is the theme default. Adjust liquid glass blur between 50% and 150%.",
+        "--liquid-blur-val" => {
+            "100% is the theme default. Adjust liquid glass blur between 50% and 150%."
+        }
         "--liquid-saturation" => {
             "100% is the theme default. Adjust between 50% and 150% of its color intensity."
         }
@@ -224,7 +239,12 @@ pub fn swatch(value: &str) -> Option<Color> {
         .map(|s| s.trim().parse::<f32>())
         .collect::<Result<Vec<_>, _>>()
         .ok()?;
-    if numbers.len() != 4 || numbers.iter().any(|n| !n.is_finite()) {
+    if numbers.len() != 4
+        || numbers
+            .iter()
+            .enumerate()
+            .any(|(i, n)| !n.is_finite() || *n < 0.0 || *n > if i == 3 { 1.0 } else { 255.0 })
+    {
         return None;
     }
     Some(Color::from_argb_u8(
@@ -237,6 +257,9 @@ pub fn swatch(value: &str) -> Option<Color> {
 
 pub fn section(name: &str) -> &'static str {
     match name {
+        "--message-bubbles" | "--message-bubble-self-tint" | "--message-bubble-other-tint" => {
+            "Message bubbles"
+        }
         "--blur-profile" | "--glass-background" => "Glass appearance",
         "--main-bg" | "--settings-bg" => "Wallpapers",
         n if n.contains("overlay") => "Background dimming",
@@ -305,7 +328,7 @@ fn validate(name: &str, value: &str) -> io::Result<()> {
         ]
         .contains(&core),
         "--glass-background" => ["var(--glass-light)", "var(--glass-dark)"].contains(&core),
-        "--show-friends-sidebar" => ["0", "1"].contains(&core),
+        "--show-friends-sidebar" | "--message-bubbles" => ["0", "1"].contains(&core),
         "--server-list-layout" => ["var(--vertical)", "var(--horizontal)"].contains(&core),
         "--main-bg" | "--settings-bg" => {
             let url = display_value(name, core);
@@ -318,25 +341,6 @@ fn validate(name: &str, value: &str) -> io::Result<()> {
                     && (core.starts_with("url('") && core.ends_with("')")
                         || core.starts_with("url(\"") && core.ends_with("\")")))
         }
-        n if n.contains("overlay")
-            || n == "--glass-light"
-            || n == "--glass-dark"
-            || n == "--mention-glass-tint"
-            || n == "--mention-glass-hover" =>
-        {
-            core.strip_prefix("rgba(")
-                .and_then(|v| v.strip_suffix(')'))
-                .map(|v| {
-                    let numbers: Vec<_> = v.split(',').map(|s| s.trim().parse::<f32>()).collect();
-                    numbers.len() == 4
-                        && numbers.iter().enumerate().all(|(i, v)| {
-                            v.as_ref().is_ok_and(|n| {
-                                n.is_finite() && *n >= 0.0 && *n <= if i == 3 { 1.0 } else { 255.0 }
-                            })
-                        })
-                })
-                .unwrap_or(false)
-        }
         "--blur-val"
         | "--liquid-blur-val"
         | "--chat-input-gap"
@@ -345,9 +349,7 @@ fn validate(name: &str, value: &str) -> io::Result<()> {
         | "--server-list-horizontal-height" => unit(core, "px"),
         "--liquid-saturation" => unit(core, "%"),
         "--avatar-radius" => unit(core, "px") || unit(core, "%"),
-        _ => core.strip_prefix('#').is_some_and(|v| {
-            [3, 4, 6, 8].contains(&v.len()) && v.chars().all(|c| c.is_ascii_hexdigit())
-        }),
+        _ => swatch(core).is_some(),
     };
     if valid { Ok(()) } else { Err(bad()) }
 }
@@ -386,6 +388,34 @@ pub fn save(path: &Path, settings: &Settings, values: &[String]) -> io::Result<S
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn message_bubble_validation_rejects_bad_switches_and_colors() {
+        for value in ["0", "1"] {
+            assert!(validate("--message-bubbles", value).is_ok());
+        }
+        for value in ["2", "-1", "On", "true", "0.5"] {
+            assert!(validate("--message-bubbles", value).is_err());
+        }
+        for name in [
+            "--message-bubble-self-tint",
+            "--message-bubble-other-tint",
+            "--glass-dark",
+        ] {
+            for value in ["#12345678", "#1234", "rgba(12, 34, 56, 0.42)"] {
+                assert!(validate(name, value).is_ok());
+            }
+            for value in [
+                "rgba(256, 0, 0, 1)",
+                "rgba(0, 0, 0, -1)",
+                "rgba(NaN, 0, 0, 1)",
+                "#xyz",
+                "red; color: blue",
+            ] {
+                assert!(validate(name, value).is_err());
+            }
+        }
+    }
     #[test]
     fn friends_sidebar_choices_map_to_valid_css() {
         let name = "--show-friends-sidebar";

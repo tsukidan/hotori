@@ -112,6 +112,10 @@ pub fn fields(settings: &Settings, defaults: Option<&Settings>) -> Vec<Field> {
                     .collect(),
                 color: swatch.map(|c| format!("#{:02x}{:02x}{:02x}", c.red, c.green, c.blue)),
                 alpha_enabled: core.starts_with("rgba(")
+                    || matches!(
+                        name.as_str(),
+                        "--message-bubble-self-tint" | "--message-bubble-other-tint"
+                    )
                     || (core.starts_with('#') && (core.len() == 5 || core.len() == 9)),
                 opacity,
                 unit: if core.ends_with("px") {
@@ -156,6 +160,74 @@ pub fn values(settings: &Settings, edits: &[Edit]) -> Result<Vec<String>, String
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn message_bubbles_save_reload_and_reset_preserve_alpha() {
+        let parsed = customization::parse(crate::installer::BUNDLED_THEME.into()).unwrap();
+        let rows = fields(&parsed, Some(&parsed));
+        let toggle = rows.iter().find(|f| f.name == "--message-bubbles").unwrap();
+        assert_eq!(toggle.value, "Off");
+        assert_eq!(toggle.choices, vec!["Off", "On"]);
+        assert_eq!(toggle.section, "Message bubbles");
+        assert!(toggle.hint.contains("ThemeAttributes"));
+        for name in ["--message-bubble-self-tint", "--message-bubble-other-tint"] {
+            let row = rows.iter().find(|f| f.name == name).unwrap();
+            assert_eq!(row.kind, "color");
+            assert!(row.alpha_enabled);
+            assert!(row.opacity > 0.0 && row.opacity < 1.0);
+        }
+        let path = std::env::temp_dir().join(format!("hotori-bubbles-{}.css", std::process::id()));
+        std::fs::write(&path, &parsed.original).unwrap();
+        let mut edits: Vec<_> = rows
+            .iter()
+            .map(|f| Edit {
+                name: f.name.clone(),
+                value: f.value.clone(),
+            })
+            .collect();
+        for edit in &mut edits {
+            edit.value = match edit.name.as_str() {
+                "--message-bubbles" => "On".into(),
+                "--message-bubble-self-tint" => "#12345678".into(),
+                "--message-bubble-other-tint" => "rgba(12, 34, 56, 0.42)".into(),
+                _ => edit.value.clone(),
+            };
+        }
+        let saved = customization::save(&path, &parsed, &values(&parsed, &edits).unwrap()).unwrap();
+        let reloaded = fields(&saved, Some(&parsed));
+        assert_eq!(
+            reloaded
+                .iter()
+                .find(|f| f.name == "--message-bubbles")
+                .unwrap()
+                .value,
+            "On"
+        );
+        assert_eq!(
+            reloaded
+                .iter()
+                .find(|f| f.name == "--message-bubble-self-tint")
+                .unwrap()
+                .value,
+            "#12345678"
+        );
+        assert_eq!(
+            reloaded
+                .iter()
+                .find(|f| f.name == "--message-bubble-other-tint")
+                .unwrap()
+                .opacity,
+            0.42
+        );
+        let reset: Vec<_> = parsed
+            .fields
+            .iter()
+            .map(|(_, value, _)| value.clone())
+            .collect();
+        let reset = customization::save(&path, &saved, &reset).unwrap();
+        assert_eq!(reset.original, parsed.original);
+        std::fs::remove_file(path).unwrap();
+    }
     #[test]
     fn bundled_friends_sidebar_is_a_saveable_choice() {
         let parsed = customization::parse(crate::installer::BUNDLED_THEME.into()).unwrap();

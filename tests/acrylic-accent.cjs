@@ -79,6 +79,8 @@ const path = require('node:path');
     const profile = page.getByLabel('Glass Profile', { exact: true });
     await profile.selectOption('Liquid Glass');
     await page.waitForFunction(() => document.querySelector('.profile-warning').classList.contains('is-visible') && document.querySelector('.profile-warning').textContent.includes('greatly reduce performance'));
+    assert.equal(await page.locator('.profile-warning svg').count(), 2);
+    assert.notEqual(await page.locator('.profile-warning-text').evaluate(el=>getComputedStyle(el).backgroundColor), 'rgba(0, 0, 0, 0)');
     await profile.selectOption('No Glass');
     await page.waitForFunction(() => document.querySelector('.profile-warning').textContent.includes('not prioritized'));
     await profile.selectOption('Liquid Glass');

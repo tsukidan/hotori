@@ -400,6 +400,67 @@ mod tests {
     use super::*;
 
     #[test]
+    fn bubble_settings_survive_updates_and_missing_values_use_release_defaults() {
+        let published = BUNDLED_THEME.replace("@version 0.9.4", "@version 999.0.0");
+        let customized = BUNDLED_THEME
+            .replace("--message-bubbles: 0;", "--message-bubbles: 1;")
+            .replace(
+                "--message-bubble-self-tint: #5865f23d;",
+                "--message-bubble-self-tint: #12345678;",
+            )
+            .replace(
+                "--message-bubble-other-tint: #10182052;",
+                "--message-bubble-other-tint: rgba(12, 34, 56, 0.42);",
+            );
+        let (merged, _) = merge(&customized, &published).unwrap();
+        for name in [
+            "--message-bubbles",
+            "--message-bubble-self-tint",
+            "--message-bubble-other-tint",
+        ] {
+            assert_eq!(
+                variables(&merged)
+                    .unwrap()
+                    .iter()
+                    .find(|v| v.name == name)
+                    .unwrap()
+                    .value,
+                variables(&customized)
+                    .unwrap()
+                    .iter()
+                    .find(|v| v.name == name)
+                    .unwrap()
+                    .value
+            );
+        }
+        let old: String = BUNDLED_THEME
+            .lines()
+            .filter(|line| !line.trim_start().starts_with("--message-bubble"))
+            .map(|line| format!("{line}\n"))
+            .collect();
+        let (merged, _) = merge(&old, &published).unwrap();
+        for name in [
+            "--message-bubbles",
+            "--message-bubble-self-tint",
+            "--message-bubble-other-tint",
+        ] {
+            assert_eq!(
+                variables(&merged)
+                    .unwrap()
+                    .iter()
+                    .find(|v| v.name == name)
+                    .unwrap()
+                    .value,
+                variables(BUNDLED_THEME)
+                    .unwrap()
+                    .iter()
+                    .find(|v| v.name == name)
+                    .unwrap()
+                    .value
+            );
+        }
+    }
+    #[test]
     fn update_notice_requires_a_newer_valid_theme_version() {
         let published = "/**\n * @name Hotori\n * @version 0.8.10\n */";
         assert!(

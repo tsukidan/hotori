@@ -39,6 +39,7 @@ const { execFileSync } = require('node:child_process');
   try {
     browser=await chromium.launch({channel:'msedge',headless:true});
     const page=await browser.newPage({viewport:{width:1600,height:900}});
+    if(process.argv.includes('--wallpapers')) await page.addInitScript(value=>{window.wallpaperFixture=value}, 'data:image/jpeg;base64,'+(await fs.readFile(process.argv.includes('--wallpaper-image') ? process.argv[process.argv.indexOf('--wallpaper-image')+1] : path.join(root,'web/assets/background.jpeg'))).toString('base64'));
     const errors=[];page.on('pageerror',error=>errors.push(error.message));
     await page.addInitScript(() => {
       window.perfStats={renderGlassPanel:0,renderGlassPanelMs:0,uploadAndBlur:0,uploadAndBlurMs:0,captures:0,captureMs:0,pendingCaptures:0,dataURLs:0,dataURLMs:0,drawImages:0,drawImageMs:0,captureTargets:{},longTasks:[]};
@@ -50,12 +51,13 @@ const { execFileSync } = require('node:child_process');
       const fields=[
         {name:'--blur-profile',label:'Glass Profile',section:'Glass appearance',kind:'choice',value:'Acrylic',choices:['Acrylic','Liquid Glass','No Glass'],choiceHints:['','',''],hint:'Choose your material.'},
         ...Array.from({length:36},(_,index)=>({name:'--performance-'+index,label:'Appearance option '+(index+1),section:'Glass appearance',kind:'number',value:'24',hint:'A generic appearance option for the scrolling performance workload.',choices:[],choiceHints:[]})),
-        {name:'--main-bg',label:'Main Background',section:'Wallpapers',kind:'image',value:'',choices:[],choiceHints:[],hint:'Choose a wallpaper.'},
-        {name:'--settings-bg',label:'Settings Background',section:'Wallpapers',kind:'image',value:'',choices:[],choiceHints:[],hint:'Choose a wallpaper.'},
+        {name:'--main-bg',label:'Main Background',section:'Wallpapers',kind:'image',value:window.wallpaperFixture||'',choices:[],choiceHints:[],hint:'Choose a wallpaper.'},
+        {name:'--settings-bg',label:'Settings Background',section:'Wallpapers',kind:'image',value:window.wallpaperFixture||'',choices:[],choiceHints:[],hint:'Choose a wallpaper.'},
       ];
       window.__TAURI__={core:{invoke:async command=>{
         if(command==='get_status')return {ready:true,installed:true,theme_version:'0.9.2'};
         if(command==='check_app_update'||command==='check_theme_update')return {available:false};
+        if(command==='app_wallpaper')return window.wallpaperFixture;
         if(command==='load_settings')return structuredClone(fields);
         if(command==='get_app_changelog')return {schemaVersion:1,currentVersion:'test',releases:[]};
         if(command==='get_theme_changelog')return {schemaVersion:1,releases:[]};
@@ -88,8 +90,16 @@ const { execFileSync } = require('node:child_process');
     const phases=[];
     phases.push(await phase('home-idle','body',1400));
     await page.locator('#customize').click();
-    await page.getByLabel('Glass Profile',{exact:true}).waitFor();
+    if(!process.argv.includes('--wallpapers')) await page.getByRole('tab',{name:'Glass Appearance',exact:true}).click();
+    else await page.getByRole('tab',{name:'Wallpapers',exact:true}).click();
     await page.waitForTimeout(1000);
+    if(process.argv.includes('--wallpapers')) {
+      const preview=page.locator('.wallpaper-discord-preview');
+      await preview.hover();
+      await page.mouse.wheel(0,450);
+      await page.waitForFunction(()=>document.querySelector('#settings-form').scrollTop>0);
+      await page.locator('#settings-form').evaluate(el=>el.scrollTop=0);
+    }
     phases.push(await phase('settings-idle','#settings-form',1400));
     phases.push(await phase('settings-scroll','#settings-form',1800,true));
     await page.locator('#settings-form').evaluate(element=>element.scrollTop=0);
