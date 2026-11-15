@@ -20,6 +20,8 @@
 
 <h2>The app</h2>
 
+<p align="center"><img src="assets/app-preview.png" alt="Hotori app with a custom wallpaper and liquid glass interface" width="100%"></p>
+
 <p>Hotori is a Windows installer and customizer in one app.<br>Install or remove the theme, preview wallpapers, and save each category separately.</p>
 
 <p>When a newer theme is available, click the update notice beside your installed theme version to update while keeping your saved settings.<br><strong>Reset to defaults</strong> gives you a fresh start whenever you want.</p>
