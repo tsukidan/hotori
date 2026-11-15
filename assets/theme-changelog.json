@@ -1,6 +1,16 @@
 {
   "schemaVersion": 1,
   "versions": {
+    "0.9.3": [
+      {
+        "title": "Readable No Glass panels",
+        "description": "Voice connection panels, pinned messages, expression pickers, menus and autocomplete now use a 50% black background in No Glass for clearer text."
+      },
+      {
+        "title": "Emoji and sticker pickers",
+        "description": "Restored the selected glass profile across emoji and sticker pickers, including category headings, side rails and preview areas. Removed opaque inner backgrounds without adding stacked blur."
+      }
+    ],
     "0.9.2": [
       {"title": "Theme cleanup", "description": "Consolidated scattered component styles and removed redundant declarations while preserving the existing appearance, customization options, live blur, and member-list scrolling fix."},
       {"title": "Visual consistency", "description": "Reorganized embed, separator, settings, popup, attachment, and media styles. All 24 fixture comparisons matched the previous version in computed styles and rendered pixels."}

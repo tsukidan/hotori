@@ -3,7 +3,7 @@
  * @author tsuki
  * @authorId 109679787630399488
  * @authorLink https://plusinsta.xyz
- * @version 0.9.2
+ * @version 0.9.3
  * @description A Discord theme inspired by Liquid Glass.
  */
 
@@ -1437,9 +1437,11 @@ svg {
     pointer-events: none;
 }
 
-/* GIF picker: one glass backdrop, with transparent inner surfaces so the
-   native opaque body/header cannot hide it. Keep the grid and GIFs intact. */
-.contentWrapper_58b0l2:has(.container_rfDq2B) {
+/* Expression pickers share one profile backdrop across GIF, sticker and emoji
+   tabs. Standalone emoji pickers use the same material without double blur. */
+.contentWrapper_58b0l2,
+    .outerWrapper_3dKq9h:not(:where(.contentWrapper_58b0l2 *, .autocomplete_CAMiwx *, .autocomplete_rg6La1 *, .autocomplete_5FdZ3J *)),
+    .emojiPicker_-sZhZn:not(:where(.contentWrapper_58b0l2 *)) {
     background: var(--glass-surface) !important;
     background-image: var(--glass-sheen) !important;
     backdrop-filter: var(--glass-filter) !important;
@@ -1456,6 +1458,33 @@ svg {
 
 .contentWrapper_58b0l2 .container_rfDq2B {
     border-radius: 0 0 16px 16px;
+}
+
+/* Clear only inner picker shells/rails so the selected outer material stays
+   visible. Item hover/selection colors and media rendering remain native. */
+.contentWrapper_58b0l2 .emojiPicker_-sZhZn {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+.contentWrapper_58b0l2 .header_-sZhZn,
+.emojiPicker_-sZhZn .header_-sZhZn,
+.contentWrapper_58b0l2 .wrapper_6AvvhR,
+.emojiPicker_-sZhZn .wrapper_6AvvhR,
+.contentWrapper_58b0l2 .inspector_1bDrGE,
+.emojiPicker_-sZhZn .inspector_1bDrGE {
+    background: transparent !important;
+}
+
+/* Category headings and inspection strips also occur in the emoji/sticker
+   autocomplete popout. Reveal its existing profile surface, not native black
+   bars or a second tint/blur layer. Preserve item and badge colors. */
+:where(.contentWrapper_58b0l2, .emojiPicker_-sZhZn, .outerWrapper_3dKq9h, .autocomplete_CAMiwx, .autocomplete_rg6La1, .autocomplete_5FdZ3J)
+:is(.wrapper_kSdzCr, .categoryHeader_3dKq9h, .wrapper_mTknAg, .header_WSRqCO, .inspector_1bDrGE, .activeNitroHeader_6c9R7U, .activeNitroHeader_dCw_12) {
+    background: transparent !important;
 }
 
 /* 17 | HEADER, TITLES & TEXT TYPOGRAPHY */
@@ -2397,7 +2426,8 @@ img[class*="avatar_"],
 
 /* 32 | NO-GLASS PROFILE */
 
-/* None removes the glass decoration entirely. Keep transparent zero shadows
+/* None removes glass effects; selected utility surfaces retain a reading tint.
+   Keep transparent zero shadows
    rather than 'none' so existing comma-separated shadow lists remain valid. */
 @container style(--blur-profile: 2) {
     body, .theme-dark {
@@ -2411,6 +2441,24 @@ img[class*="avatar_"],
         --glass-shadow-small: 0 0 0 transparent;
         --glass-filter: none;
         --glass-unread-filter: none;
+    }
+
+    /* One plain reading surface per utility panel. Do not use element opacity:
+       text/icons stay opaque, and nested content keeps its clear background. */
+    .container_9U6LUN,
+    .root_buf7nK.connecting_buf7nK,
+    .root_buf7nK.connected_buf7nK,
+    .messagesPopoutWrap_6bgemo,
+    .contentWrapper_58b0l2,
+    .outerWrapper_3dKq9h:not(:where(.contentWrapper_58b0l2 *, .autocomplete_CAMiwx *, .autocomplete_rg6La1 *, .autocomplete_5FdZ3J *)),
+    .emojiPicker_-sZhZn:not(:where(.contentWrapper_58b0l2 *)),
+    .menu_M3qk4j,
+    .submenu_M3qk4j,
+    :is(.autocomplete_CAMiwx, .autocomplete_rg6La1, .autocomplete_5FdZ3J),
+    .container_dvN-MP,
+    .root_CPqUlz {
+        background-color: rgba(0, 0, 0, 0.5) !important;
+        background-image: none !important;
     }
 
     /* These surfaces also have fixed shadows outside the shared variables. */
