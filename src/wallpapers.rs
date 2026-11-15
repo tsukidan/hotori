@@ -7,7 +7,7 @@ use std::{
     path::{Path, PathBuf},
 };
 const PREFIX: &str = "vencord:///themes/hotori-assets/";
-const MAX_BYTES: usize = 10 * 1024 * 1024;
+const MAX_BYTES: usize = 50 * 1024 * 1024;
 
 pub fn installed_background(folder: &Path) -> Option<String> {
     let text = fs::read_to_string(folder.join(crate::installer::DESTINATION)).ok()?;
@@ -46,7 +46,7 @@ pub fn app_preview(folder: &Path, uri: &str) -> io::Result<String> {
         .content_length()
         .is_some_and(|length| length > MAX_BYTES as u64)
     {
-        return Err(io::Error::other("Wallpaper exceeds 10 MB."));
+        return Err(io::Error::other("Wallpaper exceeds 50 MB."));
     }
     let mut bytes = Vec::new();
     use io::Read;
@@ -54,7 +54,7 @@ pub fn app_preview(folder: &Path, uri: &str) -> io::Result<String> {
         .take(MAX_BYTES as u64 + 1)
         .read_to_end(&mut bytes)?;
     if bytes.len() > MAX_BYTES {
-        return Err(io::Error::other("Wallpaper exceeds 10 MB."));
+        return Err(io::Error::other("Wallpaper exceeds 50 MB."));
     }
     let (_, mime) = image_type(&bytes)?;
     Ok(format!("data:{mime};base64,{}", STANDARD.encode(bytes)))
@@ -125,7 +125,7 @@ pub fn import(folder: &Path, data: &str) -> io::Result<String> {
         return Err(io::Error::other("Install Vencord first."));
     }
     if data.len() > MAX_BYTES * 4 / 3 + 100 {
-        return Err(io::Error::other("Choose an image smaller than 10 MB."));
+        return Err(io::Error::other("Choose an image smaller than 50 MB."));
     }
     let (header, encoded) = data
         .split_once(',')
@@ -142,7 +142,7 @@ pub fn import(folder: &Path, data: &str) -> io::Result<String> {
     }
     let bytes = STANDARD.decode(encoded).map_err(io::Error::other)?;
     if bytes.len() > MAX_BYTES {
-        return Err(io::Error::other("Choose an image smaller than 10 MB."));
+        return Err(io::Error::other("Choose an image smaller than 50 MB."));
     }
     let (ext, _) = image_type(&bytes)?;
     let mut hash = DefaultHasher::new();
@@ -173,7 +173,7 @@ pub fn import(folder: &Path, data: &str) -> io::Result<String> {
 pub fn preview(folder: &Path, uri: &str) -> io::Result<String> {
     let path = asset_path(folder, uri)?;
     if fs::metadata(&path)?.len() > MAX_BYTES as u64 {
-        return Err(io::Error::other("Wallpaper exceeds 10 MB."));
+        return Err(io::Error::other("Wallpaper exceeds 50 MB."));
     }
     let bytes = fs::read(path)?;
     let (_, mime) = image_type(&bytes)?;

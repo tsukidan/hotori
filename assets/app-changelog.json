@@ -2,6 +2,11 @@
   "schemaVersion": 1,
   "releases": [
     {
+      "version": "1.8.2",
+      "publishedAt": null,
+      "body": "## Wallpapers\n\n- Raise the wallpaper limit from 10 MB to 50 MB for imports, source-quality PNG crops, previews, and cached backgrounds. Crops retain original pixels without resizing or lossy compression."
+    },
+    {
       "version": "1.8.1",
       "publishedAt": null,
       "body": "## Performance\n\n- Reuse unchanged glass materials and wallpaper backdrops instead of repainting them for unrelated updates.\n- Replace repeated PNG encoding for input and dropdown backgrounds with reusable canvas surfaces.\n- Avoid empty DOM snapshots and schedule remaining snapshots serially during idle time, preventing capture bursts while scrolling.\n- Stop invisible skeleton animations from keeping the glass renderer running.\n- Avoid unchanged status/control DOM updates, coalesce overlapping refresh requests, and skip duplicate fallback optics while GPU glass is active.\n- Preserve existing glass blur/refraction, source-quality wallpaper crops, zoom, and reduced-motion behavior."

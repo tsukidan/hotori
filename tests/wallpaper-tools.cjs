@@ -254,18 +254,24 @@ const path = require('node:path');
       }, { source, fixture });
       assert.equal(mismatch, -1, 'Every exported pixel must equal the decoded source pixel, without interpolation');
     }
-    const boundaryFile = Buffer.alloc(10 * 1024 * 1024);
+    const boundaryFile = Buffer.alloc(50 * 1024 * 1024);
     file.buffer.copy(boundaryFile);
-    await main.locator('input[type="file"]').setInputFiles({ name: 'exact-limit.png', mimeType: 'image/png', buffer: boundaryFile });
+    await fs.mkdir(path.join(root, 'target/qa'), { recursive: true });
+    const boundaryPath = path.join(root, 'target/qa/exact-limit.png');
+    const oversizedPath = path.join(root, 'target/qa/too-large.png');
+    await fs.writeFile(boundaryPath, boundaryFile);
+    await main.locator('input[type="file"]').setInputFiles(boundaryPath);
     await page.locator('#wallpaper-crop-dialog').waitFor({ state: 'visible' });
     await page.getByRole('button', { name: 'Cancel', exact: true }).click();
     await page.waitForFunction(() => !document.querySelector('[data-wallpaper="main"] input[type="file"]').disabled);
     const previous = await page.evaluate(() => ({ uri: fields.find(field => field.name === '--main-bg').value, imports: window.importCount }));
-    await main.locator('input[type="file"]').setInputFiles({ name: 'too-large.png', mimeType: 'image/png', buffer: Buffer.alloc(10 * 1024 * 1024 + 1) });
-    await page.waitForFunction(() => document.querySelector('[data-wallpaper="main"] .wallpaper-feedback').textContent.includes('no larger than 10 MB'));
+    await fs.writeFile(oversizedPath, Buffer.alloc(50 * 1024 * 1024 + 1));
+    await main.locator('input[type="file"]').setInputFiles(oversizedPath);
+    await page.waitForFunction(() => document.querySelector('[data-wallpaper="main"] .wallpaper-feedback').textContent.includes('no larger than 50 MB'));
     assert.equal(await page.locator('#wallpaper-crop-dialog').count(), 0, 'Oversized source rejected before decoding');
+    assert.deepEqual(await page.evaluate(() => ({ uri: fields.find(field => field.name === '--main-bg').value, imports: window.importCount })), previous, 'Rejected source preserves the previous wallpaper');
     // A compressed WebP can fit the source limit while its full-resolution PNG
-    // exceeds it. Fail clearly without importing either image or resizing it.
+    // exceeds the former 10 MB cap. It must now import without resizing.
     const noisy = await page.evaluate(() => {
       const c = document.createElement('canvas'); c.width = 3200; c.height = 1800;
       const ctx = c.getContext('2d'), pixels = ctx.createImageData(c.width, c.height);
@@ -281,8 +287,9 @@ const path = require('node:path');
     await main.locator('input[type="file"]').setInputFiles({ name: 'detailed.webp', mimeType: 'image/webp', buffer: noiseBytes });
     await page.locator('#wallpaper-crop-dialog').waitFor({ state: 'visible' });
     await page.getByRole('button', { name: 'Use crop', exact: true }).click();
-    await page.waitForFunction(() => document.querySelector('[data-wallpaper="main"] .wallpaper-feedback').textContent.includes('full-resolution PNG crop exceeds 10 MB'));
-    assert.deepEqual(await page.evaluate(() => ({ uri: fields.find(field => field.name === '--main-bg').value, imports: window.importCount })), previous, 'Oversized crop preserves the previous wallpaper and imports no files');
+    await page.waitForFunction(() => !document.querySelector('#wallpaper-crop-dialog') && !document.querySelector('[data-wallpaper="main"] input[type="file"]').disabled);
+    const exportedBytes = await page.evaluate(() => atob(window.importedImages[fields.find(field => field.name === '--main-bg').value].split(',')[1]).length);
+    assert(exportedBytes > 10 * 1024 * 1024 && exportedBytes <= 50 * 1024 * 1024, 'Source-quality PNG above the former cap must import');
     for (const width of [1600, 800, 560]) {
       await page.setViewportSize({ width, height: 1000 });
       const adjustments = main.locator('[data-name="--bg-overlay-top"] .color-adjustments');
@@ -302,6 +309,6 @@ const path = require('node:path');
       await page.screenshot({ path: path.join(root, 'target/qa', `settings-contained-colors-${width}.png`) });
     }
     assert.deepEqual(errors, []);
-    console.log('PASS: source-resolution WebP/4K/zoom/tiny/settings crops, 10 MB source boundary and oversized PNG rejection, crop/cancel/clipboard, previews, recommendations, isolated saves, preserved originals, and 560px layout.');
+    console.log('PASS: source-resolution WebP/4K/zoom/tiny/settings crops, 50 MB source boundary and PNG exports above 10 MB, crop/cancel/clipboard, previews, recommendations, isolated saves, preserved originals, and 560px layout.');
   } finally { await browser.close(); await new Promise(resolve => server.close(resolve)); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

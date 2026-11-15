@@ -3,7 +3,7 @@
 (() => {
   // Full settings panel in the supplied reference: 1398 x 1293 pixels.
   const settingsAspect = 1398 / 1293;
-  const maxImageBytes = 10 * 1024 * 1024;
+  const maxImageBytes = 50 * 1024 * 1024;
   const localPrefix = 'vencord:///themes/hotori-assets/';
   let api, colors = [], paletteSource = '', paletteGeneration = 0;
   let seen = new Set(), views = [], previews = [], cropDialog;
@@ -21,7 +21,7 @@
     return image;
   };
   const readFile = file => new Promise((resolve, reject) => {
-    if (file.size > maxImageBytes) return reject(Error('Choose an image no larger than 10 MB.'));
+    if (file.size > maxImageBytes) return reject(Error('Choose an image no larger than 50 MB.'));
     const reader = new FileReader(); reader.onload = () => resolve(reader.result);
     reader.onerror = () => reject(Error('Could not read this image.')); reader.readAsDataURL(file);
   });
@@ -374,7 +374,7 @@
         // A full-resolution PNG can be larger than its compressed WebP source.
         const encoded = result.data.slice(result.data.indexOf(',') + 1);
         const bytes = encoded.length / 4 * 3 - (encoded.endsWith('==') ? 2 : encoded.endsWith('=') ? 1 : 0);
-        if (bytes > maxImageBytes) throw Error('The full-resolution PNG crop exceeds 10 MB. Choose a smaller crop or a different image.');
+        if (bytes > maxImageBytes) throw Error('The full-resolution PNG crop exceeds 50 MB. Choose a smaller crop or a different image.');
         api.setBusy(true); feedback.textContent = 'Saving your crop locally…';
         sourceUri ||= await api.invoke('import_wallpaper', { data: source });
         const uri = await api.invoke('import_wallpaper', { data: result.data });
