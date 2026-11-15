@@ -3,7 +3,7 @@
  * @author tsuki
  * @authorId 109679787630399488
  * @authorLink https://plusinsta.xyz
- * @version 0.9.3
+ * @version 0.9.4
  * @description A Discord theme inspired by Liquid Glass.
  */
 
@@ -151,6 +151,15 @@
     /* 0 = hide completely; 1 = show Discord's right-side friends sidebar.
        The server member list and the main Friends page remain available. */
     --show-friends-sidebar: 0;
+
+    /* 14. MESSAGE BUBBLES — requires Vencord's ThemeAttributes plugin.
+       0 = off; 1 = on. Consecutive Discord-grouped messages join one bubble.
+       The two tint colors support the installer's color/opacity editor.
+       The on/off control needs installer support; edit 0/1 here for now. */
+    --message-bubbles: 0;
+    --message-bubble-self-tint: #5865f23d;
+    --message-bubble-other-tint: #10182052;
+
 
 }
 /* =============================================================================================
@@ -3138,5 +3147,117 @@ img[class*="avatar_"],
    hover/focus :has() queries: member-list virtualization repeatedly invalidates
    their ancestor state and causes long main-thread stalls in the live client.
    Attachment action buttons and reaction hover details keep their glass. */
+
+
+
+
+/* 37 | OPTIONAL GROUPED MESSAGE BUBBLES
+   ThemeAttributes puts data-is-self on the list item (or message root on some
+   client builds). No attributes means no bubbles. Scope adjacency queries to
+   the chat list: no page-wide :has(), timers, filters on content or animation.
+   A zero-size ordered start anchor and locally scoped end anchor let the last
+   row paint ONE continuous backdrop across the group, without row blur seams. */
+@container style(--message-bubbles: 1) {
+@supports (anchor-scope: --hotori-bubble-end) and (top: anchor(--hotori-bubble-start top)) {
+    .scrollerInner_8AE1Qq { position: relative; z-index: 0; }
+    .scrollerInner_8AE1Qq > .messageListItem_SY_P2T:has(> .message_SY_P2T.cozy_2i8Bfm):is([data-is-self], :has(> .message_SY_P2T[data-is-self])) {
+        --hotori-bubble-gutter: calc(var(--message-avatar-size) + 2 * var(--custom-message-margin-horizontal, 16px));
+        --hotori-bubble-tint: var(--message-bubble-other-tint);
+
+
+
+
+        position: static;
+        z-index: auto;
+        anchor-scope: --hotori-bubble-end;
+
+        &:is([data-is-self="true"], :has(> .message_SY_P2T[data-is-self="true"])) {
+            --hotori-bubble-tint: var(--message-bubble-self-tint);
+        }
+
+        /* Use Discord's group boundaries, including time gaps and replies. */
+        &:has(> .groupStart_SY_P2T), &:not(.messageListItem_SY_P2T:has(> .message_SY_P2T.cozy_2i8Bfm) + .messageListItem_SY_P2T) {
+
+
+            margin-block-start: 12px;
+        }
+        &:not(:has(+ .messageListItem_SY_P2T > .message_SY_P2T.cozy_2i8Bfm:not(.groupStart_SY_P2T))) {
+
+
+            margin-block-end: 6px;
+        }
+
+        /* Absolute sibling anchors resolve in order; normal-flow anchors with
+           a shared name would incorrectly select later message groups. */
+        &:has(> .groupStart_SY_P2T)::before, &:not(.messageListItem_SY_P2T:has(> .message_SY_P2T.cozy_2i8Bfm) + .messageListItem_SY_P2T)::before {
+            content: "";
+            position: absolute;
+            top: auto;
+            left: 0;
+            width: 0;
+            height: 0;
+            anchor-name: --hotori-bubble-start;
+        }
+        & > .message_SY_P2T { anchor-name: --hotori-bubble-end; }
+        &:not(:has(+ .messageListItem_SY_P2T > .message_SY_P2T.cozy_2i8Bfm:not(.groupStart_SY_P2T)))::after {
+            content: "";
+            position: absolute;
+            top: anchor(--hotori-bubble-start top, 0px);
+            bottom: anchor(--hotori-bubble-end bottom, 0px);
+            inset-inline: calc(var(--hotori-bubble-gutter) - 12px) 16px;
+            z-index: -1;
+            pointer-events: none;
+            background-color: var(--glass-surface);
+            background-image: linear-gradient(var(--hotori-bubble-tint), var(--hotori-bubble-tint)), var(--glass-sheen);
+            backdrop-filter: var(--glass-filter);
+            -webkit-backdrop-filter: var(--glass-filter);
+            border: solid var(--glass-border);
+            border-width: 1px;
+            border-radius: 16px;
+        }
+        &:not(:has(+ .messageListItem_SY_P2T > .message_SY_P2T.cozy_2i8Bfm:not(.groupStart_SY_P2T))) > .message_SY_P2T .contents_2i8Bfm::after {
+            content: "";
+            position: absolute;
+            inset-inline-start: calc(var(--hotori-bubble-gutter) - 21px);
+            bottom: 12px;
+            width: 10px;
+            height: 13px;
+            background-color: var(--glass-surface);
+            background-image: linear-gradient(var(--hotori-bubble-tint), var(--hotori-bubble-tint));
+            clip-path: polygon(0 65%, 100% 0, 100% 100%);
+            pointer-events: none;
+            z-index: -1;
+        }
+        & > .message_SY_P2T {
+            margin-block-start: 0 !important;
+            /* The row retains its native content gutter, avatar and controls. */
+        }
+        &:has(> .groupStart_SY_P2T) > .message_SY_P2T, &:not(.messageListItem_SY_P2T:has(> .message_SY_P2T.cozy_2i8Bfm) + .messageListItem_SY_P2T) > .message_SY_P2T {
+            padding-block-start: 8px;
+        }
+        &:not(:has(+ .messageListItem_SY_P2T > .message_SY_P2T.cozy_2i8Bfm:not(.groupStart_SY_P2T))) > .message_SY_P2T {
+            padding-block-end: 8px;
+        }
+        /* The group supplies the backdrop; do not frost the username twice. */
+        & > .message_SY_P2T .header_2i8Bfm {
+            background: transparent !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            border: none !important;
+            box-shadow: none !important;
+            margin: 0 0 4px !important;
+            padding: 0 !important;
+        }
+        /* Preserve the yellow mention marker/text, while using the bubble tint. */
+        & > .message_SY_P2T.mentioned_SY_P2T {
+            background: transparent !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            box-shadow: none !important;
+        }
+    }
+}
+}
+/* END OPTIONAL GROUPED MESSAGE BUBBLES */
 
 /* END OF HOTORI THEME */
