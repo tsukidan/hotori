@@ -73,6 +73,18 @@ const { pathToFileURL } = require('node:url');
     assert.equal(await compact.isVisible(), true, 'Compact Member List is visible under Server List');
     assert.deepEqual(await compact.locator('select option').allTextContents(), ['Disabled', 'Enabled']);
     assert.equal(await compact.locator('select').inputValue(), 'Disabled');
+    const serverSave = page.getByRole('button', { name: 'Save Server List', exact: true });
+    for (const choice of ['Enabled', 'Disabled']) {
+      await compact.locator('select').selectOption(choice);
+      await page.getByRole('button', { name: 'Save Server List', exact: true }).waitFor();
+      assert.equal(await serverSave.isEnabled(), true, 'Changing Compact Member List enables Server List save');
+      assert.equal(await tab('Server List').getAttribute('data-dirty'), 'true');
+      assert.notEqual(await tab('Colors').getAttribute('data-dirty'), 'true', 'Member list edits do not dirty Colors');
+      await serverSave.click();
+      await page.waitForFunction(choice => window.savedSettings.find(f => f.name === '--collapse-member-list').value === choice, choice);
+      await page.waitForFunction(() => document.querySelector('#save-category').disabled);
+      assert.equal(await serverSave.isDisabled(), true, 'Save returns to disabled after saving');
+    }
     const friends = page.getByLabel('Friends Sidebar', { exact: true });
     assert.equal(await friends.count(), 0, 'Retired Friends Sidebar option is not rendered');
     assert.equal(await page.locator('[data-name="--show-friends-sidebar"]').count(), 0);

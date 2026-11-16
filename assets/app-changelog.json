@@ -2,6 +2,11 @@
   "schemaVersion": 1,
   "releases": [
     {
+      "version": "1.8.7",
+      "publishedAt": null,
+      "body": "## Fixed\n\n- Correct Compact Member List category tracking so enabling or disabling it activates Save changes in Server List and saves the selected value."
+    },
+    {
       "version": "1.8.6",
       "publishedAt": null,
       "body": "## Customization\n\n- Add Compact Member List under Server List → Member List, with Disabled/Enabled controls for the published collapsing member list.\n- Preserve the saved choice during theme updates and restore Disabled on reset, including older cached defaults."

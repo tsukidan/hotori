@@ -345,7 +345,7 @@ function disclosure(title, symbol, open, submenu = false) {
 function categoryFor(field) {
   return ({ "Glass appearance": "Glass Appearance", "Blur & saturation": "Glass Appearance", "Glass tints": "Glass Appearance",
     "Wallpapers": "Wallpapers", "Background dimming": "Wallpapers", "Accent color": "Colors", "Text & icon colors": "Colors",
-    "Avatars": "Avatars", "Message spacing": "Messages", "Mention highlights": "Messages", "Message bubbles": "Messages", "Home logo": "Server List", "Server list": "Server List", "Friends sidebar": "Server List" })[field.section] || "Colors";
+    "Avatars": "Avatars", "Message spacing": "Messages", "Mention highlights": "Messages", "Message bubbles": "Messages", "Home logo": "Server List", "Server list": "Server List", "Member list": "Server List", "Friends sidebar": "Server List" })[field.section] || "Colors";
 }
 function updateCategoryButtons() {
   for (const [category, group] of categoryGroups) {
