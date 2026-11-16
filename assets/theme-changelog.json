@@ -1,6 +1,20 @@
 {
   "schemaVersion": 1,
   "versions": {
+    "0.9.8": [
+      {
+        "title": "Forum composer",
+        "description": "Aligned the media upload button with the message field independently of the title, added comfortable text padding, and matched both controls with non-blur glass styling."
+      },
+      {
+        "title": "Menus and inbox",
+        "description": "Added profile-aware glass to Apps & Commands, thread popouts, hover containers, inbox and action buttons. Inbox message cards use non-blur glass without stacked dark child backgrounds."
+      },
+      {
+        "title": "Surface cleanup",
+        "description": "Made active thread panels, forum reaction strips, checklist steps and invite footers transparent. Scrollbar thumbs now use the accent color at 60% opacity."
+      }
+    ],
     "0.9.7": [
       {
         "title": "Role editor glass",

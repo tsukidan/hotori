@@ -3,7 +3,7 @@
  * @author tsuki
  * @authorId 109679787630399488
  * @authorLink https://plusinsta.xyz
- * @version 0.9.7
+ * @version 0.9.8
  * @description A Discord theme inspired by Liquid Glass.
  */
 
@@ -2149,32 +2149,21 @@ img[class*="avatar_"],
 
 /* 27 | SCROLLBARS */
 
-/* Glass scrollbars. Native scrollbar parts use tint and reflections rather
-   than SVG backdrop refraction. Preserve Discord's sizes and auto-hide rules. */
+/* Accent scrollbars at 60% opacity. Preserve sizes and auto-hide rules. */
 ::-webkit-scrollbar-track,
 ::-webkit-scrollbar-corner {
     background: transparent !important;
     border-color: transparent !important;
     box-shadow: none !important;
 }
-
-::-webkit-scrollbar-thumb {
-    background-color: color-mix(in srgb, var(--glass-background) 80%, rgba(255, 255, 255, 0.35)) !important;
-    background-image: linear-gradient(100deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.04) 45%, rgba(255, 255, 255, 0.14)) !important;
+::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-thumb:horizontal,
+::-webkit-scrollbar-thumb:hover,
+::-webkit-scrollbar-thumb:active {
+    background-color: color-mix(in srgb, var(--main-color) 60%, transparent) !important;
+    background-image: none !important;
     background-clip: padding-box !important;
     border-radius: 999px !important;
-}
-
-::-webkit-scrollbar-thumb:horizontal {
-    background-image: linear-gradient(170deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.04) 45%, rgba(255, 255, 255, 0.14)) !important;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background-color: color-mix(in srgb, var(--glass-background) 65%, rgba(255, 255, 255, 0.5)) !important;
-}
-
-::-webkit-scrollbar-thumb:active {
-    background-color: color-mix(in srgb, var(--glass-background) 55%, rgba(255, 255, 255, 0.65)) !important;
 }
 
 /* 28 | CALL LAYOUT & SPEAKING INDICATORS */
@@ -3587,6 +3576,238 @@ img[class*="avatar_"],
         background: transparent !important;
     }
 }
+.guildInviteContainer_fknPy8 .footerContent_fknPy8 {
+    background: transparent !important;
+}
 /* END INVITE CARDS */
+
+
+/* 41 | FORUM COMPOSER, APP COMMANDS & THREADS
+   Popout/card shells own one backdrop. Active thread panes reveal wallpaper. */
+.container_FrbQJp,
+.chatTarget_FrbQJp {
+    background: transparent !important;
+}
+.contentWrapper_Z0Mo0M,
+.container_c0tu5x,
+.container_LpNLOM,
+.mainCard_BkGrJJ {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 16px !important;
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
+    box-sizing: border-box;
+}
+/* Native black rows/headers must not cover their shell. Keep hover feedback. */
+.contentWrapper_Z0Mo0M :is(.container_OfZRPz, .container_5x0vse),
+.contentWrapper_Z0Mo0M .clickable_eR0BEc:not(:hover):not(:focus-visible),
+.container_c0tu5x .header_c0tu5x,
+.mainCard_BkGrJJ .header_BkGrJJ {
+    background: transparent !important;
+}
+/* If the forum checklist is inside a glass card, reuse that backdrop. */
+.mainCard_BkGrJJ .container_LpNLOM {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+.mainCard_BkGrJJ .header_BkGrJJ {
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    min-height: 48px;
+    box-sizing: border-box;
+}
+.mainCard_BkGrJJ :is(.slateTextArea_q99V_-, .placeholder_q99V_-) {
+    padding: 12px 16px !important;
+    box-sizing: border-box;
+}
+.mainCard_BkGrJJ :is(input, textarea) {
+    padding-inline: 16px;
+    box-sizing: border-box;
+    min-width: 0;
+}
+@container style(--blur-profile: 2) {
+    .contentWrapper_Z0Mo0M, .container_c0tu5x,
+    .container_LpNLOM, .mainCard_BkGrJJ {
+        background-color: rgba(0, 0, 0, .5) !important;
+        background-image: none !important;
+    }
+}
+/* END FORUM COMPOSER, APP COMMANDS & THREADS */
+
+
+/* 42 | THREAD ICON & FORUM CONTROL SURFACES */
+.iconWrapper_Wp3SYH {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow);
+    box-sizing: border-box;
+}
+.container_HeWz1C,
+.header_HeWz1C {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+.container_LpNLOM .stepContainer_LpNLOM {
+    background: transparent !important;
+}
+/* Reuse the composer's existing non-blur material for both visible controls.
+   Never resize/hide the actual overlaid file input or intercept its clicks. */
+.mainCard_BkGrJJ :is(.channelTextArea_2x8-Qn, .uploadInput_YeZ5Kj) {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 16px !important;
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
+    box-sizing: border-box;
+}
+.mainCard_BkGrJJ .container_YeZ5Kj {
+    align-self: center;
+    flex: 0 0 auto;
+    margin-block: 0;
+    margin-inline-start: 12px;
+}
+.mainCard_BkGrJJ .uploadInput_YeZ5Kj {
+    align-items: center;
+    justify-content: center;
+}
+/* The field's outer surface owns the tint; clear its native inner fill. */
+.mainCard_BkGrJJ .channelTextArea_2x8-Qn .scrollableContainer_2x8-Qn {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+}
+/* END THREAD ICON & FORUM CONTROL SURFACES */
+
+
+/* Align media to the message row, not the combined title+message height.
+   Subgrid preserves the real form wrapper and its editable/clickable controls. */
+@supports (grid-template-rows: subgrid) {
+    .mainCard_BkGrJJ .formContainer_owUmX8:has(> .form_owUmX8 > .bodyContainer_owUmX8 .channelTextArea_owUmX8) {
+        display: grid;
+        grid-template-columns: 24px minmax(0, 1fr) var(--custom-forum-composer-attachments-attachment-size, 80px);
+        grid-template-rows: auto auto;
+        column-gap: 12px;
+        row-gap: 8px;
+        align-items: center;
+    }
+    .mainCard_BkGrJJ .formContainer_owUmX8:has(> .form_owUmX8 > .bodyContainer_owUmX8 .channelTextArea_owUmX8) > .prefixElement_owUmX8 {
+        grid-column: 1;
+        grid-row: 1;
+        margin: 0;
+        align-self: center;
+    }
+    .mainCard_BkGrJJ .formContainer_owUmX8:has(> .form_owUmX8 > .bodyContainer_owUmX8 .channelTextArea_owUmX8) > .form_owUmX8 {
+        display: grid;
+        grid-template-rows: subgrid;
+        grid-column: 2;
+        grid-row: 1 / 3;
+        min-width: 0;
+    }
+    .mainCard_BkGrJJ .formContainer_owUmX8:has(> .form_owUmX8 > .bodyContainer_owUmX8 .channelTextArea_owUmX8) > .container_YeZ5Kj {
+        grid-column: 3;
+        grid-row: 2;
+        align-self: center;
+        margin: 0;
+    }
+    .mainCard_BkGrJJ .form_owUmX8 > .titleContainer_owUmX8 {
+        grid-row: 1;
+        min-width: 0;
+    }
+    .mainCard_BkGrJJ .form_owUmX8 > .bodyContainer_owUmX8 {
+        grid-row: 2;
+        align-self: center;
+        min-width: 0;
+    }
+    .mainCard_BkGrJJ .channelTextArea_owUmX8 {
+        margin: 0 !important;
+    }
+}
+/* END FORUM MESSAGE-ROW ALIGNMENT */
+
+/* Hover-open container: reuse the selected profile material. */
+.container_g7esM5.openOnHover_g7esM5 {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 16px !important;
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
+}
+@container style(--blur-profile: 2) {
+    .container_g7esM5.openOnHover_g7esM5 {
+        background-color: rgba(0, 0, 0, .5) !important;
+        background-image: none !important;
+    }
+}
+
+/* Inbox popout. */
+.container_uTMZTY {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 16px !important;
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
+}
+@container style(--blur-profile: 2) {
+    .container_uTMZTY {
+        background-color: rgba(0, 0, 0, .5) !important;
+        background-image: none !important;
+    }
+}
+
+
+/* Inbox message boxes: one non-blur glass surface, never a filter per row. */
+.box_0JZW4Z {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 16px !important;
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
+}
+.box_0JZW4Z :is(.singleMessage_0JZW4Z, .scroller_0JZW4Z,
+    .channelHeader_8ZcKCk, .channelHeader_3qIpbl,
+    .messageContainer_idTHId, .messageContainer_yZLikS) {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+}
+.box_0JZW4Z .header_2i8Bfm {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+@container style(--blur-profile: 2) {
+    .box_0JZW4Z {
+        background-color: rgba(0, 0, 0, .5) !important;
+        background-image: none !important;
+    }
+}
+/* END INBOX MESSAGE BOXES */
+
+/* Action button profile material. */
+.actionButton_5GqXgh {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    border: 1px solid var(--glass-border) !important;
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
+}
 
 /* END OF HOTORI THEME */
