@@ -14,6 +14,7 @@
     "test:background": "node tests/app-background.cjs",
     "test:wordmark": "node tests/glass-wordmark.cjs",
     "test:acrylic-accent": "node tests/acrylic-accent.cjs",
+    "test:home-logo": "node tests/home-logo.cjs",
     "test:wallpapers": "node tests/wallpaper-tools.cjs",
     "test:native-wallpapers": "node tests/native-wallpaper-tools.cjs"
   },

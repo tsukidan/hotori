@@ -399,6 +399,26 @@ fn replace(path: &Path, expected: Option<&str>, content: &str) -> Result<(), Str
 mod tests {
     use super::*;
 
+
+
+    #[test]
+    fn server_roundness_update_preserves_saved_value_or_uses_default() {
+        let customized=BUNDLED_THEME.replace("--server-icon-radius: 30%;", "--server-icon-radius: 17.5%;");
+        let (merged,_)=merge(&customized,BUNDLED_THEME).unwrap();
+        assert!(merged.contains("--server-icon-radius: 17.5%;"));
+        let old=BUNDLED_THEME.lines().filter(|l|!l.trim_start().starts_with("--server-icon-radius:")).collect::<Vec<_>>().join("\n");
+        let (merged,_)=merge(&old,BUNDLED_THEME).unwrap();
+        assert!(merged.contains("--server-icon-radius: 30%;"));
+    }
+    #[test]
+    fn home_logo_update_preserves_local_uri_and_defaults_missing_setting() {
+        let customized = BUNDLED_THEME.replace("--home-logo: none;", "--home-logo: url('vencord:///themes/hotori-assets/0123456789abcdef.png');");
+        let (merged, _) = merge(&customized, BUNDLED_THEME).unwrap();
+        assert!(merged.contains("--home-logo: url('vencord:///themes/hotori-assets/0123456789abcdef.png');"));
+        let old = BUNDLED_THEME.lines().filter(|line| !line.trim_start().starts_with("--home-logo:")).collect::<Vec<_>>().join("\n");
+        let (merged, _) = merge(&old, BUNDLED_THEME).unwrap();
+        assert!(merged.contains("--home-logo: none;"));
+    }
     #[test]
     fn bubble_settings_survive_updates_and_missing_values_use_release_defaults() {
         let published = BUNDLED_THEME.replace("@version 0.9.4", "@version 999.0.0");

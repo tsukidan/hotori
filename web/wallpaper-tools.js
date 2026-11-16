@@ -122,15 +122,15 @@
     root.append(section); views.push({ root: section, field, label, limit, list, empty });
   }
 
-  function crop(image, main, initial) {
+  function crop(image, main, initial, logo = false) {
     if (cropDialog?.open) return Promise.resolve(null);
     const dialog = cropDialog = node('dialog', 'glass vencord-dialog crop-dialog'); dialog.id = 'wallpaper-crop-dialog';
     dialog.setAttribute('aria-labelledby', 'wallpaper-crop-title');
-    const title = node('h2', '', main ? 'Crop Main Background' : 'Crop Settings Background'); title.id = 'wallpaper-crop-title';
+    const title = node('h2', '', logo ? 'Crop Home Logo' : main ? 'Crop Main Background' : 'Crop Settings Background'); title.id = 'wallpaper-crop-title';
     const stage = node('canvas', 'crop-stage'); stage.tabIndex = 0;
     stage.setAttribute('aria-label', 'Crop preview. Drag to position; arrow keys also move the image.');
     const instructions = node('p', 'crop-hint', 'Drag to position. Use the slider or mouse wheel to zoom.');
-    const aspect = main ? 16 / 9 : settingsAspect;
+    const aspect = logo ? 1 : main ? 16 / 9 : settingsAspect;
     const zoomLabel = node('label', 'crop-control');
     const zoomHeading = node('span', 'crop-control-heading');
     const zoomValue = node('output', 'crop-zoom-value', '100%');
@@ -435,6 +435,65 @@
     if (main) recommendations(actions, '--main-color', 'Main Color', 2, true);
     root.append(input, actions, picker, notice, feedback); sync(); show(); return input;
   }
+  function logoControl(field, root, bridge) {
+    const input = node('input', 'input'); input.type = 'text'; input.readOnly = true;
+    const image = node('img', 'home-logo-preview'); image.alt = 'Custom Home logo preview'; image.hidden = true;
+    const picker = node('input'); picker.type = 'file'; picker.hidden = true;
+    picker.accept = 'image/png,image/jpeg,image/webp,image/gif'; picker.setAttribute('aria-label', 'Home Logo local image');
+    const feedback = node('p', 'wallpaper-feedback'); feedback.setAttribute('role', 'status');
+    const actions = node('div', 'wallpaper-actions');
+    let generation = 0, working = false;
+    const sync = () => { input.value = field.value ? 'Local image selected' : 'No logo selected'; edit.disabled = working || !field.value; bridge.changed(); };
+    async function show(source) {
+      const request = ++generation;
+      if (!field.value) { image.hidden = true; image.removeAttribute('src'); return; }
+      try {
+        source ||= await bridge.invoke('wallpaper_preview', { uri: field.value });
+        const decoded = await imageFrom(source);
+        if (request !== generation || !root.isConnected) return;
+        image.src = decoded.src; image.hidden = false;
+      } catch (error) { if (request === generation) { image.hidden = true; feedback.textContent = `Could not preview logo: ${error.message || error}`; } }
+    }
+    const choose = button('Choose logo image', () => { if (!working && !bridge.busy()) picker.click(); }); choose.prepend(bridge.icon('folder'));
+    const edit = button('Crop & zoom', async () => {
+      if (working || bridge.busy() || !field.value) return;
+      const meta = readMeta(field.value), sourceUri = meta?.sourceUri || field.value;
+      await chooseCrop(undefined, meta, sourceUri);
+    });
+    const clear = button('Clear logo', () => {
+      if (working || bridge.busy()) return;
+      field.value = ''; feedback.textContent = 'Logo cleared. Save Server List to apply the blank logo slot.'; sync(); show();
+    }); clear.prepend(bridge.icon('trash'));
+    async function chooseCrop(source, meta, sourceUri) {
+      if (working || bridge.busy()) return;
+      working = true; bridge.setBusy(true); choose.disabled = edit.disabled = clear.disabled = true;
+      feedback.textContent = 'Loading logo…';
+      try {
+        source ||= await bridge.invoke('wallpaper_preview', { uri: sourceUri });
+        const decoded = await imageFrom(source); feedback.textContent = '';
+        const result = await crop(decoded, false, meta, true);
+        if (!result) return;
+        const encoded = result.data.split(',')[1];
+        const bytes = encoded.length / 4 * 3 - (encoded.endsWith('==') ? 2 : encoded.endsWith('=') ? 1 : 0);
+        if (bytes > maxImageBytes) throw Error('The full-resolution PNG crop exceeds 50 MB. Choose a smaller crop.');
+        sourceUri ||= await bridge.invoke('import_wallpaper', { data: source });
+        const uri = await bridge.invoke('import_wallpaper', { data: result.data });
+        if (!root.isConnected) return;
+        saveMeta(uri, { sourceUri, ratio: 1, zoom: result.zoom, x: result.x, y: result.y });
+        field.value = uri; sync(); await show(result.data);
+        feedback.textContent = 'Lossless square PNG ready. Save Server List to apply it.';
+      } catch (error) { feedback.textContent = error.message || String(error); }
+      finally { working = false; choose.disabled = clear.disabled = false; bridge.setBusy(false); sync(); }
+    }
+    picker.addEventListener('change', async () => {
+      const file = picker.files[0]; if (!file || working || bridge.busy()) return;
+      try { await chooseCrop(await readFile(file)); }
+      catch (error) { feedback.textContent = error.message || String(error); }
+      finally { picker.value = ''; }
+    });
+    actions.append(choose, edit, clear); root.append(image, input, actions, picker, feedback);
+    sync(); queueMicrotask(() => show()); return input;
+  }
   function mount(bridge) {
     for (const [image, url] of previewURLs) if (!image.isConnected) { URL.revokeObjectURL(url); previewURLs.delete(image); }
     api = bridge;
@@ -444,5 +503,5 @@
     }
     refreshSwatches(); markTabs(); updatePreviewColors();
   }
-  window.HotoriWallpaperTools = { control, mount, visit, updatePreviewColors, sample };
+  window.HotoriWallpaperTools = { control, logoControl, mount, visit, updatePreviewColors, sample };
 })();

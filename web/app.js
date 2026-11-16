@@ -345,7 +345,7 @@ function disclosure(title, symbol, open, submenu = false) {
 function categoryFor(field) {
   return ({ "Glass appearance": "Glass Appearance", "Blur & saturation": "Glass Appearance", "Glass tints": "Glass Appearance",
     "Wallpapers": "Wallpapers", "Background dimming": "Wallpapers", "Accent color": "Colors", "Text & icon colors": "Colors",
-    "Avatars": "Avatars", "Message spacing": "Messages", "Mention highlights": "Messages", "Message bubbles": "Messages", "Server list": "Server List", "Friends sidebar": "Server List" })[field.section] || "Colors";
+    "Avatars": "Avatars", "Message spacing": "Messages", "Mention highlights": "Messages", "Message bubbles": "Messages", "Home logo": "Server List", "Server list": "Server List", "Friends sidebar": "Server List" })[field.section] || "Colors";
 }
 function updateCategoryButtons() {
   for (const [category, group] of categoryGroups) {
@@ -479,6 +479,7 @@ function renderFields() {
       case "Message bubbles": return target("Messages", "Message bubbles", "message");
       case "Mention highlights": return target("Messages", "Mention Highlights", "message", true);
       case "Server list": return target("Server List");
+      case "Home logo": return target("Server List", "Home Logo", "image");
       default: return target("Colors", "Other Colors", "palette", true);
     }
   }
@@ -561,7 +562,7 @@ function renderFields() {
     } else if (field.slider) {
       const spec = field.slider;
       const isRelative = spec.avatarPercent || ["--blur-val", "--liquid-blur-val", "--liquid-saturation"].includes(field.name);
-      const isRoundness = field.name === "--avatar-radius";
+      const isRoundness = ["--avatar-radius", "--server-icon-radius"].includes(field.name);
       const baseline = (spec.min + spec.max) / 2;
       const toDisplay = value => isRoundness ? Math.min(100, Number(value) * 2) : isRelative ? Number(value) / baseline * 100 : Number(value);
       const toTheme = value => isRoundness ? value / 2 : isRelative ? value * baseline / 100 : value;
@@ -584,11 +585,13 @@ function renderFields() {
       const endpoints = element("div", "range-endpoints");
       endpoints.append(element("span", "", `${input.min}${unit}`), element("span", "", `${input.max}${unit}`));
       control.append(output, input, endpoints);
-      if (field.name !== "--avatar-radius" && (Number(field.value) < spec.min || Number(field.value) > spec.max)) {
+      if (!isRoundness && (Number(field.value) < spec.min || Number(field.value) > spec.max)) {
         hint.textContent += " Your existing value is outside this range and is preserved until you move the slider.";
       }
     } else if (field.kind === "image") {
-      input = wallpaperControl(field, control);
+      input = field.name === "--home-logo"
+        ? window.HotoriWallpaperTools.logoControl(field, control, wallpaperBridge())
+        : wallpaperControl(field, control);
     } else if (field.kind === "color") {
       control.classList.add("color-control");
       const adjustments = element("div", "color-adjustments"); control.append(adjustments);

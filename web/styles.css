@@ -787,3 +787,6 @@ h2, .section-heading, .sidebar-brand strong { letter-spacing: -.025em; }
 .bubble-dependency-warning strong { flex: 1; min-width: 0; font-weight: 700; }
 .bubble-warning-marker { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: none; font-size: 16px; font-weight: 800; }
 .bubble-warning-marker .icon { width: 21px; height: 21px; filter: drop-shadow(0 0 4px #ebce7866); }
+
+.home-logo-preview { display: block; width: 128px; height: 128px; max-width: 100%; object-fit: contain; justify-self: center; border-radius: 16px; border: 1px solid #ffffff26; padding: 10px; background: repeating-conic-gradient(#ffffff12 0 25%, #10121650 0 50%) 0 / 16px 16px; }
+.home-logo-preview[hidden] { display: none; }

@@ -104,18 +104,7 @@ fn reset_settings(state: tauri::State<AppState>) -> Result<Vec<settings::Field>,
         .as_ref()
         .ok_or("Open Customize before resetting settings.")?;
     let defaults = updates::defaults(state.folder()?);
-    let values = parsed
-        .fields
-        .iter()
-        .map(|(name, _, _)| {
-            defaults
-                .fields
-                .iter()
-                .find(|(default_name, _, _)| default_name == name)
-                .map(|(_, value, _)| value.clone())
-                .ok_or_else(|| format!("No published default for {name}. Nothing was reset."))
-        })
-        .collect::<Result<Vec<_>, _>>()?;
+    let values = settings::reset_values(parsed, &defaults)?;
     let next = customization::save(&path, parsed, &values).map_err(|e| e.to_string())?;
     let fields = settings::fields(&next, Some(&defaults));
     *session = Some(next);

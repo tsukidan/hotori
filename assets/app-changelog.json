@@ -2,6 +2,11 @@
   "schemaVersion": 1,
   "releases": [
     {
+      "version": "1.8.5",
+      "publishedAt": null,
+      "body": "## Home Logo\n\n- Add a local Home Logo image picker under Server List with square crop/zoom, lossless source-resolution PNG export, and Clear/reset to the blank logo slot. Transparency is preserved and original sources are retained for recropping.\n- Store logos in local hotori-assets and preserve selections across theme updates.\n- Add a separate Server Icon Roundness slider for Home and server artwork/rings. The 0–100% control maps to 0–50% CSS without changing avatar roundness or circular DM icons."
+    },
+    {
       "version": "1.8.4",
       "publishedAt": null,
       "body": "## Message bubbles\n\n- Add Off/On controls and separate color/opacity controls for your messages and other messages under Messages → Message bubbles. Requires Vencord’s built-in ThemeAttributes plugin; enable it manually in Discord Settings → Vencord → Plugins → ThemeAttributes.\n- Accept both hex and RGBA colors consistently across customization saves while preserving alpha.\n- Reorder settings to Wallpapers, Colors, Avatars, Messages, Glass Appearance, and Server List.\n- Reduce wallpaper-page stalls by using display-sized preview images and avoiding heavy miniature-layout snapshots during glass rendering. Original sources and exported crops remain unchanged.\n- Style the theme update button as a compact acrylic pill with a gentle wallpaper-accent pulse, respecting reduced motion.\n- Open settings on Wallpapers after restarting.\n- Highlight the ThemeAttributes requirement with a yellow warning panel and add matching red warning panels for experimental Liquid Glass and unfinished No Glass."

@@ -5,6 +5,10 @@ pub struct Settings {
     pub fields: Vec<(String, String, std::ops::Range<usize>)>,
 }
 
+pub fn is_image(name: &str) -> bool {
+    matches!(name, "--main-bg" | "--settings-bg" | "--home-logo")
+}
+
 pub fn display_value(name: &str, value: &str) -> String {
     let value = value.strip_suffix("!important").unwrap_or(value).trim();
     let choices = choices(name);
@@ -14,7 +18,7 @@ pub fn display_value(name: &str, value: &str) -> String {
     {
         return label.into();
     }
-    if name == "--main-bg" || name == "--settings-bg" {
+    if is_image(name) {
         if value == "none" {
             return String::new();
         }
@@ -43,7 +47,7 @@ pub fn css_value(name: &str, input: &str, original: &str) -> String {
         .find_map(|(label, css)| (*label == input).then_some(*css))
     {
         css.to_owned()
-    } else if name == "--main-bg" || name == "--settings-bg" {
+    } else if is_image(name) {
         if input.is_empty() {
             "none".to_owned()
         } else {
@@ -95,6 +99,7 @@ pub fn label(name: &str) -> String {
         "--glass-background" => "Glass Background",
         "--main-bg" => "Main Background",
         "--settings-bg" => "Settings Background",
+        "--home-logo" => "Home Logo",
         "--bg-overlay-top" => "Main Background · Top Dimming",
         "--bg-overlay-bottom" => "Main Background · Bottom Dimming",
         "--settings-bg-overlay-top" => "Settings Background · Top Dimming",
@@ -118,6 +123,7 @@ pub fn label(name: &str) -> String {
         "--chat-input-gap" => "Typing Indicator Spacing",
         "--message-avatar-size" => "Message Avatar Size",
         "--avatar-radius" => "Avatar Roundness",
+        "--server-icon-radius" => "Server Icon Roundness",
         "--mention-glass-tint" => "Mention Highlight",
         "--mention-glass-hover" => "Mention Hover Highlight",
         "--mention-glass-accent" => "Mention Accent Color",
@@ -163,6 +169,7 @@ pub fn explanation(name: &str, value: &str) -> &'static str {
         }
         "--main-bg" => "Wallpaper behind your messages and channels.",
         "--settings-bg" => "Wallpaper displayed on Discord’s settings pages.",
+        "--home-logo" => "Choose an image, then crop and zoom to a square for Discord’s Home button. A transparent background is recommended. Crops are source-resolution lossless PNGs. Clear restores an intentionally blank logo slot.",
         n if n.contains("overlay") => "Controls wallpaper darkening. Higher opacity means darker.",
         "--blur-val" => "100% is the theme default. Adjust acrylic blur between 50% and 150%.",
         "--liquid-blur-val" => {
@@ -180,6 +187,7 @@ pub fn explanation(name: &str, value: &str) -> &'static str {
             "100% is the theme default. Adjust avatar size between 90% and 110%."
         }
         "--avatar-radius" => "0% is square; 100% is a full circle.",
+        "--server-icon-radius" => "Roundness shared by the Home logo, server icons, and their rings. 0% is square; 100% is a circle. DM icons remain circular. Message avatars are controlled separately.",
         "--server-list-layout" => {
             if value == "Horizontal" {
                 "Places your servers across the top of Discord."
@@ -257,6 +265,8 @@ pub fn swatch(value: &str) -> Option<Color> {
 
 pub fn section(name: &str) -> &'static str {
     match name {
+        "--home-logo" => "Home logo",
+        "--server-icon-radius" => "Server list",
         "--message-bubbles" | "--message-bubble-self-tint" | "--message-bubble-other-tint" => {
             "Message bubbles"
         }
@@ -330,12 +340,11 @@ fn validate(name: &str, value: &str) -> io::Result<()> {
         "--glass-background" => ["var(--glass-light)", "var(--glass-dark)"].contains(&core),
         "--show-friends-sidebar" | "--message-bubbles" => ["0", "1"].contains(&core),
         "--server-list-layout" => ["var(--vertical)", "var(--horizontal)"].contains(&core),
-        "--main-bg" | "--settings-bg" => {
+        "--main-bg" | "--settings-bg" | "--home-logo" => {
             let url = display_value(name, core);
             core == "none"
                 || ((url.is_empty()
-                    || url.starts_with("https://")
-                    || url.starts_with("http://")
+                    || (name != "--home-logo" && (url.starts_with("https://") || url.starts_with("http://")))
                     || crate::wallpapers::valid_uri(&url))
                     && !url.contains(['\'', '"', '(', ')', ' '])
                     && (core.starts_with("url('") && core.ends_with("')")
@@ -349,6 +358,8 @@ fn validate(name: &str, value: &str) -> io::Result<()> {
         | "--server-list-horizontal-height" => unit(core, "px"),
         "--liquid-saturation" => unit(core, "%"),
         "--avatar-radius" => unit(core, "px") || unit(core, "%"),
+        "--server-icon-radius" => core.strip_suffix('%').and_then(|v| v.parse::<f32>().ok())
+            .is_some_and(|v| v.is_finite() && (0.0..=50.0).contains(&v)),
         _ => swatch(core).is_some(),
     };
     if valid { Ok(()) } else { Err(bad()) }
@@ -389,6 +400,12 @@ pub fn save(path: &Path, settings: &Settings, values: &[String]) -> io::Result<S
 mod tests {
     use super::*;
 
+
+    #[test]
+    fn server_icon_radius_validation_is_bounded_percentage() {
+        for value in ["0%", "30%", "17.5%", "50%", "30% !important"] { assert!(validate("--server-icon-radius",value).is_ok(),"{value}"); }
+        for value in ["-1%", "50.1%", "100%", "30px", "30", "NaN%", "inf%", "30%; color:red"] { assert!(validate("--server-icon-radius",value).is_err(),"{value}"); }
+    }
     #[test]
     fn message_bubble_validation_rejects_bad_switches_and_colors() {
         for value in ["0", "1"] {

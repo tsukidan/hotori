@@ -32,6 +32,7 @@ fn slider(name: &str, value: &str, defaults: Option<&Settings>) -> Option<Slider
     value.parse::<f64>().ok().filter(|v| v.is_finite())?;
     let (min, max, step, avatar_percent) = match name {
         "--avatar-radius" => (0.0, 50.0, 0.5, false),
+        "--server-icon-radius" => (0.0, 50.0, 0.5, false),
         "--blur-val" | "--liquid-blur-val" | "--liquid-saturation" | "--message-avatar-size" => {
             let fallback = match name {
                 "--blur-val" => 24.0,
@@ -100,7 +101,7 @@ pub fn fields(settings: &Settings, defaults: Option<&Settings>) -> Vec<Field> {
                     "choice"
                 } else if swatch.is_some() {
                     "color"
-                } else if name.ends_with("-bg") {
+                } else if customization::is_image(name) {
                     "image"
                 } else {
                     "number"
@@ -128,6 +129,20 @@ pub fn fields(settings: &Settings, defaults: Option<&Settings>) -> Vec<Field> {
             }
         })
         .collect()
+}
+
+pub fn reset_values(settings: &Settings, defaults: &Settings) -> Result<Vec<String>, String> {
+    settings.fields.iter().map(|(name, _, _)| {
+        defaults.fields.iter().find(|(default_name, _, _)| default_name == name)
+            .map(|(_, value, _)| value.clone())
+            // Older cached theme defaults predate the optional Home Logo field.
+            .or_else(|| {
+                if !matches!(name.as_str(), "--home-logo" | "--server-icon-radius") { return None; }
+                customization::parse(crate::installer::BUNDLED_THEME.into()).ok()?.fields.into_iter()
+                    .find(|(default_name, _, _)| default_name == name).map(|(_, value, _)| value)
+            })
+            .ok_or_else(|| format!("No published default for {name}. Nothing was reset."))
+    }).collect()
 }
 
 pub fn values(settings: &Settings, edits: &[Edit]) -> Result<Vec<String>, String> {
@@ -161,6 +176,71 @@ pub fn values(settings: &Settings, edits: &[Edit]) -> Result<Vec<String>, String
 mod tests {
     use super::*;
 
+
+
+    #[test]
+    fn server_roundness_save_reset_and_avatar_independence() {
+        let parsed = customization::parse(crate::installer::BUNDLED_THEME.into()).unwrap();
+        let rows = fields(&parsed, Some(&parsed));
+        let index = rows.iter().position(|f| f.name == "--server-icon-radius").unwrap();
+        assert_eq!(rows[index].label, "Server Icon Roundness");
+        assert_eq!(rows[index].section, "Server list");
+        assert_eq!(rows[index].value, "30");
+        let slider = rows[index].slider.as_ref().unwrap();
+        assert_eq!((slider.min, slider.max, slider.step), (0.0, 50.0, 0.5));
+        let path = std::env::temp_dir().join(format!("hotori-server-radius-{}.css",std::process::id()));
+        std::fs::write(&path, &parsed.original).unwrap();
+        let mut saved = parsed;
+        for value in ["0", "17.5", "50"] {
+            let mut edits: Vec<_> = fields(&saved,None).iter().map(|f|Edit{name:f.name.clone(),value:f.value.clone()}).collect();
+            edits[index].value=value.into();
+            saved=customization::save(&path,&saved,&values(&saved,&edits).unwrap()).unwrap();
+            assert_eq!(saved.fields[index].1,format!("{value}%"));
+            assert_eq!(saved.fields.iter().find(|(n,_,_)| n=="--avatar-radius").unwrap().1,
+                customization::parse(crate::installer::BUNDLED_THEME.into()).unwrap().fields.iter().find(|(n,_,_)| n=="--avatar-radius").unwrap().1);
+        }
+        let old = crate::installer::BUNDLED_THEME.lines().filter(|l|!l.trim_start().starts_with("--server-icon-radius:")).collect::<Vec<_>>().join("\n");
+        let defaults=customization::parse(old).unwrap();
+        let reset=customization::save(&path,&saved,&reset_values(&saved,&defaults).unwrap()).unwrap();
+        assert_eq!(reset.fields[index].1,"30%");
+        std::fs::remove_file(path).unwrap();
+    }
+    #[test]
+    fn home_logo_import_save_reload_clear_and_reset() {
+        let folder = std::env::temp_dir().join(format!("hotori-home-logo-{}", std::process::id()));
+        std::fs::create_dir_all(&folder).unwrap();
+        let path = folder.join("test.theme.css");
+        let source = crate::installer::BUNDLED_THEME;
+        std::fs::write(&path, source).unwrap();
+        let parsed = customization::parse(source.into()).unwrap();
+        let rows = fields(&parsed, Some(&parsed));
+        let logo = rows.iter().find(|f| f.name == "--home-logo").unwrap();
+        assert_eq!(logo.kind, "image"); assert_eq!(logo.label, "Home Logo");
+        assert_eq!(logo.section, "Home logo"); assert_eq!(logo.value, "");
+        use base64::Engine;
+        let bytes = include_bytes!("../icons/icon.png");
+        let data = format!("data:image/png;base64,{}", base64::engine::general_purpose::STANDARD.encode(bytes));
+        let uri = crate::wallpapers::import(&folder, &data).unwrap();
+        assert_eq!(std::fs::read(folder.join("hotori-assets").join(uri.rsplit('/').next().unwrap())).unwrap(), bytes);
+        let mut edits: Vec<_> = rows.iter().map(|f| Edit { name: f.name.clone(), value: f.value.clone() }).collect();
+        let index = edits.iter().position(|e| e.name == "--home-logo").unwrap();
+        edits[index].value = uri.clone();
+        let saved = customization::save(&path, &parsed, &values(&parsed, &edits).unwrap()).unwrap();
+        assert_eq!(fields(&saved, None).iter().find(|f| f.name == "--home-logo").unwrap().value, uri);
+        for name in ["--main-bg", "--settings-bg"] {
+            assert_eq!(saved.fields.iter().find(|(n,_,_)| n == name).unwrap().1, "none");
+        }
+        edits[index].value = "https://example.com/logo.png".into();
+        assert!(customization::save(&path, &saved, &values(&saved, &edits).unwrap()).is_err());
+        edits[index].value = "".into();
+        let cleared = customization::save(&path, &saved, &values(&saved, &edits).unwrap()).unwrap();
+        assert_eq!(cleared.original, source);
+        let restored = customization::save(&path, &cleared, &values(&cleared, &rows.iter().map(|f| Edit{name:f.name.clone(),value: if f.name == "--home-logo" {uri.clone()} else {f.value.clone()}}).collect::<Vec<_>>()).unwrap()).unwrap();
+        let old_defaults = customization::parse(source.lines().filter(|line| !line.trim_start().starts_with("--home-logo:")).collect::<Vec<_>>().join("\n")).unwrap();
+        let defaults = reset_values(&restored, &old_defaults).unwrap();
+        assert_eq!(customization::save(&path, &restored, &defaults).unwrap().original, source);
+        std::fs::remove_dir_all(folder).unwrap();
+    }
     #[test]
     fn message_bubbles_save_reload_and_reset_preserve_alpha() {
         let parsed = customization::parse(crate::installer::BUNDLED_THEME.into()).unwrap();
