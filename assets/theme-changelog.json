@@ -1,6 +1,20 @@
 {
   "schemaVersion": 1,
   "versions": {
+    "0.9.5": [
+      {
+        "title": "Custom Home logo",
+        "description": "Made the Home button transparent and replaced the Discord mark with an optional custom logo setting. The Home action remains available; the logo slot stays blank until an image is configured."
+      },
+      {
+        "title": "Unread DM rings",
+        "description": "Unread direct messages now use circular glowing white avatar rings instead of side pills, with accent-colored selected rings. Rings fit the avatar and sit behind the native unread count."
+      },
+      {
+        "title": "Server welcome styling",
+        "description": "Refined server welcome titles and applied the selected glass material to setup cards and help text."
+      }
+    ],
     "0.9.4": [
       {
         "title": "Optional message bubbles",
