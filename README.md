@@ -20,7 +20,7 @@
 
 <h2>The app</h2>
 
-<p align="center"><img src="assets/app-preview.png" alt="Hotori app with a custom wallpaper and liquid glass interface" width="100%"></p>
+<p align="center"><img src="assets/app-preview-1.8.5.png" alt="Hotori app with a custom wallpaper and liquid glass interface" width="100%"></p>
 
 <p>Hotori is a Windows installer and customizer in one app.<br>Install or remove the theme, preview wallpapers, and save each category separately.</p>
 
