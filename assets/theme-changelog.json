@@ -1,6 +1,20 @@
 {
   "schemaVersion": 1,
   "versions": {
+    "0.9.7": [
+      {
+        "title": "Role editor glass",
+        "description": "Applied the selected glass profile to role-editor panels and upload controls, with a transparent Edit Role header. Message samples retain native Discord backgrounds, typography and avatar styling."
+      },
+      {
+        "title": "Channel permissions",
+        "description": "Improved advanced permission panel glass, row spacing and narrow-window layout while preserving allow, deny and neutral control states."
+      },
+      {
+        "title": "Invite cards",
+        "description": "Added profile-aware glass to message invite cards and guild invite containers. Nested cards avoid duplicate blur, and No Glass keeps a readable dark background."
+      }
+    ],
     "0.9.6": [
       {
         "title": "Shared icon roundness",

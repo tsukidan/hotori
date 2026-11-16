@@ -3,7 +3,7 @@
  * @author tsuki
  * @authorId 109679787630399488
  * @authorLink https://plusinsta.xyz
- * @version 0.9.6
+ * @version 0.9.7
  * @description A Discord theme inspired by Liquid Glass.
  */
 
@@ -3397,5 +3397,196 @@ img[class*="avatar_"],
 }
 }
 /* END OPTIONAL GROUPED MESSAGE BUBBLES */
+
+/* 38 | ROLE EDITOR
+   Real role-edit layout/header classes differ from the role-list layout.
+   Explicit backdrops on these visible surfaces; native message previews stay
+   opaque so they accurately demonstrate Discord's different appearances. */
+.sidebar_7NrAL2,
+.sidebarScrollable_EDKX0U,
+.content_EDKX0U,
+.contentWidth_tLZg6c,
+.roleStyleUpsell_cXmH6r,
+.previewContainer_3kXUvP {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    border-radius: 16px;
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow);
+}
+/* Nested header/list surfaces expose their owning panel's backdrop. */
+.scroller_EDKX0U,
+.titleContainer_7NrAL2,
+.header_mssHMP {
+    background: transparent !important;
+    box-shadow: none !important;
+}
+/* The shared role-edit header can be its own contentWidth surface. */
+.header_tLZg6c:not(.contentWidth_tLZg6c) {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    border-radius: 16px;
+}
+.contentWidth_tLZg6c .header_tLZg6c,
+.sidebar_7NrAL2 .titleContainer_7NrAL2,
+.contentWidth_tLZg6c :is(.roleStyleUpsell_cXmH6r, .previewContainer_3kXUvP) {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+/* Restore native preview text tokens overridden by the theme-wide white UI. */
+:is(.messageWrapper_cXmH6r, .roleStyleMessageContainer_cXmH6r) {
+    --text-default: var(--neutral-4, #dbdee1) !important;
+}
+.theme-light :is(.messageWrapper_cXmH6r, .roleStyleMessageContainer_cXmH6r),
+:is(.messageWrapper_cXmH6r, .roleStyleMessageContainer_cXmH6r).theme-light {
+    --text-default: var(--neutral-72, #313338) !important;
+}
+/* No glass on role-style samples or the four appearance preview canvases.
+   Native backgrounds, labels, fade masks and selected borders are untouched.
+   Undo Hotori's chat typography/avatar/username-pill treatment inside samples. */
+:is(.messageWrapper_cXmH6r, .roleStyleMessageContainer_cXmH6r) .header_2i8Bfm {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: auto !important;
+}
+:is(.messageWrapper_cXmH6r, .roleStyleMessageContainer_cXmH6r) .messageContent_2i8Bfm {
+    font-weight: 400 !important;
+    text-shadow: none !important;
+    color: var(--text-default) !important;
+}
+:is(.messageWrapper_cXmH6r, .roleStyleMessageContainer_cXmH6r) .headerText_2i8Bfm {
+    color: var(--text-default) !important;
+    text-shadow: none !important;
+}
+:is(.messageWrapper_cXmH6r, .roleStyleMessageContainer_cXmH6r) .cozy_2i8Bfm.wrapper_2i8Bfm {
+    --chat-avatar-size: 40px;
+    --custom-message-avatar-size: 40px;
+    --custom-message-margin-left-content-cozy: calc(40px + 2 * var(--custom-message-margin-horizontal, 16px));
+}
+:is(.messageWrapper_cXmH6r, .roleStyleMessageContainer_cXmH6r) .avatar_2i8Bfm {
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+    box-shadow: none !important;
+}
+:is(.messageWrapper_cXmH6r, .roleStyleMessageContainer_cXmH6r) .contents_2i8Bfm {
+    min-height: 0;
+}
+@container style(--blur-profile: 2) {
+    .sidebar_7NrAL2, .sidebarScrollable_EDKX0U, .content_EDKX0U,
+    .contentWidth_tLZg6c, .header_tLZg6c:not(.contentWidth_tLZg6c) {
+        background-color: rgba(0, 0, 0, .5) !important;
+        background-image: none !important;
+    }
+}
+/* The Edit Role title/tabs sit directly on the page, without another panel. */
+.header_tLZg6c,
+.header_tLZg6c.contentWidth_tLZg6c {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+/* END ROLE EDITOR */
+
+/* 39 | ADVANCED CHANNEL PERMISSIONS
+   One material per sidebar/permission row; nested controls keep native states. */
+#permissions-tab .sidebarScrollable_EDKX0U,
+#permissions-tab .container_VhFsFg:has(.group_8GP31u) {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 16px;
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow);
+    box-sizing: border-box;
+}
+#permissions-tab .sidebarScrollable_EDKX0U .scroller_EDKX0U {
+    padding: 12px !important;
+    box-sizing: border-box;
+    background: transparent !important;
+    background-image: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+}
+#permissions-tab .panel_vNURip { container-type: inline-size; }
+#permissions-tab .container_4T6RB7 { gap: 12px; }
+/* Nudge this accordion left without shifting other settings sections. */
+#permissions-tab :is(div, section):has(> .panel_vNURip .container_4T6RB7) { margin-inline-start: -12px; }
+/* Native separators sit between wrapper stacks; remove their doubled spacing. */
+#permissions-tab .stack_TWWX0S:has(> .stack_TWWX0S > .container_VhFsFg .group_8GP31u) { gap: 6px !important; }
+#permissions-tab .stack_TWWX0S:has(> .stack_TWWX0S > .container_VhFsFg .group_8GP31u) > .divider_ZaYWLb { display: none; }
+#permissions-tab .container_4T6RB7 > * { min-width: 0; max-width: 100%; }
+#permissions-tab .container_VhFsFg:has(.group_8GP31u) { padding: 8px 12px; margin-block: 0 !important; min-width: 0; column-gap: 12px; row-gap: 6px; }
+#permissions-tab .container_VhFsFg:has(.group_8GP31u)[data-layout="horizontal"] { grid-template-columns: minmax(0, 1fr) auto; }
+#permissions-tab .container_VhFsFg:has(.group_8GP31u) .description_VhFsFg { overflow-wrap: anywhere; line-height: 1.5; }
+@container (max-width: 620px) {
+    #permissions-tab .container_4T6RB7 { flex-direction: column; align-items: stretch; }
+    #permissions-tab .container_4T6RB7 > * { width: 100%; box-sizing: border-box; }
+    #permissions-tab .sidebarScrollable_EDKX0U { flex-basis: auto; }
+    #permissions-tab .sidebarScrollable_EDKX0U .scroller_EDKX0U { max-height: 180px; }
+}
+#permissions-tab .group_8GP31u {
+    background: rgba(16, 18, 22, .18);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    overflow: hidden;
+}
+#permissions-tab .group_8GP31u .item_8GP31u:not(.selected_8GP31u):not(:hover) {
+    background: transparent !important;
+}
+@container style(--blur-profile: 2) {
+    #permissions-tab .sidebarScrollable_EDKX0U,
+    #permissions-tab .container_VhFsFg:has(.group_8GP31u) {
+        background-color: rgba(0, 0, 0, .5) !important;
+        background-image: none !important;
+    }
+}
+/* END ADVANCED CHANNEL PERMISSIONS */
+
+
+/* 39 | INVITE CARDS — one profile backdrop, with native layout and buttons. */
+.wrapper_jsxF_b.inviteEmbed_aoI0WQ,
+.guildInviteContainer_fknPy8:not(:where(.wrapper_jsxF_b.inviteEmbed_aoI0WQ *)) {
+    background: var(--glass-surface) !important;
+    background-image: var(--glass-sheen) !important;
+    backdrop-filter: var(--glass-filter) !important;
+    -webkit-backdrop-filter: var(--glass-filter) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 16px !important;
+    box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
+}
+.wrapper_jsxF_b.inviteEmbed_aoI0WQ .guildInviteContainer_fknPy8,
+.guildInviteContainer_fknPy8 .wrapper_jsxF_b.inviteEmbed_aoI0WQ {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+@container style(--blur-profile: 2) {
+    .wrapper_jsxF_b.inviteEmbed_aoI0WQ,
+    .guildInviteContainer_fknPy8:not(:where(.wrapper_jsxF_b.inviteEmbed_aoI0WQ *)) {
+        background-color: rgba(0, 0, 0, .5) !important;
+        background-image: none !important;
+    }
+    .guildInviteContainer_fknPy8 .wrapper_jsxF_b.inviteEmbed_aoI0WQ {
+        background: transparent !important;
+    }
+}
+/* END INVITE CARDS */
 
 /* END OF HOTORI THEME */
