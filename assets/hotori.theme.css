@@ -3,7 +3,7 @@
  * @author tsuki
  * @authorId 109679787630399488
  * @authorLink https://plusinsta.xyz
- * @version 0.9.5
+ * @version 0.9.6
  * @description A Discord theme inspired by Liquid Glass.
  */
 
@@ -44,6 +44,8 @@
     --main-bg: none;
     /* Home button logo; installer integration must supply url('...'). */
     --home-logo: none;
+    /* Shared Home/server icon roundness: 0% square, 50% circle. */
+    --server-icon-radius: 30%;
     --settings-bg: none;
 
     /* =====================================================================================
@@ -2729,8 +2731,8 @@ img[class*="avatar_"],
     }
 }
 
-/* Custom Home logo: keep Discord's Home action and accessible name, but clear
-   its native tile/mark. The logo itself supplies any artwork, never a fill. */
+/* Home artwork and ring share the actual 40px icon host, not the tutorial
+   container (which can include other controls/spacing). No layout offsets. */
 .wrapper_5dqHTG [data-guilds-bar-home="true"],
 .wrapper_5dqHTG [data-guilds-bar-home="true"] :is(.wrapper_JJ-hgR, .childWrapper_JJ-hgR) {
     background: transparent !important;
@@ -2742,19 +2744,66 @@ img[class*="avatar_"],
 .wrapper_5dqHTG [data-guilds-bar-home="true"] :is(.homeIcon_1IyMuq, svg:not(:has(foreignObject))) {
     display: none !important;
 }
-.wrapper_5dqHTG [data-guilds-bar-home="true"] {
-    position: relative;
+.wrapper_5dqHTG [data-guilds-bar-home="true"] .wrapper__o8_Xq {
+    visibility: hidden !important;
 }
-.wrapper_5dqHTG [data-guilds-bar-home="true"]::after {
+/* Let the Home ring escape its local icon wrappers; the rail's scroller
+   retains responsibility for scrolling and viewport clipping. */
+.wrapper_5dqHTG [data-guilds-bar-home="true"],
+.wrapper_5dqHTG [data-guilds-bar-home="true"] :is(.listItem_rwEpIL, .blobContainer_IaPwK5, .wrapper_hqZPsU) {
+    overflow: visible !important;
+    contain: none !important;
+}
+/* Suppress the generic guild ring if Home also uses that wrapper. */
+.wrapper_5dqHTG [data-guilds-bar-home="true"] .blobContainer_IaPwK5::after {
+    content: none !important;
+}
+.wrapper_5dqHTG [data-guilds-bar-home="true"] .wrapper_hqZPsU {
+    position: relative;
+    --hotori-home-ring: transparent;
+    --hotori-home-glow: 0 0 0 transparent;
+}
+.wrapper_5dqHTG [data-guilds-bar-home="true"] .wrapper_hqZPsU::after {
     content: "";
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: var(--guildbar-avatar-size, 40px);
-    height: var(--guildbar-avatar-size, 40px);
-    transform: translate(-50%, -50%);
+    inset: 0;
+    border-radius: var(--server-icon-radius);
     background: var(--home-logo) center / contain no-repeat;
     pointer-events: none;
+    z-index: 0;
+}
+.wrapper_5dqHTG [data-guilds-bar-home="true"] .wrapper_hqZPsU::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 2px solid var(--hotori-home-ring);
+    border-radius: var(--server-icon-radius);
+    box-sizing: border-box;
+    box-shadow: var(--hotori-home-glow);
+    pointer-events: none;
+    z-index: 1;
+    transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+.wrapper_5dqHTG [data-guilds-bar-home="true"]:has(.item__o8_Xq.visible__o8_Xq:not(.hovered__o8_Xq):not(.selected__o8_Xq)) .wrapper_hqZPsU {
+    --hotori-home-ring: #ffffff;
+    --hotori-home-glow: 0 0 5px 1px rgba(255,255,255,.55), 0 0 10px 1px rgba(255,255,255,.32);
+}
+.wrapper_5dqHTG [data-guilds-bar-home="true"]:is(:has(.item__o8_Xq.selected__o8_Xq), :has(.wrapper_JJ-hgR.selected_JJ-hgR), :has([aria-selected="true"])) .wrapper_hqZPsU {
+    --hotori-home-ring: var(--main-color);
+    --hotori-home-glow: 0 0 5px 1px color-mix(in srgb,var(--main-color) 85%,transparent), 0 0 10px 1px color-mix(in srgb,var(--main-color) 60%,transparent);
+}
+/* Server artwork and indicator use the same radius; SVG masks must not force
+   an older shape. Leave the separate unread-DM group circular. */
+.wrapper_5dqHTG .blobContainer_IaPwK5 .icon_JJ-hgR {
+    border-radius: var(--server-icon-radius) !important;
+}
+.wrapper_5dqHTG .blobContainer_IaPwK5 .svg_hqZPsU foreignObject {
+    mask: none !important;
+    border-radius: var(--server-icon-radius);
+    overflow: hidden;
+}
+@media (prefers-reduced-motion: reduce) {
+    .wrapper_5dqHTG [data-guilds-bar-home="true"] .wrapper_hqZPsU::before { transition: none; }
 }
 
 /* Server state rings live outside Discord's masked SVG, so their glow can
@@ -2775,7 +2824,7 @@ img[class*="avatar_"],
     position: absolute;
     inset: -2px;
     border: 2px solid var(--hotori-server-ring);
-    border-radius: calc(var(--radius-md, 12px) + 2px);
+    border-radius: calc(var(--server-icon-radius) + 2px);
     box-sizing: border-box;
     box-shadow: var(--hotori-server-glow);
     pointer-events: none;
