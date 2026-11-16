@@ -3,7 +3,7 @@
  * @author tsuki
  * @authorId 109679787630399488
  * @authorLink https://plusinsta.xyz
- * @version 0.9.8
+ * @version 0.9.9
  * @description A Discord theme inspired by Liquid Glass.
  */
 
@@ -155,6 +155,8 @@
     /* 0 = hide completely; 1 = show Discord's right-side friends sidebar.
        The server member list and the main Friends page remain available. */
     --show-friends-sidebar: 0;
+    /* 1 = icons-only server members; hover/focus expands. 0 = normal list. */
+    --collapse-member-list: 0;
 
     /* 14. MESSAGE BUBBLES — requires Vencord's ThemeAttributes plugin.
        0 = off; 1 = on. Consecutive Discord-grouped messages join one bubble.
@@ -3809,5 +3811,76 @@ img[class*="avatar_"],
     border: 1px solid var(--glass-border) !important;
     box-shadow: var(--glass-shadow-small), var(--glass-edge-shadow) !important;
 }
+
+/* OPTIONAL COLLAPSING SERVER MEMBER LIST
+   Keep a fixed 72px rail in chat layout. Expand the panel over chat rather
+   than reflowing every chat message on every animation frame. No timers or
+   per-member hover queries. Only pointer hover expands; Discord can focus a
+   member automatically while switching servers. */
+@container style(--collapse-member-list: 1) {
+    .container_86es0b:has(> .membersWrap_86es0b) {
+        position: relative;
+        width: 72px !important;
+        min-width: 72px !important;
+        max-width: 72px !important;
+        flex: 0 0 72px;
+        overflow: visible;
+        z-index: 5;
+    }
+    .container_86es0b > .membersWrap_86es0b {
+        position: absolute;
+        inset-block: 0;
+        inset-inline-end: 0;
+        width: 72px;
+        min-width: 72px !important;
+        max-width: none !important;
+        overflow: hidden;
+        transition: width 420ms cubic-bezier(.22, 1.2, .36, 1);
+        @starting-style { width: 72px; }
+    }
+    .container_86es0b:hover > .membersWrap_86es0b {
+        width: var(--custom-member-list-width, 240px);
+    }
+    .membersWrap_86es0b .members_86es0b,
+    .membersWrap_86es0b .membersListNotices_86es0b {
+        width: 100%;
+        min-width: 0;
+    }
+    .membersWrap_86es0b .member_Iy0c7A {
+        max-width: calc(100% - 16px);
+    }
+    .membersWrap_86es0b .memberInner_Iy0c7A {
+        transition: padding-inline 350ms cubic-bezier(.22, 1, .36, 1);
+    }
+    .membersWrap_86es0b :is(.content_TBNqol, .membersGroup_86es0b, .membersListNotices_86es0b) {
+        transition: opacity 150ms ease;
+    }
+    .membersWrap_86es0b:not(:hover) .memberInner_Iy0c7A {
+        padding-inline: 0;
+    }
+    .membersWrap_86es0b:not(:hover) :is(.content_TBNqol, .membersGroup_86es0b, .membersListNotices_86es0b) {
+        opacity: 0;
+        pointer-events: none;
+    }
+    /* Existing member-row material owns blur; tint the collapsed icon tile
+       without adding another filter or changing the expanded appearance. */
+    .membersWrap_86es0b:not(:hover) .member_86es0b {
+        background: var(--glass-surface) !important;
+        background-image: var(--glass-sheen) !important;
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .container_86es0b > .membersWrap_86es0b,
+        .membersWrap_86es0b .memberInner_Iy0c7A,
+        .membersWrap_86es0b :is(.content_TBNqol, .membersGroup_86es0b, .membersListNotices_86es0b) {
+            transition: none;
+        }
+    }
+    .reduce-motion .container_86es0b > .membersWrap_86es0b,
+    .reduce-motion .membersWrap_86es0b .memberInner_Iy0c7A,
+    .reduce-motion .membersWrap_86es0b :is(.content_TBNqol, .membersGroup_86es0b, .membersListNotices_86es0b) {
+        transition: none;
+    }
+}
+/* END COLLAPSING SERVER MEMBER LIST */
 
 /* END OF HOTORI THEME */
