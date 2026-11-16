@@ -23,6 +23,7 @@ const { pathToFileURL } = require('node:url');
         choices: ['Hidden', 'Shown'], choiceHints: ['Hide the sidebar.', 'Show the sidebar.'] });
       defaults.push({ name: '--message-bubbles', section: 'Message bubbles', label: 'Message Bubbles', kind: 'choice', value: 'Off', choices: ['Off','On'], choiceHints: ['', ''], hint: 'Requires Vencord’s built-in ThemeAttributes plugin. Enable via Discord Settings → Vencord → Plugins → ThemeAttributes.' });
       for (const [name,label,value] of [['--message-bubble-self-tint','Your Messages','#5865f23d'],['--message-bubble-other-tint','Other Messages','#10182052']]) defaults.push({name, label, section:'Message bubbles', kind:'color', value, color:value.slice(0,7), alphaEnabled:true, opacity:parseInt(value.slice(7),16)/255, hint:'Color and opacity of grouped messages.'});
+      defaults.push({ name: '--collapse-member-list', section: 'Member list', label: 'Compact Member List', kind: 'choice', value: 'Disabled', choices: ['Disabled', 'Enabled'], choiceHints: ['Restores the normal member list.', 'Hover expands the icons-only rail.'], hint: 'Hover expands the icons-only rail without resizing chat.' });
       let saved = structuredClone(defaults);
       window.savedSettings = saved;
       window.__TAURI__ = { core: { invoke: async (command, args) => {
@@ -68,6 +69,10 @@ const { pathToFileURL } = require('node:url');
     });
     assert(surfaces.siblings && surfaces.gap > 0);
     await tab('Server List').click();
+    const compact = page.locator('[data-name="--collapse-member-list"]');
+    assert.equal(await compact.isVisible(), true, 'Compact Member List is visible under Server List');
+    assert.deepEqual(await compact.locator('select option').allTextContents(), ['Disabled', 'Enabled']);
+    assert.equal(await compact.locator('select').inputValue(), 'Disabled');
     const friends = page.getByLabel('Friends Sidebar', { exact: true });
     assert.equal(await friends.count(), 0, 'Retired Friends Sidebar option is not rendered');
     assert.equal(await page.locator('[data-name="--show-friends-sidebar"]').count(), 0);

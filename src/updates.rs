@@ -399,6 +399,18 @@ fn replace(path: &Path, expected: Option<&str>, content: &str) -> Result<(), Str
 mod tests {
     use super::*;
 
+    #[test]
+    fn compact_member_list_update_preserves_choice_or_uses_published_default() {
+        for value in ["0", "1"] {
+            let customized = BUNDLED_THEME.replace("--collapse-member-list: 0;", &format!("--collapse-member-list: {value};"));
+            let (merged, _) = merge(&customized, BUNDLED_THEME).unwrap();
+            assert!(merged.contains(&format!("--collapse-member-list: {value};")));
+        }
+        let old = BUNDLED_THEME.lines().filter(|l| !l.trim_start().starts_with("--collapse-member-list:")).collect::<Vec<_>>().join("\n");
+        let (merged, _) = merge(&old, BUNDLED_THEME).unwrap();
+        assert!(merged.contains("--collapse-member-list: 0;"));
+    }
+
 
 
     #[test]

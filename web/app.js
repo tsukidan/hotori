@@ -479,6 +479,7 @@ function renderFields() {
       case "Message bubbles": return target("Messages", "Message bubbles", "message");
       case "Mention highlights": return target("Messages", "Mention Highlights", "message", true);
       case "Server list": return target("Server List");
+      case "Member list": return target("Server List", "Member List", "user");
       case "Home logo": return target("Server List", "Home Logo", "image");
       default: return target("Colors", "Other Colors", "palette", true);
     }

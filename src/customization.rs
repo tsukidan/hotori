@@ -84,6 +84,7 @@ pub fn choices(name: &str) -> Vec<(&'static str, &'static str)> {
             ("Light Glass", "var(--glass-light)"),
         ],
         "--show-friends-sidebar" => vec![("Hidden", "0"), ("Shown", "1")],
+        "--collapse-member-list" => vec![("Disabled", "0"), ("Enabled", "1")],
         "--message-bubbles" => vec![("Off", "0"), ("On", "1")],
         "--server-list-layout" => vec![
             ("Vertical", "var(--vertical)"),
@@ -127,6 +128,7 @@ pub fn label(name: &str) -> String {
         "--mention-glass-tint" => "Mention Highlight",
         "--mention-glass-hover" => "Mention Hover Highlight",
         "--mention-glass-accent" => "Mention Accent Color",
+        "--collapse-member-list" => "Compact Member List",
         "--message-bubbles" => "Message Bubbles",
         "--message-bubble-self-tint" => "Your Messages",
         "--message-bubble-other-tint" => "Other Messages",
@@ -139,6 +141,7 @@ pub fn label(name: &str) -> String {
 
 pub fn explanation(name: &str, value: &str) -> &'static str {
     match name {
+        "--collapse-member-list" => "Rests as a 72px icons-only rail. Hover to expand over the edge of chat without resizing messages; scrolling remains available. Focus alone does not expand it. Supports all glass profiles and reduced motion. Disabled restores the normal member list.",
         "--message-bubbles" => {
             "Requires Vencord’s built-in ThemeAttributes plugin. Enable via Discord Settings → Vencord → Plugins → ThemeAttributes. Without it, bubbles do not render. Off restores the normal username glass pill."
         }
@@ -266,6 +269,7 @@ pub fn swatch(value: &str) -> Option<Color> {
 pub fn section(name: &str) -> &'static str {
     match name {
         "--home-logo" => "Home logo",
+        "--collapse-member-list" => "Member list",
         "--server-icon-radius" => "Server list",
         "--message-bubbles" | "--message-bubble-self-tint" | "--message-bubble-other-tint" => {
             "Message bubbles"
@@ -338,7 +342,7 @@ fn validate(name: &str, value: &str) -> io::Result<()> {
         ]
         .contains(&core),
         "--glass-background" => ["var(--glass-light)", "var(--glass-dark)"].contains(&core),
-        "--show-friends-sidebar" | "--message-bubbles" => ["0", "1"].contains(&core),
+        "--show-friends-sidebar" | "--message-bubbles" | "--collapse-member-list" => ["0", "1"].contains(&core),
         "--server-list-layout" => ["var(--vertical)", "var(--horizontal)"].contains(&core),
         "--main-bg" | "--settings-bg" | "--home-logo" => {
             let url = display_value(name, core);
@@ -399,6 +403,16 @@ pub fn save(path: &Path, settings: &Settings, values: &[String]) -> io::Result<S
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn compact_member_list_accepts_only_binary_values() {
+        for value in ["0", "1", "1 !important"] {
+            assert!(validate("--collapse-member-list", value).is_ok());
+        }
+        for value in ["2", "-1", "0.5", "true", "Enabled", "01", "1px", "1; color:red"] {
+            assert!(validate("--collapse-member-list", value).is_err(), "{value}");
+        }
+    }
 
 
     #[test]

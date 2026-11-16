@@ -135,9 +135,9 @@ pub fn reset_values(settings: &Settings, defaults: &Settings) -> Result<Vec<Stri
     settings.fields.iter().map(|(name, _, _)| {
         defaults.fields.iter().find(|(default_name, _, _)| default_name == name)
             .map(|(_, value, _)| value.clone())
-            // Older cached theme defaults predate the optional Home Logo field.
+            // Older cached defaults may predate optional controls.
             .or_else(|| {
-                if !matches!(name.as_str(), "--home-logo" | "--server-icon-radius") { return None; }
+                if !matches!(name.as_str(), "--home-logo" | "--server-icon-radius" | "--collapse-member-list") { return None; }
                 customization::parse(crate::installer::BUNDLED_THEME.into()).ok()?.fields.into_iter()
                     .find(|(default_name, _, _)| default_name == name).map(|(_, value, _)| value)
             })
@@ -175,6 +175,37 @@ pub fn values(settings: &Settings, edits: &[Edit]) -> Result<Vec<String>, String
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn compact_member_list_save_reload_and_reset() {
+        let source = crate::installer::BUNDLED_THEME;
+        let mut saved = customization::parse(source.into()).unwrap();
+        let path = std::env::temp_dir().join(format!("hotori-compact-members-{}.css", std::process::id()));
+        std::fs::write(&path, source).unwrap();
+        let index = saved.fields.iter().position(|(n, _, _)| n == "--collapse-member-list").unwrap();
+        assert_eq!(saved.fields[index].1, "0");
+        for (choice, css) in [("Enabled", "1"), ("Disabled", "0"), ("Enabled", "1")] {
+            let rows = fields(&saved, None);
+            assert_eq!(rows[index].label, "Compact Member List");
+            assert_eq!(rows[index].section, "Member list");
+            assert_eq!(rows[index].kind, "choice");
+            assert_eq!(rows[index].choices, vec!["Disabled", "Enabled"]);
+            assert!(rows[index].hint.contains("Focus alone does not expand"));
+            let mut edits: Vec<_> = rows.iter().map(|f| Edit { name: f.name.clone(), value: f.value.clone() }).collect();
+            edits[index].value = choice.into();
+            customization::save(&path, &saved, &values(&saved, &edits).unwrap()).unwrap();
+            saved = customization::parse(std::fs::read_to_string(&path).unwrap()).unwrap();
+            assert_eq!(saved.fields[index].1, css);
+            assert_eq!(fields(&saved, None)[index].value, choice);
+        }
+        for defaults in [source.to_owned(), source.lines().filter(|l| !l.trim_start().starts_with("--collapse-member-list:")).collect::<Vec<_>>().join("\n")] {
+            let defaults = customization::parse(defaults).unwrap();
+            let reset = customization::save(&path, &saved, &reset_values(&saved, &defaults).unwrap()).unwrap();
+            assert_eq!(reset.fields[index].1, "0");
+            std::fs::write(&path, &saved.original).unwrap();
+        }
+        std::fs::remove_file(path).unwrap();
+    }
 
 
 

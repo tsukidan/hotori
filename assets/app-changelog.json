@@ -2,6 +2,11 @@
   "schemaVersion": 1,
   "releases": [
     {
+      "version": "1.8.6",
+      "publishedAt": null,
+      "body": "## Customization\n\n- Add Compact Member List under Server List → Member List, with Disabled/Enabled controls for the published collapsing member list.\n- Preserve the saved choice during theme updates and restore Disabled on reset, including older cached defaults."
+    },
+    {
       "version": "1.8.5",
       "publishedAt": null,
       "body": "## Home Logo\n\n- Add a local Home Logo image picker under Server List with square crop/zoom, lossless source-resolution PNG export, and Clear/reset to the blank logo slot. Transparency is preserved and original sources are retained for recropping.\n- Store logos in local hotori-assets and preserve selections across theme updates.\n- Add a separate Server Icon Roundness slider for Home and server artwork/rings. The 0–100% control maps to 0–50% CSS without changing avatar roundness or circular DM icons."
