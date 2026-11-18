@@ -3,7 +3,7 @@
  * @author tsuki
  * @authorId 109679787630399488
  * @authorLink https://plusinsta.xyz
- * @version 0.9.9
+ * @version 0.9.10
  * @description A Discord theme inspired by Liquid Glass.
  */
 
@@ -3882,5 +3882,40 @@ img[class*="avatar_"],
     }
 }
 /* END COLLAPSING SERVER MEMBER LIST */
+
+
+/* ACCENT PING / DM COUNT BADGES
+   Keep notification counts opaque and their native size/shape. Animate only
+   the fixed halo's opacity, never the text or shadow blur/spread. */
+:is(.numberBadge_lMvXrQ[style*="--badge-notification-background"], .lowerBadge_hqZPsU .numberBadge_lMvXrQ, .mentionsBadge_iclnS3 .numberBadge_lMvXrQ):not(:where(.enable-forced-colors *)) {
+    position: relative;
+    z-index: 0;
+    background-color: var(--main-color) !important;
+    color: #ffffff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, .35);
+}
+:is(.numberBadge_lMvXrQ[style*="--badge-notification-background"], .lowerBadge_hqZPsU .numberBadge_lMvXrQ, .mentionsBadge_iclnS3 .numberBadge_lMvXrQ):not(:where(.enable-forced-colors *))::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: 0 0 4px 1px color-mix(in srgb, var(--main-color) 65%, transparent),
+                0 0 9px 2px color-mix(in srgb, var(--main-color) 35%, transparent);
+    pointer-events: none;
+    z-index: -1;
+    opacity: .85;
+    animation: hotori-count-badge-glow 2.4s ease-in-out infinite;
+}
+@keyframes hotori-count-badge-glow {
+    0%, 100% { opacity: .85; }
+    50% { opacity: .35; }
+}
+@media (prefers-reduced-motion: reduce) {
+    :is(.numberBadge_lMvXrQ[style*="--badge-notification-background"], .lowerBadge_hqZPsU .numberBadge_lMvXrQ, .mentionsBadge_iclnS3 .numberBadge_lMvXrQ):not(:where(.enable-forced-colors *))::after { animation: none; }
+}
+.reduce-motion :is(.numberBadge_lMvXrQ[style*="--badge-notification-background"], .lowerBadge_hqZPsU .numberBadge_lMvXrQ, .mentionsBadge_iclnS3 .numberBadge_lMvXrQ):not(:where(.enable-forced-colors *))::after {
+    animation: none;
+}
+/* END ACCENT PING / DM COUNT BADGES */
 
 /* END OF HOTORI THEME */
