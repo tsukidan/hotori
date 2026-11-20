@@ -7,10 +7,50 @@ mod updates;
 mod wallpapers;
 mod theme_changelog;
 mod window_preferences;
+mod true_liquid_glass;
+mod runtime_delivery;
+
+#[tauri::command]
+async fn get_true_glass_runtime() -> Result<runtime_delivery::Delivery, String> {
+    let loc = runtime_delivery::Locations::current()?;
+    tauri::async_runtime::spawn_blocking(move || runtime_delivery::status(&loc)).await.map_err(|e|e.to_string())
+}
+
+#[tauri::command]
+async fn apply_true_glass_runtime() -> Result<runtime_delivery::Delivery, String> {
+    let loc = runtime_delivery::Locations::current()?;
+    tauri::async_runtime::spawn_blocking(move || runtime_delivery::apply(&loc)).await.map_err(|e|e.to_string())?
+}
+
+#[tauri::command]
+async fn rollback_true_glass_runtime() -> Result<runtime_delivery::Delivery, String> {
+    let loc = runtime_delivery::Locations::current()?;
+    tauri::async_runtime::spawn_blocking(move || runtime_delivery::rollback(&loc)).await.map_err(|e|e.to_string())?
+}
+
+#[tauri::command]
+async fn open_true_glass_sources() -> Result<(), String> {
+    let folder = runtime_delivery::sources(&runtime_delivery::Locations::current()?)?;
+    #[cfg(windows)]
+    std::process::Command::new("explorer.exe").arg(folder).spawn().map_err(|e|e.to_string())?;
+    Ok(())
+}
 
 use serde::Serialize;
 use tauri::Manager;
 use std::{path::PathBuf, sync::Mutex};
+
+#[tauri::command]
+async fn get_true_liquid_glass() -> Result<true_liquid_glass::Snapshot, String> {
+    let root = true_liquid_glass::root()?;
+    tauri::async_runtime::spawn_blocking(move || true_liquid_glass::read(&root)).await.map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+async fn save_true_liquid_glass(requested_enabled: bool, quality: true_liquid_glass::Quality) -> Result<true_liquid_glass::Snapshot, String> {
+    let root = true_liquid_glass::root()?;
+    tauri::async_runtime::spawn_blocking(move || true_liquid_glass::save(&root, requested_enabled, quality)).await.map_err(|e| e.to_string())?
+}
 
 struct AppState {
     folder: Option<PathBuf>,
@@ -267,6 +307,13 @@ fn main() {
         .setup(|app| {
             window_preferences::restore(app.handle());
             app_updates::complete_startup().map_err(std::io::Error::other)?;
+            // App updates deliver this embedded payload automatically. Never apply
+            // it to Vencord here: a running Discord must remain untouched.
+            std::thread::spawn(|| {
+                if let Ok(loc) = runtime_delivery::Locations::current() {
+                    let _ = runtime_delivery::status(&loc);
+                }
+            });
             Ok(())
         })
         .on_window_event(|window, event| {
@@ -280,6 +327,12 @@ fn main() {
             settings: Mutex::new(None),
         })
         .invoke_handler(tauri::generate_handler![
+            get_true_glass_runtime,
+            apply_true_glass_runtime,
+            rollback_true_glass_runtime,
+            open_true_glass_sources,
+            get_true_liquid_glass,
+            save_true_liquid_glass,
             get_status,
             install_theme,
             uninstall_theme,

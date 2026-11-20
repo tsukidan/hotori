@@ -12,6 +12,7 @@ import os
 from pathlib import Path
 import re
 import sys
+import subprocess
 
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from cryptography.hazmat.primitives import serialization
@@ -82,6 +83,8 @@ def main():
     if not re.fullmatch(r"(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)", version):
         raise RuntimeError("Use a stable three-part release version.")
     binary = args.exe.read_bytes()
+    # The signed EXE must contain the current verified runtime, sources and licenses.
+    subprocess.run(["node", str(ROOT / "scripts/verify-true-glass.mjs"), "--exe", str(args.exe.resolve())], cwd=ROOT, check=True)
     if not binary.startswith(b"MZ") or not (1024 <= len(binary) <= 128 * 1024 * 1024):
         raise RuntimeError("Expected a Windows EXE between 1 KB and 128 MB.")
     # Bind the manifest to the EXE's Windows product version before signing.

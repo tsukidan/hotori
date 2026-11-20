@@ -2,6 +2,11 @@
   "schemaVersion": 1,
   "releases": [
     {
+      "version": "1.8.8",
+      "publishedAt": null,
+      "body": "## True Liquid Glass delivery\n\n- Include the verified four-surface plugin and pinned custom Vencord runtime in signed Hotori app updates, with corresponding source and license notices. Receiving an app update stages the runtime; applying it requires Discord and Vesktop to be fully closed.\n- Add plugin setup/update status, verified backups, rollback, interrupted-install recovery and first-time Discord bootstrap support. Unknown custom builds are preserved and require a source merge. Settings, themes, existing plugins and effect preferences are not overwritten.\n- Add the animated wallpaper-accent True Liquid Glass switch, performance warning, atomic companion requests and fresh revision-matched runtime acknowledgements. Reset restores Off/Balanced.\n- Vencord plugin enablement remains manual. Hotori manages updates for the bundled custom runtime; the official Vencord updater is disabled. The latest narrow-bevel and two newly supported surfaces still await final live visual assessment."
+    },
+    {
       "version": "1.8.7",
       "publishedAt": null,
       "body": "## Fixed\n\n- Correct Compact Member List category tracking so enabling or disabling it activates Save changes in Server List and saves the selected value."

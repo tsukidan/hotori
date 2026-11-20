@@ -349,7 +349,7 @@ function categoryFor(field) {
 }
 function updateCategoryButtons() {
   for (const [category, group] of categoryGroups) {
-    const dirty = fields.some(field => categoryFor(field) === category && field.value !== savedValues.get(field.name));
+    const dirty = fields.some(field => categoryFor(field) === category && field.value !== savedValues.get(field.name)) || (category === "Glass Appearance" && window.HotoriTrueGlass.dirty());
     group.dirty = dirty;
     setText(group.note, dirty ? "Unsaved changes" : group.saved ? "Changes saved" : "No changes");
     setData(group.tab, 'dirty', dirty);
@@ -387,6 +387,7 @@ function selectCategory(category) {
   window.HotoriWallpaperTools?.visit(category);
   $("settings-form").scrollTop = categoryGroups.get(category)?.scroll || 0;
   updateCategoryButtons();
+  window.HotoriTrueGlass.refresh();
 }
 async function saveCategory(category) {
   const group = categoryGroups.get(category);
@@ -403,8 +404,11 @@ async function saveCategory(category) {
       // Keep any new edits made while the save was in flight.
       if (field.value === submitted.get(field.name)) field.value = canonical;
     }
+    if (category === "Glass Appearance") await window.HotoriTrueGlass.save();
     group.saved = true;
-    message("settings-status", `${category} saved. Other unsaved changes stay in the editor.`);
+    message("settings-status", category === "Glass Appearance"
+      ? "Glass Appearance saved. The True Liquid Glass status below shows whether the plugin has acknowledged its request."
+      : `${category} saved. Other unsaved changes stay in the editor.`);
   } catch (error) { message("settings-status", String(error), true); }
   finally { finishLoading(); busy = false; group.saving = false; await refresh(); updateButtons(); }
 }
@@ -526,6 +530,7 @@ function renderFields() {
       });
       control.append(input);
       if (field.name === "--blur-profile") {
+        control.append(window.HotoriTrueGlass.control(input, updateCategoryButtons));
         const warning = element("div", "profile-warning");
         const message = element("p", "profile-warning-text");
         const clip = element("div", "profile-warning-clip");
@@ -823,6 +828,7 @@ $("customize").addEventListener("click", async () => {
   navigate("settings");
   try {
     fields = await invoke("load_settings");
+    await window.HotoriTrueGlass.load();
     savedValues = new Map(fields.map(field => [field.name, field.value]));
     renderFields();
     message("settings-status", "Save changes in each category. Back discards only unsaved changes.");
@@ -842,6 +848,7 @@ $("reset-confirm").addEventListener("click", async () => {
   const finishLoading = window.HotoriMotion?.loading($("settings-list"), { label: 'Restoring defaults…', rows: 3, overlay: true }) || (() => {});
   try {
     fields = await invoke("reset_settings");
+    await window.HotoriTrueGlass.reset();
     savedValues = new Map(fields.map(field => [field.name, field.value]));
     renderFields();
     $("settings-form").scrollTop = scroll;

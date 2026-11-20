@@ -1,0 +1,13 @@
+{
+  "name": "hotori-true-liquid-glass",
+  "version": "0.2.2",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node --check index.ts && node --check native.ts && node --check src/runtime.js && node --check src/renderer.js && node --check src/companion-native.js && node --check src/companion-controller.js && node --check src/local-wallpaper.js",
+    "test:bridge": "node --test tests/companion-*.test.js",
+    "test:wallpaper": "node --test tests/local-wallpaper.test.js",
+    "test:material": "node tests/material.cjs",
+    "test": "node --test tests/companion-*.test.js tests/local-wallpaper.test.js && node tests/renderer.cjs && node tests/runtime.cjs"
+  }
+}

@@ -1366,7 +1366,7 @@ checksum = "7f24254aa9a54b5c858eaee2f5bccdb46aaf0e486a595ed5fd8f86ba55232a70"
 
 [[package]]
 name = "hotori"
-version = "1.8.7"
+version = "1.8.8"
 dependencies = [
  "base64 0.23.1",
  "ed25519-dalek",
@@ -1377,6 +1377,7 @@ dependencies = [
  "sha2",
  "tauri",
  "tauri-build",
+ "time",
  "windows-sys 0.61.2",
 ]
 

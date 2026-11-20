@@ -16,7 +16,10 @@
     "test:acrylic-accent": "node tests/acrylic-accent.cjs",
     "test:home-logo": "node tests/home-logo.cjs",
     "test:wallpapers": "node tests/wallpaper-tools.cjs",
-    "test:native-wallpapers": "node tests/native-wallpaper-tools.cjs"
+    "test:native-wallpapers": "node tests/native-wallpaper-tools.cjs",
+    "test:true-glass": "node tests/true-liquid-glass.cjs",
+    "test:runtime-delivery": "node tests/runtime-delivery.cjs",
+    "verify:runtime": "node scripts/verify-true-glass.mjs"
   },
   "devDependencies": {
     "playwright": "1.62.1"

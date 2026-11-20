@@ -22,6 +22,7 @@ fn is_discord_process(name: &str) -> bool {
         "discordptb.exe",
         "discordcanary.exe",
         "discorddevelopment.exe",
+        "vesktop.exe",
     ]
     .iter()
     .any(|candidate| name.eq_ignore_ascii_case(candidate))
@@ -277,6 +278,7 @@ mod tests {
             "DiscordPTB.exe",
             "discordcanary.exe",
             "DiscordDevelopment.exe",
+            "Vesktop.exe",
         ] {
             assert!(is_discord_process(name));
         }

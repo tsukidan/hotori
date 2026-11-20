@@ -27,6 +27,8 @@ const { pathToFileURL } = require('node:url');
       let saved = structuredClone(defaults);
       window.savedSettings = saved;
       window.__TAURI__ = { core: { invoke: async (command, args) => {
+        if (command === 'get_true_liquid_glass') return { config: null, instances: [], error: null };
+        if (command === 'save_true_liquid_glass') return { config: { schemaVersion: 1, revision: 1, requestedEnabled: args.requestedEnabled, quality: args.quality }, instances: [], error: null };
         if (command === 'get_status') return { ready: true, installed: true, theme_version: '0.8.0' };
         if (command === 'check_app_update') return { available: false };
         if (command === 'check_theme_update') return { available: false, installedVersion: '0.8.0', version: '0.8.0' };

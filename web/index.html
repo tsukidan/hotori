@@ -16,6 +16,8 @@
   <script src="wallpaper-accent.js" defer></script>
   <script src="wallpaper-tools.js" defer></script>
   <script src="app-changelog.js" defer></script>
+  <script src="true-liquid-glass.js" defer></script>
+  <script src="runtime-delivery.js" defer></script>
   <script src="app.js" defer></script>
   <script src="ui-zoom.js" defer></script>
   <script src="liquid-glass.js" defer></script>
@@ -47,6 +49,7 @@
             <p class="description">A Discord theme inspired by Liquid Glass. Make it yours with acrylic or liquid glass, custom backgrounds, colors and blur. Adjust avatar size and shape, message spacing, mention highlights, and your server list layout.</p>
           </div>
           <p id="home-status" class="status" role="status" aria-live="polite">Checking your theme…</p>
+          <button id="runtime-open" class="button acrylic-select runtime-notice" type="button">True Liquid Glass setup &amp; updates</button>
           <div id="theme-version" class="theme-version" role="status" aria-live="polite" hidden>
             <div class="theme-version-heading"><span data-icon="tag"></span><span>Installed theme <strong id="theme-version-value"></strong></span><button id="theme-update-notice" class="theme-update-notice acrylic-select" type="button" hidden><span data-icon="reset"></span><span id="theme-update-label"></span></button></div>
             <section id="theme-changelog" class="theme-changelog" aria-label="Theme changelog">
@@ -191,6 +194,22 @@
       <button id="app-update-install" class="button primary" type="button">Download &amp; restart</button>
     </div>
   </dialog>
-  <span class="version" aria-label="Version 1.8.7">v1.8.7</span>
+  <dialog id="runtime-dialog" class="glass vencord-dialog" aria-labelledby="runtime-title">
+    <h2 id="runtime-title">True Liquid Glass runtime</h2>
+    <p>Hotori includes the plugin and its custom Vencord runtime. Receiving it does not install it into Discord.</p>
+    <p>Fully quit Discord and Vesktop, including tray icons, before applying or rolling back. Restart afterward, then enable <strong>HotoriTrueLiquidGlass</strong> under Vencord → Plugins.</p>
+    <p>Hotori supplies updates for this custom runtime; its official Vencord updater is disabled. Existing custom builds are preserved when they cannot be verified as compatible.</p>
+    <p class="runtime-version">Includes Vencord (GPL-3.0-or-later) and MIT-licensed optical code. Corresponding source and dependency notices are bundled.</p>
+    <p id="runtime-version" class="runtime-version"></p>
+    <p id="runtime-status" class="status" role="status" aria-live="polite">Checking bundled runtime…</p>
+    <div class="app-update-actions runtime-actions">
+      <button id="runtime-close" class="button" type="button" autofocus>Close</button>
+      <button id="runtime-sources" class="button" type="button">Sources &amp; licenses</button>
+      <button id="runtime-refresh" class="button" type="button">Check status</button>
+      <button id="runtime-rollback" class="button" type="button" disabled>Roll back runtime</button>
+      <button id="runtime-apply" class="button primary" type="button" disabled>Apply runtime</button>
+    </div>
+  </dialog>
+  <span class="version" aria-label="Version 1.8.8">v1.8.8</span>
 </body>
 </html>

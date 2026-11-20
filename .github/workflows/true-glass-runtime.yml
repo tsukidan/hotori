@@ -1,0 +1,30 @@
+name: Validate bundled True Liquid Glass runtime
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: dtolnay/rust-toolchain@stable
+      - run: npm install --ignore-scripts --no-package-lock
+      - run: npm install --global pnpm@12.15.0
+      - run: node scripts/verify-true-glass.mjs
+      - name: Test vendored plugin without Discord
+        shell: pwsh
+        run: |
+          $env:HOTORI_TEST_DEPENDENCIES = (Get-Location).Path
+          npm --prefix vendor/true-liquid-glass test
+      - name: Rebuild from pinned upstream and vendored source
+        run: node scripts/build-true-glass.mjs
+      - run: cargo test --locked
+      - run: node tests/runtime-delivery.cjs
+      - run: cargo build --release --locked
+      - run: node scripts/verify-true-glass.mjs --exe target/release/hotori.exe
+      # Release signing stays on the maintainer's Windows account. This workflow
+      # deliberately has no release/push permission or private signing material.

@@ -1,0 +1,10 @@
+{
+  "repository": "https://github.com/Vendicated/Vencord.git",
+  "revision": "e75ac9ace41f6212cfaa2d5f3670830be392da4e",
+  "pluginVersion": "0.2.2",
+  "flags": [
+    "--dev",
+    "--standalone",
+    "--disable-updater"
+  ]
+}

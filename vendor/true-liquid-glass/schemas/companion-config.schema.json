@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Hotori True Liquid Glass companion request v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "revision", "requestedEnabled", "quality"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "revision": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+    "requestedEnabled": { "type": "boolean", "default": false },
+    "quality": { "enum": ["low", "balanced", "high"], "default": "balanced" }
+  }
+}

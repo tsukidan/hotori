@@ -1,0 +1,3 @@
+# Runtime manifests and imported source are byte-exact across Windows/Linux clones.
+/assets/true-glass/** -text -whitespace
+/vendor/true-liquid-glass/** -text -whitespace

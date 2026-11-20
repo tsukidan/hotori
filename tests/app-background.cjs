@@ -29,6 +29,8 @@ const http = require('node:http');
       window.backgroundLoads = [];
       let saved = ['--main-bg', '--settings-bg'].map((name, i) => ({ name, label: i ? 'Settings Background' : 'Main Background', section: 'Wallpapers', kind: 'image', value: i ? '' : initial, hint: 'Choose a wallpaper.' }));
       window.__TAURI__ = { core: { invoke: async (command, args) => {
+        if (command === 'get_true_liquid_glass') return { config: null, instances: [], error: null };
+        if (command === 'save_true_liquid_glass') return { config: { schemaVersion: 1, revision: 1, requestedEnabled: args.requestedEnabled, quality: args.quality }, instances: [], error: null };
         if (command === 'get_status') return structuredClone(window.backgroundStatus);
         if (command === 'show_main_window') {
           window.firstVisibleBackground = document.querySelector('.wallpaper').style.getPropertyValue('--app-wallpaper');

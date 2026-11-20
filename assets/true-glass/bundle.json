@@ -1,0 +1,283 @@
+{
+  "schemaVersion": 1,
+  "id": "40d2660084fc2d420127c824",
+  "pluginVersion": "0.2.2",
+  "upstreamRevision": "e75ac9ace41f6212cfaa2d5f3670830be392da4e",
+  "files": [
+    {
+      "path": "dist/package.json",
+      "size": 3,
+      "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
+    },
+    {
+      "path": "dist/patcher.js",
+      "size": 45234,
+      "sha256": "1247879741debc2d511552bfa8612013bb72131fd8e99806fdf3d9c0c70bb6c1"
+    },
+    {
+      "path": "dist/patcher.js.LEGAL.txt",
+      "size": 964,
+      "sha256": "3a77a1f63d0bbc71bb238ce6a16f90288fa19aa4fe01655e23e10757526671c7"
+    },
+    {
+      "path": "dist/preload.js",
+      "size": 2485,
+      "sha256": "e51f00b5ff861c92dfcb3973e1f5705a70f54953bd2f8a025ce3cce0bef059c9"
+    },
+    {
+      "path": "dist/renderer.css",
+      "size": 43726,
+      "sha256": "f2dc03726e81af8ef67b017f6e441432580c088758a4dcd8c78b07686f650254"
+    },
+    {
+      "path": "dist/renderer.js",
+      "size": 787448,
+      "sha256": "18a545761587fd1ea6f037c9fa691b73d8f91c7848c4242a74cc26070562f9a6"
+    },
+    {
+      "path": "dist/renderer.js.LEGAL.txt",
+      "size": 1719,
+      "sha256": "45eff05ed5011021938f095940a157ff5fc21ce82be518eae3c835a7f017bcc7"
+    },
+    {
+      "path": "licenses/Apache-2.0.txt",
+      "size": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "path": "licenses/dependencies/eventemitter3-4.0.7/LICENSE",
+      "size": 1082,
+      "sha256": "3aecc12b1cb28832b5f65ab64291de96568c3f236a74d646281b4491f7bcadbf"
+    },
+    {
+      "path": "licenses/dependencies/fflate-0.8.3/LICENSE",
+      "size": 1069,
+      "sha256": "0a1df3a083d0c010560aa342e87959c8c1070e6fd54545741f083f22d0c8b551"
+    },
+    {
+      "path": "licenses/dependencies/gifenc-1.0.3/LICENSE.md",
+      "size": 1083,
+      "sha256": "47bc590c39d8ccccfc544875a9faebf44bafa828ef20315b396b5d0629f0cfd6"
+    },
+    {
+      "path": "licenses/dependencies/intrnl_xxhash64-0.1.2/LICENSE",
+      "size": 1023,
+      "sha256": "f9c4c77baa3828004ee54b8a4f2db2e88ed44a6237a493965bf551fac0fcb62d"
+    },
+    {
+      "path": "licenses/dependencies/p-limit-7.3.3/license",
+      "size": 1117,
+      "sha256": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3"
+    },
+    {
+      "path": "licenses/dependencies/yocto-queue-1.2.2/license",
+      "size": 1117,
+      "sha256": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3"
+    },
+    {
+      "path": "licenses/LiquidGlass-MIT.txt",
+      "size": 1173,
+      "sha256": "dbfbdb6d6a75777c290be8e39367de855edb7ea821b6a58ecd91a1ae10baffde"
+    },
+    {
+      "path": "licenses/LiquidGlass-NOTICE.md",
+      "size": 775,
+      "sha256": "55133e83375d95c311f22a4782198e3f7c2ea803e36f521de76c53f5209a6311"
+    },
+    {
+      "path": "licenses/Third-party-MIT.txt",
+      "size": 1159,
+      "sha256": "25b27daecd3f37c54f69d14ae003f1fdfc6a46bea46d4497c95f2cdf35fb168d"
+    },
+    {
+      "path": "licenses/Vencord-GPL-3.0.txt",
+      "size": 35149,
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+    },
+    {
+      "path": "sources/BUILD.txt",
+      "size": 684,
+      "sha256": "53865e2dbbee02aa781dfd6396fecdd11153689ce0f25133cb97f447c7537681"
+    },
+    {
+      "path": "sources/plugin/index.ts",
+      "size": 1177,
+      "sha256": "5cf8efa44ce8cd4fd02706b715d8674e89fc309236153a10804b4827f519451f"
+    },
+    {
+      "path": "sources/plugin/INSTALLER-CONTRACT.md",
+      "size": 7820,
+      "sha256": "dca332d7b59d52d3007b881527cec640b710f59bde46d02610cfb1f9f9ca22bd"
+    },
+    {
+      "path": "sources/plugin/licenses/Apache-2.0.txt",
+      "size": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "path": "sources/plugin/native.ts",
+      "size": 1158,
+      "sha256": "d93728416f77ae4d99ec571304b13cde762a3dbabd9adf60aaf5b56fe6968423"
+    },
+    {
+      "path": "sources/plugin/package.json",
+      "size": 682,
+      "sha256": "874b710e46cd2df272e19dbd8ef24c9bdaa9e47c093351ed893a380459667d04"
+    },
+    {
+      "path": "sources/plugin/schemas/companion-config.schema.json",
+      "size": 538,
+      "sha256": "5093154e909d4ffc7e332d7b8057f4f5eb0bbd55e8e9bc0c55b58c736aea7aaf"
+    },
+    {
+      "path": "sources/plugin/schemas/companion-status.schema.json",
+      "size": 1166,
+      "sha256": "8590c6cc1a334f34dbb008d54fd2caad5e1d734b0890963b78808bde0b3efbe3"
+    },
+    {
+      "path": "sources/plugin/src/companion-controller.d.ts",
+      "size": 1302,
+      "sha256": "f0478ecd710157fce4242e93cd712a1121f8e9fee00402d3672e52cd3f0e983c"
+    },
+    {
+      "path": "sources/plugin/src/companion-controller.js",
+      "size": 6092,
+      "sha256": "06b73e880bfb0f2aec646183604a478faf8ecf57eed28a8f20728e98cea6e2f5"
+    },
+    {
+      "path": "sources/plugin/src/companion-native.js",
+      "size": 9953,
+      "sha256": "b2c5f4ab26634c9bc51445bd4af25f3c285769ae81fa8bd73676d87b314be680"
+    },
+    {
+      "path": "sources/plugin/src/local-wallpaper.js",
+      "size": 4069,
+      "sha256": "0ee417eef105382007ce0dab9389dd080c81b6651f85ee87c4e4a0991fb63059"
+    },
+    {
+      "path": "sources/plugin/src/renderer.js",
+      "size": 18435,
+      "sha256": "7d8e8b9782aef5a5d0502c9bf2f6a6d2b5a820c02ddd6cb5482e848a7a50867a"
+    },
+    {
+      "path": "sources/plugin/src/runtime.d.ts",
+      "size": 413,
+      "sha256": "cdd732b2073dab7dbe11ea1e47a9af24fe6dc2d38c2382cca8d25160744930f8"
+    },
+    {
+      "path": "sources/plugin/src/runtime.js",
+      "size": 14164,
+      "sha256": "544c7fd0012d491f61fb5f533b77dbd132e6b86cc708e04926fc68d84aa6fb31"
+    },
+    {
+      "path": "sources/plugin/src/vendor/LICENSE",
+      "size": 1173,
+      "sha256": "dbfbdb6d6a75777c290be8e39367de855edb7ea821b6a58ecd91a1ae10baffde"
+    },
+    {
+      "path": "sources/plugin/src/vendor/liquidglass-shaders.js",
+      "size": 8926,
+      "sha256": "aec988256d1e0e92d8a99c490412ab1a4d2020702c465b7ee4d9aefeedbe5e7b"
+    },
+    {
+      "path": "sources/plugin/src/vendor/NOTICE.md",
+      "size": 775,
+      "sha256": "55133e83375d95c311f22a4782198e3f7c2ea803e36f521de76c53f5209a6311"
+    },
+    {
+      "path": "sources/plugin/tests/companion-controller.test.js",
+      "size": 9691,
+      "sha256": "ddd23a1141347080a9012c294552cf4c0782ea55f952006ddb8a442abac75dfe"
+    },
+    {
+      "path": "sources/plugin/tests/companion-integration.test.js",
+      "size": 4129,
+      "sha256": "3523ced13664616b81b45c5b0217781f0bad19f4a47c70b65f09523a62210f4b"
+    },
+    {
+      "path": "sources/plugin/tests/companion-native.test.js",
+      "size": 9926,
+      "sha256": "606acff53b80e00b286e079e33e565d8aa842f8499f84d028f4c9a39dedd1aca"
+    },
+    {
+      "path": "sources/plugin/tests/local-wallpaper.test.js",
+      "size": 4177,
+      "sha256": "c61bc397678795096dde6f9714a303e61f41a87344b6ecd399a7ca50435fd5a1"
+    },
+    {
+      "path": "sources/plugin/tests/material.cjs",
+      "size": 7164,
+      "sha256": "4f3ff3573c46db6578d48186bbd7e7c029faff3b7ac3f4b9383c04efcc02dfb8"
+    },
+    {
+      "path": "sources/plugin/tests/renderer.cjs",
+      "size": 7857,
+      "sha256": "58c6b07b77f530566dedc19ebacb83d8d590f4fb468d2020124ba7c384caef3d"
+    },
+    {
+      "path": "sources/plugin/tests/runtime.cjs",
+      "size": 11954,
+      "sha256": "dcea02ff6faf3d5ccf8e2b4340b9ee49d83cf57b8cc7009f206d29541f9bdbf3"
+    },
+    {
+      "path": "sources/plugin/UPSTREAM.json",
+      "size": 225,
+      "sha256": "4274432da27d21fe54844aa32a9855539831c4ff925687d2df3442a9199a82a3"
+    },
+    {
+      "path": "sources/vencord.zip",
+      "size": 1168595,
+      "sha256": "304af4bdbbe50c46a005989f9470760a9ab36de844f4ea0f6887cc98f5267560"
+    }
+  ],
+  "baselines": [
+    {
+      "label": "tested-pre-integration-runtime",
+      "files": {
+        "patcher.js": "a46e05910d84300d6971dd74fd0ddd28c53e9c3b60658373166b255ce730cc91",
+        "preload.js": "5527dbe86f5ef20b621c3e860a0b85de17f7a040f3d4ccd90da3f29496944c14",
+        "renderer.js": "d6b92912d79d23a2125b6ef11df72eabb7930b733bc1207aeccb5ebea8ea442f",
+        "renderer.css": "f2dc03726e81af8ef67b017f6e441432580c088758a4dcd8c78b07686f650254",
+        "patcher.js.LEGAL.txt": "3a77a1f63d0bbc71bb238ce6a16f90288fa19aa4fe01655e23e10757526671c7",
+        "renderer.js.LEGAL.txt": "45eff05ed5011021938f095940a157ff5fc21ce82be518eae3c835a7f017bcc7",
+        "patcher.js.map": "197baf234ea6b317a5f1a6f9189ab1b1c695145b6a645052f97fc1f43633fce6",
+        "preload.js.map": "add874f2998c1481f139f1aef64d80240c38335b46de72f5bfdd72b227a65326",
+        "renderer.js.map": "18e251b1c0fd4241267213990c1867828d673fb436ed5ccbc7a85769b042ef32",
+        "renderer.css.map": "142245aa1482646f01db69166629748f5629745736161c3f51b7c2c88029d763",
+        "package.json": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
+      }
+    },
+    {
+      "label": "verified-stock-e75ac9ace41f6212cfaa2d5f3670830be392da4e",
+      "files": {
+        "package.json": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "patcher.js": "9a791544cec2724aabc2a0bf56b8f97559d3ec6c90e3cc9699dfd7e5c78e2d4e",
+        "patcher.js.LEGAL.txt": "3a77a1f63d0bbc71bb238ce6a16f90288fa19aa4fe01655e23e10757526671c7",
+        "patcher.js.map": "490a62950eb28bc0f4249fef62399975f6b845897159c586325c77cd74433098",
+        "preload.js": "db9285668c71b05b54e9dda5c702c7676bfa7882af56654590a8dedcc2723820",
+        "preload.js.map": "8e22f1c6f7b194e1ea2daca52f67740a426b1cbab179b8ca9079343b41d7a114",
+        "renderer.css": "f2dc03726e81af8ef67b017f6e441432580c088758a4dcd8c78b07686f650254",
+        "renderer.css.map": "142245aa1482646f01db69166629748f5629745736161c3f51b7c2c88029d763",
+        "renderer.js": "e0dde1890fcf4f30a2108a56a372b22eb60af23b8eca0df726de7c543af481e1",
+        "renderer.js.LEGAL.txt": "45eff05ed5011021938f095940a157ff5fc21ce82be518eae3c835a7f017bcc7",
+        "renderer.js.map": "a0885de026513bc3b93ae0a9d2aa6bb9913cad09acb16b94e4975bd67d0c6c81"
+      }
+    },
+    {
+      "label": "tested-pre-integration-runtime",
+      "files": {
+        "patcher.js": "a46e05910d84300d6971dd74fd0ddd28c53e9c3b60658373166b255ce730cc91",
+        "preload.js": "5527dbe86f5ef20b621c3e860a0b85de17f7a040f3d4ccd90da3f29496944c14",
+        "renderer.js": "d6b92912d79d23a2125b6ef11df72eabb7930b733bc1207aeccb5ebea8ea442f",
+        "renderer.css": "f2dc03726e81af8ef67b017f6e441432580c088758a4dcd8c78b07686f650254",
+        "patcher.js.LEGAL.txt": "3a77a1f63d0bbc71bb238ce6a16f90288fa19aa4fe01655e23e10757526671c7",
+        "renderer.js.LEGAL.txt": "45eff05ed5011021938f095940a157ff5fc21ce82be518eae3c835a7f017bcc7",
+        "patcher.js.map": "197baf234ea6b317a5f1a6f9189ab1b1c695145b6a645052f97fc1f43633fce6",
+        "preload.js.map": "add874f2998c1481f139f1aef64d80240c38335b46de72f5bfdd72b227a65326",
+        "renderer.js.map": "18e251b1c0fd4241267213990c1867828d673fb436ed5ccbc7a85769b042ef32",
+        "renderer.css.map": "142245aa1482646f01db69166629748f5629745736161c3f51b7c2c88029d763",
+        "package.json": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    }
+  ]
+}
