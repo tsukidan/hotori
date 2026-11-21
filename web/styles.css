@@ -786,7 +786,6 @@ h2, .section-heading, .sidebar-brand strong { letter-spacing: -.025em; }
 .true-glass-warning p { margin: 8px 0 0; }
 .true-glass-status { margin: 10px 2px 0; font-size: 12px; line-height: 1.6; color: #e1d8d8; overflow-wrap: anywhere; }
 .true-glass-setup { margin-top: 12px; }
-.runtime-notice { margin-bottom: 12px; font-size: 12px; }
 .runtime-actions { flex-wrap: wrap; gap: 8px; }
 .runtime-version { font-size: 12px; overflow-wrap: anywhere; color: #ddd; }
 #runtime-dialog { width: min(680px, calc(100vw - 32px)); max-height: calc(100dvh - 64px); box-sizing: border-box; overflow-y: auto; overflow-x: hidden; text-align: left; }

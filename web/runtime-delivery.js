@@ -10,8 +10,6 @@
     document.getElementById('runtime-refresh').disabled = working;
     document.getElementById('runtime-close').disabled = working;
     document.getElementById('runtime-sources').disabled = working || !current?.payloadReady;
-    const notice = document.getElementById('runtime-open');
-    notice.textContent = current?.state === 'ready' ? 'True Liquid Glass runtime ready' : current?.state === 'recovery_required' ? 'Plugin runtime needs recovery' : 'True Liquid Glass setup & updates';
     document.getElementById('runtime-version').textContent = current?.payloadReady ? `Plugin ${current.pluginVersion} · Bundle ${current.buildId}` : '';
   }
   async function check() {
@@ -28,7 +26,6 @@
     finally { working = false; render(); }
   }
   function open() { if (!dialog.open) dialog.showModal(); check(); }
-  document.getElementById('runtime-open').addEventListener('click', open);
   document.getElementById('runtime-close').addEventListener('click', () => dialog.close());
   document.getElementById('runtime-refresh').addEventListener('click', check);
   document.getElementById('runtime-sources').addEventListener('click', async () => {

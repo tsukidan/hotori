@@ -13,7 +13,7 @@ App startup stages and verifies the payload under
 **not installation**. Startup and the app-update completion helper never replace
 Vencord or Discord files. The app remains usable if staging fails.
 
-Open **True Liquid Glass setup & updates** from Home or the Glass Appearance
+Open **True Liquid Glass setup & updates** from the Glass Appearance
 control. Fully quit Discord (including the tray icon) and Vesktop, then choose
 **Apply runtime**. Do not launch Discord during the transaction. After applying,
 restart Discord and manually enable **HotoriTrueLiquidGlass** in Vencord → Plugins.
