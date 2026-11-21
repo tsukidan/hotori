@@ -1,6 +1,16 @@
 {
   "schemaVersion": 1,
   "versions": {
+    "0.9.11": [
+      {
+        "title": "Soft speaking glow",
+        "description": "Speaking indicators in calls now use a stronger, broad main-color halo with smooth fade-in and fade-out transitions. Voice-channel avatars and active video indicators share the accent glow."
+      },
+      {
+        "title": "Clear idle indicators",
+        "description": "Idle avatars retain their normal appearance, voice effects keep their own styling, and reduced-motion settings disable the transitions."
+      }
+    ],
     "0.9.10": [
       {
         "title": "Accent notification badges",
