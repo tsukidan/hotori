@@ -1,6 +1,12 @@
 {
   "schemaVersion": 1,
   "versions": {
+    "0.9.12": [
+      {
+        "title": "Unclipped speaking glow",
+        "description": "Allowed the speaking halo to extend beyond call-tile wrappers while preserving rounded clipping for the video and avatar content inside. Other tiles keep their existing clipping behavior."
+      }
+    ],
     "0.9.11": [
       {
         "title": "Soft speaking glow",

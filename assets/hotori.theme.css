@@ -3,7 +3,7 @@
  * @author tsuki
  * @authorId 109679787630399488
  * @authorLink https://plusinsta.xyz
- * @version 0.9.11
+ * @version 0.9.12
  * @description A Discord theme inspired by Liquid Glass.
  */
 
@@ -2327,6 +2327,18 @@ img[class*="avatar_"],
 .reduce-motion .wrapper_hbKzX7 :is([class*="avatar_"], [class*="avatarBorder_"]),
 .reduce-motion :is(.border_7NOr2f, .avatar_YUoOxm, .avatarSpeakingOutline_ieJ4Sq, .povMedia_rBoB5H, .povMediaActive_rBoB5H) {
     transition: none !important;
+}
+
+/* Speaking halos sit outside the call tile. Keep media clipping on the
+   inner content surface instead of clipping the ring at the outer wrapper. */
+.tile_JPP66i:has(.border_7NOr2f),
+.tile_BKJg6Y:has(.border_7NOr2f) {
+    overflow: visible !important;
+}
+.tile_JPP66i:has(.border_7NOr2f) .content_7NOr2f,
+.tile_BKJg6Y:has(.border_7NOr2f) .content_7NOr2f {
+    overflow: hidden !important;
+    border-radius: var(--custom-base-tile-border-radius, 12px);
 }
 
 /* 29 | VOICE PANEL BUTTONS */
