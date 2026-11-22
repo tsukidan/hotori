@@ -18,6 +18,8 @@
   <script src="app-changelog.js" defer></script>
   <script src="true-liquid-glass.js" defer></script>
   <script src="runtime-delivery.js" defer></script>
+  <script src="music-metadata.js" defer></script>
+  <script src="background-music.js" defer></script>
   <script src="app.js" defer></script>
   <script src="ui-zoom.js" defer></script>
   <script src="liquid-glass.js" defer></script>
@@ -77,7 +79,7 @@
           <h3 id="customization-heading" class="dock-heading">Customization</h3>
           <div class="dock-item"><button id="customize" class="dock-button" disabled><span class="dock-symbol"><span data-icon="sliders"></span></span><span class="button-label">Customize</span></button></div>
           <div class="dock-item"><button id="folder" class="dock-button" disabled><span class="dock-symbol"><span data-icon="folder"></span></span><span class="button-label">Themes folder</span></button></div>
-          <div class="dock-item"><button id="app-changelog" class="dock-button" type="button"><span class="dock-symbol"><span data-icon="book"></span></span><span class="button-label">App Changelog</span></button></div>
+          <div class="dock-item"><button id="app-changelog" class="dock-button" type="button"><span class="dock-symbol"><span data-icon="code"></span></span><span class="button-label">App Changelog</span></button></div>
         </section>
         <section class="dock-group" aria-labelledby="getting-started-heading">
           <h3 id="getting-started-heading" class="dock-heading">Getting started</h3>
@@ -86,13 +88,15 @@
         </section>
         </div>
       </nav>
-      <div class="app-overlay-control">
+      <div class="launcher-quick-controls" role="group" aria-label="Launcher brightness and volume">
         <div class="dock-surface" aria-hidden="true"></div>
-        <button id="app-overlay-toggle" class="overlay-toggle" type="button" aria-label="App background overlay opacity" aria-controls="app-overlay-range" aria-expanded="false"><span data-icon="sun"></span></button>
+      <div class="app-overlay-control">
+        <button id="app-overlay-toggle" class="overlay-toggle" type="button" aria-label="App background brightness" aria-controls="app-overlay-range" aria-expanded="false"><span data-icon="sun"></span></button>
         <div class="range-surface overlay-range">
           <div class="range-track" aria-hidden="true"><div class="range-fill"></div></div>
-          <input id="app-overlay-range" type="range" min="0" max="100" step="1" value="60" aria-label="App background overlay opacity">
+          <input id="app-overlay-range" type="range" min="0" max="100" step="1" value="25" aria-label="App background brightness">
         </div>
+      </div>
       </div>
       </div>
     </section>
@@ -100,8 +104,8 @@
       <div class="settings-workspace">
       <aside class="glass settings-sidebar" aria-label="Customization navigation">
         <div class="sidebar-brand"><span data-icon="glass"></span><div><strong>Hotori</strong><span>Make it yours</span></div></div>
-        <p class="sidebar-label">Customization</p>
-        <div id="settings-categories" class="settings-categories" role="tablist" aria-label="Theme categories" aria-orientation="vertical"></div>
+        <p class="sidebar-label">Theme Settings</p>
+        <div id="settings-categories" class="settings-categories" role="tablist" aria-label="Theme and launcher categories" aria-orientation="vertical"></div>
       </aside>
       <div class="glass settings-card">
         <header class="settings-header">
@@ -209,6 +213,7 @@
       <button id="runtime-apply" class="button primary" type="button" disabled>Apply runtime</button>
     </div>
   </dialog>
-  <span class="version" aria-label="Version 1.8.9">v1.8.9</span>
+  <p id="now-playing" class="now-playing" hidden></p>
+  <span class="version" aria-label="Version 1.8.10">v1.8.10</span>
 </body>
 </html>

@@ -2,6 +2,11 @@
   "schemaVersion": 1,
   "releases": [
     {
+      "version": "1.8.10",
+      "publishedAt": null,
+      "body": "## Launcher music\n\n- Add a separate Launcher Settings → Background Music page with one locally stored song, Add/Replace/Remove controls, metadata titles and a liquid-glass player. Skip restarts the selected song. Center song details and acrylic playback controls, with bold elapsed/total times beneath the progress bar.\n- Group Home brightness and music volume in one glass container; hovering or focusing either reveals both sliders. Correct brightness direction: full brightness has no dimming, and minimum brightness applies 80% dimming. Volume defaults to 20%, with remembered volume and reversible mute. Show the current song beneath the launcher version.\n- Keep launcher music and preferences separate from Discord theme settings and resets.\n- Give App Changelog a developer/code icon distinct from the Installation Guide."
+    },
+    {
       "version": "1.8.9",
       "publishedAt": null,
       "body": "## Appearance\n\n- Remove the True Liquid Glass setup/update button from Home. Plugin setup, runtime updates, rollback, and license access remain available under Glass Appearance when Liquid Glass is selected."

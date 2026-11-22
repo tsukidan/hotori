@@ -19,6 +19,7 @@ const path = require('node:path');
     const page = await browser.newPage({ viewport: { width: 1600, height: 900 } });
     const errors = []; page.on('pageerror', error => errors.push(error.message));
     await page.addInitScript(() => {
+      localStorage.setItem('hotori.appOverlayOpacity', '60');
       window.commands = [];
       window.__TAURI__ = { core: { invoke: async command => {
         window.commands.push(command);
@@ -29,6 +30,7 @@ const path = require('node:path');
       } } };
     });
     await page.goto(`http://127.0.0.1:${server.address().port}/index.html`);
+    await page.locator('#app-update-cancel').click();
     await page.waitForFunction(() => document.documentElement.dataset.glassRenderer === 'reference-liquidglass');
     await page.evaluate(() => {
       window.panelMaterials = [];
@@ -37,7 +39,7 @@ const path = require('node:path');
         window.panelMaterials.push({ config: { ...config }, width, height });
         return render.call(this, config, width, height, ...rest);
       };
-      document.dispatchEvent(new Event('hotori:backdrop-change'));
+      document.dispatchEvent(new Event('hotori:glass-invalidate'));
     });
     await page.waitForFunction(() => window.panelMaterials.length > 0);
     const materials = await page.evaluate(() => {
@@ -51,28 +53,38 @@ const path = require('node:path');
     assert.equal(materials[0].brightness, 0);
     assert.equal(materials[0].tintStrength, 0);
     assert.deepEqual(materials[0], materials[1], 'Description and installed-status glass must use the same optical material');
-    const control = page.locator('.app-overlay-control'), slider = page.locator('#app-overlay-range');
+    const control = page.locator('.app-overlay-control:not(.music-home-volume)'), slider = page.locator('#app-overlay-range');
+    assert.equal(await slider.inputValue(), '25', 'Existing dimming preference migrates to brightness');
     await page.waitForTimeout(500);
     assert.equal(Math.round((await control.boundingBox()).width), 76);
     assert.equal((await control.textContent()).trim(), '', 'No visible labels, numbers, or extra copy');
     await control.hover(); await page.waitForTimeout(500);
     assert.equal(Math.round((await control.boundingBox()).width), 244);
+    const volume = page.locator('.music-home-volume [data-music-volume]');
+    assert(await volume.isVisible(), 'Brightness hover reveals the volume slider too');
+    await page.locator('.music-home-volume').hover(); await page.waitForTimeout(500);
+    assert(await slider.isVisible(), 'Volume hover keeps the brightness slider visible');
+    assert.equal(await page.locator('.launcher-quick-controls > .dock-surface').count(), 1, 'Both controls share one glass surface');
+    assert.equal(await page.locator('.app-overlay-control > .dock-surface').count(), 0);
+    await page.locator('.launcher-quick-controls').screenshot({ path: path.join(root, 'target/qa/shared-launcher-controls.png') });
+    await control.hover();
     assert.equal(Math.round((await page.locator('#command-dock').boundingBox()).width), 76, 'The main dock stays collapsed');
-    const icon = await page.locator('.overlay-toggle .icon').boundingBox(), range = await slider.boundingBox();
+    const icon = await control.locator('.overlay-toggle .icon').boundingBox(), range = await slider.boundingBox();
     assert(icon.x + icon.width < range.x);
-    assert.equal(await control.locator('.dock-surface').evaluate(el => el.classList.contains('shader-glass')), true);
+    assert.equal(await page.locator('.launcher-quick-controls > .dock-surface').evaluate(el => el.classList.contains('shader-glass')), true);
     assert.equal(await control.locator('.range-fill').evaluate(el => getComputedStyle(el).backgroundColor), await page.evaluate(() => {
       const element = document.createElement('span'); element.style.color = 'var(--accent)'; document.body.append(element);
       const color = getComputedStyle(element).color; element.remove(); return color;
     }));
     for (const value of [0, 100, 37]) {
       await slider.fill(String(value)); await slider.dispatchEvent('input');
-      assert.equal(await page.evaluate(() => document.documentElement.style.getPropertyValue('--app-overlay-opacity')), String(value / 100));
-      assert.equal(await page.evaluate(() => localStorage.getItem('hotori.appOverlayOpacity')), String(value));
+      assert.equal(await page.evaluate(() => document.documentElement.style.getPropertyValue('--app-overlay-opacity')), String((100 - value) * .008));
+      assert.equal(await page.evaluate(() => localStorage.getItem('hotori.appBrightness')), String(value));
     }
     assert(!(await page.evaluate(() => window.commands)).some(command => /save_settings|install_theme|update_theme/.test(command)));
     await page.screenshot({ path: path.join(root, 'target/qa/app-overlay-expanded.png') });
-    await page.reload(); await page.waitForFunction(() => document.documentElement.style.getPropertyValue('--app-overlay-opacity') === '0.37');
+    await page.reload();
+    await page.locator('#app-update-cancel').click(); await page.waitForFunction(() => document.documentElement.style.getPropertyValue('--app-overlay-opacity') === '0.504');
     assert.equal(await slider.inputValue(), '37', 'The app preference survives relaunch');
     await slider.evaluate(el => { el.value = '0'; el.dispatchEvent(new Event('input', { bubbles: true })); });
     await page.evaluate(() => {
@@ -99,6 +111,6 @@ const path = require('node:path');
       assert(rect.x >= 0 && rect.x + rect.width <= width);
     }
     assert.deepEqual(errors, []);
-    console.log('PASS: independent glass expansion, icon placement, accent fill, 0–100 app-only opacity, persistence, keyboard access, reduced motion and small-window fit.');
+    console.log('PASS: independent glass expansion, icon placement, accent fill, 0–100 brightness with 80%–0% dimming and old-preference migration, persistence, keyboard access, reduced motion and small-window fit.');
   } finally { await browser.close(); await new Promise(resolve => server.close(resolve)); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

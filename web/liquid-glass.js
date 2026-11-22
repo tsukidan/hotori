@@ -98,7 +98,7 @@
       // at the same time duplicates work, especially during settings entry and
       // window resizing. Context-loss state changes schedule the fallback below.
       if (!compositorOnly || surface.classList.contains('shader-glass')) continue;
-      if (surface.matches('.guide-step, .acrylic-select') || (surface.closest('#settings-page') && !surface.matches('.settings-card, .settings-sidebar, .settings-glass-action'))) {
+      if (surface.matches('.guide-step, .acrylic-select') || (surface.closest('#settings-page') && !surface.matches('.settings-card, .settings-sidebar, .settings-glass-action, .music-player'))) {
         for (const property of ['--glass-refraction', '--glass-sheen-image', '--glass-picker-refraction', '--glass-picker-sheen-image']) surface.style.removeProperty(property);
         continue;
       }

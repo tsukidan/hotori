@@ -11,7 +11,7 @@
   const layers = new Map(), captures = new Map();
   const captureQueue = new Map();
   let captureIdle = 0, activeCaptures = 0, captureWaitStarted = 0;
-  const isAcrylic = element => element.matches('.guide-step, .acrylic-select') || (!!element.closest('#settings-page') && !element.matches('.settings-card, .settings-sidebar, .settings-glass-action'));
+  const isAcrylic = element => element.matches('.guide-step, .acrylic-select') || (!!element.closest('#settings-page') && !element.matches('.settings-card, .settings-sidebar, .settings-glass-action, .music-player'));
   const mediaAccess = new WeakMap();
   const mediaProbe = document.createElement('canvas'); mediaProbe.width = mediaProbe.height = 1;
   const scene = document.createElement('canvas'), sceneContext = scene.getContext('2d');

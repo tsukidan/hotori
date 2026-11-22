@@ -29,6 +29,7 @@ const categoryDescriptions = {
   "Avatars": "Find the right size and shape for your conversations.",
   "Messages": "Give your conversations room and make mentions stand out.",
   "Server List": "Arrange your servers in the layout that suits you.",
+  "Background Music": "Choose one song for this launcher. Music and volume changes save automatically.",
 };
 
 function message(id, text, error = false, symbol = "info", detailSymbol = "") {
@@ -55,7 +56,7 @@ function updateButtons() {
   setValue($("theme-update-notice"), 'disabled', busy || !status.installed);
   if (themeUpdate?.available) setText($("theme-update-label"), updatingTheme ? "Updating…" : `v${themeUpdate.version} available`);
   setValue($("uninstall"), 'disabled', busy || !status.installed);
-  setValue($("customize"), 'disabled', busy || !status.installed);
+  setValue($("customize"), 'disabled', busy || !invoke);
   setValue($("folder"), 'disabled', busy || !invoke);
   setValue($("update-app"), 'disabled', busy || checkingApp || !invoke);
   setText($("update-app").querySelector(".button-label"), checkingApp ? "Checking…" : "Update Hotori");
@@ -231,6 +232,7 @@ const iconPaths = {
   close: '<path d="m6 6 12 12M18 6 6 18"/>',
   download: '<path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/>',
   book: '<path d="M12 5C9 3 5 3 3 4v15c3-1 6-1 9 1 3-2 6-2 9-1V4c-2-1-6-1-9 1Zm0 0v15"/>',
+  code: '<path d="m8 7-5 5 5 5m8-10 5 5-5 5m-3-14-2 18"/>',
   "app-update": '<rect x="3" y="3" width="18" height="18" rx="5"/><path d="M12 17V7m-4 4 4-4 4 4"/>',
   trash: '<path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7m4-7v7"/>',
   sliders: '<path d="M4 7h5m4 0h7M4 17h9m4 0h3M9 4v6m4-6v6m0 4v6m4-6v6"/>',
@@ -368,6 +370,11 @@ function selectCategory(category) {
   const changed = previous && previous !== categoryGroups.get(category);
   if (previous) previous.scroll = $("settings-form").scrollTop;
   selectedCategory = category;
+  const launcher = category === "Background Music";
+  document.body.classList.toggle('music-settings-open', launcher);
+  $("save-category").hidden = launcher;
+  $("reset-defaults").hidden = launcher;
+  $("settings-status").textContent = launcher ? "Launcher settings save automatically." : "Save changes in each category. Back discards only unsaved changes.";
   for (const [name, group] of categoryGroups) {
     const active = name === category;
     group.panel.hidden = !active;
@@ -388,6 +395,7 @@ function selectCategory(category) {
   $("settings-form").scrollTop = categoryGroups.get(category)?.scroll || 0;
   updateCategoryButtons();
   window.HotoriTrueGlass.refresh();
+  window.HotoriMusic?.visit();
 }
 async function saveCategory(category) {
   const group = categoryGroups.get(category);
@@ -447,6 +455,7 @@ function renderFields() {
     ["Wallpapers", "image", true], ["Colors", "palette", true],
     ["Avatars", "user", true], ["Messages", "message", true],
     ["Glass Appearance", "glass", true], ["Server List", "server", true],
+    ["Background Music", "headphones", true],
   ];
   const sections = new Map();
   for (const [title] of layouts) {
@@ -643,6 +652,7 @@ function renderFields() {
   });
   categoryGroups = new Map();
   const tabs = document.createDocumentFragment();
+  window.HotoriMusic.mount(sections.get("Background Music").content);
   for (const [category, group] of sections) {
     if (!group.content.children.length) { group.details.remove(); continue; }
     const note = element("span", "category-status visually-hidden", "No changes"); note.setAttribute("role", "status");
@@ -657,12 +667,20 @@ function renderFields() {
     tab.addEventListener("click", () => selectCategory(category));
     group.details.id = `panel-${key}`; group.details.setAttribute("role", "tabpanel");
     group.details.setAttribute("aria-labelledby", tab.id);
+    if (category === "Background Music") {
+      const divider = element("hr", "launcher-divider"); divider.setAttribute('role', 'presentation');
+      const heading = element("p", "sidebar-label launcher-heading", "Launcher Settings"); heading.setAttribute('role', 'presentation');
+      if (categoryGroups.size) tabs.append(divider);
+      tabs.append(heading);
+    }
     tabs.append(tab);
     categoryGroups.set(category, { note, tab, panel: group.details, scroll: 0, dirty: false, saved: false, saving: false });
   }
   $("settings-list").replaceChildren(fragment);
   $("settings-categories").replaceChildren(tabs);
+  document.querySelector('.settings-sidebar > .sidebar-label').hidden = !fields.length;
   $("settings-list").querySelectorAll('input[type="range"]').forEach(input => {
+    if (input.closest('.range-surface')) return;
     const surface = element("div", "range-surface");
     const track = element("div", "range-track");
     const fill = element("div", "range-fill");
@@ -827,7 +845,7 @@ $("customize").addEventListener("click", async () => {
   const finishLoading = window.HotoriMotion?.loading($("settings-list"), { label: 'Loading settings…', rows: 4 }) || (() => {});
   navigate("settings");
   try {
-    fields = await invoke("load_settings");
+    fields = status.installed ? await invoke("load_settings") : [];
     await window.HotoriTrueGlass.load();
     savedValues = new Map(fields.map(field => [field.name, field.value]));
     renderFields();
@@ -934,22 +952,27 @@ function initializeCategoryMotion() {
 function initializeAppOverlay() {
   const input = $("app-overlay-range"), toggle = $("app-overlay-toggle");
   const control = toggle.closest('.app-overlay-control');
-  const key = 'hotori.appOverlayOpacity';
+  const group = control.closest('.launcher-quick-controls');
+  const key = 'hotori.appBrightness';
   try {
     const saved = localStorage.getItem(key);
     if (saved !== null && /^\d{1,3}$/.test(saved)) input.value = String(Math.min(100, Number(saved)));
+    else {
+      const oldOpacity = localStorage.getItem('hotori.appOverlayOpacity');
+      if (oldOpacity !== null && /^\d{1,3}$/.test(oldOpacity)) input.value = String(Math.round(100 - Math.min(80, Number(oldOpacity)) / .8));
+    }
   } catch { /* Storage may be disabled; the control still works. */ }
   function apply(persist) {
     const value = Math.min(100, Math.max(0, Number(input.value)));
-    document.documentElement.style.setProperty('--app-overlay-opacity', String(value / 100));
+    document.documentElement.style.setProperty('--app-overlay-opacity', String((100 - value) * .008));
     control.style.setProperty('--range-progress', `${value}%`);
     if (persist) { try { localStorage.setItem(key, String(value)); } catch {} }
     document.dispatchEvent(new Event('hotori:backdrop-change'));
   }
   input.addEventListener('input', () => apply(true));
-  const expanded = () => toggle.setAttribute('aria-expanded', String(control.matches(':hover, :focus-within')));
-  for (const event of ['pointerenter', 'pointerleave', 'focusin']) control.addEventListener(event, expanded);
-  control.addEventListener('focusout', () => requestAnimationFrame(expanded));
+  const expanded = () => toggle.setAttribute('aria-expanded', String(group.matches(':hover, :focus-within')));
+  for (const event of ['pointerenter', 'pointerleave', 'focusin']) group.addEventListener(event, expanded);
+  group.addEventListener('focusout', () => requestAnimationFrame(expanded));
   toggle.addEventListener('click', () => input.focus({ preventScroll: true }));
   control.addEventListener('keydown', event => { if (event.key === 'Escape') { document.activeElement.blur(); } });
   apply(false);
