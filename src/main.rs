@@ -3,6 +3,7 @@ mod app_updates;
 mod customization;
 mod installer;
 mod settings;
+mod presets;
 mod updates;
 mod wallpapers;
 mod theme_changelog;
@@ -134,6 +135,29 @@ fn save_settings(
     let fields = settings::fields(&next, Some(&defaults));
     *session = Some(next);
     Ok(fields)
+}
+
+#[tauri::command]
+fn list_presets() -> Result<Vec<presets::Preset>, String> { presets::list(&presets::path()?) }
+
+#[tauri::command]
+fn save_preset(state: tauri::State<AppState>, name: String, edits: Vec<settings::Edit>, companion: Option<presets::Companion>) -> Result<Vec<presets::Preset>, String> {
+    let session=state.settings.lock().map_err(|e|e.to_string())?;
+    presets::capture(&presets::path()?,session.as_ref().ok_or("Open Customize before saving a preset.")?,&edits,&name,companion)
+}
+
+#[tauri::command]
+fn delete_preset(id: String) -> Result<Vec<presets::Preset>, String> { presets::delete(&presets::path()?,&id) }
+
+#[tauri::command]
+fn apply_preset(state: tauri::State<AppState>, id: String) -> Result<Vec<settings::Field>, String> {
+    let preset=presets::find(&presets::path()?,&id)?;
+    let folder=state.folder()?;
+    let mut session=state.settings.lock().map_err(|e|e.to_string())?;
+    let current=session.as_ref().ok_or("Open Customize before applying a preset.")?;
+    let next=presets::apply(&folder.join(installer::DESTINATION),folder,current,&preset)?;
+    let fields=settings::fields(&next,Some(&updates::defaults(folder)));
+    *session=Some(next); Ok(fields)
 }
 
 #[tauri::command]
@@ -337,6 +361,10 @@ fn main() {
             install_theme,
             uninstall_theme,
             load_settings,
+            list_presets,
+            save_preset,
+            delete_preset,
+            apply_preset,
             save_settings,
             reset_settings,
             update_theme,

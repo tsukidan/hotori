@@ -324,7 +324,7 @@ pub fn parse(css: String) -> io::Result<Settings> {
     })
 }
 
-fn validate(name: &str, value: &str) -> io::Result<()> {
+pub(crate) fn validate(name: &str, value: &str) -> io::Result<()> {
     let bad = || io::Error::other(format!("Invalid value for {name}"));
     if value.is_empty()
         || value.contains([';', '{', '}', '\n', '\r'])

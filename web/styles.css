@@ -880,3 +880,41 @@ h2, .section-heading, .sidebar-brand strong { letter-spacing: -.025em; }
 
 .home-logo-preview { display: block; width: 128px; height: 128px; max-width: 100%; object-fit: contain; justify-self: center; border-radius: 16px; border: 1px solid #ffffff26; padding: 10px; background: repeating-conic-gradient(#ffffff12 0 25%, #10121650 0 50%) 0 / 16px 16px; }
 .home-logo-preview[hidden] { display: none; }
+/* Theme preset gallery: native acrylic cards keep large libraries inexpensive to scroll. */
+.presets-settings-open .settings-actions { display:none; }
+.presets-page { display:flex; flex-direction:column; gap:24px; min-width:0; }
+.preset-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(240px,100%),1fr)); gap:22px; padding:12px; }
+.preset-card { position:relative; isolation:isolate; min-width:0; border:2px solid #ffffff1f; border-radius:22px; background:#10121660; backdrop-filter:blur(24px) saturate(115%); box-shadow:0 5px 18px #0003; transition:border-color 220ms ease,box-shadow 220ms ease,transform 220ms ease; }
+.preset-card.is-selected { border-color:var(--accent); box-shadow:0 0 18px color-mix(in srgb,var(--accent) 65%,transparent),0 0 48px color-mix(in srgb,var(--accent) 42%,transparent); }
+.preset-card:hover { transform:translateY(-2px); }
+.preset-select { display:flex; flex-direction:column; width:100%; padding:0; border:0; border-radius:20px; background:transparent; color:#fff; text-align:center; cursor:pointer; overflow:hidden; }
+.preset-preview { position:relative; display:grid; place-items:center; width:100%; aspect-ratio:16/9; overflow:hidden; background:radial-gradient(at 20% 20%,color-mix(in srgb,var(--preset-color,var(--accent)) 55%,transparent),transparent 80%),#10121680; }
+.preset-wallpaper { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; animation:hotori-prompt-backdrop-in 240ms ease both; }
+.preset-colors { position:absolute; bottom:12px; display:flex; justify-content:center; gap:8px; padding:7px 10px; border-radius:30px; background:#101216aa; box-shadow:0 2px 8px #0005; }
+.preset-swatch { width:23px; height:23px; border-radius:50%; border:1px solid #ffffff70; }
+.preset-name { display:block; padding:16px; color:#fff; font-size:16px; line-height:1.4; font-weight:750; text-shadow:0 2px 4px #000c; overflow-wrap:anywhere; }
+.preset-delete { position:absolute; z-index:2; top:10px; right:10px; display:grid; place-items:center; width:36px; height:36px; min-height:36px; min-width:36px; padding:0; border-radius:50%; background:#752b36bb; backdrop-filter:blur(24px) saturate(115%); color:#ffaaaa; box-shadow:0 3px 12px #0004; border:1px solid #f7868655; opacity:0; pointer-events:none; transition:opacity 180ms ease,background-color 180ms ease; }
+.preset-delete .icon { width:19px; height:19px; }
+.preset-card:hover .preset-delete,.preset-card:focus-within .preset-delete { opacity:1; pointer-events:auto; }
+.preset-delete:hover { background:#9c3545d9; border-color:#ffaaaa; }
+.preset-add { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:220px; color:#fff; cursor:pointer; }
+.preset-plus { font-size:60px; line-height:1; font-weight:300; text-shadow:0 2px 5px #0009; }
+.preset-add .preset-name { font-size:14px; }
+.preset-actions { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:8px 12px; }
+.preset-status.status { margin:0; overflow-wrap:anywhere; }
+.preset-status.error,.preset-dialog-error { color:#ffb0b0; }
+.preset-preview-unavailable { color:#fff; font-size:12px; padding:12px; text-shadow:0 1px 4px #000; }
+.preset-card.is-loading .preset-preview::after { content:''; position:absolute; inset:0; background:linear-gradient(110deg,transparent 25%,#ffffff18 50%,transparent 75%); background-size:200% 100%; animation:preset-shimmer 1.4s ease infinite; }
+@keyframes preset-shimmer { from { background-position:200% 0; } to { background-position:-200% 0; } }
+.preset-dialog { border-radius:28px; overflow-x:hidden; overflow-y:auto; scrollbar-width:none; }
+.preset-dialog::-webkit-scrollbar,.preset-dialog *::-webkit-scrollbar { display:none; width:0; height:0; }
+.preset-dialog * { scrollbar-width:none; }
+.preset-dialog[open] { animation:hotori-prompt-in 260ms cubic-bezier(.16,1,.3,1) both; }
+.preset-dialog[open]::backdrop { animation:hotori-prompt-backdrop-in 220ms ease-out both; }
+.preset-name-form { display:flex; flex-direction:column; gap:12px; text-align:left; }
+.preset-name-form label { font-weight:700; }
+.preset-name-form .input { width:100%; }
+.preset-dialog-actions { display:flex; justify-content:center; flex-wrap:wrap; gap:12px; }
+.preset-dialog .preset-dialog-error:empty { display:none; }
+@media(hover:none) { .preset-delete { opacity:1; pointer-events:auto; } }
+@media(prefers-reduced-motion:reduce) { .preset-card,.preset-delete { transition:none; } .preset-card:hover { transform:none; } .preset-dialog[open],.preset-dialog[open]::backdrop,.preset-wallpaper,.preset-card.is-loading .preset-preview::after { animation:none; } }

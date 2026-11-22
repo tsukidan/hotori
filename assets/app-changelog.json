@@ -2,6 +2,11 @@
   "schemaVersion": 1,
   "releases": [
     {
+      "version": "1.8.11",
+      "publishedAt": null,
+      "body": "## Theme presets\n\n- Add Presets above Wallpapers and keep preset name dialogs free of scrollbars. Save named theme configurations in an acrylic gallery with wallpaper and color previews. Select a preset and apply it, or delete it with confirmation. Presets remain separate from launcher music and volume."
+    },
+    {
       "version": "1.8.10",
       "publishedAt": null,
       "body": "## Launcher music\n\n- Add a separate Launcher Settings → Background Music page with one locally stored song, Add/Replace/Remove controls, metadata titles and a liquid-glass player. Skip restarts the selected song. Center song details and acrylic playback controls, with bold elapsed/total times beneath the progress bar.\n- Group Home brightness and music volume in one glass container; hovering or focusing either reveals both sliders. Correct brightness direction: full brightness has no dimming, and minimum brightness applies 80% dimming. Volume defaults to 20%, with remembered volume and reversible mute. Show the current song beneath the launcher version.\n- Keep launcher music and preferences separate from Discord theme settings and resets.\n- Give App Changelog a developer/code icon distinct from the Installation Guide."

@@ -102,5 +102,5 @@
   }
   document.addEventListener('visibilitychange', () => { if (document.hidden) stopPolling(); else poll(); });
   new MutationObserver(() => { if (!canPoll()) stopPolling(); else if (!timer) poll(); }).observe(document.getElementById('app'), { attributes: true, attributeFilter: ['data-page'] });
-  window.HotoriTrueGlass = { control, dirty, load, refresh: poll, save: () => store(draft, quality), reset: () => store(false, 'balanced', true) };
+  window.HotoriTrueGlass = { preset: () => readError || snapshot.error ? null : ({ requestedEnabled: draft, quality }), applyPreset: config => store(config.requestedEnabled, config.quality, true), control, dirty, load, refresh: poll, save: () => store(draft, quality), reset: () => store(false, 'balanced', true) };
 })();

@@ -32,6 +32,7 @@ const { pathToFileURL } = require('node:url');
         if (command === 'get_status') return { ready: true, installed: true, theme_version: '0.8.0' };
         if (command === 'check_app_update') return { available: false };
         if (command === 'check_theme_update') return { available: false, installedVersion: '0.8.0', version: '0.8.0' };
+        if (command === 'list_presets') return [];
         if (command === 'load_settings') return structuredClone(saved);
         if (command === 'reset_settings') { saved = structuredClone(defaults); window.savedSettings = saved; return structuredClone(saved); }
         if (command === 'save_settings') {
@@ -45,7 +46,7 @@ const { pathToFileURL } = require('node:url');
     await page.locator('#customize').click();
     await page.waitForTimeout(400);
     const tab = name => page.getByRole('tab', { name, exact: true });
-    assert.deepEqual(await page.getByRole('tab').allTextContents(), ['Wallpapers','Colors','Avatars','Messages','Glass Appearance','Server List','Background Music']);
+    assert.deepEqual(await page.getByRole('tab').allTextContents(), ['Presets','Wallpapers','Colors','Avatars','Messages','Glass Appearance','Server List','Background Music']);
     assert.equal(await page.locator('[role="tabpanel"]:visible').count(), 1);
     assert.equal(await tab('Wallpapers').getAttribute('aria-selected'), 'true');
     await tab('Glass Appearance').click();

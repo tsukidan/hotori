@@ -29,6 +29,7 @@ const categoryDescriptions = {
   "Avatars": "Find the right size and shape for your conversations.",
   "Messages": "Give your conversations room and make mentions stand out.",
   "Server List": "Arrange your servers in the layout that suits you.",
+  "Presets": "Save your current theme, select a look, then choose Apply.",
   "Background Music": "Choose one song for this launcher. Music and volume changes save automatically.",
 };
 
@@ -232,6 +233,7 @@ const iconPaths = {
   close: '<path d="m6 6 12 12M18 6 6 18"/>',
   download: '<path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/>',
   book: '<path d="M12 5C9 3 5 3 3 4v15c3-1 6-1 9 1 3-2 6-2 9-1V4c-2-1-6-1-9 1Zm0 0v15"/>',
+  presets: '<rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/>',
   code: '<path d="m8 7-5 5 5 5m8-10 5 5-5 5m-3-14-2 18"/>',
   "app-update": '<rect x="3" y="3" width="18" height="18" rx="5"/><path d="M12 17V7m-4 4 4-4 4 4"/>',
   trash: '<path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7m4-7v7"/>',
@@ -372,9 +374,10 @@ function selectCategory(category) {
   selectedCategory = category;
   const launcher = category === "Background Music";
   document.body.classList.toggle('music-settings-open', launcher);
-  $("save-category").hidden = launcher;
-  $("reset-defaults").hidden = launcher;
-  $("settings-status").textContent = launcher ? "Launcher settings save automatically." : "Save changes in each category. Back discards only unsaved changes.";
+  document.body.classList.toggle('presets-settings-open', category === "Presets");
+  $("save-category").hidden = launcher || category === "Presets";
+  $("reset-defaults").hidden = launcher || category === "Presets";
+  $("settings-status").textContent = launcher ? "Launcher settings save automatically." : category === "Presets" ? "Presets save locally. Apply changes your installed theme." : "Save changes in each category. Back discards only unsaved changes.";
   for (const [name, group] of categoryGroups) {
     const active = name === category;
     group.panel.hidden = !active;
@@ -396,6 +399,7 @@ function selectCategory(category) {
   updateCategoryButtons();
   window.HotoriTrueGlass.refresh();
   window.HotoriMusic?.visit();
+  window.HotoriPresets?.visit(category);
 }
 async function saveCategory(category) {
   const group = categoryGroups.get(category);
@@ -452,6 +456,7 @@ async function saveRecommendedColor(name, hex) {
 function renderFields() {
   const fragment = document.createDocumentFragment();
   const layouts = [
+    ["Presets", "presets", true],
     ["Wallpapers", "image", true], ["Colors", "palette", true],
     ["Avatars", "user", true], ["Messages", "message", true],
     ["Glass Appearance", "glass", true], ["Server List", "server", true],
@@ -653,6 +658,10 @@ function renderFields() {
   categoryGroups = new Map();
   const tabs = document.createDocumentFragment();
   window.HotoriMusic.mount(sections.get("Background Music").content);
+  if (fields.length) window.HotoriPresets.mount(sections.get("Presets").content, { invoke, icon, fields: () => fields, busy: () => busy,
+    setBusy(value) { busy = value; updateButtons(); },
+    applied(updated) { fields = updated; savedValues = new Map(fields.map(f => [f.name, f.value])); },
+    refresh, render: renderFields });
   for (const [category, group] of sections) {
     if (!group.content.children.length) { group.details.remove(); continue; }
     const note = element("span", "category-status visually-hidden", "No changes"); note.setAttribute("role", "status");
