@@ -147,6 +147,9 @@ fn save_preset(state: tauri::State<AppState>, name: String, edits: Vec<settings:
 }
 
 #[tauri::command]
+fn rename_preset(id: String, name: String) -> Result<Vec<presets::Preset>, String> { presets::rename(&presets::path()?,&id,&name) }
+
+#[tauri::command]
 fn delete_preset(id: String) -> Result<Vec<presets::Preset>, String> { presets::delete(&presets::path()?,&id) }
 
 #[tauri::command]
@@ -363,6 +366,7 @@ fn main() {
             load_settings,
             list_presets,
             save_preset,
+            rename_preset,
             delete_preset,
             apply_preset,
             save_settings,

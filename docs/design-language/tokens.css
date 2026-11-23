@@ -1,0 +1,76 @@
+/* Portable starting tokens. Not loaded by Hotori and not a WebGL renderer.
+   Read README.md for material hierarchy, motion, fallbacks, and provenance.
+   Override the accent and adapt sizing to the new product/platform. */
+:root {
+  --h-font-ui: "Hotori Inter", Inter, system-ui, sans-serif;
+  --h-font-display: "Hotori Rounded", Nunito, system-ui, sans-serif;
+  --h-text: #f5f6f7;
+  --h-text-muted: #cbd0d7;
+  --h-accent: #b8c4d2;
+  --h-canvas: #101216;
+  --h-glass-tint: #15181c33;
+  --h-acrylic-tint: #10121660;
+  --h-inset-tint: #10121660;
+  --h-border: #ffffff26;
+  --h-border-strong: #ffffff50;
+  --h-warning-text: #f3dfa0;
+  --h-warning-fill: #332b1670;
+  --h-warning-border: #ebce7859;
+  --h-danger-text: #edaaaa;
+  --h-danger-fill: #391c217d;
+  --h-danger-border: #e7a0a059;
+  --h-acrylic-blur: 24px;
+  --h-acrylic-saturation: 115%;
+  --h-glass-fallback-blur: 4px;
+  --h-glass-fallback-saturation: 140%;
+  --h-radius-shell: 60px;
+  --h-radius-dialog: 32px;
+  --h-radius-group: 36px;
+  --h-radius-submenu: 40px;
+  --h-radius-card: 22px;
+  --h-radius-inset: 16px;
+  --h-radius-pill: 999px;
+  --h-radius-circle: 50%;
+  --h-space-1: 4px;
+  --h-space-2: 8px;
+  --h-space-3: 12px;
+  --h-space-4: 16px;
+  --h-space-5: 20px;
+  --h-space-6: 24px;
+  --h-space-8: 32px;
+  --h-type-body: 14px;
+  --h-type-help: 13px;
+  --h-type-meta: 12px;
+  --h-type-section: 16px;
+  --h-type-heading: clamp(24px, 1.75vw, 30px);
+  --h-line-body: 1.5;
+  --h-line-help: 1.65;
+  --h-weight-control: 600;
+  --h-weight-emphasis: 700;
+  --h-target-primary: 44px;
+  --h-dock-collapsed: 76px;
+  --h-dock-expanded: 244px;
+  --h-shadow-rim: inset 0 1px .5px #ffffff4d, inset 0 -1px .5px #ffffff24;
+  --h-shadow-panel: 0 14px 36px #00000030;
+  --h-shadow-card: 0 5px 18px #0003;
+  --h-shadow-text: 0 1px 3px #000c;
+  --h-selection-border-width: 2px;
+  --h-selection-glow: 0 0 18px color-mix(in srgb, var(--h-accent) 65%, transparent), 0 0 48px color-mix(in srgb, var(--h-accent) 42%, transparent);
+  --h-duration-fast: 180ms;
+  --h-duration-content: 220ms;
+  --h-duration-page: 280ms;
+  --h-duration-expand: 400ms;
+  --h-duration-dock: 480ms;
+  --h-ease-standard: cubic-bezier(.22, .7, .18, 1);
+  --h-ease-expand: cubic-bezier(.22, 1, .36, 1);
+  --h-ease-dock: cubic-bezier(.22, 1.15, .36, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --h-duration-fast: 0ms;
+    --h-duration-content: 0ms;
+    --h-duration-page: 0ms;
+    --h-duration-expand: 0ms;
+    --h-duration-dock: 0ms;
+  }
+}

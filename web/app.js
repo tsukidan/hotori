@@ -237,6 +237,7 @@ const iconPaths = {
   code: '<path d="m8 7-5 5 5 5m8-10 5 5-5 5m-3-14-2 18"/>',
   "app-update": '<rect x="3" y="3" width="18" height="18" rx="5"/><path d="M12 17V7m-4 4 4-4 4 4"/>',
   trash: '<path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7m4-7v7"/>',
+  pencil: '<path d="M4 20h4L19 9l-4-4L4 16v4Zm9-13 4 4"/>',
   sliders: '<path d="M4 7h5m4 0h7M4 17h9m4 0h3M9 4v6m4-6v6m0 4v6m4-6v6"/>',
   folder: '<path d="M3 7V4h6l3 3h9v13H3z"/>',
   back: '<path d="m10 5-7 7 7 7M3 12h18"/>',

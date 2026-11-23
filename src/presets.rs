@@ -134,6 +134,22 @@ pub fn delete(path: &Path, id: &str) -> Result<Vec<Preset>, String> {
     write(path, &library)?;
     Ok(library.presets)
 }
+pub fn rename(path: &Path, id: &str, name: &str) -> Result<Vec<Preset>, String> {
+    let _lock = WRITER.lock().map_err(|e| e.to_string())?;
+    let name = name.trim();
+    if name.is_empty() || name.chars().count() > 80 || name.chars().any(char::is_control) {
+        return Err("Enter a preset name between 1 and 80 characters.".into());
+    }
+    let mut library = read(path)?;
+    let preset = library
+        .presets
+        .iter_mut()
+        .find(|p| p.id == id)
+        .ok_or("This preset no longer exists. Reopen Presets.")?;
+    preset.name = name.into();
+    write(path, &library)?;
+    Ok(library.presets)
+}
 pub fn find(path: &Path, id: &str) -> Result<Preset, String> {
     list(path)?
         .into_iter()
@@ -238,6 +254,11 @@ mod tests {
             next.original
                 .contains("--message-bubble-self-tint: #12345678;")
         );
+        let renamed = rename(&library, &reloaded.id, "  Renamed  ").unwrap();
+        assert_eq!(renamed[0].name, "Renamed");
+        assert_eq!(renamed[0].values, reloaded.values);
+        assert!(rename(&library, &reloaded.id, "   ").is_err());
+        assert!(rename(&library, "missing", "x").is_err());
         delete(&library, &reloaded.id).unwrap();
         assert!(list(&library).unwrap().is_empty());
         assert_eq!(

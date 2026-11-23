@@ -12,6 +12,7 @@ if(command==='save_true_liquid_glass')return{config:{requestedEnabled:args.reque
 if(command==='load_settings')return structuredClone(window.fixture);
 if(command==='list_presets')return read();
 if(command==='save_preset'){if(window.failSave)throw Error('Storage unavailable');const values=Object.fromEntries(args.edits.map(e=>[e.name,e.value]));if(values['--main-bg'])values['--main-bg']=`url('${values['--main-bg']}')`;else values['--main-bg']='none';return write([...read(),{id:String(Date.now()),name:args.name,values,companion:args.companion}]);}
+if(command==='rename_preset')return write(read().map(p=>p.id===args.id?{...p,name:args.name}:p));
 if(command==='delete_preset')return write(read().filter(p=>p.id!==args.id));
 if(command==='apply_preset'){if(window.failApply)throw Error('Theme changed outside the installer. Reopen Customize.');const p=read().find(p=>p.id===args.id);window.fixture=window.fixture.map(f=>({...f,value:p.values[f.name]==='none'?'':p.values[f.name],color:f.kind==='color'?p.values[f.name]:undefined}));localStorage.setItem('fixture',JSON.stringify(window.fixture));return structuredClone(window.fixture);}
 if(command==='app_wallpaper'||command==='wallpaper_preview'){if(window.slowPreview)await new Promise(r=>setTimeout(r,250));return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScLttAAAAABJRU5ErkJggg==';}

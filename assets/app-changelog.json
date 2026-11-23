@@ -2,6 +2,11 @@
   "schemaVersion": 1,
   "releases": [
     {
+      "version": "1.8.12",
+      "publishedAt": null,
+      "body": "## Preset renaming\n\n- Add a soft acrylic pencil button beside each preset name, revealed on hover or keyboard focus, to rename a saved preset. Renaming changes only the name; theme settings and images are untouched."
+    },
+    {
       "version": "1.8.11",
       "publishedAt": null,
       "body": "## Theme presets\n\n- Add Presets above Wallpapers and keep preset name dialogs free of scrollbars. Save named theme configurations in an acrylic gallery with wallpaper and color previews. Select a preset and apply it, or delete it with confirmation. Presets remain separate from launcher music and volume."

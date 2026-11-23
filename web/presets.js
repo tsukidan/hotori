@@ -41,7 +41,7 @@
       const samples=node('div','preset-colors');samples.setAttribute('aria-label','Preset colors');
       for(const key of ['--main-color','--secondary-ui-color','--message-bubble-self-tint','--message-bubble-other-tint']){const value=plain(p.values[key]);if(CSS.supports('color',value)){const swatch=node('span','preset-swatch');swatch.style.backgroundColor=value;swatch.title=key.replace(/^--/,'')+': '+value;samples.append(swatch);}}
       preview.append(samples);select.append(preview,node('strong','preset-name',p.name));card.append(select);
-      const remove=node('button','preset-delete');remove.type='button';remove.setAttribute('aria-label',`Delete ${p.name}`);remove.title='Delete preset';remove.append(api.icon('trash'));remove.addEventListener('click',()=>askDelete(p));card.append(remove);grid.append(card);card.classList.toggle('is-selected',p.id===selected);observer.observe(card);
+      const remove=node('button','preset-delete');remove.type='button';remove.setAttribute('aria-label',`Delete ${p.name}`);remove.title='Delete preset';remove.append(api.icon('trash'));remove.addEventListener('click',()=>askDelete(p));card.append(remove);const rename=node('button','preset-rename');rename.type='button';rename.setAttribute('aria-label',`Rename ${p.name}`);rename.title='Rename preset';rename.append(api.icon('pencil'));rename.addEventListener('click',()=>askRename(p));card.append(rename);grid.append(card);card.classList.toggle('is-selected',p.id===selected);observer.observe(card);
     }
     const add=node('button','preset-card preset-add');add.type='button';add.setAttribute('aria-label','Save current preset');const plus=node('span','preset-plus','+');plus.setAttribute('aria-hidden','true');add.append(plus,node('strong','preset-name','Save current preset'));add.addEventListener('click',askName);grid.append(add);buttons();
   }
@@ -54,12 +54,21 @@
   }
   function askName(){
     if(pending||api.busy())return;const {dialog,error,actions,cancel}=prompt('Save preset');dialog.id='preset-name-dialog';
-    const form=node('form','preset-name-form'),label=node('label','','Preset name'),input=node('input','input');input.id='preset-name-input';input.name='name';input.type='text';input.required=true;input.maxLength=80;input.autocomplete='off';label.htmlFor=input.id;
+    const form=node('form','preset-name-form'),label=node('label','','Preset name'),input=node('input','input acrylic-select');input.id='preset-name-input';input.name='name';input.type='text';input.required=true;input.maxLength=80;input.autocomplete='off';label.htmlFor=input.id;
     const save=node('button','button primary','Save preset');save.type='submit';actions.append(save);form.append(label,input,error,actions);dialog.append(form);
     form.addEventListener('submit',async e=>{e.preventDefault();if(pending)return;const name=input.value.trim();if(!name){error.textContent='Enter a preset name.';return;}pending=true;generation++;api.setBusy(true);buttons();save.disabled=cancel.disabled=input.disabled=true;
       try{items=await api.invoke('save_preset',{name,edits:api.fields().map(f=>({name:f.name,value:f.value})),companion:window.HotoriTrueGlass?.preset?.()||null});selected=items.at(-1)?.id||'';render();dialog.close();message('Preset saved.');}
       catch(e){error.textContent=String(e);}finally{pending=false;api.setBusy(false);if(dialog.isConnected)save.disabled=cancel.disabled=input.disabled=false;buttons();}});
     dialog.showModal();input.focus();
+  }
+  function askRename(p){
+    if(pending||api.busy())return;const {dialog,error,actions,cancel}=prompt('Rename preset');dialog.id='preset-rename-dialog';
+    const form=node('form','preset-name-form'),label=node('label','','Preset name'),input=node('input','input acrylic-select');input.id='preset-rename-input';input.name='name';input.type='text';input.required=true;input.maxLength=80;input.autocomplete='off';input.value=p.name;label.htmlFor=input.id;
+    const save=node('button','button primary','Rename');save.type='submit';actions.append(save);form.append(label,input,error,actions);dialog.append(form);
+    form.addEventListener('submit',async e=>{e.preventDefault();if(pending)return;const name=input.value.trim();if(!name){error.textContent='Enter a preset name.';return;}pending=true;generation++;api.setBusy(true);buttons();save.disabled=cancel.disabled=input.disabled=true;
+      try{items=await api.invoke('rename_preset',{id:p.id,name});render();dialog.close();message('Preset renamed.');}
+      catch(e){error.textContent=String(e);}finally{pending=false;api.setBusy(false);if(dialog.isConnected)save.disabled=cancel.disabled=input.disabled=false;buttons();}});
+    dialog.showModal();input.focus();input.select();
   }
   function askDelete(p){
     if(pending||api.busy())return;const {dialog,error,actions,cancel}=prompt('Delete preset?');dialog.id='preset-delete-dialog';dialog.append(node('p','',`Delete “${p.name}”? This cannot be undone. Your installed theme will stay as it is.`),error);
