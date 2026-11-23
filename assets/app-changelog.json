@@ -2,6 +2,11 @@
   "schemaVersion": 1,
   "releases": [
     {
+      "version": "1.8.13",
+      "publishedAt": null,
+      "body": "## Album artwork\n\n- Show an MP3's embedded front-cover artwork in the Background Music image container, with the music icon as the fallback. Artwork stays on this computer with the selected song and is removed when the song is removed or replaced.\n- Make the artwork square, extend the song details and buttons into one acrylic panel beside it, and show the larger song title in the Hotori logo font in bold wallpaper accent color.\n\n## Installation Guide\n\n- Add Presets, Background Music and True Liquid Glass steps, including the experimental-performance warning, to the in-app Installation Guide.\n\n## Presets\n\n- Blur the wallpaper behind each preset card's color swatches and center the Apply button vertically between the gallery and footer."
+    },
+    {
       "version": "1.8.12",
       "publishedAt": null,
       "body": "## Preset renaming\n\n- Add a soft acrylic pencil button beside each preset name, revealed on hover or keyboard focus, to rename a saved preset. Renaming changes only the name; theme settings and images are untouched."

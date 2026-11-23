@@ -1,6 +1,6 @@
 [package]
 name = "hotori"
-version = "1.8.12"
+version = "1.8.13"
 edition = "2024"
 build = "build.rs"
 

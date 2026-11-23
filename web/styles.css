@@ -333,14 +333,17 @@ details[open] > summary > .icon { transform: rotate(180deg); }
 .music-settings-open #panel-background-music > .music-page { display: flex; flex-direction: column; flex: 1; min-width: 0; gap: 16px; }
 .music-settings-open .settings-actions { display: none; }
 
-.music-library.setting-row { display:flex; justify-content:center; padding:5px 16px; min-height:160px; }
-.music-library-content { display:grid; grid-template-columns:76px minmax(0,640px); grid-template-rows:1fr auto; align-items:center; gap:12px 16px; max-width:100%; }
-.music-art { grid-row:1 / 3; align-self:stretch; display:grid; place-items:center; width:76px; border-radius:22px; background:#ffffff0f; border:1px solid #ffffff28; color:var(--accent); }
-.music-art svg { width:36px; height:36px; }
-.music-song-info { min-width:0; padding:14px 18px; margin-top:7px; border-radius:16px; background:#10121660; border:1px solid #ffffff18; text-align:center; }
-.music-title { font-size:20px; line-height:1.35; margin:0 0 8px; overflow-wrap:anywhere; }
-.music-filename { color:var(--muted); margin:0; font-size:12px; line-height:1.5; overflow-wrap:anywhere; }
-.music-file-actions { display:flex; justify-content:center; flex-wrap:wrap; gap:10px; margin-bottom:7px; }
+.music-library.setting-row { display:flex; flex:1 1 auto; justify-content:center; padding:5px 16px; min-height:160px; }
+.music-library-content { --music-art-size:158px; display:grid; grid-template-columns:var(--music-art-size) minmax(0,640px); grid-template-rows:1fr; align-items:stretch; align-self:stretch; gap:12px 16px; max-width:100%; }
+.music-art { grid-row:1; align-self:center; display:grid; place-items:center; width:var(--music-art-size); aspect-ratio:1 / 1; border-radius:22px; background:#ffffff0f; border:1px solid #ffffff28; color:var(--accent); }
+.music-art svg { width:44px; height:44px; }
+.music-art.has-cover { display:block; overflow:hidden; padding:0; border-color:#ffffff40; box-shadow:0 3px 12px #0004; }
+.music-art img { display:block; width:100%; height:100%; object-fit:cover; border-radius:inherit; }
+.music-song-panel { grid-column:2; grid-row:1; align-self:stretch; display:flex; flex-direction:column; justify-content:center; gap:14px; min-width:0; min-height:var(--music-art-size); padding:14px 18px; border-radius:22px; background:#10121660; border:1px solid #ffffff18; text-align:center; }
+.music-song-info { min-width:0; }
+.music-title { font-size:40px; line-height:1.2; margin:0 0 10px; overflow-wrap:anywhere; color:var(--accent); font-family:"Hotori Rounded","Hotori Inter",sans-serif; font-weight:900; text-shadow:0 1px 3px #000c; }
+.music-filename { color:var(--muted); margin:0; font-size:24px; line-height:1.4; overflow-wrap:anywhere; }
+.music-file-actions { display:flex; justify-content:center; flex-wrap:wrap; gap:10px; }
 .music-feedback { margin:0; overflow-wrap:anywhere; }
 .music-player { position:relative; flex-shrink:0; isolation:isolate; margin-top:auto; padding:18px; border-radius:22px; min-width:0; }
 .music-player-title { display:block; font-size:15px; text-align:center; overflow-wrap:anywhere; margin-bottom:8px; }
@@ -356,10 +359,10 @@ details[open] > summary > .icon { transform: rotate(180deg); }
 .music-time { display:flex; justify-content:space-between; width:100%; color:#fff; font-size:12px; font-weight:700; text-shadow:0 1px 3px #0009; white-space:nowrap; }
 @media(max-width:640px) {
 .music-library.setting-row { padding-inline:10px; }
-.music-library-content { grid-template-columns:52px minmax(0,1fr); gap:10px; }
-.music-art { width:52px; border-radius:16px; }
-.music-song-info { padding:12px; }
-.music-title { font-size:17px; }
+.music-library-content { --music-art-size:88px; grid-template-columns:var(--music-art-size) minmax(0,1fr); gap:10px; }
+.music-art { border-radius:16px; }
+.music-song-panel { padding:12px; border-radius:16px; }
+.music-title { font-size:34px; }
 .music-player-controls { grid-template-columns:1fr; }
 .music-transport,.music-player-volume { grid-column:1; justify-self:center; }
 }
@@ -850,6 +853,12 @@ h2, .section-heading, .sidebar-brand strong { letter-spacing: -.025em; }
 .true-glass-warning { margin-top: 12px; padding: 14px; border: 1px solid #e7a0a059; border-radius: 14px; background: #391c217d; color: #edaaaa; box-shadow: 0 0 14px #e7a0a038, inset 0 0 10px #e7a0a014; font-size: 13px; line-height: 1.65; text-shadow: 0 1px 4px #000; }
 .true-glass-warning strong { font-weight: 700; }
 .true-glass-warning p { margin: 8px 0 0; }
+.guide-steps .true-glass-warning { margin-top: 12px; }
+.guide-steps .true-glass-warning strong { color: inherit; font-weight: 700; }
+.guide-steps .true-glass-warning p { margin: 8px 0 0; font-size: 13px; line-height: 1.65; color: inherit; }
+.guide-glass-demo { margin-top: 12px; pointer-events: none; }
+.guide-glass-label { font-size: 15px; font-weight: 700; color: white; text-shadow: 0 1px 4px #000; }
+.guide-glass-demo .true-glass-switch:disabled { opacity: 1; }
 .true-glass-status { margin: 10px 2px 0; font-size: 12px; line-height: 1.6; color: #e1d8d8; overflow-wrap: anywhere; }
 .true-glass-setup { margin-top: 12px; }
 .runtime-actions { flex-wrap: wrap; gap: 8px; }
@@ -882,6 +891,8 @@ h2, .section-heading, .sidebar-brand strong { letter-spacing: -.025em; }
 .home-logo-preview[hidden] { display: none; }
 /* Theme preset gallery: native acrylic cards keep large libraries inexpensive to scroll. */
 .presets-settings-open .settings-actions { display:none; }
+.presets-settings-open #settings-form, .presets-settings-open #settings-list, .presets-settings-open #panel-presets { display:flex; flex:1; min-width:0; }
+.presets-settings-open #panel-presets > .presets-page { flex:1; }
 .presets-page { display:flex; flex-direction:column; gap:24px; min-width:0; }
 .preset-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(240px,100%),1fr)); gap:22px; padding:12px; }
 .preset-card { position:relative; isolation:isolate; min-width:0; border:2px solid #ffffff1f; border-radius:22px; background:#10121660; backdrop-filter:blur(24px) saturate(115%); box-shadow:0 5px 18px #0003; transition:border-color 220ms ease,box-shadow 220ms ease,transform 220ms ease; }
@@ -890,7 +901,7 @@ h2, .section-heading, .sidebar-brand strong { letter-spacing: -.025em; }
 .preset-select { display:flex; flex-direction:column; width:100%; padding:0; border:0; border-radius:20px; background:transparent; color:#fff; text-align:center; cursor:pointer; overflow:hidden; }
 .preset-preview { position:relative; display:grid; place-items:center; width:100%; aspect-ratio:16/9; overflow:hidden; background:radial-gradient(at 20% 20%,color-mix(in srgb,var(--preset-color,var(--accent)) 55%,transparent),transparent 80%),#10121680; }
 .preset-wallpaper { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; animation:hotori-prompt-backdrop-in 240ms ease both; }
-.preset-colors { position:absolute; bottom:12px; display:flex; justify-content:center; gap:8px; padding:7px 10px; border-radius:30px; background:#101216aa; box-shadow:0 2px 8px #0005; }
+.preset-colors { position:absolute; bottom:12px; display:flex; justify-content:center; gap:8px; padding:7px 10px; border-radius:30px; background:#10121680; backdrop-filter:blur(8px) saturate(115%); box-shadow:0 2px 8px #0005; }
 .preset-swatch { width:23px; height:23px; border-radius:50%; border:1px solid #ffffff70; }
 .preset-name { display:block; padding:16px; color:#fff; font-size:16px; line-height:1.4; font-weight:750; text-shadow:0 2px 4px #000c; overflow-wrap:anywhere; }
 .preset-delete { position:absolute; z-index:2; top:10px; right:10px; display:grid; place-items:center; width:36px; height:36px; min-height:36px; min-width:36px; padding:0; border-radius:50%; background:#752b36bb; backdrop-filter:blur(24px) saturate(115%); color:#ffaaaa; box-shadow:0 3px 12px #0004; border:1px solid #f7868655; opacity:0; pointer-events:none; transition:opacity 180ms ease,background-color 180ms ease; }
@@ -904,7 +915,7 @@ h2, .section-heading, .sidebar-brand strong { letter-spacing: -.025em; }
 .preset-add { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:220px; color:#fff; cursor:pointer; }
 .preset-plus { font-size:60px; line-height:1; font-weight:300; text-shadow:0 2px 5px #0009; }
 .preset-add .preset-name { font-size:14px; }
-.preset-actions { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:8px 12px; }
+.preset-actions { display:flex; flex:1 1 auto; align-items:center; justify-content:space-between; gap:16px; padding:8px 12px; }
 .preset-status.status { margin:0; overflow-wrap:anywhere; }
 .preset-status.error,.preset-dialog-error { color:#ffb0b0; }
 .preset-preview-unavailable { color:#fff; font-size:12px; padding:12px; text-shadow:0 1px 4px #000; }
