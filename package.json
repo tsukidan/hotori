@@ -20,6 +20,7 @@
     "test:true-glass": "node tests/true-liquid-glass.cjs",
     "test:runtime-delivery": "node tests/runtime-delivery.cjs",
     "verify:runtime": "node scripts/verify-true-glass.mjs",
+    "test:native-presets": "node tests/native-presets.cjs",
     "test:presets": "node tests/presets.cjs",
     "test:music": "node tests/background-music.cjs && node tests/music-audio.cjs"
   },

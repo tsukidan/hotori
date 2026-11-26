@@ -2,6 +2,11 @@
   "schemaVersion": 1,
   "releases": [
     {
+      "version": "1.9.0",
+      "publishedAt": "2026-11-26T17:41:02.495Z",
+      "body": "## Theme presets\n\n- Select a preset to rename it, replace its saved settings with your current choices, or delete it. Choose **Apply** when you want to use that preset.\n- Preset menus now open beneath the card with softer glass and a slower, bouncier reveal.\n\n## Clearer release notes\n\n- App and theme changes are easier to read, with grouped headings, simple explanations, and clearer icons. The Configuration Guide now has separate installation, customization and warnings pages.\n\n## Clearer settings\n\n- Settings now share white acrylic headings, clearer icons and darker descriptions for easier reading."
+    },
+    {
       "version": "1.8.13",
       "publishedAt": null,
       "body": "## Album artwork\n\n- Show an MP3's embedded front-cover artwork in the Background Music image container, with the music icon as the fallback. Artwork stays on this computer with the selected song and is removed when the song is removed or replaced.\n- Make the artwork square, extend the song details and buttons into one acrylic panel beside it, and show the larger song title in the Hotori logo font in bold wallpaper accent color.\n\n## Installation Guide\n\n- Add Presets, Background Music and True Liquid Glass steps, including the experimental-performance warning, to the in-app Installation Guide.\n\n## Presets\n\n- Blur the wallpaper behind each preset card's color swatches and center the Apply button vertically between the gallery and footer."

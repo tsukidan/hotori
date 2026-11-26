@@ -65,6 +65,10 @@ Do not push or publish without explicit user authorization. For this project, wh
 - A source push alone does not complete an app update. Report any publishing blocker explicitly. Never claim a release is published or updater-visible before verification succeeds.
 - Keep app releases separate from theme CSS releases unless the user requests both. An authorized theme release must include the matching `assets/hotori.theme.css` and `assets/theme-changelog.json` notes together, with the appropriate theme version.
 
+### Release-note language and presentation
+
+Follow [docs/release-notes.md](docs/release-notes.md) for installer/app, theme CSS, and plugin/runtime changelogs. Write short, plain-language notes about what users can do, what improved, and any action they must take. Condense routine maintenance to "Minor bug fixes and improvements." Do not hide meaningful behavior changes, security/privacy issues, data risks, or required actions under that summary. Keep technical implementation and test details in developer records. Use no emoji or Unicode icon substitutes; the app uses trusted local SVG icons separately from safe release-note text. Use the design guide's liquid-glass shell, white-acrylic heading hierarchy, and restrained main-color accents.
+
 ### Existing signing environment on this machine
 
 Before declaring the signing key missing, check the local-data folder used by the session that signed previous releases. The normal Windows local-data folder and the Codex package's redirected local-data folder can differ even under the same Windows account.

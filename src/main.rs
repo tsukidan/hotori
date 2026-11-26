@@ -147,6 +147,12 @@ fn save_preset(state: tauri::State<AppState>, name: String, edits: Vec<settings:
 }
 
 #[tauri::command]
+fn overwrite_preset(state: tauri::State<AppState>, id: String, edits: Vec<settings::Edit>, companion: Option<presets::Companion>) -> Result<Vec<presets::Preset>, String> {
+    let session = state.settings.lock().map_err(|e| e.to_string())?;
+    presets::overwrite(&presets::path()?, session.as_ref().ok_or("Open Customize before overwriting a preset.")?, &edits, &id, companion)
+}
+
+#[tauri::command]
 fn rename_preset(id: String, name: String) -> Result<Vec<presets::Preset>, String> { presets::rename(&presets::path()?,&id,&name) }
 
 #[tauri::command]
@@ -366,6 +372,7 @@ fn main() {
             load_settings,
             list_presets,
             save_preset,
+            overwrite_preset,
             rename_preset,
             delete_preset,
             apply_preset,

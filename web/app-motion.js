@@ -4,6 +4,7 @@
   const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
   function enter(element) {
     if (!element) return;
+    if (element.id === 'theme-changelog-items') { for (const copy of element.querySelectorAll('.theme-note-copy')) enter(copy); return; }
     // Fading a glass surface (or one of its ancestors) also fades the backdrop
     // composed for nested lenses, then the browser fades that result again.
     // Keep material containers solid and animate only their foreground copy.

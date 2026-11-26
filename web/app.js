@@ -183,10 +183,15 @@ function renderThemeChangelog(version) {
   section.dataset.notesSignature = signature;
   $('theme-changelog-version').textContent = version ? `Theme v${version.replace(/^v/, '')}` : 'Theme version unavailable';
   const items = Array.isArray(notes) && notes.length ? notes.map(note => {
-    const item = element('li');
-    item.append(element('strong', '', `${note.title}:`), document.createTextNode(` ${note.description}`));
-    return item;
-  }) : [element('li', '', themeChangelog ? 'Release notes are not available for this theme version.' : 'Loading theme changes…')];
+    const item = element('li','theme-note-group');
+    const symbol = /wallpaper|background|image/i.test(note.title) ? 'image'
+      : /glow|speak|call|voice/i.test(note.title) ? 'mic'
+      : /member|server|layout/i.test(note.title) ? 'server'
+      : /message|mention|chat|bubble/i.test(note.title) ? 'message'
+      : /color|accent|tint/i.test(note.title) ? 'palette' : 'glass';
+    const heading=element('h4','theme-note-heading');heading.append(icon(symbol),element('strong','',note.title));
+    const body=element('p','theme-note-body');body.append(element('span','theme-note-copy',note.description));item.append(heading,body);return item;
+  }) : (()=>{const item=element('li','theme-note-group theme-note-empty');item.append(icon('info'),element('span','',themeChangelog ? 'Release notes are not available for this theme version.' : 'Loading theme changes…'));return [item];})();
   $('theme-changelog-items').replaceChildren(...items);
   window.HotoriMotion?.enter($('theme-changelog-items'));
 }
@@ -223,6 +228,7 @@ function element(tag, className, text) {
 }
 
 const iconPaths = {
+  replace: '<path d="M20 7H5m4-4L5 7l4 4M4 17h15m-4-4 4 4-4 4"/>',
   tag: '<path d="M3 3h8l10 10-8 8L3 11V3Z"/><circle cx="7.5" cy="7.5" r="1"/>',
   info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10h.01"/>',
   check: '<circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/>',
@@ -811,11 +817,26 @@ $("uninstall").addEventListener("click", () => {
   $("uninstall-dialog").showModal();
 });
 $("uninstall-cancel").addEventListener("click", () => $("uninstall-dialog").close());
-$("installation-guide").addEventListener("click", () => {
-  $("guide-dialog").showModal();
-  $("guide-dialog").querySelector('.guide-scroll').scrollTop = 0;
-});
-$("guide-close").addEventListener("click", () => $("guide-dialog").close());
+const guideTitles = {overview:"Configuration Guide", installation:"Installation Guide", customization:"Customization Guide", warnings:"Warnings"};
+let guideTransition = 0;
+async function showGuidePage(name, animate = true) {
+ const token = ++guideTransition, scroll = $("guide-dialog").querySelector('.guide-scroll');
+ const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+ if (animate && !reduced) await Promise.all([...scroll.querySelectorAll('h3,.configuration-copy,.configuration-choice')].map(el=>el.animate([{opacity:1},{opacity:0}],{duration:130}).finished.catch(()=>{})));
+ if(token !== guideTransition) return;
+ for(const page of scroll.querySelectorAll('.configuration-page')) page.hidden = page.id !== `guide-${name}`;
+ $("guide-page-title").textContent = guideTitles[name];
+ $("guide-back").hidden = name === 'overview';
+ $("guide-download-vencord").hidden = name !== 'installation';
+ scroll.scrollTop = 0;
+ if(animate) $("guide-title").focus({preventScroll:true});
+ if(animate && !reduced) for(const el of scroll.querySelectorAll('.configuration-page:not([hidden]) h3,.configuration-page:not([hidden]) .configuration-copy,.configuration-page:not([hidden]) .configuration-choice')) el.animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],{duration:300,easing:'cubic-bezier(.16,1,.3,1)'});
+}
+$("installation-guide").addEventListener("click",()=>{showGuidePage('overview',false);$("guide-dialog").showModal();$("guide-overview").querySelector('button').focus();});
+for(const button of document.querySelectorAll('[data-guide-target]')) button.addEventListener('click',()=>showGuidePage(button.dataset.guideTarget));
+$("guide-back").addEventListener('click',async()=>{await showGuidePage('overview');$("guide-overview").querySelector('button').focus();});
+$("guide-dialog").addEventListener('close',()=>{++guideTransition;});
+$("guide-close").addEventListener("click",()=>$("guide-dialog").close());
 async function downloadVencord() {
   if (!invoke) return;
   try { await invoke("open_vencord_download"); }

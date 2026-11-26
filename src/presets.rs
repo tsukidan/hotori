@@ -82,6 +82,44 @@ fn write(path: &Path, library: &Library) -> Result<(), String> {
 pub fn list(path: &Path) -> Result<Vec<Preset>, String> {
     Ok(read(path)?.presets)
 }
+fn snapshot_values(
+    current: &Settings,
+    edits: &[settings::Edit],
+) -> Result<BTreeMap<String, String>, String> {
+    let values = settings::values(current, edits)?;
+    let mut saved = BTreeMap::new();
+    for ((key, old, _), value) in current.fields.iter().zip(values) {
+        if value != *old {
+            customization::validate(key, &value).map_err(|e| e.to_string())?;
+        }
+        saved.insert(key.clone(), value);
+    }
+    Ok(saved)
+}
+
+pub fn overwrite(
+    path: &Path,
+    current: &Settings,
+    edits: &[settings::Edit],
+    id: &str,
+    companion: Option<Companion>,
+) -> Result<Vec<Preset>, String> {
+    let _lock = WRITER.lock().map_err(|e| e.to_string())?;
+    let mut library = read(path)?;
+    let preset = library
+        .presets
+        .iter_mut()
+        .find(|p| p.id == id)
+        .ok_or("This preset no longer exists. Reopen Presets.")?;
+    preset.values = snapshot_values(current, edits)?;
+    // A temporarily unavailable companion bridge must not erase its saved preference.
+    if companion.is_some() {
+        preset.companion = companion;
+    }
+    write(path, &library)?;
+    Ok(library.presets)
+}
+
 pub fn capture(
     path: &Path,
     current: &Settings,
@@ -98,14 +136,7 @@ pub fn capture(
     if library.presets.len() >= 100 {
         return Err("You can save up to 100 presets. Delete one before adding another.".into());
     }
-    let values = settings::values(current, edits)?;
-    let mut saved = BTreeMap::new();
-    for ((key, old, _), value) in current.fields.iter().zip(values) {
-        if value != *old {
-            customization::validate(key, &value).map_err(|e| e.to_string())?;
-        }
-        saved.insert(key.clone(), value);
-    }
+    let saved = snapshot_values(current, edits)?;
     let id = format!(
         "{}-{}",
         std::process::id(),
@@ -316,6 +347,120 @@ mod tests {
         assert_eq!(
             fs::read_to_string(root.join("theme.css")).unwrap(),
             next.original
+        );
+        fs::remove_dir_all(root).unwrap();
+    }
+
+    #[test]
+    fn overwrite_keeps_identity_and_never_applies_theme() {
+        let (root, current) = setup("overwrite");
+        let path = root.join("presets.json");
+        let initial = capture(
+            &path,
+            &current,
+            &edits(&current),
+            "Keep my name",
+            Some(Companion {
+                requested_enabled: true,
+                quality: true_liquid_glass::Quality::High,
+            }),
+        )
+        .unwrap();
+        let other = capture(&path, &current, &edits(&current), "Unchanged", None)
+            .unwrap()
+            .remove(1);
+        let id = &initial[0].id;
+        let mut changed = edits(&current);
+        changed
+            .iter_mut()
+            .find(|e| e.name == "--main-color")
+            .unwrap()
+            .value = "#aabbcc".into();
+        changed
+            .iter_mut()
+            .find(|e| e.name == "--message-bubble-self-tint")
+            .unwrap()
+            .value = "#12345678".into();
+        changed
+            .iter_mut()
+            .find(|e| e.name == "--home-logo")
+            .unwrap()
+            .value = "vencord:///themes/hotori-assets/0123456789abcdef.png".into();
+        let result = overwrite(
+            &path,
+            &current,
+            &changed,
+            id,
+            Some(Companion {
+                requested_enabled: false,
+                quality: true_liquid_glass::Quality::Low,
+            }),
+        )
+        .unwrap();
+        assert_eq!(result.len(), 2);
+        assert_eq!(result[0].id, *id);
+        assert_eq!(result[0].name, "Keep my name");
+        assert_eq!(result[0].values["--main-color"], "#aabbcc");
+        assert_eq!(result[0].values["--message-bubble-self-tint"], "#12345678");
+        assert!(result[0].values["--home-logo"].contains("0123456789abcdef.png"));
+        assert!(!result[0].companion.as_ref().unwrap().requested_enabled);
+        assert_eq!(
+            result[0].companion.as_ref().unwrap().quality,
+            true_liquid_glass::Quality::Low
+        );
+        assert_eq!(
+            serde_json::to_value(&result[1]).unwrap(),
+            serde_json::to_value(other).unwrap()
+        );
+        assert_eq!(find(&path, id).unwrap().values["--main-color"], "#aabbcc");
+        let kept = overwrite(&path, &current, &changed, id, None).unwrap();
+        assert_eq!(
+            kept[0].companion.as_ref().unwrap().quality,
+            true_liquid_glass::Quality::Low
+        );
+        assert_eq!(
+            fs::read_to_string(root.join("theme.css")).unwrap(),
+            current.original
+        );
+        let before = fs::read(&path).unwrap();
+        assert!(overwrite(&path, &current, &changed, "missing", None).is_err());
+        changed
+            .iter_mut()
+            .find(|e| e.name == "--main-color")
+            .unwrap()
+            .value = "red; bad: 1".into();
+        assert!(overwrite(&path, &current, &changed, id, None).is_err());
+        assert_eq!(fs::read(&path).unwrap(), before);
+        fs::remove_dir_all(root).unwrap();
+    }
+
+    #[test]
+    fn overwrite_allowed_at_preset_limit() {
+        let (root, current) = setup("overwrite-limit");
+        let path = root.join("presets.json");
+        let first = capture(&path, &current, &edits(&current), "First", None)
+            .unwrap()
+            .remove(0);
+        let presets = (0..100)
+            .map(|n| Preset {
+                id: n.to_string(),
+                ..first.clone()
+            })
+            .collect();
+        write(
+            &path,
+            &Library {
+                schema_version: 1,
+                presets,
+            },
+        )
+        .unwrap();
+        assert!(capture(&path, &current, &edits(&current), "Extra", None).is_err());
+        assert_eq!(
+            overwrite(&path, &current, &edits(&current), "50", None)
+                .unwrap()
+                .len(),
+            100
         );
         fs::remove_dir_all(root).unwrap();
     }

@@ -42,17 +42,25 @@ const { pathToFileURL } = require('node:url');
       if (scenario === 'latest-theme' || scenario === 'previous-theme') {
         assert.equal(await page.locator('#theme-changelog-version').textContent(), scenario === 'latest-theme' ? 'Theme v0.8.12' : 'Theme v0.8.9');
         const notes = await page.locator('#theme-changelog-items').textContent();
-        assert(notes.includes(scenario === 'latest-theme' ? 'Unread markers:' : 'Mentions:'));
+        assert(notes.includes(scenario === 'latest-theme' ? 'Unread markers' : 'Mentions'));
         assert(!notes.includes('Startup:') && !notes.includes('Offline:'));
         if (scenario === 'previous-theme') {
           await page.evaluate(async () => { window.setThemeVersion('0.8.12'); await refresh(); });
-          assert((await page.locator('#theme-changelog-items').textContent()).includes('Unread markers:'));
-          assert(!(await page.locator('#theme-changelog-items').textContent()).includes('Mentions:'));
+          assert((await page.locator('#theme-changelog-items').textContent()).includes('Unread markers'));
+          assert(!(await page.locator('#theme-changelog-items').textContent()).includes('Mentions'));
         }
+        assert.equal(await page.locator('.theme-note-group').count(),catalog.versions['0.8.12'].length);
+        assert.equal(await page.locator('.theme-note-heading svg').count(),await page.locator('.theme-note-heading').count());
+        assert.equal(await page.locator('.theme-note-heading').first().evaluate(e=>getComputedStyle(e).borderBottomWidth),'0px');
+        assert.match(await page.locator('.theme-note-body').first().evaluate(e=>getComputedStyle(e).backdropFilter),/blur\(12px\)/);
+        await page.locator('#theme-version').scrollIntoViewIfNeeded();
+        await page.waitForFunction(()=>document.querySelector('#theme-version').classList.contains('optical-glass'));
+        assert.equal(await page.locator('#theme-version').evaluate(e=>getComputedStyle(e).borderRadius),'26px');
+        assert.equal(await page.locator('#theme-version').evaluate(e=>e.classList.contains('theme-version')),true,'Existing liquid-glass shell is preserved');
         await page.waitForTimeout(500);
         await page.screenshot({ path: path.join(qa, `changelog-${scenario}.png`) });
       } else if (scenario === 'future') {
-        assert((await page.locator('#theme-changelog-items').textContent()).includes('Future theme:'));
+        assert((await page.locator('#theme-changelog-items').textContent()).includes('Future theme'));
       } else if (scenario === 'normalized' || scenario === 'offline') {
         assert(!(await page.locator('#theme-changelog-items').textContent()).includes('not available'));
       } else if (scenario === 'unknown' || scenario === 'newer') {

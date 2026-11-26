@@ -4,7 +4,7 @@ const path=require('node:path');
 const fs=require('node:fs');
 const {pathToFileURL}=require('node:url');
 (async()=>{
- const catalog=JSON.parse(fs.readFileSync('assets/app-changelog.json','utf8')); catalog.currentVersion='1.7.10';
+ const catalog=JSON.parse(fs.readFileSync('assets/app-changelog.json','utf8')); catalog.currentVersion='1.7.10';catalog.releases.push({version:'99.0.0',publishedAt:null,body:'## <img src=x onerror=window.injected=true>\n\n- **Safe** <script>window.injected=true</script>'});
  const browser=await chromium.launch({channel:'msedge',headless:true});
  try {
   const page=await browser.newPage({viewport:{width:1120,height:780}});
@@ -42,6 +42,16 @@ const {pathToFileURL}=require('node:url');
   assert(popup.height<=popup.limit+2,'Long release menus stay bounded');
   assert.equal(popup.overflow,'auto');
   await page.keyboard.press('Escape');
+  await picker.selectOption('1.9.0');
+  assert.equal(await page.locator('.changelog-release-heading h3').textContent(),'Hotori 1.9.0');
+  assert.deepEqual(await page.locator('.changelog-section-heading span').allTextContents(),['Theme presets','Clearer release notes','Clearer settings']);
+  assert.equal(await page.locator('.changelog-section-heading svg').count(),3);assert.equal(await page.locator('.changelog-bullet').count(),4);
+  assert.equal(await page.locator('.app-changelog-card.guide-step').count(),0,'Content is not a single dark acrylic slab');
+  const titleMaterial=await page.locator('.changelog-release-heading').evaluate(e=>({blur:getComputedStyle(e).backdropFilter,fill:getComputedStyle(e).backgroundColor,border:getComputedStyle(e).borderLeftWidth}));
+  assert.match(titleMaterial.blur,/blur\(24px\)/);assert.match(titleMaterial.fill,/rgba\(255, 255, 255,/);assert.equal(titleMaterial.border,'3px');assert.equal(await page.locator('.changelog-section-heading').first().evaluate(e=>getComputedStyle(e).borderBottomWidth),'0px');
+  assert(!(await page.locator('.app-changelog-card').textContent()).includes('revision'));
+  await fs.promises.mkdir('target/qa',{recursive:true});await page.waitForTimeout(400);await page.screenshot({path:'target/qa/app-changelog-hierarchy.png'});
+  await picker.selectOption('99.0.0');assert.equal(await page.locator('#app-changelog-content img,#app-changelog-content script').count(),0);assert.equal(await page.locator('#app-changelog-content strong').textContent(),'Safe');assert((await page.locator('#app-changelog-content').textContent()).includes('<script>'));assert.equal(await page.evaluate(()=>window.injected),undefined);
   const body=catalog.releases.find(r=>r.version==='1.7.8').body;
   await page.getByLabel('App release version').selectOption('1.7.8');
   assert((await page.locator('.app-changelog-card').textContent()).includes('50%'));

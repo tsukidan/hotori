@@ -130,6 +130,8 @@ Use the wallpaper as the canvas. Place brand and useful summary content in a del
 
 ### Settings workspace
 
+Apply the informational hierarchy throughout the editor: white SVGs and 24px-blurred white acrylic label/section headers, flush darker descriptions with 12px blur, and consistent compact padding. Preserve semantic yellow/red warnings, the optical outer panes, original previews and explicit save behavior. Do not add a new WebGL surface per label or description.
+
 Use two sibling material panes: a navigation sidebar and a larger content pane. Keep the page header, scrollable body, and action/footer areas distinct. Maximizing expands useful content width; it should not leave a narrow fixed column floating in the middle.
 
 Group navigation by purpose, with a quiet divider and section label for fundamentally different settings. In Hotori, theme settings and launcher settings are separate because they affect different things. A new app should make an equivalent distinction only when its own content needs one.
@@ -151,6 +153,12 @@ The dock has a stable edge and unfolds into available space. The current referen
 This focus-expansion rule belongs to the **app dock**. It must not be copied indiscriminately to every hover widget: Hotori's Discord collapsing member list deliberately expands on hover only to avoid Discord's automatic focus changes.
 
 ## 7. Component behavior
+
+### Informational screens and release notes
+
+Use a liquid-glass outer frame, white-acrylic title/version panels, quieter white-acrylic section headings, and slightly darker readable content regions. Release-note bodies use a small extra black tint and 12px backdrop blur, half the headings’ 24px blur. Header and body meet flush with no internal divider or gap. Theme changelog groups use the same hierarchy inside their existing liquid-glass shell; do not flatten or replace that outer material. Keep text bold white with restrained shadow where appropriate. Keep outline SVG icons white for readability; use the main accent for a slim edge, icon-chip background, or a small highlight rather than saturating body text. Dates and version selectors are subordinate to the actual changes. Keep sections short and scannable; avoid one large, opaque block of prose. No emoji or Unicode icon substitutes. Release-note text remains safe text/limited emphasis; trusted SVGs belong to the UI, not untrusted note HTML.
+
+Follow [the release-note writing standard](../release-notes.md) for the app, CSS theme and plugin. Routine maintenance becomes "Minor bug fixes and improvements." Explain meaningful user-visible changes and required actions in simple terms.
 
 ### Buttons and selection
 
@@ -192,7 +200,7 @@ An actionable update indicator can pulse softly in the accent. It should be noti
 
 ### Galleries, previews, and media
 
-Use a responsive file-gallery grid of acrylic cards, with a stable preview area and bold white names beneath. A blank plus card is an action to create/save an item. A hover-revealed delete button is circular, red acrylic, and uses a lighter red SVG; it must also be accessible through keyboard focus or touch.
+Use a responsive file-gallery grid of acrylic cards, with a stable preview area and bold white names beneath. A blank plus card is an action to create/save an item. Preset cards reveal a backdrop-blurred, 10% black-tinted acrylic action list directly below the card, at its full width. The grid row smoothly expands to move following rows down, then collapses back when dismissed. The action order is Rename, Overwrite, then a muted red Delete action, all with outline SVGs. Use quiet 1px gray row separators and staggered top-to-bottom spring motion (current reference: 720ms rows with 110ms start offsets, a more pronounced overshoot/settle, and 620ms opening / 440ms closing layout movement). Retain a separate Apply action below the gallery. Menu actions must support keyboard navigation, Escape/outside dismissal, and reduced motion. Other compact gallery actions, where appropriate, can use circular acrylic buttons; do not clutter preset cards with standalone pencil/trash icons.
 
 Previews represent the user's relevant configuration: wallpaper, colors, crop, and material profile. Example UI uses generic names and fictional content, never captured private account information. Thumbnail optimization must stay separate from saved original image quality.
 
